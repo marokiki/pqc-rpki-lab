@@ -1,0 +1,21 @@
+{
+  "cache": "",
+  "measurement_type": "skipped",
+  "results": [
+    {
+      "changed_within_24h_count": "",
+      "count": 0,
+      "extension": "all",
+      "max_bytes": "",
+      "median_bytes": "",
+      "min_bytes": "",
+      "newest_age_seconds": "",
+      "oldest_age_seconds": "",
+      "p95_bytes": "",
+      "reason": "no --cache argument supplied",
+      "status": "skipped",
+      "total_bytes": ""
+    }
+  ],
+  "status": "skipped"
+}

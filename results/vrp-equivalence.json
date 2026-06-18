@@ -1,0 +1,15 @@
+{
+  "result": {
+    "baseline_count": 2,
+    "candidate_count": 2,
+    "equivalent": true,
+    "only_baseline": [],
+    "only_candidate": []
+  },
+  "sources": {
+    "baseline": "built-in synthetic",
+    "candidate": "built-in synthetic"
+  },
+  "status": "estimated",
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

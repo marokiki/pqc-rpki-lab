@@ -1,0 +1,10 @@
+expected_vrp_relation,observation,scenario,scenario_id,status,validator_population
+equivalent,Baseline deployment,RSA only,rsa-only,confirmed,all
+equivalent,Preferred first transition experiment,RSA + ML-DSA-65 parallel,parallel-ml-dsa-65,estimated,mixed
+equivalent,High-assurance transition,RSA + ML-DSA-87 parallel,parallel-ml-dsa-87,estimated,mixed
+equivalent,Large repository and transfer impact,RSA + SLH-DSA-SHAKE-128s parallel,parallel-slh-128s,estimated,mixed
+equivalent,Legacy validators reject or ignore branch,PQC only,pqc-only,future work,PQC-capable only
+blocked,Algorithm suite mismatch can break path validation,Partial parent/child migration,partial-hierarchy,estimated,policy-dependent
+different,Must raise semantic divergence telemetry,Inconsistent parallel ROA,inconsistent-roa,confirmed,mixed
+different,Freshness rules remain independently enforced,Stale manifest in one branch,stale-manifest,confirmed,mixed
+policy-dependent,Avoid silent downgrade and split VRP views,Unsupported validator mixed deployment,mixed-validators,estimated,mixed

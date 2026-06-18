@@ -1,0 +1,11 @@
+algorithm,approximate_median_roa_bytes,comparison_status,literature_calibrated_ratio_vs_rsa,literature_calibrated_repository_bytes,local_primitive_sign_ms,published_estimated_sign_ms,published_ratio_vs_rsa,published_repository_bytes_rounded,published_validation_cpu_seconds,synthetic_difference_percent_vs_calibrated,synthetic_ratio_vs_rsa
+RSA-2048/SHA-256,2123,comparable-size-model,1.0,838030450,1.847375,10.8,1.0,838030450,13.0,0.0,1.0
+ML-DSA-65,9911,comparable-size-model,4.6628,3907548358,5.636167,0.212,4.6538,3900000000,51.8,-13.96,4.0118
+ML-DSA-87,13187,comparable-size-model,6.204,5199132926,5.998292,0.257,6.205,5200000000,80.9,-14.9,5.2798
+SLH-DSA-SHAKE-128s,17085,comparable-size-model,8.0419,6739369570,369.43975,1873.028,7.9949,6700000000,1376.3,-14.88,6.845
+SLH-DSA-SHAKE-192s,33837,comparable-size-model,15.927,13347313490,619.849916,,,,,-15.96,13.3845
+Falcon-512,3570,comparable-size-model,1.6794,1407377885,,0.404,1.6706,1400000000,23.4,-7.45,1.5542
+Falcon-1024,5694,comparable-size-model,2.678,2244282901,,0.821,2.6252,2200000000,46.4,-11.57,2.3682
+MAYO-1,3669,comparable-size-model,1.7253,1445890014,,0.188,1.6706,1400000000,44.3,-8.19,1.584
+"SNOVA-(24,5,4)",2853,comparable-size-model,1.3418,1124428810,,0.123,1.3126,1100000000,47.3,-5.18,1.2723
+HAWK-512,3475,comparable-size-model,1.6345,1369773438,,0.034,1.6706,1400000000,42.8,-7.31,1.515

@@ -1,0 +1,14 @@
+name: small-synthetic-rpki-corpus
+notes: Synthetic corpus for first-order repository growth estimation. Replace with real Krill/Routinator corpus metadata when available.
+counts:
+  ca_certificates: 10
+  ee_certificates: 100
+  crls: 10
+  manifests: 10
+  roas: 100
+baseline_object_bytes:
+  ca_certificate: 1500
+  ee_certificate: 1500
+  crl: 600
+  manifest_payload: 1500
+  roa_payload: 200

@@ -1,0 +1,20 @@
+[
+  {
+    "error": "executable not found",
+    "stage": "existence",
+    "status": "unsupported",
+    "validator": "Routinator"
+  },
+  {
+    "error": "executable not found",
+    "stage": "existence",
+    "status": "unsupported",
+    "validator": "rpki-client"
+  },
+  {
+    "error": "executable not found",
+    "stage": "existence",
+    "status": "unsupported",
+    "validator": "FORT"
+  }
+]

@@ -1,0 +1,15 @@
+[project]
+name = "pqc-rpki-lab"
+version = "0.1.0"
+description = "Reproducible evaluation scaffold for PQC signature migration in RPKI"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+pqc = ["cryptography>=48.0.1"]
+analysis = ["matplotlib>=3.8"]
+test = ["pytest>=8.0"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]

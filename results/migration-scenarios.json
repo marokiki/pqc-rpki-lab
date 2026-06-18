@@ -1,0 +1,78 @@
+{
+  "model": "deterministic policy/semantic scenario matrix",
+  "results": [
+    {
+      "expected_vrp_relation": "equivalent",
+      "observation": "Baseline deployment",
+      "scenario": "RSA only",
+      "scenario_id": "rsa-only",
+      "status": "confirmed",
+      "validator_population": "all"
+    },
+    {
+      "expected_vrp_relation": "equivalent",
+      "observation": "Preferred first transition experiment",
+      "scenario": "RSA + ML-DSA-65 parallel",
+      "scenario_id": "parallel-ml-dsa-65",
+      "status": "estimated",
+      "validator_population": "mixed"
+    },
+    {
+      "expected_vrp_relation": "equivalent",
+      "observation": "High-assurance transition",
+      "scenario": "RSA + ML-DSA-87 parallel",
+      "scenario_id": "parallel-ml-dsa-87",
+      "status": "estimated",
+      "validator_population": "mixed"
+    },
+    {
+      "expected_vrp_relation": "equivalent",
+      "observation": "Large repository and transfer impact",
+      "scenario": "RSA + SLH-DSA-SHAKE-128s parallel",
+      "scenario_id": "parallel-slh-128s",
+      "status": "estimated",
+      "validator_population": "mixed"
+    },
+    {
+      "expected_vrp_relation": "equivalent",
+      "observation": "Legacy validators reject or ignore branch",
+      "scenario": "PQC only",
+      "scenario_id": "pqc-only",
+      "status": "future work",
+      "validator_population": "PQC-capable only"
+    },
+    {
+      "expected_vrp_relation": "blocked",
+      "observation": "Algorithm suite mismatch can break path validation",
+      "scenario": "Partial parent/child migration",
+      "scenario_id": "partial-hierarchy",
+      "status": "estimated",
+      "validator_population": "policy-dependent"
+    },
+    {
+      "expected_vrp_relation": "different",
+      "observation": "Must raise semantic divergence telemetry",
+      "scenario": "Inconsistent parallel ROA",
+      "scenario_id": "inconsistent-roa",
+      "status": "confirmed",
+      "validator_population": "mixed"
+    },
+    {
+      "expected_vrp_relation": "different",
+      "observation": "Freshness rules remain independently enforced",
+      "scenario": "Stale manifest in one branch",
+      "scenario_id": "stale-manifest",
+      "status": "confirmed",
+      "validator_population": "mixed"
+    },
+    {
+      "expected_vrp_relation": "policy-dependent",
+      "observation": "Avoid silent downgrade and split VRP views",
+      "scenario": "Unsupported validator mixed deployment",
+      "scenario_id": "mixed-validators",
+      "status": "estimated",
+      "validator_population": "mixed"
+    }
+  ],
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

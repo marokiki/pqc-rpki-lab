@@ -1,0 +1,7 @@
+services:
+  lab:
+    image: python:3.12-slim
+    working_dir: /work
+    volumes:
+      - .:/work
+    command: bash -lc "pip install -e . && tools/run_all.sh"

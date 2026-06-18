@@ -1,0 +1,23 @@
+# Defaults from standards / well-known parameter sets.
+# Scripts should prefer measured values when available.
+algorithms:
+  rsa2048-sha256:
+    public_key_bytes: 270
+    signature_bytes: 256
+    note: Rough DER/SPKI baseline placeholder. Replace with measured values.
+  ML-DSA-65:
+    public_key_bytes: 1952
+    signature_bytes: 3309
+    note: FIPS 204 / RFC 9881 parameter size.
+  ML-DSA-87:
+    public_key_bytes: 2592
+    signature_bytes: 4627
+    note: FIPS 204 / RFC 9881 parameter size.
+  SLH-DSA-SHAKE-128s:
+    public_key_bytes: 32
+    signature_bytes: 7856
+    note: FIPS 205 parameter size.
+  SLH-DSA-SHAKE-192s:
+    public_key_bytes: 48
+    signature_bytes: 16224
+    note: FIPS 205 parameter size.

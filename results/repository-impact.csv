@@ -1,0 +1,11 @@
+algorithm,ca_cert_total_bytes,crl_total_bytes,ee_cert_total_bytes,local_cache_bytes,manifest_total_bytes,model,repository_growth_percent_vs_rsa,repository_growth_ratio_vs_rsa,repository_total_bytes,roa_total_bytes,rrdp_delta_bytes,rrdp_snapshot_bytes,status
+RSA-2048/SHA-256,20260,8560,202600,309309,17560,first-order component-size estimator,0.0,1.0,294580,45600,32993,329930,estimated
+ML-DSA-65,67610,39090,676100,1240880,48090,first-order component-size estimator,301.18,4.0118,1181790,350900,132360,1323605,estimated
+ML-DSA-87,87190,52270,871900,1633096,61270,first-order component-size estimator,427.98,5.2798,1555330,482700,174197,1741970,estimated
+SLH-DSA-SHAKE-128s,93880,84560,938800,2117220,93560,first-order component-size estimator,584.5,6.845,2016400,805600,225837,2258368,estimated
+SLH-DSA-SHAKE-192s,177720,168240,1777200,4139940,177240,first-order component-size estimator,1238.45,13.3845,3942800,1642400,441594,4415936,estimated
+Falcon-512,30630,12660,306300,480742,21660,first-order component-size estimator,55.42,1.5542,457850,86600,51279,512792,estimated
+Falcon-1024,45730,18800,457300,732512,27800,first-order component-size estimator,136.82,2.3682,697630,148000,78135,781346,estimated
+MAYO-1,33740,10540,337400,489951,19540,first-order component-size estimator,58.4,1.584,466620,65400,52261,522614,estimated
+"SNOVA-(24,5,4)",27640,8480,276400,393540,17480,first-order component-size estimator,27.23,1.2723,374800,44800,41978,419776,estimated
+HAWK-512,30790,11550,307900,468604,20550,first-order component-size estimator,51.5,1.515,446290,75500,49984,499845,estimated

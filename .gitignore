@@ -1,0 +1,7 @@
+__pycache__/
+.pytest_cache/
+.xml2rfc-cache/
+.venv/
+*.egg-info/
+.local/
+.DS_Store

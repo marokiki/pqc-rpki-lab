@@ -1,0 +1,4 @@
+existence_status,installed,network_used,pqc_object_status,reason,rsa_baseline_status,validator,version,version_status,vrp_output_status
+unsupported,False,False,unsupported,executable not found,unsupported,Routinator,,unsupported,unsupported
+unsupported,False,False,unsupported,executable not found,unsupported,rpki-client,,unsupported,unsupported
+unsupported,False,False,unsupported,executable not found,unsupported,FORT,,unsupported,unsupported
