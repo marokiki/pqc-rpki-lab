@@ -4,7 +4,7 @@ from tools.object_generation_feasibility import ALGORITHMS, config_text
 
 
 class ObjectGenerationTest(unittest.TestCase):
-    def test_required_algorithms_are_covered(self):
+    def test_comparison_algorithms_are_covered(self):
         self.assertEqual(
             [row[0] for row in ALGORITHMS],
             [

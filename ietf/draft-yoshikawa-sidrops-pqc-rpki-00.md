@@ -185,6 +185,12 @@ and CMS [RFC9882] algorithm identifier specifications.  It is not
 selected because it is always the smallest or fastest possible signature
 algorithm.
 
+ML-DSA-44 was not benchmarked by the accompanying harness.  It was excluded
+before measurement because this revision uses NIST Category 3 as a
+conservative minimum for the primary long-lived RPKI suite.  This is a profile
+policy choice, not evidence of an implementation failure, and SIDROPS may
+revisit it.
+
 ML-DSA-87, SLH-DSA-SHAKE-128s, and SLH-DSA-SHAKE-192s remain useful
 comparison points for security level, cryptographic diversity, and
 repository stress testing.  The SLH-DSA candidates have corresponding
@@ -193,6 +199,17 @@ Falcon/FN-DSA and other additional-signature candidates may be attractive
 for size or performance reasons, but they are outside the mandatory path
 of this revision until stable PKIX and CMS profiles and RPKI validator
 evidence are available.
+
+The first-order repository estimator gives Falcon-512, using a 666-octet
+maximum signature size, a 1.5542 ratio to the RSA baseline and gives
+SNOVA-(24,5,4), using a 248-octet signature, a 1.2723 ratio.  Both are much
+smaller than the estimated 4.0118 ratio for ML-DSA-65.  These ratios are
+synthetic estimates based on static parameter sizes, not local primitive or
+full-repository measurements: the corresponding backends were unavailable in
+the recorded run.  They are outside the primary profile because stable PKIX
+and CMS profiles and validator evidence are absent, not because of repository
+size.  They should be reconsidered if their standardization and implementation
+maturity changes.
 
 Detailed measurements for key sizes, signature sizes, primitive timings,
 repository-size estimates, and validator probes are maintained outside

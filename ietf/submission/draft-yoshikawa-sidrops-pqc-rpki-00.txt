@@ -84,11 +84,11 @@ Table of Contents
      6.2.  Primary Next Suite  . . . . . . . . . . . . . . . . . . .   5
      6.3.  Additional Candidate Suites . . . . . . . . . . . . . . .   5
      6.4.  Algorithm Selection Rationale . . . . . . . . . . . . . .   6
-   7.  Resource Certificate and CRL Profile  . . . . . . . . . . . .   6
+   7.  Resource Certificate and CRL Profile  . . . . . . . . . . . .   7
    8.  CMS Signed Object Profile . . . . . . . . . . . . . . . . . .   7
    9.  Manifests, ROAs, and Repository Processing  . . . . . . . . .   8
      9.1.  Implementation Evidence . . . . . . . . . . . . . . . . .   8
-   10. Relying Party Behavior  . . . . . . . . . . . . . . . . . . .   8
+   10. Relying Party Behavior  . . . . . . . . . . . . . . . . . . .   9
    11. Migration Strategy  . . . . . . . . . . . . . . . . . . . . .   9
    12. Implementation Status . . . . . . . . . . . . . . . . . . . .  10
    13. Security Considerations . . . . . . . . . . . . . . . . . . .  11
@@ -302,6 +302,12 @@ Internet-Draft                PQC for RPKI                     June 2026
    It is not selected because it is always the smallest or fastest
    possible signature algorithm.
 
+   ML-DSA-44 was not benchmarked by the accompanying harness.  It was
+   excluded before measurement because this revision uses NIST Category
+   3 as a conservative minimum for the primary long-lived RPKI suite.
+   This is a profile policy choice, not evidence of an implementation
+   failure, and SIDROPS may revisit it.
+
    ML-DSA-87, SLH-DSA-SHAKE-128s, and SLH-DSA-SHAKE-192s remain useful
    comparison points for security level, cryptographic diversity, and
    repository stress testing.  The SLH-DSA candidates have corresponding
@@ -310,6 +316,27 @@ Internet-Draft                PQC for RPKI                     June 2026
    may be attractive for size or performance reasons, but they are
    outside the mandatory path of this revision until stable PKIX and CMS
    profiles and RPKI validator evidence are available.
+
+   The first-order repository estimator gives Falcon-512, using a
+   666-octet maximum signature size, a 1.5542 ratio to the RSA baseline
+   and gives SNOVA-(24,5,4), using a 248-octet signature, a 1.2723
+   ratio.  Both are much smaller than the estimated 4.0118 ratio for ML-
+   DSA-65.  These ratios are synthetic estimates based on static
+   parameter sizes, not local primitive or full-repository measurements:
+   the corresponding backends were unavailable in the recorded run.
+   They are outside the primary profile because stable PKIX and CMS
+   profiles and validator evidence are absent, not because of repository
+   size.  They should be reconsidered if their standardization and
+   implementation maturity changes.
+
+
+
+
+
+Yoshikawa               Expires 21 December 2026                [Page 6]
+
+Internet-Draft                PQC for RPKI                     June 2026
+
 
    Detailed measurements for key sizes, signature sizes, primitive
    timings, repository-size estimates, and validator probes are
@@ -326,17 +353,6 @@ Internet-Draft                PQC for RPKI                     June 2026
    When id-ml-dsa-65 or id-ml-dsa-87 appears in SubjectPublicKeyInfo,
    the subjectPublicKey BIT STRING contains the raw public key encoding
    defined by FIPS 204 and profiled by RFC 9881.
-
-
-
-
-
-
-
-Yoshikawa               Expires 21 December 2026                [Page 6]
-
-Internet-Draft                PQC for RPKI                     June 2026
-
 
    For RPKI CA certificates, the keyUsage extension MUST remain
    consistent with the resource certificate profile.  A CA certificate
@@ -370,6 +386,14 @@ Internet-Draft                PQC for RPKI                     June 2026
    accordance with [RFC6488] as updated by [RFC9589], it MUST contain
    exactly one content-type attribute, one message-digest attribute, and
    one signing-time attribute.  The binary-signing-time attribute and
+
+
+
+Yoshikawa               Expires 21 December 2026                [Page 7]
+
+Internet-Draft                PQC for RPKI                     June 2026
+
+
    all other signed attributes MUST be absent.  In particular, the
    CMSAlgorithmProtection attribute suggested by the general CMS
    guidance in [RFC9882] MUST NOT be included because the RPKI signed
@@ -385,14 +409,6 @@ Internet-Draft                PQC for RPKI                     June 2026
    signed objects are unchanged.  Validators MUST apply the object-
    specific validation rules after CMS signature validation exactly as
    they do for the Current Suite.
-
-
-
-
-Yoshikawa               Expires 21 December 2026                [Page 7]
-
-Internet-Draft                PQC for RPKI                     June 2026
-
 
 9.  Manifests, ROAs, and Repository Processing
 
@@ -423,6 +439,17 @@ Internet-Draft                PQC for RPKI                     June 2026
    repository that publishes parallel products MUST ensure that
    manifests and CRLs are internally consistent within each suite.
 
+
+
+
+
+
+
+Yoshikawa               Expires 21 December 2026                [Page 8]
+
+Internet-Draft                PQC for RPKI                     June 2026
+
+
    During parallel publication, operators SHOULD provide a way to
    identify corresponding products across suites for measurement and
    debugging.  This identification MAY be derived from publication point
@@ -442,13 +469,6 @@ Internet-Draft                PQC for RPKI                     June 2026
    *  Next Suite preferred with Current Suite fallback;
 
    *  Next Suite only.
-
-
-
-Yoshikawa               Expires 21 December 2026                [Page 8]
-
-Internet-Draft                PQC for RPKI                     June 2026
-
 
    An RP MUST reject a certificate, CRL, or signed object whose
    signature algorithm is not in its configured policy.  The rejection
@@ -477,6 +497,15 @@ Internet-Draft                PQC for RPKI                     June 2026
    A deployment that follows this document is expected to proceed
    through the following phases.
 
+
+
+
+
+Yoshikawa               Expires 21 December 2026                [Page 9]
+
+Internet-Draft                PQC for RPKI                     June 2026
+
+
    1.  Implementation readiness: CAs and RPs add support for the Next
        Suite in
 
@@ -496,15 +525,6 @@ Internet-Draft                PQC for RPKI                     June 2026
        time,
 
    repository size, failure modes, and semantic equivalence.
-
-
-
-
-
-Yoshikawa               Expires 21 December 2026                [Page 9]
-
-Internet-Draft                PQC for RPKI                     June 2026
-
 
    1.  PQC-preferred operation: RPs prefer the Next Suite while
        retaining the
@@ -534,6 +554,14 @@ Internet-Draft                PQC for RPKI                     June 2026
 
    *  Static algorithm metadata: implemented.
 
+
+
+
+Yoshikawa               Expires 21 December 2026               [Page 10]
+
+Internet-Draft                PQC for RPKI                     June 2026
+
+
    *  Primitive benchmark using existing libraries: implemented.
 
    *  Synthetic repository impact estimator: implemented.
@@ -552,15 +580,6 @@ Internet-Draft                PQC for RPKI                     June 2026
       generated
 
    with OpenSSL 3.6.2 for ML-DSA and SLH-DSA.
-
-
-
-
-
-Yoshikawa               Expires 21 December 2026               [Page 10]
-
-Internet-Draft                PQC for RPKI                     June 2026
-
 
    *  PQC CMS SignedData: unsupported by the tested OpenSSL CMS CLI,
       which
@@ -592,6 +611,13 @@ Internet-Draft                PQC for RPKI                     June 2026
    accept a Current Suite product as equivalent to a missing or invalid
    Next Suite product when local policy requires the Next Suite.
 
+
+
+Yoshikawa               Expires 21 December 2026               [Page 11]
+
+Internet-Draft                PQC for RPKI                     June 2026
+
+
    Parallel publication introduces the possibility of semantic
    divergence.  For example, the RSA branch and the PQC branch might
    contain different ROA payloads, stale manifests, or different CRL
@@ -610,13 +636,6 @@ Internet-Draft                PQC for RPKI                     June 2026
    follow the operational guidance in RFC 9881 and RFC 9882.
    Deterministic signing is not preferred for platforms where side-
    channel or fault attacks are a concern.
-
-
-
-Yoshikawa               Expires 21 December 2026               [Page 11]
-
-Internet-Draft                PQC for RPKI                     June 2026
-
 
    Algorithm confusion is possible if AlgorithmIdentifier parameters,
    SignerInfo digestAlgorithm, CMS signed attributes, or certificate
@@ -648,6 +667,13 @@ Internet-Draft                PQC for RPKI                     June 2026
    strengthen ML-DSA-65 requirement language until complete RFC 6488 PQC
    objects are generated and major validator behavior is measured.
 
+
+
+Yoshikawa               Expires 21 December 2026               [Page 12]
+
+Internet-Draft                PQC for RPKI                     June 2026
+
+
    *  Whether ML-DSA-65 should be mandatory-to-implement for RPs and
       CAs.
 
@@ -664,15 +690,6 @@ Internet-Draft                PQC for RPKI                     June 2026
 
    [I-D.doesburg-sidrops-nullscheme] should be considered separately
    from the initial signature-algorithm profile.
-
-
-
-
-
-Yoshikawa               Expires 21 December 2026               [Page 12]
-
-Internet-Draft                PQC for RPKI                     June 2026
-
 
    *  How to define a transition timetable and readiness metrics for
       RPKI
@@ -703,6 +720,16 @@ Internet-Draft                PQC for RPKI                     June 2026
 
 16.  Normative References
 
+
+
+
+
+
+Yoshikawa               Expires 21 December 2026               [Page 13]
+
+Internet-Draft                PQC for RPKI                     June 2026
+
+
    [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
@@ -720,15 +747,6 @@ Internet-Draft                PQC for RPKI                     June 2026
               X.509 PKIX Resource Certificates", RFC 6487,
               DOI 10.17487/RFC6487, February 2012,
               <https://www.rfc-editor.org/info/rfc6487>.
-
-
-
-
-
-Yoshikawa               Expires 21 December 2026               [Page 13]
-
-Internet-Draft                PQC for RPKI                     June 2026
-
 
    [RFC6488]  Lepinski, M., Chi, A., and S. Kent, "Signed Object
               Template for the Resource Public Key Infrastructure
@@ -760,6 +778,14 @@ Internet-Draft                PQC for RPKI                     June 2026
               RFC 9582, DOI 10.17487/RFC9582, May 2024,
               <https://www.rfc-editor.org/info/rfc9582>.
 
+
+
+
+Yoshikawa               Expires 21 December 2026               [Page 14]
+
+Internet-Draft                PQC for RPKI                     June 2026
+
+
    [RFC9589]  Snijders, J. and T. Harrison, "On the Use of the
               Cryptographic Message Syntax (CMS) Signing-Time Attribute
               in Resource Public Key Infrastructure (RPKI) Signed
@@ -778,13 +804,6 @@ Internet-Draft                PQC for RPKI                     June 2026
               Signature Algorithm (ML-DSA)", RFC 9881,
               DOI 10.17487/RFC9881, October 2025,
               <https://www.rfc-editor.org/info/rfc9881>.
-
-
-
-Yoshikawa               Expires 21 December 2026               [Page 14]
-
-Internet-Draft                PQC for RPKI                     June 2026
-
 
    [RFC9882]  Salter, B., Raine, A., and D. Van Geest, "Use of the ML-
               DSA Signature Algorithm in the Cryptographic Message
@@ -813,6 +832,16 @@ Internet-Draft                PQC for RPKI                     June 2026
               RFC 7942, DOI 10.17487/RFC7942, July 2016,
               <https://www.rfc-editor.org/info/rfc7942>.
 
+
+
+
+
+
+Yoshikawa               Expires 21 December 2026               [Page 15]
+
+Internet-Draft                PQC for RPKI                     June 2026
+
+
    [I-D.ietf-lamps-pq-composite-sigs]
               Ounsworth, M., Gray, J., Pala, M., Klaußner, J., and S.
               Fluhrer, "Composite Module-Lattice-Based Digital Signature
@@ -834,14 +863,6 @@ Internet-Draft                PQC for RPKI                     June 2026
    [I-D.doesburg-sidrops-nullscheme]
               Doesburg, D., "Null Scheme for Signed Objects in the
               Resource Public Key Infrastructure (RPKI)", Work in
-
-
-
-Yoshikawa               Expires 21 December 2026               [Page 15]
-
-Internet-Draft                PQC for RPKI                     June 2026
-
-
               Progress, Internet-Draft, draft-doesburg-sidrops-
               nullscheme-00, 5 October 2025,
               <https://datatracker.ietf.org/doc/html/draft-doesburg-
@@ -864,27 +885,6 @@ Author's Address
    Tomoki Yoshikawa
    Graduate School of Informatics, Kyoto University
    Email: segre@marokiki.net
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

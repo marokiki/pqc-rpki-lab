@@ -2,32 +2,37 @@ algorithms:
   - name: rsa2048-sha256
     role: baseline
     type: classical-signature
-    required: true
+    mandatory_profile: true
+    comparison_required: true
   - name: ML-DSA-65
     role: primary-pqc-candidate
     type: pqc-signature
     oqs_names:
       - ML-DSA-65
       - Dilithium3
-    required: true
+    mandatory_profile: true
+    comparison_required: true
   - name: ML-DSA-87
     role: high-assurance-pqc-candidate
     type: pqc-signature
     oqs_names:
       - ML-DSA-87
       - Dilithium5
-    required: false
+    mandatory_profile: false
+    comparison_required: true
   - name: SLH-DSA-SHAKE-128s
     role: diversity-pqc-candidate
     type: pqc-signature
     oqs_names:
       - SLH-DSA-SHAKE-128s
       - SPHINCS+-SHAKE-128s-simple
-    required: false
+    mandatory_profile: false
+    comparison_required: true
   - name: SLH-DSA-SHAKE-192s
     role: conservative-diversity-pqc-candidate
     type: pqc-signature
     oqs_names:
       - SLH-DSA-SHAKE-192s
       - SPHINCS+-SHAKE-192s-simple
-    required: false
+    mandatory_profile: false
+    comparison_required: true

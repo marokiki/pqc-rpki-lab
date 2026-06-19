@@ -2,6 +2,7 @@
   "algorithms": [
     {
       "backend": "cryptography or OpenSSL",
+      "comparison_required": true,
       "family": "RSA",
       "name": "RSA-2048/SHA-256",
       "nist_category": "classical",
@@ -11,10 +12,11 @@
       "signature_bytes": 256,
       "specification": "RFC 7935",
       "status": "confirmed",
-      "track": "required"
+      "track": "baseline"
     },
     {
       "backend": "oqs-python/liboqs",
+      "comparison_required": true,
       "family": "ML-DSA",
       "name": "ML-DSA-65",
       "nist_category": "3",
@@ -27,10 +29,11 @@
       "signature_bytes": 3309,
       "specification": "FIPS 204; RFC 9881; RFC 9882",
       "status": "confirmed",
-      "track": "required"
+      "track": "primary"
     },
     {
       "backend": "oqs-python/liboqs",
+      "comparison_required": true,
       "family": "ML-DSA",
       "name": "ML-DSA-87",
       "nist_category": "5",
@@ -43,10 +46,11 @@
       "signature_bytes": 4627,
       "specification": "FIPS 204; RFC 9881; RFC 9882",
       "status": "confirmed",
-      "track": "required"
+      "track": "high-assurance"
     },
     {
       "backend": "oqs-python/liboqs",
+      "comparison_required": true,
       "family": "SLH-DSA",
       "name": "SLH-DSA-SHAKE-128s",
       "nist_category": "1",
@@ -59,10 +63,11 @@
       "signature_bytes": 7856,
       "specification": "FIPS 205; RFC 9909; RFC 9814",
       "status": "confirmed",
-      "track": "required"
+      "track": "diversity"
     },
     {
       "backend": "oqs-python/liboqs",
+      "comparison_required": true,
       "family": "SLH-DSA",
       "name": "SLH-DSA-SHAKE-192s",
       "nist_category": "3",
@@ -75,10 +80,11 @@
       "signature_bytes": 16224,
       "specification": "FIPS 205; RFC 9909; RFC 9814",
       "status": "confirmed",
-      "track": "required"
+      "track": "diversity"
     },
     {
       "backend": "liboqs",
+      "comparison_required": false,
       "family": "Falcon/FN-DSA",
       "name": "Falcon-512",
       "nist_category": "1",
@@ -94,6 +100,7 @@
     },
     {
       "backend": "liboqs",
+      "comparison_required": false,
       "family": "Falcon/FN-DSA",
       "name": "Falcon-1024",
       "nist_category": "5",
@@ -109,6 +116,7 @@
     },
     {
       "backend": "liboqs",
+      "comparison_required": false,
       "family": "MAYO",
       "name": "MAYO-1",
       "nist_category": "1",
@@ -124,6 +132,7 @@
     },
     {
       "backend": "liboqs",
+      "comparison_required": false,
       "family": "SNOVA",
       "name": "SNOVA-(24,5,4)",
       "nist_category": "1",
@@ -139,6 +148,7 @@
     },
     {
       "backend": "upstream implementation required",
+      "comparison_required": false,
       "family": "HAWK",
       "name": "HAWK-512",
       "nist_category": "1",
@@ -563,9 +573,10 @@
     {
       "backend": "cryptography or OpenSSL",
       "benchmark_status": "confirmed",
+      "comparison_required": "True",
       "family": "RSA",
       "iterations": "3",
-      "keygen_ms_median": "65.034334",
+      "keygen_ms_median": "88.241667",
       "measured_public_key_bytes": "294",
       "measured_signature_bytes": "256",
       "name": "RSA-2048/SHA-256",
@@ -575,20 +586,21 @@
       "provider_name": "cryptography",
       "public_key_bytes": "270",
       "reason": "",
-      "secret_key_bytes": "1217",
-      "sign_ms_median": "1.847375",
+      "secret_key_bytes": "1218",
+      "sign_ms_median": "1.828167",
       "signature_bytes": "256",
       "specification": "RFC 7935",
       "status": "confirmed",
-      "track": "required",
-      "verify_ms_median": "0.061541"
+      "track": "baseline",
+      "verify_ms_median": "0.054833"
     },
     {
       "backend": "OpenSSL default provider",
       "benchmark_status": "confirmed",
+      "comparison_required": "True",
       "family": "ML-DSA",
       "iterations": "3",
-      "keygen_ms_median": "5.587417",
+      "keygen_ms_median": "5.35275",
       "measured_public_key_bytes": "1974",
       "measured_signature_bytes": "3309",
       "name": "ML-DSA-65",
@@ -599,19 +611,20 @@
       "public_key_bytes": "1952",
       "reason": "",
       "secret_key_bytes": "4098",
-      "sign_ms_median": "5.636167",
+      "sign_ms_median": "5.90875",
       "signature_bytes": "3309",
       "specification": "FIPS 204; RFC 9881; RFC 9882",
       "status": "confirmed",
-      "track": "required",
-      "verify_ms_median": "4.483958"
+      "track": "primary",
+      "verify_ms_median": "4.834084"
     },
     {
       "backend": "OpenSSL default provider",
       "benchmark_status": "confirmed",
+      "comparison_required": "True",
       "family": "ML-DSA",
       "iterations": "3",
-      "keygen_ms_median": "5.622917",
+      "keygen_ms_median": "7.633125",
       "measured_public_key_bytes": "2614",
       "measured_signature_bytes": "4627",
       "name": "ML-DSA-87",
@@ -622,19 +635,20 @@
       "public_key_bytes": "2592",
       "reason": "",
       "secret_key_bytes": "4962",
-      "sign_ms_median": "5.998292",
+      "sign_ms_median": "7.330166",
       "signature_bytes": "4627",
       "specification": "FIPS 204; RFC 9881; RFC 9882",
       "status": "confirmed",
-      "track": "required",
-      "verify_ms_median": "5.189042"
+      "track": "high-assurance",
+      "verify_ms_median": "6.030584"
     },
     {
       "backend": "OpenSSL default provider",
       "benchmark_status": "confirmed",
+      "comparison_required": "True",
       "family": "SLH-DSA",
       "iterations": "3",
-      "keygen_ms_median": "54.135666",
+      "keygen_ms_median": "53.361125",
       "measured_public_key_bytes": "50",
       "measured_signature_bytes": "7856",
       "name": "SLH-DSA-SHAKE-128s",
@@ -645,19 +659,20 @@
       "public_key_bytes": "32",
       "reason": "",
       "secret_key_bytes": "84",
-      "sign_ms_median": "369.43975",
+      "sign_ms_median": "359.079791",
       "signature_bytes": "7856",
       "specification": "FIPS 205; RFC 9909; RFC 9814",
       "status": "confirmed",
-      "track": "required",
-      "verify_ms_median": "5.7195"
+      "track": "diversity",
+      "verify_ms_median": "5.714458"
     },
     {
       "backend": "OpenSSL default provider",
       "benchmark_status": "confirmed",
+      "comparison_required": "True",
       "family": "SLH-DSA",
       "iterations": "3",
-      "keygen_ms_median": "78.30875",
+      "keygen_ms_median": "72.651875",
       "measured_public_key_bytes": "66",
       "measured_signature_bytes": "16224",
       "name": "SLH-DSA-SHAKE-192s",
@@ -668,16 +683,17 @@
       "public_key_bytes": "48",
       "reason": "",
       "secret_key_bytes": "116",
-      "sign_ms_median": "619.849916",
+      "sign_ms_median": "655.597459",
       "signature_bytes": "16224",
       "specification": "FIPS 205; RFC 9909; RFC 9814",
       "status": "confirmed",
-      "track": "required",
-      "verify_ms_median": "5.815625"
+      "track": "diversity",
+      "verify_ms_median": "5.973459"
     },
     {
       "backend": "liboqs",
       "benchmark_status": "unsupported",
+      "comparison_required": "False",
       "family": "Falcon/FN-DSA",
       "iterations": "",
       "keygen_ms_median": "",
@@ -701,6 +717,7 @@
     {
       "backend": "liboqs",
       "benchmark_status": "unsupported",
+      "comparison_required": "False",
       "family": "Falcon/FN-DSA",
       "iterations": "",
       "keygen_ms_median": "",
@@ -724,6 +741,7 @@
     {
       "backend": "liboqs",
       "benchmark_status": "unsupported",
+      "comparison_required": "False",
       "family": "MAYO",
       "iterations": "",
       "keygen_ms_median": "",
@@ -747,6 +765,7 @@
     {
       "backend": "liboqs",
       "benchmark_status": "unsupported",
+      "comparison_required": "False",
       "family": "SNOVA",
       "iterations": "",
       "keygen_ms_median": "",
@@ -770,6 +789,7 @@
     {
       "backend": "upstream implementation required",
       "benchmark_status": "unsupported",
+      "comparison_required": "False",
       "family": "HAWK",
       "iterations": "",
       "keygen_ms_median": "",

@@ -45,11 +45,11 @@ ML-DSA-65 remains the standards-ready SIDROPS implementation target. OpenSSL gen
 
 | Algorithm | Status | Sign ms | Verify ms | Measured signature bytes |
 |---|---|---|---|---|
-| RSA-2048/SHA-256 | confirmed | 1.847375 | 0.061541 | 256 |
-| ML-DSA-65 | confirmed | 5.636167 | 4.483958 | 3309 |
-| ML-DSA-87 | confirmed | 5.998292 | 5.189042 | 4627 |
-| SLH-DSA-SHAKE-128s | confirmed | 369.43975 | 5.7195 | 7856 |
-| SLH-DSA-SHAKE-192s | confirmed | 619.849916 | 5.815625 | 16224 |
+| RSA-2048/SHA-256 | confirmed | 1.828167 | 0.054833 | 256 |
+| ML-DSA-65 | confirmed | 5.90875 | 4.834084 | 3309 |
+| ML-DSA-87 | confirmed | 7.330166 | 6.030584 | 4627 |
+| SLH-DSA-SHAKE-128s | confirmed | 359.079791 | 5.714458 | 7856 |
+| SLH-DSA-SHAKE-192s | confirmed | 655.597459 | 5.973459 | 16224 |
 | Falcon-512 | unsupported |  |  |  |
 | Falcon-1024 | unsupported |  |  |  |
 | MAYO-1 | unsupported |  |  |  |

@@ -46,7 +46,7 @@ def main() -> None:
     real_status = real_repository[0].get("status", "skipped") if real_repository else "skipped"
 
     capability = [
-        {"component": "Static algorithm metadata", "status": "confirmed", "backend": "Python standard library", "notes": "Required and optional tracks"},
+        {"component": "Static algorithm metadata", "status": "confirmed", "backend": "Python standard library", "notes": "Profile role and comparison scope are recorded separately"},
         {"component": "Primitive benchmark", "status": "confirmed" if any(row.get("benchmark_status") == "confirmed" for row in primitive) else "unsupported", "backend": "cryptography/liboqs", "notes": "Optional dependencies"},
         {"component": "Repository/RRDP/cache estimator", "status": "estimated", "backend": "Python standard library", "notes": "First-order model"},
         {"component": "Real repository cache adapter", "status": real_status, "backend": "filesystem", "notes": "Requires explicit cache path"},

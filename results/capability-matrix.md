@@ -4,7 +4,7 @@
 
 | Component | Status | Backend | Notes |
 |---|---|---|---|
-| Static algorithm metadata | confirmed | Python standard library | Required and optional tracks |
+| Static algorithm metadata | confirmed | Python standard library | Profile role and comparison scope are recorded separately |
 | Primitive benchmark | confirmed | cryptography/liboqs | Optional dependencies |
 | Repository/RRDP/cache estimator | estimated | Python standard library | First-order model |
 | Real repository cache adapter | skipped | filesystem | Requires explicit cache path |

@@ -172,7 +172,7 @@ def benchmark_pqc(algorithm: Algorithm, iterations: int) -> dict[str, object]:
     oqs_row = benchmark_oqs(algorithm, iterations)
     if oqs_row.get("benchmark_status") == "confirmed":
         return oqs_row
-    if algorithm.track == "required":
+    if algorithm.comparison_required:
         return benchmark_openssl(algorithm, iterations)
     return oqs_row
 
