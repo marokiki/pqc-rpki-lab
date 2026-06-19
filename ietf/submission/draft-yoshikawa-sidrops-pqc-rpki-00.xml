@@ -9,7 +9,7 @@
         <email>segre@marokiki.net</email>
       </address>
     </author>
-    <date year="2026" month="June" day="18" />
+    <date year="2026" month="June" day="19" />
     <area>Routing</area>
     <workgroup>SIDROPS</workgroup>
     <keyword>RPKI</keyword>
@@ -120,10 +120,11 @@
     </section>
     <section anchor="cms-signed-object-profile">
       <name>CMS Signed Object Profile</name>
-      <t>RPKI signed objects using ML-DSA MUST follow the CMS conventions for ML-DSA defined in RFC 9882 and the RPKI signed object template defined in RFC 6488.</t>
+      <t>RPKI signed objects using ML-DSA MUST follow the CMS conventions for ML-DSA defined in <xref target="RFC9882" /> and the RPKI signed object template defined in <xref target="RFC6488" />, as updated by <xref target="RFC9589" />.</t>
       <t>The signatureAlgorithm field of SignerInfo MUST contain id-ml-dsa-65 for the primary Next Suite.  AlgorithmIdentifier parameters MUST be absent.</t>
-      <t>The signedAttrs element remains REQUIRED for RPKI signed objects.  It MUST include the content-type and message-digest attributes required by RFC 6488.  Other signed attributes remain restricted by the RPKI signed object template.</t>
-      <t>This revision does not select a digestAlgorithms or SignerInfo digestAlgorithm value for ML-DSA.  OpenSSL 3.6.2 generated ML-DSA certificates and CRLs but its CMS CLI rejected ML-DSA signing with <tt>CMS_add1_signer:no default digest</tt>.  The correct RFC 9882 and RFC 6488 combination therefore requires implementation and interoperability evidence before normative values are specified here.</t>
+      <t>For ML-DSA-65, the digestAlgorithms field of SignedData and the digestAlgorithm field of SignerInfo MUST contain id-sha512.  The parameters field of that AlgorithmIdentifier MUST be absent.  The message-digest signed attribute MUST contain the SHA-512 digest of the eContent.  SHA-512 is selected from the algorithms permitted for ML-DSA-65 by <xref target="RFC9882" /> to provide one mandatory interoperable encoding for this RPKI suite.</t>
+      <t>The signedAttrs element remains REQUIRED for RPKI signed objects.  In accordance with <xref target="RFC6488" /> as updated by <xref target="RFC9589" />, it MUST contain exactly one content-type attribute, one message-digest attribute, and one signing-time attribute.  The binary-signing-time attribute and all other signed attributes MUST be absent.  In particular, the CMSAlgorithmProtection attribute suggested by the general CMS guidance in <xref target="RFC9882" /> MUST NOT be included because the RPKI signed object profile restricts signedAttrs to those three attributes.</t>
+      <t>OpenSSL 3.6.2 generated ML-DSA certificates and CRLs but its CMS CLI rejected ML-DSA signing with <tt>CMS_add1_signer:no default digest</tt>.  The SHA-512 selection above follows <xref target="RFC9882" />; the CLI failure remains an implementation and interoperability gap rather than an unspecified protocol value.</t>
       <t>The CMS eContentType and eContent for ROAs, manifests, and other RPKI signed objects are unchanged.  Validators MUST apply the object-specific validation rules after CMS signature validation exactly as they do for the Current Suite.</t>
     </section>
     <section anchor="manifests-roas-and-repository-processing">
@@ -328,174 +329,321 @@
   <back>
     <references>
       <name>Normative References</name>
-      <reference anchor="RFC2119">
+      <reference anchor="RFC2119" target="https://www.rfc-editor.org/info/rfc2119">
         <front>
           <title>Key words for use in RFCs to Indicate Requirement Levels</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="S. Bradner" initials="S." surname="Bradner" />
+          <date month="March" year="1997" />
+          <abstract>
+            <t>In many standards track documents several words are used to signify the requirements in the specification. These words are often capitalized. This document defines these words as they should be interpreted in IETF documents. This document specifies an Internet Best Current Practices for the Internet Community, and requests discussion and suggestions for improvements.</t>
+          </abstract>
         </front>
+        <seriesInfo name="BCP" value="14" />
         <seriesInfo name="RFC" value="2119" />
+        <seriesInfo name="DOI" value="10.17487/RFC2119" />
       </reference>
-      <reference anchor="RFC8174">
+      <reference anchor="RFC8174" target="https://www.rfc-editor.org/info/rfc8174">
         <front>
           <title>Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="B. Leiba" initials="B." surname="Leiba" />
+          <date month="May" year="2017" />
+          <abstract>
+            <t>RFC 2119 specifies common key words that may be used in protocol specifications. This document aims to reduce the ambiguity by clarifying that only UPPERCASE usage of the key words have the defined special meanings.</t>
+          </abstract>
         </front>
+        <seriesInfo name="BCP" value="14" />
         <seriesInfo name="RFC" value="8174" />
+        <seriesInfo name="DOI" value="10.17487/RFC8174" />
       </reference>
-      <reference anchor="RFC6480">
+      <reference anchor="RFC6480" target="https://www.rfc-editor.org/info/rfc6480">
         <front>
           <title>An Infrastructure to Support Secure Internet Routing</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="M. Lepinski" initials="M." surname="Lepinski" />
+          <author fullname="S. Kent" initials="S." surname="Kent" />
+          <date month="February" year="2012" />
+          <abstract>
+            <t>This document describes an architecture for an infrastructure to support improved security of Internet routing. The foundation of this architecture is a Resource Public Key Infrastructure (RPKI) that represents the allocation hierarchy of IP address space and Autonomous System (AS) numbers; and a distributed repository system for storing and disseminating the data objects that comprise the RPKI, as well as other signed objects necessary for improved routing security. As an initial application of this architecture, the document describes how a legitimate holder of IP address space can explicitly and verifiably authorize one or more ASes to originate routes to that address space. Such verifiable authorizations could be used, for example, to more securely construct BGP route filters. This document is not an Internet Standards Track specification; it is published for informational purposes.</t>
+          </abstract>
         </front>
         <seriesInfo name="RFC" value="6480" />
+        <seriesInfo name="DOI" value="10.17487/RFC6480" />
       </reference>
-      <reference anchor="RFC6487">
+      <reference anchor="RFC6487" target="https://www.rfc-editor.org/info/rfc6487">
         <front>
           <title>A Profile for X.509 PKIX Resource Certificates</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="G. Huston" initials="G." surname="Huston" />
+          <author fullname="G. Michaelson" initials="G." surname="Michaelson" />
+          <author fullname="R. Loomans" initials="R." surname="Loomans" />
+          <date month="February" year="2012" />
+          <abstract>
+            <t>This document defines a standard profile for X.509 certificates for the purpose of supporting validation of assertions of "right-of-use" of Internet Number Resources (INRs). The certificates issued under this profile are used to convey the issuer's authorization of the subject to be regarded as the current holder of a "right-of-use" of the INRs that are described in the certificate. This document contains the normative specification of Certificate and Certificate Revocation List (CRL) syntax in the Resource Public Key Infrastructure (RPKI). This document also specifies profiles for the format of certificate requests and specifies the Relying Party RPKI certificate path validation procedure. [STANDARDS-TRACK]</t>
+          </abstract>
         </front>
         <seriesInfo name="RFC" value="6487" />
+        <seriesInfo name="DOI" value="10.17487/RFC6487" />
       </reference>
-      <reference anchor="RFC6488">
+      <reference anchor="RFC6488" target="https://www.rfc-editor.org/info/rfc6488">
         <front>
           <title>Signed Object Template for the Resource Public Key Infrastructure (RPKI)</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="M. Lepinski" initials="M." surname="Lepinski" />
+          <author fullname="A. Chi" initials="A." surname="Chi" />
+          <author fullname="S. Kent" initials="S." surname="Kent" />
+          <date month="February" year="2012" />
+          <abstract>
+            <t>This document defines a generic profile for signed objects used in the Resource Public Key Infrastructure (RPKI). These RPKI signed objects make use of Cryptographic Message Syntax (CMS) as a standard encapsulation format. [STANDARDS-TRACK]</t>
+          </abstract>
         </front>
         <seriesInfo name="RFC" value="6488" />
+        <seriesInfo name="DOI" value="10.17487/RFC6488" />
       </reference>
-      <reference anchor="RFC6916">
+      <reference anchor="RFC6916" target="https://www.rfc-editor.org/info/rfc6916">
         <front>
           <title>Algorithm Agility Procedure for the Resource Public Key Infrastructure (RPKI)</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="R. Gagliano" initials="R." surname="Gagliano" />
+          <author fullname="S. Kent" initials="S." surname="Kent" />
+          <author fullname="S. Turner" initials="S." surname="Turner" />
+          <date month="April" year="2013" />
+          <abstract>
+            <t>This document specifies the process that Certification Authorities (CAs) and Relying Parties (RPs) participating in the Resource Public Key Infrastructure (RPKI) will need to follow to transition to a new (and probably cryptographically stronger) algorithm set. The process is expected to be completed over a timescale of several years. Consequently, no emergency transition is specified. The transition procedure defined in this document supports only a top-down migration (parent migrates before children).</t>
+          </abstract>
         </front>
+        <seriesInfo name="BCP" value="182" />
         <seriesInfo name="RFC" value="6916" />
+        <seriesInfo name="DOI" value="10.17487/RFC6916" />
       </reference>
-      <reference anchor="RFC7935">
+      <reference anchor="RFC7935" target="https://www.rfc-editor.org/info/rfc7935">
         <front>
           <title>The Profile for Algorithms and Key Sizes for Use in the Resource Public Key Infrastructure</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="G. Huston" initials="G." surname="Huston" />
+          <author fullname="G. Michaelson" initials="G." role="editor" surname="Michaelson" />
+          <date month="August" year="2016" />
+          <abstract>
+            <t>This document specifies the algorithms, algorithms' parameters, asymmetric key formats, asymmetric key size, and signature format for the Resource Public Key Infrastructure (RPKI) subscribers that generate digital signatures on certificates, Certificate Revocation Lists (CRLs), Cryptographic Message Syntax (CMS) signed objects and certification requests as well as for the relying parties (RPs) that verify these digital signatures.</t>
+          </abstract>
         </front>
         <seriesInfo name="RFC" value="7935" />
+        <seriesInfo name="DOI" value="10.17487/RFC7935" />
       </reference>
-      <reference anchor="RFC8182">
+      <reference anchor="RFC8182" target="https://www.rfc-editor.org/info/rfc8182">
         <front>
           <title>The RPKI Repository Delta Protocol (RRDP)</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="T. Bruijnzeels" initials="T." surname="Bruijnzeels" />
+          <author fullname="O. Muravskiy" initials="O." surname="Muravskiy" />
+          <author fullname="B. Weber" initials="B." surname="Weber" />
+          <author fullname="R. Austein" initials="R." surname="Austein" />
+          <date month="July" year="2017" />
+          <abstract>
+            <t>In the Resource Public Key Infrastructure (RPKI), Certificate Authorities (CAs) publish certificates, including end-entity certificates, Certificate Revocation Lists (CRLs), and RPKI signed objects to repositories. Relying Parties retrieve the published information from those repositories. This document specifies a new RPKI Repository Delta Protocol (RRDP) for this purpose. RRDP was specifically designed for scaling. It relies on an Update Notification File which lists the current Snapshot and Delta Files that can be retrieved using HTTPS (HTTP over Transport Layer Security (TLS)), and it enables the use of Content Distribution Networks (CDNs) or other caching infrastructures for the retrieval of these files.</t>
+          </abstract>
         </front>
         <seriesInfo name="RFC" value="8182" />
+        <seriesInfo name="DOI" value="10.17487/RFC8182" />
       </reference>
-      <reference anchor="RFC9286">
+      <reference anchor="RFC9286" target="https://www.rfc-editor.org/info/rfc9286">
         <front>
           <title>Manifests for the Resource Public Key Infrastructure (RPKI)</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="R. Austein" initials="R." surname="Austein" />
+          <author fullname="G. Huston" initials="G." surname="Huston" />
+          <author fullname="S. Kent" initials="S." surname="Kent" />
+          <author fullname="M. Lepinski" initials="M." surname="Lepinski" />
+          <date month="June" year="2022" />
+          <abstract>
+            <t>This document defines a "manifest" for use in the Resource Public Key Infrastructure (RPKI). A manifest is a signed object (file) that contains a listing of all the signed objects (files) in the repository publication point (directory) associated with an authority responsible for publishing in the repository. For each certificate, Certificate Revocation List (CRL), or other type of signed objects issued by the authority that are published at this repository publication point, the manifest contains both the name of the file containing the object and a hash of the file content. Manifests are intended to enable a relying party (RP) to detect certain forms of attacks against a repository. Specifically, if an RP checks a manifest's contents against the signed objects retrieved from a repository publication point, then the RP can detect replay attacks, and unauthorized in-flight modification or deletion of signed objects. This document obsoletes RFC 6486.</t>
+          </abstract>
         </front>
         <seriesInfo name="RFC" value="9286" />
+        <seriesInfo name="DOI" value="10.17487/RFC9286" />
       </reference>
-      <reference anchor="RFC9582">
+      <reference anchor="RFC9582" target="https://www.rfc-editor.org/info/rfc9582">
         <front>
           <title>A Profile for Route Origin Authorizations (ROAs)</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="J. Snijders" initials="J." surname="Snijders" />
+          <author fullname="B. Maddison" initials="B." surname="Maddison" />
+          <author fullname="M. Lepinski" initials="M." surname="Lepinski" />
+          <author fullname="D. Kong" initials="D." surname="Kong" />
+          <author fullname="S. Kent" initials="S." surname="Kent" />
+          <date month="May" year="2024" />
+          <abstract>
+            <t>This document defines a standard profile for Route Origin Authorizations (ROAs). A ROA is a digitally signed object that provides a means of verifying that an IP address block holder has authorized an Autonomous System (AS) to originate routes to one or more prefixes within the address block. This document obsoletes RFC 6482.</t>
+          </abstract>
         </front>
         <seriesInfo name="RFC" value="9582" />
+        <seriesInfo name="DOI" value="10.17487/RFC9582" />
       </reference>
-      <reference anchor="RFC9814">
+      <reference anchor="RFC9589" target="https://www.rfc-editor.org/info/rfc9589">
+        <front>
+          <title>On the Use of the Cryptographic Message Syntax (CMS) Signing-Time Attribute in Resource Public Key Infrastructure (RPKI) Signed Objects</title>
+          <author fullname="J. Snijders" initials="J." surname="Snijders" />
+          <author fullname="T. Harrison" initials="T." surname="Harrison" />
+          <date month="May" year="2024" />
+          <abstract>
+            <t>In the Resource Public Key Infrastructure (RPKI), Signed Objects are defined as Cryptographic Message Syntax (CMS) protected content types. A Signed Object contains a signing-time attribute, representing the purported time at which the object was signed by its issuer. RPKI repositories are accessible using the rsync and RPKI Repository Delta protocols, allowing Relying Parties (RPs) to synchronize a local copy of the RPKI repository used for validation with the remote repositories. This document describes how the CMS signing-time attribute can be used to avoid needless retransfers of data when switching between different synchronization protocols. This document updates RFC 6488 by mandating the presence of the CMS signing-time attribute and disallowing the use of the binary-signing-time attribute.</t>
+          </abstract>
+        </front>
+        <seriesInfo name="RFC" value="9589" />
+        <seriesInfo name="DOI" value="10.17487/RFC9589" />
+      </reference>
+      <reference anchor="RFC9814" target="https://www.rfc-editor.org/info/rfc9814">
         <front>
           <title>Use of the SLH-DSA Signature Algorithm in the Cryptographic Message Syntax (CMS)</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="R. Housley" initials="R." surname="Housley" />
+          <author fullname="S. Fluhrer" initials="S." surname="Fluhrer" />
+          <author fullname="P. Kampanakis" initials="P." surname="Kampanakis" />
+          <author fullname="B. Westerbaan" initials="B." surname="Westerbaan" />
+          <date month="July" year="2025" />
+          <abstract>
+            <t>SLH-DSA is a stateless hash-based signature algorithm. This document specifies the conventions for using the SLH-DSA signature algorithm with the Cryptographic Message Syntax (CMS). In addition, the algorithm identifier and public key syntax are provided.</t>
+          </abstract>
         </front>
         <seriesInfo name="RFC" value="9814" />
+        <seriesInfo name="DOI" value="10.17487/RFC9814" />
       </reference>
-      <reference anchor="RFC9881">
+      <reference anchor="RFC9881" target="https://www.rfc-editor.org/info/rfc9881">
         <front>
-          <title>Internet X.509 Public Key Infrastructure -- Algorithm Identifiers for ML-DSA</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <title>Internet X.509 Public Key Infrastructure -- Algorithm Identifiers for the Module-Lattice-Based Digital Signature Algorithm (ML-DSA)</title>
+          <author fullname="J. Massimo" initials="J." surname="Massimo" />
+          <author fullname="P. Kampanakis" initials="P." surname="Kampanakis" />
+          <author fullname="S. Turner" initials="S." surname="Turner" />
+          <author fullname="B. E. Westerbaan" initials="B. E." surname="Westerbaan" />
+          <date month="October" year="2025" />
+          <abstract>
+            <t>Digital signatures are used within X.509 certificates and Certificate Revocation Lists (CRLs), and to sign messages. This document specifies the conventions for using FIPS 204, the Module-Lattice-Based Digital Signature Algorithm (ML-DSA) in Internet X.509 certificates and CRLs. The conventions for the associated signatures, subject public keys, and private key are also described.</t>
+          </abstract>
         </front>
         <seriesInfo name="RFC" value="9881" />
+        <seriesInfo name="DOI" value="10.17487/RFC9881" />
       </reference>
-      <reference anchor="RFC9882">
+      <reference anchor="RFC9882" target="https://www.rfc-editor.org/info/rfc9882">
         <front>
           <title>Use of the ML-DSA Signature Algorithm in the Cryptographic Message Syntax (CMS)</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="B. Salter" initials="B." surname="Salter" />
+          <author fullname="A. Raine" initials="A." surname="Raine" />
+          <author fullname="D. Van Geest" initials="D." surname="Van Geest" />
+          <date month="October" year="2025" />
+          <abstract>
+            <t>The Module-Lattice-Based Digital Signature Algorithm (ML-DSA), as defined by NIST in FIPS 204, is a post-quantum digital signature scheme that aims to be secure against an adversary in possession of a Cryptographically Relevant Quantum Computer (CRQC). This document specifies the conventions for using the ML-DSA signature algorithm with the Cryptographic Message Syntax (CMS). In addition, the algorithm identifier syntax is provided.</t>
+          </abstract>
         </front>
         <seriesInfo name="RFC" value="9882" />
+        <seriesInfo name="DOI" value="10.17487/RFC9882" />
       </reference>
-      <reference anchor="RFC9909">
+      <reference anchor="RFC9909" target="https://www.rfc-editor.org/info/rfc9909">
         <front>
-          <title>Internet X.509 Public Key Infrastructure -- Algorithm Identifiers for SLH-DSA</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <title>Internet X.509 Public Key Infrastructure -- Algorithm Identifiers for the Stateless Hash-Based Digital Signature Algorithm (SLH-DSA)</title>
+          <author fullname="K. Bashiri" initials="K." surname="Bashiri" />
+          <author fullname="S. Fluhrer" initials="S." surname="Fluhrer" />
+          <author fullname="S. Gazdag" initials="S." surname="Gazdag" />
+          <author fullname="D. Van Geest" initials="D." surname="Van Geest" />
+          <author fullname="S. Kousidis" initials="S." surname="Kousidis" />
+          <date month="December" year="2025" />
+          <abstract>
+            <t>Digital signatures are used within the X.509 Public Key Infrastructure, such as X.509 certificates and Certificate Revocation Lists (CRLs), as well as to sign messages. This document specifies the conventions for using the Stateless Hash-Based Digital Signature Algorithm (SLH-DSA) in the X.509 Public Key Infrastructure. The conventions for the associated signatures, subject public keys, and private keys are also specified.</t>
+          </abstract>
         </front>
         <seriesInfo name="RFC" value="9909" />
+        <seriesInfo name="DOI" value="10.17487/RFC9909" />
       </reference>
-      <reference anchor="FIPS204">
+      <reference anchor="FIPS204" target="https://doi.org/10.6028/NIST.FIPS.204">
         <front>
           <title>Module-Lattice-Based Digital Signature Standard</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author>
+            <organization>National Institute of Standards and Technology</organization>
+          </author>
+          <date month="August" year="2024" />
         </front>
         <seriesInfo name="FIPS" value="204" />
       </reference>
-      <reference anchor="FIPS205">
+      <reference anchor="FIPS205" target="https://doi.org/10.6028/NIST.FIPS.205">
         <front>
           <title>Stateless Hash-Based Digital Signature Standard</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author>
+            <organization>National Institute of Standards and Technology</organization>
+          </author>
+          <date month="August" year="2024" />
         </front>
         <seriesInfo name="FIPS" value="205" />
       </reference>
     </references>
     <references>
       <name>Informative References</name>
-      <reference anchor="RFC7942">
+      <reference anchor="RFC7942" target="https://www.rfc-editor.org/info/rfc7942">
         <front>
           <title>Improving Awareness of Running Code: The Implementation Status Section</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="Y. Sheffer" initials="Y." surname="Sheffer" />
+          <author fullname="A. Farrel" initials="A." surname="Farrel" />
+          <date month="July" year="2016" />
+          <abstract>
+            <t>This document describes a simple process that allows authors of Internet-Drafts to record the status of known implementations by including an Implementation Status section. This will allow reviewers and working groups to assign due consideration to documents that have the benefit of running code, which may serve as evidence of valuable experimentation and feedback that have made the implemented protocols more mature.</t>
+            <t>This process is not mandatory. Authors of Internet-Drafts are encouraged to consider using the process for their documents, and working groups are invited to think about applying the process to all of their protocol specifications. This document obsoletes RFC 6982, advancing it to a Best Current Practice.</t>
+          </abstract>
         </front>
+        <seriesInfo name="BCP" value="205" />
         <seriesInfo name="RFC" value="7942" />
+        <seriesInfo name="DOI" value="10.17487/RFC7942" />
       </reference>
-      <reference anchor="I-D.ietf-lamps-pq-composite-sigs">
+      <reference anchor="I-D.ietf-lamps-pq-composite-sigs" target="https://datatracker.ietf.org/doc/html/draft-ietf-lamps-pq-composite-sigs-19">
         <front>
-          <title>Composite ML-DSA for use in X.509 Public Key Infrastructure</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <title>Composite Module-Lattice-Based Digital Signature Algorithm (ML-DSA) for use in X.509 Public Key Infrastructure</title>
+          <author fullname="Mike Ounsworth" initials="M." surname="Ounsworth">
+            <organization>Entrust Limited</organization>
+          </author>
+          <author fullname="John Gray" initials="J." surname="Gray">
+            <organization>Entrust Limited</organization>
+          </author>
+          <author fullname="Massimiliano Pala" initials="M." surname="Pala">
+            <organization>OpenCA Labs</organization>
+          </author>
+          <author fullname="Jan Klaußner" initials="J." surname="Klaußner">
+            <organization>Bundesdruckerei GmbH</organization>
+          </author>
+          <author fullname="Scott Fluhrer" initials="S." surname="Fluhrer">
+            <organization>Cisco Systems</organization>
+          </author>
+          <date day="21" month="April" year="2026" />
+          <abstract>
+            <t>This document defines combinations of US NIST Module-Lattice-Based Digital Signature Algorithm (ML-DSA) in hybrid with traditional algorithms RSASSA-PKCS1-v1.5, RSASSA-PSS, ECDSA, Ed25519, and Ed448. These combinations are tailored to meet regulatory guidelines in certain regions. Composite ML-DSA is applicable in applications that use X.509 or PKIX data structures that accept ML-DSA, but where the operator wants extra protection against breaks or catastrophic bugs in ML-DSA, and where existential unforgeability (EUF-CMA) level security is acceptable.</t>
+          </abstract>
         </front>
-        <seriesInfo name="Internet-Draft" value="draft-ietf-lamps-pq-composite-sigs" />
+        <seriesInfo name="Internet-Draft" value="draft-ietf-lamps-pq-composite-sigs-19" />
       </reference>
-      <reference anchor="I-D.ietf-lamps-cms-composite-sigs">
+      <reference anchor="I-D.ietf-lamps-cms-composite-sigs" target="https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cms-composite-sigs-05">
         <front>
-          <title>Composite ML-DSA for use in Cryptographic Message Syntax</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <title>Composite Module-Lattice-Based Digital Signature Algorithm (ML-DSA) for use in Cryptographic Message Syntax (CMS)</title>
+          <author fullname="Mike Ounsworth" initials="M." surname="Ounsworth">
+            <organization>Entrust Limited</organization>
+          </author>
+          <author fullname="John Gray" initials="J." surname="Gray">
+            <organization>Entrust Limited</organization>
+          </author>
+          <author fullname="Jan Klaußner" initials="J." surname="Klaußner">
+            <organization>Bundesdruckerei GmbH</organization>
+          </author>
+          <author fullname="Daniel Van Geest" initials="D." surname="Van Geest">
+            <organization>CryptoNext Security</organization>
+          </author>
+          <date day="22" month="May" year="2026" />
+          <abstract>
+            <t>Composite Module-Lattice-Based Digital Signature Algorithm (ML-DSA) defines combinations of ML-DSA with RSA, ECDSA, and EdDSA. This document specifies the conventions for using Composite ML-DSA algorithms within the Cryptographic Message Syntax (CMS).</t>
+          </abstract>
         </front>
-        <seriesInfo name="Internet-Draft" value="draft-ietf-lamps-cms-composite-sigs" />
+        <seriesInfo name="Internet-Draft" value="draft-ietf-lamps-cms-composite-sigs-05" />
       </reference>
-      <reference anchor="I-D.doesburg-sidrops-nullscheme">
+      <reference anchor="I-D.doesburg-sidrops-nullscheme" target="https://datatracker.ietf.org/doc/html/draft-doesburg-sidrops-nullscheme-00">
         <front>
           <title>Null Scheme for Signed Objects in the Resource Public Key Infrastructure (RPKI)</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="Dirk Doesburg" initials="D." surname="Doesburg" />
+          <date day="5" month="October" year="2025" />
+          <abstract>
+            <t>This document specifies the Null Scheme for use in Signed Objects in the Resource Public Key Infrastructure (RPKI). The Null Scheme is a niche signature scheme that can replace the redundant and costly use of actual digital signatures from so-called "one-time-use" key pairs in Signed Objects. The Null Scheme has as public key the digest of the message to be signed, and the signature is always empty. When a Null Scheme public key is the subject of a Signed Object's one-time- use End-Entity (EE) certificate, it establishes a secure binding between the issuer of the EE certificate and the message to be signed. This is cheaper in terms of size and verification time than using a real signature scheme, while providing the same security guarantees.</t>
+          </abstract>
         </front>
-        <seriesInfo name="Internet-Draft" value="draft-doesburg-sidrops-nullscheme" />
+        <seriesInfo name="Internet-Draft" value="draft-doesburg-sidrops-nullscheme-00" />
       </reference>
       <reference anchor="pqc-rpki-lab" target="https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-00">
         <front>
           <title>pqc-rpki-lab experimental harness</title>
-          <author fullname="Reference Editor" />
-          <date />
+          <author fullname="Tomoki Yoshikawa" initials="T." surname="Yoshikawa" />
+          <date month="June" year="2026" />
         </front>
       </reference>
     </references>

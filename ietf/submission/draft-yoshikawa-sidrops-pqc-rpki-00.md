@@ -7,7 +7,7 @@ ipr: trust200902
 area: Routing
 wg: SIDROPS
 submissiontype: IETF
-date: 2026-06-18
+date: 2026-06-19
 keyword:
   - RPKI
   - PQC
@@ -223,23 +223,31 @@ processing rules, or CRL processing rules.
 # CMS Signed Object Profile
 
 RPKI signed objects using ML-DSA MUST follow the CMS conventions for
-ML-DSA defined in RFC 9882 and the RPKI signed object template defined in
-RFC 6488.
+ML-DSA defined in [RFC9882] and the RPKI signed object template defined in
+[RFC6488], as updated by [RFC9589].
 
 The signatureAlgorithm field of SignerInfo MUST contain id-ml-dsa-65 for
 the primary Next Suite.  AlgorithmIdentifier parameters MUST be absent.
 
-The signedAttrs element remains REQUIRED for RPKI signed objects.  It
-MUST include the content-type and message-digest attributes required by
-RFC 6488.  Other signed attributes remain restricted by the RPKI signed
-object template.
+For ML-DSA-65, the digestAlgorithms field of SignedData and the
+digestAlgorithm field of SignerInfo MUST contain id-sha512.  The parameters
+field of that AlgorithmIdentifier MUST be absent.  The message-digest signed
+attribute MUST contain the SHA-512 digest of the eContent.  SHA-512 is selected
+from the algorithms permitted for ML-DSA-65 by [RFC9882] to provide one
+mandatory interoperable encoding for this RPKI suite.
 
-This revision does not select a digestAlgorithms or SignerInfo
-digestAlgorithm value for ML-DSA.  OpenSSL 3.6.2 generated ML-DSA
-certificates and CRLs but its CMS CLI rejected ML-DSA signing with
-`CMS_add1_signer:no default digest`.  The correct RFC 9882 and RFC 6488
-combination therefore requires implementation and interoperability evidence
-before normative values are specified here.
+The signedAttrs element remains REQUIRED for RPKI signed objects.  In
+accordance with [RFC6488] as updated by [RFC9589], it MUST contain exactly one
+content-type attribute, one message-digest attribute, and one signing-time
+attribute.  The binary-signing-time attribute and all other signed attributes
+MUST be absent.  In particular, the CMSAlgorithmProtection attribute suggested
+by the general CMS guidance in [RFC9882] MUST NOT be included because the RPKI
+signed object profile restricts signedAttrs to those three attributes.
+
+OpenSSL 3.6.2 generated ML-DSA certificates and CRLs but its CMS CLI rejected
+ML-DSA signing with `CMS_add1_signer:no default digest`.  The SHA-512 selection
+above follows [RFC9882]; the CLI failure remains an implementation and
+interoperability gap rather than an unspecified protocol value.
 
 The CMS eContentType and eContent for ROAs, manifests, and other RPKI
 signed objects are unchanged.  Validators MUST apply the object-specific
@@ -486,26 +494,32 @@ July 2017.
 the Resource Public Key Infrastructure (RPKI)", RFC 9286, DOI
 10.17487/RFC9286, June 2022.
 
-[RFC9582] Harrison, T., Snijders, J., and B. Maddison, "A Profile for Route
-Origin Authorizations (ROAs)", RFC 9582, DOI 10.17487/RFC9582, May 2024.
+[RFC9582] Snijders, J., Maddison, B., Lepinski, M., Kong, D., and S. Kent,
+"A Profile for Route Origin Authorizations (ROAs)", RFC 9582, DOI
+10.17487/RFC9582, May 2024.
 
-[RFC9814] Housley, R., "Use of the SLH-DSA Signature Algorithm in the
-Cryptographic Message Syntax (CMS)", RFC 9814, DOI 10.17487/RFC9814,
-June 2025.
+[RFC9589] Snijders, J. and T. Harrison, "On the Use of the Cryptographic
+Message Syntax (CMS) Signing-Time Attribute in Resource Public Key
+Infrastructure (RPKI) Signed Objects", RFC 9589, DOI 10.17487/RFC9589,
+May 2024.
+
+[RFC9814] Housley, R., Fluhrer, S., Kampanakis, P., and B. Westerbaan, "Use
+of the SLH-DSA Signature Algorithm in the Cryptographic Message Syntax
+(CMS)", RFC 9814, DOI 10.17487/RFC9814, July 2025.
 
 [RFC9881] Massimo, J., Kampanakis, P., Turner, S., and B. E. Westerbaan,
 "Internet X.509 Public Key Infrastructure -- Algorithm Identifiers for
 the Module-Lattice-Based Digital Signature Algorithm (ML-DSA)", RFC 9881,
 DOI 10.17487/RFC9881, October 2025.
 
-[RFC9882] Massimo, J., Kampanakis, P., Turner, S., and B. E. Westerbaan,
-"Use of the ML-DSA Signature Algorithm in the Cryptographic Message
-Syntax (CMS)", RFC 9882, DOI 10.17487/RFC9882, October 2025.
+[RFC9882] Salter, B., Raine, A., and D. Van Geest, "Use of the ML-DSA
+Signature Algorithm in the Cryptographic Message Syntax (CMS)", RFC 9882,
+DOI 10.17487/RFC9882, October 2025.
 
-[RFC9909] Jenkins, M., Kampanakis, P., Housley, R., and P. Hecht, "Internet
-X.509 Public Key Infrastructure -- Algorithm Identifiers for the Stateless
-Hash-Based Digital Signature Algorithm (SLH-DSA)", RFC 9909, DOI
-10.17487/RFC9909, December 2025.
+[RFC9909] Bashiri, K., Fluhrer, S., Gazdag, S., Van Geest, D., and S.
+Kousidis, "Internet X.509 Public Key Infrastructure -- Algorithm Identifiers
+for the Stateless Hash-Based Digital Signature Algorithm (SLH-DSA)", RFC
+9909, DOI 10.17487/RFC9909, December 2025.
 
 [FIPS204] National Institute of Standards and Technology, "Module-Lattice-
 Based Digital Signature Standard", FIPS 204, DOI 10.6028/NIST.FIPS.204,

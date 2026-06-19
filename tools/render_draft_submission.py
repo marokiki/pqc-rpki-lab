@@ -19,6 +19,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / "ietf" / "draft-yoshikawa-sidrops-pqc-rpki-00.md"
 OUTDIR = ROOT / "ietf" / "submission"
+BIBXML_DIR = ROOT / "ietf" / "bibxml"
 DOCNAME = "draft-yoshikawa-sidrops-pqc-rpki-00"
 
 
@@ -224,6 +225,12 @@ def reference(
     series_name: str | None = None,
     series_value: str | None = None,
     target: str | None = None,
+    author_fullname: str | None = None,
+    author_initials: str | None = None,
+    author_surname: str | None = None,
+    organization: str | None = None,
+    month: str | None = None,
+    year: str | None = None,
 ) -> None:
     attrs = {"anchor": anchor_value}
     if target:
@@ -231,10 +238,29 @@ def reference(
     ref = ET.SubElement(parent, "reference", attrs)
     front = ET.SubElement(ref, "front")
     ET.SubElement(front, "title").text = title
-    ET.SubElement(front, "author", {"fullname": "Reference Editor"})
-    ET.SubElement(front, "date")
+    author_attrs: dict[str, str] = {}
+    if author_fullname:
+        author_attrs["fullname"] = author_fullname
+    if author_initials:
+        author_attrs["initials"] = author_initials
+    if author_surname:
+        author_attrs["surname"] = author_surname
+    author = ET.SubElement(front, "author", author_attrs)
+    if organization:
+        ET.SubElement(author, "organization").text = organization
+    date_attrs: dict[str, str] = {}
+    if month:
+        date_attrs["month"] = month
+    if year:
+        date_attrs["year"] = year
+    ET.SubElement(front, "date", date_attrs)
     if series_name and series_value:
         ET.SubElement(ref, "seriesInfo", {"name": series_name, "value": series_value})
+
+
+def add_bibxml(parent: ET.Element, filename: str) -> None:
+    path = BIBXML_DIR / filename
+    parent.append(ET.parse(path).getroot())
 
 
 def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) -> ET.Element:
@@ -289,42 +315,53 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
     # complete bibxml references if desired.
     normative = ET.SubElement(back_el, "references")
     ET.SubElement(normative, "name").text = "Normative References"
-    normative_refs = {
-        "RFC2119": ("Key words for use in RFCs to Indicate Requirement Levels", "RFC", "2119"),
-        "RFC8174": ("Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words", "RFC", "8174"),
-        "RFC6480": ("An Infrastructure to Support Secure Internet Routing", "RFC", "6480"),
-        "RFC6487": ("A Profile for X.509 PKIX Resource Certificates", "RFC", "6487"),
-        "RFC6488": ("Signed Object Template for the Resource Public Key Infrastructure (RPKI)", "RFC", "6488"),
-        "RFC6916": ("Algorithm Agility Procedure for the Resource Public Key Infrastructure (RPKI)", "RFC", "6916"),
-        "RFC7935": ("The Profile for Algorithms and Key Sizes for Use in the Resource Public Key Infrastructure", "RFC", "7935"),
-        "RFC8182": ("The RPKI Repository Delta Protocol (RRDP)", "RFC", "8182"),
-        "RFC9286": ("Manifests for the Resource Public Key Infrastructure (RPKI)", "RFC", "9286"),
-        "RFC9582": ("A Profile for Route Origin Authorizations (ROAs)", "RFC", "9582"),
-        "RFC9814": ("Use of the SLH-DSA Signature Algorithm in the Cryptographic Message Syntax (CMS)", "RFC", "9814"),
-        "RFC9881": ("Internet X.509 Public Key Infrastructure -- Algorithm Identifiers for ML-DSA", "RFC", "9881"),
-        "RFC9882": ("Use of the ML-DSA Signature Algorithm in the Cryptographic Message Syntax (CMS)", "RFC", "9882"),
-        "RFC9909": ("Internet X.509 Public Key Infrastructure -- Algorithm Identifiers for SLH-DSA", "RFC", "9909"),
-        "FIPS204": ("Module-Lattice-Based Digital Signature Standard", "FIPS", "204"),
-        "FIPS205": ("Stateless Hash-Based Digital Signature Standard", "FIPS", "205"),
-    }
-    for ref_anchor, (title, series_name, series_value) in normative_refs.items():
-        reference(normative, ref_anchor, title, series_name, series_value)
+    for number in (
+        "2119", "8174", "6480", "6487", "6488", "6916", "7935", "8182",
+        "9286", "9582", "9589", "9814", "9881", "9882", "9909",
+    ):
+        add_bibxml(normative, f"reference.RFC.{number}.xml")
+    reference(
+        normative,
+        "FIPS204",
+        "Module-Lattice-Based Digital Signature Standard",
+        "FIPS",
+        "204",
+        "https://doi.org/10.6028/NIST.FIPS.204",
+        organization="National Institute of Standards and Technology",
+        month="August",
+        year="2024",
+    )
+    reference(
+        normative,
+        "FIPS205",
+        "Stateless Hash-Based Digital Signature Standard",
+        "FIPS",
+        "205",
+        "https://doi.org/10.6028/NIST.FIPS.205",
+        organization="National Institute of Standards and Technology",
+        month="August",
+        year="2024",
+    )
     informative = ET.SubElement(back_el, "references")
     ET.SubElement(informative, "name").text = "Informative References"
-    informative_refs = {
-        "RFC7942": ("Improving Awareness of Running Code: The Implementation Status Section", "RFC", "7942", None),
-        "I-D.ietf-lamps-pq-composite-sigs": ("Composite ML-DSA for use in X.509 Public Key Infrastructure", "Internet-Draft", "draft-ietf-lamps-pq-composite-sigs", None),
-        "I-D.ietf-lamps-cms-composite-sigs": ("Composite ML-DSA for use in Cryptographic Message Syntax", "Internet-Draft", "draft-ietf-lamps-cms-composite-sigs", None),
-        "I-D.doesburg-sidrops-nullscheme": ("Null Scheme for Signed Objects in the Resource Public Key Infrastructure (RPKI)", "Internet-Draft", "draft-doesburg-sidrops-nullscheme", None),
-        "pqc-rpki-lab": (
-            "pqc-rpki-lab experimental harness",
-            None,
-            None,
-            "https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-00",
-        ),
-    }
-    for ref_anchor, (title, series_name, series_value, target) in informative_refs.items():
-        reference(informative, ref_anchor, title, series_name, series_value, target)
+    add_bibxml(informative, "reference.RFC.7942.xml")
+    for name in (
+        "ietf-lamps-pq-composite-sigs",
+        "ietf-lamps-cms-composite-sigs",
+        "doesburg-sidrops-nullscheme",
+    ):
+        add_bibxml(informative, f"reference.I-D.{name}.xml")
+    reference(
+        informative,
+        "pqc-rpki-lab",
+        "pqc-rpki-lab experimental harness",
+        target="https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-00",
+        author_fullname="Tomoki Yoshikawa",
+        author_initials="T.",
+        author_surname="Yoshikawa",
+        month="June",
+        year="2026",
+    )
     back_sections_text = back.split("# References", 1)[0].strip()
     if back_sections_text:
         add_sections(back_el, parse_sections(back_sections_text))

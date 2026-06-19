@@ -1,0 +1,15 @@
+<reference anchor="RFC9814" target="https://www.rfc-editor.org/info/rfc9814">
+  <front>
+    <title>Use of the SLH-DSA Signature Algorithm in the Cryptographic Message Syntax (CMS)</title>
+    <author fullname="R. Housley" initials="R." surname="Housley"/>
+    <author fullname="S. Fluhrer" initials="S." surname="Fluhrer"/>
+    <author fullname="P. Kampanakis" initials="P." surname="Kampanakis"/>
+    <author fullname="B. Westerbaan" initials="B." surname="Westerbaan"/>
+    <date month="July" year="2025"/>
+    <abstract>
+      <t>SLH-DSA is a stateless hash-based signature algorithm. This document specifies the conventions for using the SLH-DSA signature algorithm with the Cryptographic Message Syntax (CMS). In addition, the algorithm identifier and public key syntax are provided.</t>
+    </abstract>
+  </front>
+  <seriesInfo name="RFC" value="9814"/>
+  <seriesInfo name="DOI" value="10.17487/RFC9814"/>
+</reference>

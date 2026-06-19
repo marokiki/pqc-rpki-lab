@@ -1,0 +1,22 @@
+<reference anchor="I-D.ietf-lamps-cms-composite-sigs" target="https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cms-composite-sigs-05">
+  <front>
+    <title>Composite Module-Lattice-Based Digital Signature Algorithm (ML-DSA) for use in Cryptographic Message Syntax (CMS)</title>
+    <author fullname="Mike Ounsworth" initials="M." surname="Ounsworth">
+      <organization>Entrust Limited</organization>
+    </author>
+    <author fullname="John Gray" initials="J." surname="Gray">
+      <organization>Entrust Limited</organization>
+    </author>
+    <author fullname="Jan Klaußner" initials="J." surname="Klaußner">
+      <organization>Bundesdruckerei GmbH</organization>
+    </author>
+    <author fullname="Daniel Van Geest" initials="D." surname="Van Geest">
+      <organization>CryptoNext Security</organization>
+    </author>
+    <date day="22" month="May" year="2026"/>
+    <abstract>
+      <t>Composite Module-Lattice-Based Digital Signature Algorithm (ML-DSA) defines combinations of ML-DSA with RSA, ECDSA, and EdDSA. This document specifies the conventions for using Composite ML-DSA algorithms within the Cryptographic Message Syntax (CMS).</t>
+    </abstract>
+  </front>
+  <seriesInfo name="Internet-Draft" value="draft-ietf-lamps-cms-composite-sigs-05"/>
+</reference>

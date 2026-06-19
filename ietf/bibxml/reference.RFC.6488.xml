@@ -1,0 +1,14 @@
+<reference anchor="RFC6488" target="https://www.rfc-editor.org/info/rfc6488">
+  <front>
+    <title>Signed Object Template for the Resource Public Key Infrastructure (RPKI)</title>
+    <author fullname="M. Lepinski" initials="M." surname="Lepinski"/>
+    <author fullname="A. Chi" initials="A." surname="Chi"/>
+    <author fullname="S. Kent" initials="S." surname="Kent"/>
+    <date month="February" year="2012"/>
+    <abstract>
+      <t>This document defines a generic profile for signed objects used in the Resource Public Key Infrastructure (RPKI). These RPKI signed objects make use of Cryptographic Message Syntax (CMS) as a standard encapsulation format. [STANDARDS-TRACK]</t>
+    </abstract>
+  </front>
+  <seriesInfo name="RFC" value="6488"/>
+  <seriesInfo name="DOI" value="10.17487/RFC6488"/>
+</reference>

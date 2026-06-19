@@ -1,0 +1,16 @@
+<reference anchor="RFC9582" target="https://www.rfc-editor.org/info/rfc9582">
+  <front>
+    <title>A Profile for Route Origin Authorizations (ROAs)</title>
+    <author fullname="J. Snijders" initials="J." surname="Snijders"/>
+    <author fullname="B. Maddison" initials="B." surname="Maddison"/>
+    <author fullname="M. Lepinski" initials="M." surname="Lepinski"/>
+    <author fullname="D. Kong" initials="D." surname="Kong"/>
+    <author fullname="S. Kent" initials="S." surname="Kent"/>
+    <date month="May" year="2024"/>
+    <abstract>
+      <t>This document defines a standard profile for Route Origin Authorizations (ROAs). A ROA is a digitally signed object that provides a means of verifying that an IP address block holder has authorized an Autonomous System (AS) to originate routes to one or more prefixes within the address block. This document obsoletes RFC 6482.</t>
+    </abstract>
+  </front>
+  <seriesInfo name="RFC" value="9582"/>
+  <seriesInfo name="DOI" value="10.17487/RFC9582"/>
+</reference>
