@@ -61,9 +61,9 @@ address, expiry date, table of contents, references, and page breaks:
 - `ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-00.html`
 - `ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-00.txt`
 
-Optionally run the server-side-equivalent checks through IETF Author Tools:
-<https://author-tools.ietf.org/>. The Datatracker will run validation again
-during upload.
+Run the IETF Author Tools `idnits` check and address applicable findings:
+<https://author-tools.ietf.org/idnits>. The Datatracker will run validation
+again during upload.
 
 ## 3. Upload to Datatracker
 

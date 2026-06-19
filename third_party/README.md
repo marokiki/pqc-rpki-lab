@@ -20,8 +20,6 @@ The installer builds into ignored repository-local paths and currently pins:
 
 - liboqs 0.15.0, commit `97f6b86b1b6d109cfd43cf276ae39c2e776aed80`
 - liboqs-python commit `35eceb69d2b363cb0421085cf1ae1c682dee1acc`
-- cryptography 48.0.1
-- pytest 9.0.3 (verification environment)
 
 The PyPI project named `oqs` is intentionally not declared as a dependency.
 The official Open Quantum Safe Python wrapper is installed from its pinned

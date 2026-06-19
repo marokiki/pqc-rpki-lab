@@ -21,7 +21,7 @@ class Algorithm:
 
 COMPARISON_ALGORITHMS = (
     Algorithm("RSA-2048/SHA-256", "RSA", "classical", 270, 256, "confirmed",
-              "RFC 7935", "cryptography or OpenSSL",
+              "RFC 7935", "OpenSSL CLI",
               "Current RPKI baseline; SPKI size is an approximate DER value.",
               track="baseline"),
     Algorithm("ML-DSA-65", "ML-DSA", "3", 1952, 3309, "confirmed",

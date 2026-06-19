@@ -11,7 +11,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - run: pip install -e .[pqc,test]
+      - run: pip install -e .[test]
       - run: pytest
       - name: Validate committed evidence
         run: >-
@@ -30,7 +30,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install -e .[pqc,test]
+      - run: pip install -e .[test]
       - run: tools/run_all.sh
       - name: Require a confirmed baseline in the generated results
         run: python tools/validate_results.py --require-confirmed RSA-2048/SHA-256

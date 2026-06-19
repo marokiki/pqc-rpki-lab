@@ -5,7 +5,7 @@
       "benchmark_status": "confirmed",
       "comparable_group": "openssl-cli-v1",
       "comparison_required": true,
-      "configured_backend": "cryptography or OpenSSL",
+      "configured_backend": "OpenSSL CLI",
       "family": "RSA",
       "iterations": 3,
       "keygen_ms_median": 19.775667,

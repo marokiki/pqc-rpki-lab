@@ -6,7 +6,6 @@ requires-python = ">=3.11"
 dependencies = []
 
 [project.optional-dependencies]
-pqc = ["cryptography>=48.0.1"]
 analysis = ["matplotlib>=3.8"]
 test = ["pytest>=8.0"]
 

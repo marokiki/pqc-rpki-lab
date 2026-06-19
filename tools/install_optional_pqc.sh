@@ -12,7 +12,7 @@ if [[ "${1:-}" != "--allow-network" && "${PQC_RPKI_ALLOW_NETWORK:-0}" != "1" ]];
 fi
 
 python3 -m venv "$ROOT/.venv"
-"$ROOT/.venv/bin/pip" install cmake==4.3.2 ninja==1.13.0 cryptography==48.0.1
+"$ROOT/.venv/bin/pip" install cmake==4.3.2 ninja==1.13.0
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/pqc-rpki-oqs.XXXXXX")"
 trap 'rm -rf "$WORK"' EXIT
 git clone --depth 1 --branch "$LIBOQS_TAG" https://github.com/open-quantum-safe/liboqs.git "$WORK/liboqs"
