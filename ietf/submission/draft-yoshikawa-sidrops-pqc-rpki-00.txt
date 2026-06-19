@@ -858,7 +858,7 @@ Internet-Draft                PQC for RPKI                     June 2026
               <https://www.rfc-editor.org/info/rfc7942>.
 
    [I-D.ietf-lamps-pq-composite-sigs]
-              Ounsworth, M., Gray, J., Pala, M., Klaußner, J., and S.
+              Ounsworth, M., Gray, J., Pala, M., Klaussner, J., and S.
               Fluhrer, "Composite Module-Lattice-Based Digital Signature
               Algorithm (ML-DSA) for use in X.509 Public Key
               Infrastructure", Work in Progress, Internet-Draft, draft-
@@ -867,7 +867,7 @@ Internet-Draft                PQC for RPKI                     June 2026
               pq-composite-sigs-19>.
 
    [I-D.ietf-lamps-cms-composite-sigs]
-              Ounsworth, M., Gray, J., Klaußner, J., and D. Van Geest,
+              Ounsworth, M., Gray, J., Klaussner, J., and D. Van Geest,
               "Composite Module-Lattice-Based Digital Signature
               Algorithm (ML-DSA) for use in Cryptographic Message Syntax
               (CMS)", Work in Progress, Internet-Draft, draft-ietf-
