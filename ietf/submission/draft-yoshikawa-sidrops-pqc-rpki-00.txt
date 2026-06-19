@@ -146,8 +146,8 @@ Internet-Draft                PQC for RPKI                     June 2026
    The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
    "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
    "OPTIONAL" in this document are to be interpreted as described in BCP
-   14 [RFC2119] [RFC8174] when, and only when, they appear in all
-   capitals, as shown here.
+   14 [BCP14] when, and only when, they appear in all capitals, as shown
+   here.
 
 3.  Terminology
 
@@ -742,12 +742,16 @@ Internet-Draft                PQC for RPKI                     June 2026
 
 16.  Normative References
 
-   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+   [BCP14]    Best Current Practice 14,
+              <https://www.rfc-editor.org/info/bcp14>.
+              At the time of writing, this BCP comprises the following:
+
+              Bradner, S., "Key words for use in RFCs to Indicate
               Requirement Levels", BCP 14, RFC 2119,
               DOI 10.17487/RFC2119, March 1997,
               <https://www.rfc-editor.org/info/rfc2119>.
 
-   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
               2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
               May 2017, <https://www.rfc-editor.org/info/rfc8174>.
 
@@ -774,10 +778,6 @@ Internet-Draft                PQC for RPKI                     June 2026
               Algorithms and Key Sizes for Use in the Resource Public
               Key Infrastructure", RFC 7935, DOI 10.17487/RFC7935,
               August 2016, <https://www.rfc-editor.org/info/rfc7935>.
-
-
-
-
 
 
 

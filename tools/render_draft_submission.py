@@ -314,8 +314,15 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
     # complete bibxml references if desired.
     normative = ET.SubElement(back_el, "references")
     ET.SubElement(normative, "name").text = "Normative References"
+    bcp14 = ET.SubElement(
+        normative,
+        "referencegroup",
+        {"anchor": "BCP14", "target": "https://www.rfc-editor.org/info/bcp14"},
+    )
+    for number in ("2119", "8174"):
+        add_bibxml(bcp14, f"reference.RFC.{number}.xml")
     for number in (
-        "2119", "8174", "6480", "6487", "6488", "6916", "7935", "8182",
+        "6480", "6487", "6488", "6916", "7935", "8182",
         "9286", "9582", "9589", "9814", "9881", "9882", "9909",
     ):
         add_bibxml(normative, f"reference.RFC.{number}.xml")

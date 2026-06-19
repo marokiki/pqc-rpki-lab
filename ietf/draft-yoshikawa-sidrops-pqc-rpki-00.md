@@ -69,7 +69,7 @@ questions rather than declaring the final global RPKI migration plan.
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
 "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
 "OPTIONAL" in this document are to be interpreted as described in BCP 14
-[RFC2119] [RFC8174] when, and only when, they appear in all capitals, as
+[BCP14] when, and only when, they appear in all capitals, as
 shown here.
 
 # Terminology
@@ -482,11 +482,8 @@ acknowledgements will be added as the draft receives review.
 
 ## Normative References
 
-[RFC2119] Bradner, S., "Key words for use in RFCs to Indicate Requirement
-Levels", BCP 14, RFC 2119, DOI 10.17487/RFC2119, March 1997.
-
-[RFC8174] Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC 2119 Key
-Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174, May 2017.
+[BCP14] Best Current Practice 14, comprising RFC 2119 and RFC 8174,
+https://www.rfc-editor.org/info/bcp14.
 
 [RFC6480] Lepinski, M. and S. Kent, "An Infrastructure to Support Secure
 Internet Routing", RFC 6480, DOI 10.17487/RFC6480, February 2012.
