@@ -21,6 +21,7 @@ The initial candidates are intentionally narrow:
 | Candidate | Role in experiment | Reason |
 |---|---|---|
 | RSA-2048/SHA-256 | Baseline | Current RPKI algorithm profile baseline |
+| ML-DSA-44 | Excluded-policy comparison | Measured for completeness; below the Category 3 floor selected for the primary profile |
 | ML-DSA-65 | Primary PQC candidate | NIST-standardized signature algorithm; balanced security/size/performance candidate |
 | ML-DSA-87 | High-assurance candidate | Higher NIST category; useful for trust anchor or CA-oriented discussion |
 | SLH-DSA-SHAKE-128s | Diversity candidate | Hash-based alternative; useful for crypto-diversity and size-cost comparison |
@@ -138,6 +139,12 @@ network. It installs pinned liboqs/liboqs-python sources under `.local/oqs` and
 recorded as unsupported because liboqs 0.15.0 does not provide it.
 
 The default primitive benchmark uses a small iteration count so that offline CI and Codex runs finish quickly. Set `PQC_RPKI_ITERATIONS` to a larger value for paper-quality measurements.
+
+The RSA, ML-DSA, and SLH-DSA comparison rows use end-to-end OpenSSL CLI
+wall-clock measurements. Each timed operation includes one process launch, so
+the values are not pure cryptographic cycle counts. Compare timings only when
+the `comparable_group` field is identical. Optional oqs-python measurements
+are in-process and belong to a separate comparison group.
 
 `PQC_RPKI_CACHE` reads local `.cer`, `.roa`, `.mft`, and `.crl` file metadata
 only. Network use is not part of the default harness. Use isolated test TALs

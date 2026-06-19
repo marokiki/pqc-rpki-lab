@@ -9,6 +9,10 @@ algorithms:
     public_key_bytes: 1952
     signature_bytes: 3309
     note: FIPS 204 / RFC 9881 parameter size.
+  ML-DSA-44:
+    public_key_bytes: 1312
+    signature_bytes: 2420
+    note: FIPS 204 / RFC 9881 parameter size; measured for comparison but excluded from the primary profile by policy.
   ML-DSA-87:
     public_key_bytes: 2592
     signature_bytes: 4627

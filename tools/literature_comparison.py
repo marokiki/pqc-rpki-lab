@@ -24,6 +24,14 @@ PUBLISHED = {
     "SNOVA-(24,5,4)": (1_100_000_000, 47.3, 0.123),
     "HAWK-512": (1_400_000_000, 42.8, 0.034),
 }
+SOURCE = {
+    "author": "Dirk Doesburg",
+    "title": "Post-Quantum Cryptography for the RPKI",
+    "type": "Master's thesis",
+    "institution": "Radboud University",
+    "date": "2025-06-27",
+    "url": "https://www.sidnlabs.nl/en/news-and-blogs/thesis-pqc-for-the-rpki",
+}
 
 
 def csv_by_name(name: str, key: str) -> dict[str, dict[str, str]]:
@@ -67,6 +75,7 @@ def main() -> None:
             "rsa_public_key_bytes": 272, "rsa_signature_bytes": 256,
         },
         "method": "Replace RSA public-key and signature bytes while retaining non-cryptographic bytes.",
+        "source": SOURCE,
         "results": rows,
     })
     table = markdown_table(rows, [
@@ -79,7 +88,8 @@ def main() -> None:
     (RESULTS / "literature-comparison.md").write_text(
         "# Literature Comparison\n\n> EXPERIMENTAL / NOT FOR PRODUCTION\n\n"
         "The calibrated model uses the measured object, public-key, and signature counts "
-        "from the 2025 thesis. Local primitive and published full-RPKI timings are not directly comparable.\n\n"
+        "from Dirk Doesburg's 2025 master's thesis, *Post-Quantum Cryptography for the RPKI*. "
+        "Local primitive and published full-RPKI timings are not directly comparable.\n\n"
         + table + "\n")
 
 

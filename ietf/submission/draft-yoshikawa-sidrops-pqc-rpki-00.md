@@ -185,11 +185,10 @@ and CMS [RFC9882] algorithm identifier specifications.  It is not
 selected because it is always the smallest or fastest possible signature
 algorithm.
 
-ML-DSA-44 was not benchmarked by the accompanying harness.  It was excluded
-before measurement because this revision uses NIST Category 3 as a
-conservative minimum for the primary long-lived RPKI suite.  This is a profile
-policy choice, not evidence of an implementation failure, and SIDROPS may
-revisit it.
+ML-DSA-44 is retained as a measured comparison but is excluded from the
+primary profile because this document uses NIST Category 3 as a conservative
+minimum for the primary long-lived RPKI suite.  This is a profile policy
+choice, not evidence of an implementation failure, and SIDROPS may revisit it.
 
 ML-DSA-87, SLH-DSA-SHAKE-128s, and SLH-DSA-SHAKE-192s remain useful
 comparison points for security level, cryptographic diversity, and
@@ -210,6 +209,11 @@ the recorded run.  They are outside the primary profile because stable PKIX
 and CMS profiles and validator evidence are absent, not because of repository
 size.  They should be reconsidered if their standardization and implementation
 maturity changes.
+
+Published RPKI analysis also identifies Falcon-512 as a compact and
+performance-oriented candidate [Doesburg2025].  This document treats that
+result as literature evidence; the accompanying evidence snapshot does not
+contain a confirmed local Falcon primitive benchmark.
 
 Detailed measurements for key sizes, signature sizes, primitive timings,
 repository-size estimates, and validator probes are maintained outside
@@ -563,6 +567,10 @@ Cryptographic Message Syntax (CMS)", Work in Progress.
 [I-D.doesburg-sidrops-nullscheme] Doesburg, D., "Null Scheme for Signed
 Objects in the Resource Public Key Infrastructure (RPKI)", Work in
 Progress, expired.
+
+[Doesburg2025] Doesburg, D., "Post-Quantum Cryptography for the RPKI",
+Master's thesis, Radboud University, 27 June 2025,
+https://www.sidnlabs.nl/en/news-and-blogs/thesis-pqc-for-the-rpki.
 
 [pqc-rpki-lab] Yoshikawa, T., "pqc-rpki-lab experimental harness",
 release for draft-yoshikawa-sidrops-pqc-rpki-00, 2026,

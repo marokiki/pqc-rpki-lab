@@ -5,6 +5,7 @@
 | ML-DSA-87 | high-assurance | 2592 | 4627 |
 | SLH-DSA-SHAKE-128s | diversity | 32 | 7856 |
 | SLH-DSA-SHAKE-192s | diversity | 48 | 16224 |
+| ML-DSA-44 | excluded-policy | 1312 | 2420 |
 | Falcon-512 | optional | 897 | 666 |
 | Falcon-1024 | optional | 1793 | 1280 |
 | MAYO-1 | optional | 1420 | 454 |

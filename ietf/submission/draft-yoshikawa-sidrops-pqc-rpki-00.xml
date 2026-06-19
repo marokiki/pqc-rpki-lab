@@ -105,11 +105,12 @@
       <section anchor="algorithm-selection-rationale">
         <name>Algorithm Selection Rationale</name>
         <t>ML-DSA-65 is selected as the primary candidate because it has an existing FIPS signature specification <xref target="FIPS204" /> and corresponding PKIX <xref target="RFC9881" /> and CMS <xref target="RFC9882" /> algorithm identifier specifications.  It is not selected because it is always the smallest or fastest possible signature algorithm.</t>
-        <t>ML-DSA-44 was not benchmarked by the accompanying harness.  It was excluded before measurement because this revision uses NIST Category 3 as a conservative minimum for the primary long-lived RPKI suite.  This is a profile policy choice, not evidence of an implementation failure, and SIDROPS may revisit it.</t>
+        <t>ML-DSA-44 is retained as a measured comparison but is excluded from the primary profile because this document uses NIST Category 3 as a conservative minimum for the primary long-lived RPKI suite.  This is a profile policy choice, not evidence of an implementation failure, and SIDROPS may revisit it.</t>
         <t>ML-DSA-87, SLH-DSA-SHAKE-128s, and SLH-DSA-SHAKE-192s remain useful comparison points for security level, cryptographic diversity, and repository stress testing.  The SLH-DSA candidates have corresponding signature, PKIX, and CMS specifications <xref target="FIPS205" />
           <xref target="RFC9909" />
           <xref target="RFC9814" />. Falcon/FN-DSA and other additional-signature candidates may be attractive for size or performance reasons, but they are outside the mandatory path of this revision until stable PKIX and CMS profiles and RPKI validator evidence are available.</t>
         <t>The first-order repository estimator gives Falcon-512, using a 666-octet maximum signature size, a 1.5542 ratio to the RSA baseline and gives SNOVA-(24,5,4), using a 248-octet signature, a 1.2723 ratio.  Both are much smaller than the estimated 4.0118 ratio for ML-DSA-65.  These ratios are synthetic estimates based on static parameter sizes, not local primitive or full-repository measurements: the corresponding backends were unavailable in the recorded run.  They are outside the primary profile because stable PKIX and CMS profiles and validator evidence are absent, not because of repository size.  They should be reconsidered if their standardization and implementation maturity changes.</t>
+        <t>Published RPKI analysis also identifies Falcon-512 as a compact and performance-oriented candidate <xref target="Doesburg2025" />.  This document treats that result as literature evidence; the accompanying evidence snapshot does not contain a confirmed local Falcon primitive benchmark.</t>
         <t>Detailed measurements for key sizes, signature sizes, primitive timings, repository-size estimates, and validator probes are maintained outside this document by the experimental harness <xref target="pqc-rpki-lab" />.  Those values are implementation and environment dependent and are not protocol requirements.</t>
       </section>
     </section>
@@ -640,6 +641,15 @@
           </abstract>
         </front>
         <seriesInfo name="Internet-Draft" value="draft-doesburg-sidrops-nullscheme-00" />
+      </reference>
+      <reference anchor="Doesburg2025" target="https://www.sidnlabs.nl/en/news-and-blogs/thesis-pqc-for-the-rpki">
+        <front>
+          <title>Post-Quantum Cryptography for the RPKI</title>
+          <author fullname="Dirk Doesburg" initials="D." surname="Doesburg">
+            <organization>Radboud University</organization>
+          </author>
+          <date month="June" year="2025" />
+        </front>
       </reference>
       <reference anchor="pqc-rpki-lab" target="https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-00">
         <front>

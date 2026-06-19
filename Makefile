@@ -10,4 +10,6 @@ install-optional-pqc:
 	./tools/install_optional_pqc.sh --allow-network
 
 clean:
-	rm -rf results/*.csv results/*.json results/*.md results/tool-versions.txt results/tables results/figures
+	rm -f results/*.csv results/*.json results/*.md results/tool-versions.txt
+	rm -rf results/tables
+	find results/figures -mindepth 1 ! -name README.md -delete 2>/dev/null || true

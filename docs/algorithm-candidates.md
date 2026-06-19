@@ -5,7 +5,7 @@ This file records why each candidate is included and what should be measured bef
 | Algorithm | Include? | Status to track | Main measurements | Expected RPKI concern |
 |---|---:|---|---|---|
 | RSA-2048/SHA-256 | Yes | Existing RPKI profile | Baseline object sizes and validator time | Not quantum-safe |
-| ML-DSA-44 | No (not benchmarked) | NIST/IETF standardized | Excluded before measurement | Category 2 is below the conservative Category 3 floor selected for the primary long-lived RPKI suite; SIDROPS may revisit this policy choice |
+| ML-DSA-44 | Comparison only | NIST/IETF standardized | Primitive timing and size-model impact | Category 2 is below the conservative Category 3 floor selected for the primary long-lived RPKI suite |
 | ML-DSA-65 | Yes | NIST/IETF standardized | cert/CMS size, validation speed, repository growth | Larger than RSA but likely manageable |
 | ML-DSA-87 | Yes | NIST/IETF standardized | high-assurance cost delta | Larger keys/signatures; may be excessive for all ROAs |
 | SLH-DSA-SHAKE-128s | Yes | NIST/IETF standardized | signature-size impact | Large signatures, repository growth |

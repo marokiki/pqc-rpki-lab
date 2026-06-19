@@ -12,6 +12,15 @@ algorithms:
       - Dilithium3
     mandatory_profile: true
     comparison_required: true
+  - name: ML-DSA-44
+    role: excluded-policy-comparison
+    type: pqc-signature
+    oqs_names:
+      - ML-DSA-44
+      - Dilithium2
+    mandatory_profile: false
+    comparison_required: true
+    exclusion_reason: NIST Category 2 is below the Category 3 floor selected for the primary suite.
   - name: ML-DSA-87
     role: high-assurance-pqc-candidate
     type: pqc-signature

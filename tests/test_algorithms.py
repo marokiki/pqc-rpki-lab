@@ -4,6 +4,7 @@ from pqc_rpki_lab.algorithms import (
     ALL_ALGORITHMS,
     BY_NAME,
     COMPARISON_ALGORITHMS,
+    EXCLUDED_PROFILE_ALGORITHMS,
     OPTIONAL_ALGORITHMS,
 )
 
@@ -26,6 +27,12 @@ class AlgorithmsTest(unittest.TestCase):
         self.assertEqual(BY_NAME["ML-DSA-87"].track, "high-assurance")
         self.assertEqual(BY_NAME["SLH-DSA-SHAKE-128s"].track, "diversity")
         self.assertEqual(BY_NAME["SLH-DSA-SHAKE-192s"].track, "diversity")
+
+    def test_mldsa44_is_measured_but_excluded_by_policy(self):
+        self.assertEqual(len(EXCLUDED_PROFILE_ALGORITHMS), 1)
+        algorithm = BY_NAME["ML-DSA-44"]
+        self.assertEqual(algorithm.track, "excluded-policy")
+        self.assertTrue(algorithm.comparison_required)
 
     def test_sizes_are_positive(self):
         for algorithm in ALL_ALGORITHMS:

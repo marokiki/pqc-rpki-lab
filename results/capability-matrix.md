@@ -5,7 +5,7 @@
 | Component | Status | Backend | Notes |
 |---|---|---|---|
 | Static algorithm metadata | confirmed | Python standard library | Profile role and comparison scope are recorded separately |
-| Primitive benchmark | confirmed | cryptography/liboqs | Optional dependencies |
+| Primitive benchmark | confirmed | OpenSSL CLI; optional oqs-python | Timing class and comparable group are recorded per row |
 | Repository/RRDP/cache estimator | estimated | Python standard library | First-order model |
 | Real repository cache adapter | skipped | filesystem | Requires explicit cache path |
 | VRP equivalence checker | estimated | CSV/JSON | Synthetic input by default |

@@ -14,10 +14,11 @@ WG `-00` submission.
 - `draft-yoshikawa-sidrops-pqc-rpki-00.md`: review copy generated from the authoring source.
 - `draft-yoshikawa-sidrops-pqc-rpki-00.xml`: standalone RFCXML v3 submission source.
 - `draft-yoshikawa-sidrops-pqc-rpki-00.txt`: xml2rfc-rendered plaintext.
-- `draft-yoshikawa-sidrops-pqc-rpki-00.html`: xml2rfc-rendered HTML.
 
 The XML file is authoritative. The Datatracker generates its own text and HTML
-renderings from it. Uploading the local text rendering is optional.
+renderings from it. The local HTML rendering is a validation output and is not
+part of the published evidence snapshot. Uploading the local text rendering is
+optional.
 
 ## 1. Before Submission
 

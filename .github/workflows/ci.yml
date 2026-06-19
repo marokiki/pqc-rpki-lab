@@ -2,12 +2,35 @@ name: ci
 on: [push, pull_request]
 jobs:
   test:
+    strategy:
+      matrix:
+        python-version: ['3.11', '3.12']
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - run: pip install -e .[pqc,test]
+      - run: pytest
+      - name: Validate committed evidence
+        run: >-
+          python tools/validate_results.py
+          --require-confirmed RSA-2048/SHA-256
+          --require-confirmed ML-DSA-44
+          --require-confirmed ML-DSA-65
+          --require-confirmed ML-DSA-87
+          --require-confirmed SLH-DSA-SHAKE-128s
+          --require-confirmed SLH-DSA-SHAKE-192s
+
+  offline-run:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: pip install -e .[test]
-      - run: pytest
+      - run: pip install -e .[pqc,test]
       - run: tools/run_all.sh
+      - name: Require a confirmed baseline in the generated results
+        run: python tools/validate_results.py --require-confirmed RSA-2048/SHA-256

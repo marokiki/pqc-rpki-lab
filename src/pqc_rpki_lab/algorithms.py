@@ -41,6 +41,13 @@ COMPARISON_ALGORITHMS = (
               ("SLH-DSA-SHAKE-192s", "SPHINCS+-SHAKE-192s-simple"), "diversity"),
 )
 
+EXCLUDED_PROFILE_ALGORITHMS = (
+    Algorithm("ML-DSA-44", "ML-DSA", "2", 1312, 2420, "confirmed",
+              "FIPS 204; RFC 9881; RFC 9882", "OpenSSL default provider",
+              "Measured comparison excluded from the primary profile by the Category 3 policy floor.",
+              ("ML-DSA-44", "Dilithium2"), "excluded-policy", True),
+)
+
 OPTIONAL_ALGORITHMS = (
     Algorithm("Falcon-512", "Falcon/FN-DSA", "1", 897, 666, "experimental",
               "NIST-selected Falcon; FN-DSA final profile pending", "liboqs",
@@ -64,7 +71,7 @@ OPTIONAL_ALGORITHMS = (
 )
 
 ALGORITHMS = COMPARISON_ALGORITHMS
-ALL_ALGORITHMS = COMPARISON_ALGORITHMS + OPTIONAL_ALGORITHMS
+ALL_ALGORITHMS = COMPARISON_ALGORITHMS + EXCLUDED_PROFILE_ALGORITHMS + OPTIONAL_ALGORITHMS
 BY_NAME = {algorithm.name: algorithm for algorithm in ALL_ALGORITHMS}
 
 

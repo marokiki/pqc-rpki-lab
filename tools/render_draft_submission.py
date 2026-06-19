@@ -353,6 +353,18 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
         add_bibxml(informative, f"reference.I-D.{name}.xml")
     reference(
         informative,
+        "Doesburg2025",
+        "Post-Quantum Cryptography for the RPKI",
+        target="https://www.sidnlabs.nl/en/news-and-blogs/thesis-pqc-for-the-rpki",
+        author_fullname="Dirk Doesburg",
+        author_initials="D.",
+        author_surname="Doesburg",
+        organization="Radboud University",
+        month="June",
+        year="2025",
+    )
+    reference(
+        informative,
         "pqc-rpki-lab",
         "pqc-rpki-lab experimental harness",
         target="https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-00",

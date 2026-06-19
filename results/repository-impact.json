@@ -100,6 +100,22 @@
       "status": "estimated"
     },
     {
+      "algorithm": "ML-DSA-44",
+      "ca_cert_total_bytes": 52320,
+      "crl_total_bytes": 30200,
+      "ee_cert_total_bytes": 523200,
+      "local_cache_bytes": 952266,
+      "manifest_total_bytes": 39200,
+      "model": "first-order component-size estimator",
+      "repository_growth_percent_vs_rsa": 207.87,
+      "repository_growth_ratio_vs_rsa": 3.0787,
+      "repository_total_bytes": 906920,
+      "roa_total_bytes": 262000,
+      "rrdp_delta_bytes": 101575,
+      "rrdp_snapshot_bytes": 1015750,
+      "status": "estimated"
+    },
+    {
       "algorithm": "Falcon-512",
       "ca_cert_total_bytes": 30630,
       "crl_total_bytes": 12660,

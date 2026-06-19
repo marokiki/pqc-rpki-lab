@@ -2,7 +2,7 @@
 
 > EXPERIMENTAL / NOT FOR PRODUCTION
 
-The calibrated model uses the measured object, public-key, and signature counts from the 2025 thesis. Local primitive and published full-RPKI timings are not directly comparable.
+The calibrated model uses the measured object, public-key, and signature counts from Dirk Doesburg's 2025 master's thesis, *Post-Quantum Cryptography for the RPKI*. Local primitive and published full-RPKI timings are not directly comparable.
 
 | Algorithm | Current synthetic ratio | Calibrated ratio | Published ratio | Synthetic difference | Published validation CPU s |
 |---|---|---|---|---|---|
@@ -11,6 +11,7 @@ The calibrated model uses the measured object, public-key, and signature counts 
 | ML-DSA-87 | 5.2798 | 6.204 | 6.205 | -14.9 | 80.9 |
 | SLH-DSA-SHAKE-128s | 6.845 | 8.0419 | 7.9949 | -14.88 | 1376.3 |
 | SLH-DSA-SHAKE-192s | 13.3845 | 15.927 |  | -15.96 |  |
+| ML-DSA-44 | 3.0787 | 3.5254 |  | -12.67 |  |
 | Falcon-512 | 1.5542 | 1.6794 | 1.6706 | -7.45 | 23.4 |
 | Falcon-1024 | 2.3682 | 2.678 | 2.6252 | -11.57 | 46.4 |
 | MAYO-1 | 1.584 | 1.7253 | 1.6706 | -8.19 | 44.3 |

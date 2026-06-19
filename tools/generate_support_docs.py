@@ -47,7 +47,7 @@ def main() -> None:
 
     capability = [
         {"component": "Static algorithm metadata", "status": "confirmed", "backend": "Python standard library", "notes": "Profile role and comparison scope are recorded separately"},
-        {"component": "Primitive benchmark", "status": "confirmed" if any(row.get("benchmark_status") == "confirmed" for row in primitive) else "unsupported", "backend": "cryptography/liboqs", "notes": "Optional dependencies"},
+        {"component": "Primitive benchmark", "status": "confirmed" if any(row.get("benchmark_status") == "confirmed" for row in primitive) else "unsupported", "backend": "OpenSSL CLI; optional oqs-python", "notes": "Timing class and comparable group are recorded per row"},
         {"component": "Repository/RRDP/cache estimator", "status": "estimated", "backend": "Python standard library", "notes": "First-order model"},
         {"component": "Real repository cache adapter", "status": real_status, "backend": "filesystem", "notes": "Requires explicit cache path"},
         {"component": "VRP equivalence checker", "status": "estimated", "backend": "CSV/JSON", "notes": "Synthetic input by default"},
@@ -65,7 +65,7 @@ def main() -> None:
               ("public_key_bytes", "Public key bytes"), ("signature_bytes", "Signature bytes"),
               ("specification", "Standards"),
           ]) +
-          "\n\nML-DSA-65 is the standards-ready primary experiment. ML-DSA-87 is the high-assurance candidate. "
+          "\n\nML-DSA-65 is the standards-ready primary experiment. ML-DSA-44 is measured but excluded from the profile by the Category 3 policy floor. ML-DSA-87 is the high-assurance candidate. "
           "SLH-DSA remains a crypto-diversity candidate with significant size and signing-cost concerns. "
           "Composite signatures, Falcon, MAYO, SNOVA, and HAWK remain outside the mandatory path until RPKI-specific profile and interoperability evidence exists.")
 
@@ -83,7 +83,11 @@ The default run performs no network access and never uses production TALs or cre
 
     write("docs/measurement-methodology.md", """# Measurement Methodology
 
-Primitive operations use a deterministic 32-byte message and median wall-clock time. RSA uses cryptography; supported PQC mechanisms use oqs-python/liboqs. Repository impact applies key and signature component sizes to a documented synthetic corpus. VRP comparison normalizes prefix, maxLength, origin AS, and TA/source. CSV/JSON are primary evidence and Markdown is generated.
+Primitive operations use a deterministic 32-byte message and median wall-clock time. The RSA baseline and the required ML-DSA/SLH-DSA comparison rows use one OpenSSL CLI subprocess per timed key generation, signing, or verification operation. These values include process startup, provider initialization, argument parsing, file I/O, and the cryptographic operation. They are end-to-end CLI measurements, not pure algorithm cycle counts. Timing ratios are valid only between rows with the same `comparable_group`; closely grouped verification values primarily characterize the common CLI path.
+
+Optional algorithms use oqs-python/liboqs when available. Those measurements are in-process and belong to a separate comparable group, so they MUST NOT be directly divided by OpenSSL CLI values. A pure per-operation comparison requires all algorithms to use a common in-process API or a benchmark that subtracts and validates harness overhead.
+
+Repository impact applies standardized or candidate parameter sizes to a documented synthetic corpus. It does not require a locally executable primitive backend and is classified as `estimated`. VRP comparison normalizes prefix, maxLength, origin AS, and TA/source. CSV/JSON contain backend, timing scope, comparability group, and status fields and are the primary evidence; Markdown views retain those limitations.
 
 Current repository-impact data is `estimated`, not proof of global deployability. Before increasing normative language in the Internet-Draft, calibrate the estimator with a local RPKI cache supplied through `PQC_RPKI_CACHE` and produce real-cache projections.""")
 
@@ -96,13 +100,15 @@ Current repository-impact data is `estimated`, not proof of global deployability
 5. Can parallel RSA/PQC publication preserve identical VRP semantics?
 6. Is composite signature support needed, or is parallel publication sufficient?
 7. Are Null Scheme-like reductions useful enough to justify new SIDROPS work?
-8. Which downgrade and mixed-validator failures require normative handling?""")
+8. Which downgrade and mixed-validator failures require normative handling?
+
+The protocol-level issue list is maintained in the Open Issues section of `ietf/draft-yoshikawa-sidrops-pqc-rpki-00.md`.""")
 
     write("docs/references.md", """# References
 
 Normative and standards references:
 
-- RFC 6480, 6487, 6488, 6489, 6916, 7935, 8182, 9286, 9582, 9691
+- RFC 6480, 6487, 6488, 6916, 7935, 8182, 9286, 9582, 9589
 - RFC 9881 and RFC 9882 for ML-DSA in X.509 and CMS
 - RFC 9909 and RFC 9814 for SLH-DSA in X.509 and CMS
 - NIST FIPS 204 and FIPS 205
@@ -112,7 +118,7 @@ Internet-Drafts and research references:
 - draft-ietf-lamps-pq-composite-sigs
 - draft-ietf-lamps-cms-composite-sigs
 - draft-doesburg-sidrops-nullscheme, expired individual draft
-- Thijs de Cock, *Post-Quantum Cryptography for the RPKI*, 2025
+- Dirk Doesburg, *Post-Quantum Cryptography for the RPKI*, Master's thesis, Radboud University, 27 June 2025, https://www.sidnlabs.nl/en/news-and-blogs/thesis-pqc-for-the-rpki
 
 Use the Datatracker before submission because active Internet-Draft status can change.""")
 
@@ -143,25 +149,17 @@ Current repository-size results are synthetic or literature-calibrated estimates
 
 > EXPERIMENTAL / NOT FOR PRODUCTION
 
-1. Should ML-DSA-65 be a MUST, SHOULD, or candidate-only next-suite algorithm?
-2. Should ML-DSA-87 be mandatory for trust anchors or upper-tier CAs?
-3. Should SLH-DSA be included in the profile or only discussed as crypto-diversity future work?
-4. Can RPKI CMS signedAttrs requirements be combined with RFC 9882 ML-DSA and RFC 9814 SLH-DSA without profile conflict?
-5. How should validators cleanly fail on unsupported PQC algorithms?
-6. Should semantic equivalence between RSA and PQC branches be a MUST, SHOULD, or operational recommendation?
-7. Should RPKI use parallel publication, composite signatures, or both?
-8. Should Null Scheme-like reductions be revived or avoided?
-9. Does PQC migration require trust-anchor or TAK procedure updates?
-10. Should ASPA, RSC, or BGPsec be included or deferred?
-11. Are existing PKIX/CMS OIDs sufficient, or should RPKI define suite identifiers or validator error classes?""")
+The authoritative protocol issue list is the Open Issues section of
+`draft-yoshikawa-sidrops-pqc-rpki-00`. Research execution questions are
+maintained separately in `docs/research-questions.md`.""")
 
     write("ietf/security-considerations-notes.md", """# Security Considerations Notes
 
-Avoid silent downgrade, split VRP views, algorithm confusion, oversized-object resource exhaustion, stale manifest masking, and accidental use of experimental private keys or production TALs. Draft-01 should add explicit handling for unsupported validators, stale RSA/PQC branches, and semantic divergence between parallel publication branches.""")
+Avoid silent downgrade, split VRP views, algorithm confusion, oversized-object resource exhaustion, stale manifest masking, and accidental use of experimental private keys or production TALs. The protocol text explicitly handles unsupported validators, stale RSA/PQC branches, and semantic divergence between parallel publication branches.""")
 
     write("ietf/iana-considerations-notes.md", """# IANA Considerations Notes
 
-The current assumption is no new IANA registry action because ML-DSA and SLH-DSA OIDs are inherited from PKIX/CMS specifications. Draft-01 should revisit whether an RPKI-specific algorithm-suite name, suite registry, or validator error registry is operationally useful.""")
+The current assumption is no new IANA registry action because ML-DSA and SLH-DSA OIDs are inherited from PKIX/CMS specifications. An RPKI-specific algorithm-suite name, suite registry, or validator error registry remains an open design question.""")
 
     write("ietf/interoperability-report.md", """# Interoperability Report
 
