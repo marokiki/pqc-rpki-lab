@@ -9,7 +9,6 @@ review copy.  It is not a full mmark implementation.
 from __future__ import annotations
 
 import re
-import textwrap
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from datetime import date
@@ -380,18 +379,6 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
     return rfc
 
 
-def plain_text(text: str) -> str:
-    body = re.sub(r"^---.*$", "", text, flags=re.MULTILINE)
-    body = re.sub(r"`([^`]+)`", r"\1", body)
-    lines: list[str] = []
-    for line in body.splitlines():
-        if not line or line.startswith("#"):
-            lines.append(line)
-        else:
-            lines.extend(textwrap.wrap(line, width=72) or [""])
-    return "\n".join(lines) + "\n"
-
-
 def main() -> None:
     meta, abstract, middle, back = split_source(SOURCE.read_text())
     OUTDIR.mkdir(parents=True, exist_ok=True)
@@ -400,13 +387,7 @@ def main() -> None:
     ET.indent(xml_root)
     ET.ElementTree(xml_root).write(xml_path, encoding="utf-8", xml_declaration=True)
     ET.parse(xml_path)
-    md_path = OUTDIR / f"{DOCNAME}.md"
-    md_path.write_text(SOURCE.read_text())
-    txt_path = OUTDIR / f"{DOCNAME}.txt"
-    txt_path.write_text(plain_text(SOURCE.read_text()))
     print(xml_path)
-    print(md_path)
-    print(txt_path)
 
 
 if __name__ == "__main__":

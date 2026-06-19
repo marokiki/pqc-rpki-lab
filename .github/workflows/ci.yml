@@ -1,5 +1,7 @@
 name: ci
 on: [push, pull_request]
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
 jobs:
   test:
     strategy:
@@ -13,6 +15,8 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - run: pip install -e .[test]
       - run: pytest
+      - name: Reject tracked Python caches
+        run: test -z "$(git ls-files | grep -E '(^|/)(__pycache__/|.*\.pyc$)' || true)"
       - name: Validate committed evidence
         run: >-
           python tools/validate_results.py

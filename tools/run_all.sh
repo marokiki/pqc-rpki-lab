@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
+export PYTHONDONTWRITEBYTECODE=1
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 if [[ -n "${PQC_RPKI_PYTHON:-}" ]]; then

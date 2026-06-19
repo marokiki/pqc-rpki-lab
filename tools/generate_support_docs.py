@@ -145,22 +145,6 @@ This note is maintained in the style of an RFC 7942 implementation-status sectio
 
 Current repository-size results are synthetic or literature-calibrated estimates. ML-DSA certificates and CRLs were generated with OpenSSL, but MFT/ROA generation remains blocked at the CMS/payload-generator layer. No independent validator has accepted a PQC RPKI object in this repository.""")
 
-    write("ietf/open-issues.md", """# Open Issues for draft-yoshikawa-sidrops-pqc-rpki
-
-> EXPERIMENTAL / NOT FOR PRODUCTION
-
-The authoritative protocol issue list is the Open Issues section of
-`draft-yoshikawa-sidrops-pqc-rpki-00`. Research execution questions are
-maintained separately in `docs/research-questions.md`.""")
-
-    write("ietf/security-considerations-notes.md", """# Security Considerations Notes
-
-Avoid silent downgrade, split VRP views, algorithm confusion, oversized-object resource exhaustion, stale manifest masking, and accidental use of experimental private keys or production TALs. The protocol text explicitly handles unsupported validators, stale RSA/PQC branches, and semantic divergence between parallel publication branches.""")
-
-    write("ietf/iana-considerations-notes.md", """# IANA Considerations Notes
-
-The current assumption is no new IANA registry action because ML-DSA and SLH-DSA OIDs are inherited from PKIX/CMS specifications. An RPKI-specific algorithm-suite name, suite registry, or validator error registry remains an open design question.""")
-
     write("ietf/interoperability-report.md", """# Interoperability Report
 
 > EXPERIMENTAL / NOT FOR PRODUCTION
