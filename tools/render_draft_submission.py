@@ -126,6 +126,12 @@ def consume_blocks(lines: list[str]) -> list[object]:
             flush_bullet()
             numbered.append(match.group(1).strip())
             continue
+        if line.startswith("  ") and bullet:
+            bullet[-1] += " " + line.strip()
+            continue
+        if line.startswith("  ") and numbered:
+            numbered[-1] += " " + line.strip()
+            continue
         flush_bullet()
         flush_numbered()
         para.append(line)

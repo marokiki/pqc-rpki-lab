@@ -1,5 +1,5 @@
 algorithms:
-  - name: rsa2048-sha256
+  - name: RSA-2048/SHA-256
     role: baseline
     type: classical-signature
     mandatory_profile: true

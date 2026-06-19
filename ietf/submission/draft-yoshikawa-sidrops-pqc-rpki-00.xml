@@ -60,11 +60,8 @@
           <t>Reuse existing LAMPS PKIX and CMS encodings for PQC algorithms.</t>
         </li>
         <li>
-          <t>Avoid new RPKI object formats unless measurements show that simple</t>
+          <t>Avoid new RPKI object formats unless measurements show that simple signature substitution is infeasible.</t>
         </li>
-      </ul>
-      <t>signature substitution is infeasible.</t>
-      <ul>
         <li>
           <t>Keep routers as consumers of validated payloads, not PQC validators.</t>
         </li>
@@ -72,16 +69,12 @@
           <t>Support a prolonged Current Suite and Next Suite interval.</t>
         </li>
         <li>
-          <t>Make downgrade, unsupported-algorithm, and semantic-divergence cases</t>
+          <t>Make downgrade, unsupported-algorithm, and semantic-divergence cases observable by RPs and operators.</t>
         </li>
-      </ul>
-      <t>observable by RPs and operators.</t>
-      <ul>
         <li>
-          <t>Keep measurement and interoperability evidence reproducible outside the</t>
+          <t>Keep measurement and interoperability evidence reproducible outside the protocol specification.</t>
         </li>
       </ul>
-      <t>protocol specification.</t>
     </section>
     <section anchor="algorithm-profile">
       <name>Algorithm Profile</name>
@@ -167,40 +160,24 @@
       <t>A deployment that follows this document is expected to proceed through the following phases.</t>
       <ol>
         <li>
-          <t>Implementation readiness: CAs and RPs add support for the Next Suite in</t>
+          <t>Implementation readiness: CAs and RPs add support for the Next Suite in non-production code paths.</t>
         </li>
-      </ol>
-      <t>non-production code paths.</t>
-      <ol>
         <li>
-          <t>Test repositories: operators publish PQC test repositories under test</t>
+          <t>Test repositories: operators publish PQC test repositories under test TALs.</t>
         </li>
-      </ol>
-      <t>TALs.</t>
-      <ol>
         <li>
-          <t>Parallel publication: selected CAs publish corresponding products under</t>
+          <t>Parallel publication: selected CAs publish corresponding products under the Current Suite and the Next Suite.</t>
         </li>
-      </ol>
-      <t>the Current Suite and the Next Suite.</t>
-      <ol>
         <li>
-          <t>RP measurement: RPs validate both suites and report validation time,</t>
+          <t>RP measurement: RPs validate both suites and report validation time, repository size, failure modes, and semantic equivalence.</t>
         </li>
-      </ol>
-      <t>repository size, failure modes, and semantic equivalence.</t>
-      <ol>
         <li>
-          <t>PQC-preferred operation: RPs prefer the Next Suite while retaining the</t>
+          <t>PQC-preferred operation: RPs prefer the Next Suite while retaining the Current Suite for a limited period.</t>
         </li>
-      </ol>
-      <t>Current Suite for a limited period.</t>
-      <ol>
         <li>
-          <t>Classical retirement: a separate transition timetable defines the</t>
+          <t>Classical retirement: a separate transition timetable defines the twilight date and withdrawal of the old suite.</t>
         </li>
       </ol>
-      <t>twilight date and withdrawal of the old suite.</t>
       <t>This document assumes the top-down migration constraint of RFC 6916 for production deployment.  Experiments involving partial parent migration, partial child migration, or mixed unsupported validator deployment are useful for failure analysis, but they are not declared valid production transition states by this revision.</t>
     </section>
     <section anchor="implementation-status">
@@ -224,29 +201,17 @@
           <t>VRP semantic equivalence checker: implemented for CSV/JSON fixtures.</t>
         </li>
         <li>
-          <t>Validator probes: implemented, but Routinator, rpki-client, and FORT</t>
+          <t>Validator probes: implemented, but Routinator, rpki-client, and FORT were not installed in the test environment.</t>
         </li>
-      </ul>
-      <t>were not installed in the test environment.</t>
-      <ul>
         <li>
-          <t>RFC-profiled PQC CA certificates, EE certificates, and CRLs: generated</t>
+          <t>RFC-profiled PQC CA certificates, EE certificates, and CRLs: generated with OpenSSL 3.6.2 for ML-DSA and SLH-DSA.</t>
         </li>
-      </ul>
-      <t>with OpenSSL 3.6.2 for ML-DSA and SLH-DSA.</t>
-      <ul>
         <li>
-          <t>PQC CMS SignedData: unsupported by the tested OpenSSL CMS CLI, which</t>
+          <t>PQC CMS SignedData: unsupported by the tested OpenSSL CMS CLI, which returned <tt>CMS_add1_signer:no default digest</tt>.</t>
         </li>
-      </ul>
-      <t>returned <tt>CMS_add1_signer:no default digest</tt>.</t>
-      <ul>
         <li>
-          <t>Manifest and ROA generation: not completed because PQC CMS signing and an</t>
+          <t>Manifest and ROA generation: not completed because PQC CMS signing and an existing payload generator were unavailable.</t>
         </li>
-      </ul>
-      <t>existing payload generator were unavailable.</t>
-      <ul>
         <li>
           <t>Multi-validator interoperability using real PQC RPKI objects: future work.</t>
         </li>
@@ -282,50 +247,30 @@
           <t>Whether SLH-DSA should remain only a diversity experiment.</t>
         </li>
         <li>
-          <t>Whether composite signatures are needed for RPKI, or whether parallel</t>
+          <t>Whether composite signatures are needed for RPKI, or whether parallel publication is operationally sufficient.</t>
         </li>
-      </ul>
-      <t>publication is operationally sufficient.</t>
-      <ul>
         <li>
-          <t>Whether Null Scheme-like signed-object reductions</t>
+          <t>Whether Null Scheme-like signed-object reductions <xref target="I-D.doesburg-sidrops-nullscheme" /> should be considered separately from the initial signature-algorithm profile.</t>
         </li>
-      </ul>
-      <t>
-        <xref target="I-D.doesburg-sidrops-nullscheme" /> should be considered separately from the initial signature-algorithm profile.</t>
-      <ul>
         <li>
-          <t>How to define a transition timetable and readiness metrics for RPKI</t>
+          <t>How to define a transition timetable and readiness metrics for RPKI deployment.</t>
         </li>
-      </ul>
-      <t>deployment.</t>
-      <ul>
         <li>
-          <t>Whether semantic-equivalence checking should be mandatory during the</t>
+          <t>Whether semantic-equivalence checking should be mandatory during the parallel-publication phase.</t>
         </li>
-      </ul>
-      <t>parallel-publication phase.</t>
-      <ul>
         <li>
           <t>How to handle PQC unsupported validators in mixed deployments.</t>
         </li>
         <li>
-          <t>Whether TAK, ASPA, RSC, and BGPsec should be covered by this document or</t>
+          <t>Whether TAK, ASPA, RSC, and BGPsec should be covered by this document or by separate companion documents.</t>
         </li>
-      </ul>
-      <t>by separate companion documents.</t>
-      <ul>
         <li>
-          <t>How RRDP snapshot and delta limits should be operationally assessed for</t>
+          <t>How RRDP snapshot and delta limits should be operationally assessed for larger objects.</t>
         </li>
-      </ul>
-      <t>larger objects.</t>
-      <ul>
         <li>
-          <t>Whether any RPKI-specific object naming, repository layout, or manifest</t>
+          <t>Whether any RPKI-specific object naming, repository layout, or manifest conventions are needed to map corresponding products across suites.</t>
         </li>
       </ul>
-      <t>conventions are needed to map corresponding products across suites.</t>
     </section>
   </middle>
   <back>
@@ -662,7 +607,7 @@
     </references>
     <section anchor="acknowledgements">
       <name>Acknowledgements</name>
-      <t>The author thanks the SIDROPS and LAMPS communities for the specifications and implementation work that make this experiment possible.  Further acknowledgements will be added as the draft receives review.</t>
+      <t>The author thanks the SIDROPS and LAMPS communities for the specifications and implementation work that make this experiment possible.</t>
     </section>
   </back>
 </rfc>

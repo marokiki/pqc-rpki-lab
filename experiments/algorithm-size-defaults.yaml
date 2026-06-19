@@ -1,7 +1,7 @@
 # Defaults from standards / well-known parameter sets.
 # Scripts should prefer measured values when available.
 algorithms:
-  rsa2048-sha256:
+  RSA-2048/SHA-256:
     public_key_bytes: 270
     signature_bytes: 256
     note: Rough DER/SPKI baseline placeholder. Replace with measured values.

@@ -475,8 +475,7 @@ generated and major validator behavior is measured.
 # Acknowledgements
 
 The author thanks the SIDROPS and LAMPS communities for the specifications
-and implementation work that make this experiment possible.  Further
-acknowledgements will be added as the draft receives review.
+and implementation work that make this experiment possible.
 
 # References
 
