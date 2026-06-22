@@ -37,6 +37,12 @@ def main() -> None:
         {normalize_vrp(row) for row in candidate_rows})
     summary = {
         "status": "confirmed" if args.baseline and args.candidate else "estimated",
+        "method": "local canonical JSON approximation; not draft-ietf-sidrops-rpki-ccr DER",
+        "ccr_design": {
+            "equality": "Compare CCR ROAPayloadState.hash values when CCR output is available.",
+            "diagnosis": "Decode and compare ROAPayloadState.rps when hashes differ.",
+            "provenance": "Compare trust-anchor/source attribution separately from VRP-set equality.",
+        },
         "sources": {
             "baseline": str(args.baseline) if args.baseline else "built-in synthetic",
             "candidate": str(args.candidate) if args.candidate else "built-in synthetic",
@@ -47,11 +53,19 @@ def main() -> None:
     row = {
         "baseline_count": result["baseline_count"], "candidate_count": result["candidate_count"],
         "equivalent": result["equivalent"], "only_baseline_count": len(result["only_baseline"]),
-        "only_candidate_count": len(result["only_candidate"]), "status": summary["status"],
+        "only_candidate_count": len(result["only_candidate"]),
+        "provenance_difference_count": len(result["provenance_differences"]),
+        "baseline_local_hash": result["baseline_local_hash"],
+        "candidate_local_hash": result["candidate_local_hash"],
+        "status": summary["status"],
     }
     write_csv(RESULTS / "vrp-equivalence.csv", [row])
     (RESULTS / "vrp-equivalence.md").write_text(
-        "# VRP Semantic Equivalence\n\n> EXPERIMENTAL / NOT FOR PRODUCTION\n\n" +
+        "# VRP Set Equality\n\n> EXPERIMENTAL / NOT FOR PRODUCTION\n\n"
+        "The default hash is a local canonical JSON approximation, not the DER-encoded "
+        "CCR `ROAPayloadState.hash`. When validator CCR output is available, that hash is "
+        "the comparison target; decoded `rps` values identify individual VRP differences. "
+        "Trust-anchor and source attribution are reported separately.\n\n" +
         markdown_table([row], [(key, key.replace("_", " ").title()) for key in row]) + "\n")
 
 

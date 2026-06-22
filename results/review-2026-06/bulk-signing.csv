@@ -1,0 +1,7 @@
+algorithm,backend,estimated_100k_manifests_crypto_lower_bound_seconds,estimated_100k_manifests_signing_lower_bound_seconds,estimated_100k_signatures_seconds,estimated_key_roll_crypto_lower_bound_seconds,estimated_key_roll_signing_lower_bound_seconds,keygen_ops_per_second,measurement_seconds_per_operation,reason,sign_ops_per_second,status,timing_scope,verify_ops_per_second
+RSA-2048/SHA-256,OpenSSL speed,2824.18,67.423,33.712,2.883698,0.071806,36.275,1,,2966.337,confirmed,in-process EVP throughput,117652.0
+P-256/SHA-256,OpenSSL speed,,2.235,1.118,,0.002381,,1,,89466.0,confirmed,in-process EVP throughput,30522.0
+Ed25519,OpenSSL speed,,3.149,1.574,,0.003353,,1,,63516.0,confirmed,in-process EVP throughput,25427.0
+ML-DSA-44,OpenSSL speed,53.831,49.468,24.734,0.057134,0.052684,22918.812,1,,4043.0,confirmed,in-process EVP throughput,20787.129
+ML-DSA-65,OpenSSL speed,88.274,80.032,40.016,0.09364,0.085234,12133.663,1,,2499.0,confirmed,in-process EVP throughput,11953.0
+ML-DSA-87,OpenSSL speed,105.635,93.721,46.86,0.111966,0.099813,8393.0,1,,2134.0,confirmed,in-process EVP throughput,8232.673

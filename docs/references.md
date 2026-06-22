@@ -11,6 +11,8 @@ Internet-Drafts and research references:
 
 - draft-ietf-lamps-pq-composite-sigs
 - draft-ietf-lamps-cms-composite-sigs
+- draft-ietf-sidrops-rpki-ccr
+- draft-ietf-pquip-hybrid-signature-spectrums
 - draft-doesburg-sidrops-nullscheme, expired individual draft
 - Dirk Doesburg, *Post-Quantum Cryptography for the RPKI*, Master's thesis, Radboud University, 27 June 2025, https://www.sidnlabs.nl/en/news-and-blogs/thesis-pqc-for-the-rpki
 

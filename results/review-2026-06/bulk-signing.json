@@ -1,0 +1,112 @@
+{
+  "metadata": {
+    "complete_object_workload": {
+      "reason": "No existing generator in this environment can produce complete PQC RFC 6488 Manifest payloads and CMS SignedData; projected crypto work is not object-level throughput.",
+      "status": "unsupported"
+    },
+    "key_roll_projection": "The synthetic key-roll lower bound uses 10 child certificates, 100 RFC 6488 objects, one manifest, and one CRL: 213 signatures and 102 key generations (one CA and 101 EE keys).",
+    "manifest_projection": "The signing-only 100,000-manifest value uses two signatures per RFC 6488 object (EE certificate plus CMS signature). Where OpenSSL reports keygen throughput, the crypto lower bound also includes 100,000 one-time EE keys. Both exclude ASN.1/CMS construction, hashing, file I/O, RRDP publication, and HSM latency.",
+    "method": "One OpenSSL speed process per algorithm; provider and process startup are outside timed loops.",
+    "openssl": "OpenSSL 3.6.2 7 Apr 2026 (Library: OpenSSL 3.6.2 7 Apr 2026)",
+    "platform": "macOS-26.5.1-arm64-arm-64bit-Mach-O",
+    "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+  },
+  "results": [
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "backend": "OpenSSL speed",
+      "estimated_100k_manifests_crypto_lower_bound_seconds": 2824.18,
+      "estimated_100k_manifests_signing_lower_bound_seconds": 67.423,
+      "estimated_100k_signatures_seconds": 33.712,
+      "estimated_key_roll_crypto_lower_bound_seconds": 2.883698,
+      "estimated_key_roll_signing_lower_bound_seconds": 0.071806,
+      "keygen_ops_per_second": 36.275,
+      "measurement_seconds_per_operation": 1,
+      "reason": "",
+      "sign_ops_per_second": 2966.337,
+      "status": "confirmed",
+      "timing_scope": "in-process EVP throughput",
+      "verify_ops_per_second": 117652.0
+    },
+    {
+      "algorithm": "P-256/SHA-256",
+      "backend": "OpenSSL speed",
+      "estimated_100k_manifests_crypto_lower_bound_seconds": "",
+      "estimated_100k_manifests_signing_lower_bound_seconds": 2.235,
+      "estimated_100k_signatures_seconds": 1.118,
+      "estimated_key_roll_crypto_lower_bound_seconds": "",
+      "estimated_key_roll_signing_lower_bound_seconds": 0.002381,
+      "keygen_ops_per_second": "",
+      "measurement_seconds_per_operation": 1,
+      "reason": "",
+      "sign_ops_per_second": 89466.0,
+      "status": "confirmed",
+      "timing_scope": "in-process EVP throughput",
+      "verify_ops_per_second": 30522.0
+    },
+    {
+      "algorithm": "Ed25519",
+      "backend": "OpenSSL speed",
+      "estimated_100k_manifests_crypto_lower_bound_seconds": "",
+      "estimated_100k_manifests_signing_lower_bound_seconds": 3.149,
+      "estimated_100k_signatures_seconds": 1.574,
+      "estimated_key_roll_crypto_lower_bound_seconds": "",
+      "estimated_key_roll_signing_lower_bound_seconds": 0.003353,
+      "keygen_ops_per_second": "",
+      "measurement_seconds_per_operation": 1,
+      "reason": "",
+      "sign_ops_per_second": 63516.0,
+      "status": "confirmed",
+      "timing_scope": "in-process EVP throughput",
+      "verify_ops_per_second": 25427.0
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "backend": "OpenSSL speed",
+      "estimated_100k_manifests_crypto_lower_bound_seconds": 53.831,
+      "estimated_100k_manifests_signing_lower_bound_seconds": 49.468,
+      "estimated_100k_signatures_seconds": 24.734,
+      "estimated_key_roll_crypto_lower_bound_seconds": 0.057134,
+      "estimated_key_roll_signing_lower_bound_seconds": 0.052684,
+      "keygen_ops_per_second": 22918.812,
+      "measurement_seconds_per_operation": 1,
+      "reason": "",
+      "sign_ops_per_second": 4043.0,
+      "status": "confirmed",
+      "timing_scope": "in-process EVP throughput",
+      "verify_ops_per_second": 20787.129
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "backend": "OpenSSL speed",
+      "estimated_100k_manifests_crypto_lower_bound_seconds": 88.274,
+      "estimated_100k_manifests_signing_lower_bound_seconds": 80.032,
+      "estimated_100k_signatures_seconds": 40.016,
+      "estimated_key_roll_crypto_lower_bound_seconds": 0.09364,
+      "estimated_key_roll_signing_lower_bound_seconds": 0.085234,
+      "keygen_ops_per_second": 12133.663,
+      "measurement_seconds_per_operation": 1,
+      "reason": "",
+      "sign_ops_per_second": 2499.0,
+      "status": "confirmed",
+      "timing_scope": "in-process EVP throughput",
+      "verify_ops_per_second": 11953.0
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "backend": "OpenSSL speed",
+      "estimated_100k_manifests_crypto_lower_bound_seconds": 105.635,
+      "estimated_100k_manifests_signing_lower_bound_seconds": 93.721,
+      "estimated_100k_signatures_seconds": 46.86,
+      "estimated_key_roll_crypto_lower_bound_seconds": 0.111966,
+      "estimated_key_roll_signing_lower_bound_seconds": 0.099813,
+      "keygen_ops_per_second": 8393.0,
+      "measurement_seconds_per_operation": 1,
+      "reason": "",
+      "sign_ops_per_second": 2134.0,
+      "status": "confirmed",
+      "timing_scope": "in-process EVP throughput",
+      "verify_ops_per_second": 8232.673
+    }
+  ]
+}

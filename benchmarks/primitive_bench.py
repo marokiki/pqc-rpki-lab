@@ -16,7 +16,7 @@ from pqc_rpki_lab.algorithms import ALL_ALGORITHMS, Algorithm
 from pqc_rpki_lab.result_io import markdown_table, write_csv, write_json
 
 ROOT = Path(__file__).resolve().parents[1]
-RESULTS = ROOT / "results"
+RESULTS = Path(os.environ.get("PQC_RPKI_RESULTS_DIR", ROOT / "results"))
 
 
 def timed(operation):
@@ -101,6 +101,78 @@ def benchmark_rsa_openssl(algorithm: Algorithm, iterations: int) -> dict[str, ob
             "measured_signature_bytes": signature_path.stat().st_size,
             "timing_scope": "end-to-end CLI wall-clock",
             "comparable_group": "openssl-cli-v1",
+            "notes": algorithm.notes + " Timed operations each include one OpenSSL process launch.",
+        }
+
+
+def benchmark_classical_openssl(algorithm: Algorithm, iterations: int) -> dict[str, object]:
+    row = base_row(algorithm)
+    if not shutil.which("openssl"):
+        return row | {
+            "backend": "OpenSSL CLI", "benchmark_status": "unsupported",
+            "reason": "OpenSSL executable not found", "timing_scope": "end-to-end CLI wall-clock",
+            "comparable_group": "openssl-cli-v1",
+        }
+    is_ecdsa = algorithm.family == "ECDSA"
+    key_command = (["openssl", "genpkey", "-algorithm", "EC", "-pkeyopt", "ec_paramgen_curve:P-256"]
+                   if is_ecdsa else ["openssl", "genpkey", "-algorithm", "ED25519"])
+    message = hashlib.sha256(b"pqc-rpki-lab").digest()
+    keygen: list[float] = []
+    signing: list[float] = []
+    verifying: list[float] = []
+    with tempfile.TemporaryDirectory(prefix="pqc-rpki-classical-primitive-") as name:
+        directory = Path(name)
+        message_path = directory / "message.bin"
+        private_path = directory / "private.pem"
+        private_der = directory / "private.der"
+        public_path = directory / "public.der"
+        public_pem = directory / "public.pem"
+        signature_path = directory / "signature.bin"
+        message_path.write_bytes(message)
+        for _ in range(iterations):
+            process, elapsed = timed(lambda: subprocess.run(
+                key_command + ["-out", str(private_path)], capture_output=True, text=True))
+            if process.returncode:
+                return row | {
+                    "backend": "OpenSSL CLI", "benchmark_status": "unsupported",
+                    "reason": (process.stderr or process.stdout).strip().splitlines()[-1],
+                    "timing_scope": "end-to-end CLI wall-clock", "comparable_group": "openssl-cli-v1",
+                }
+            keygen.append(elapsed)
+            subprocess.run(["openssl", "pkey", "-in", str(private_path), "-pubout",
+                            "-out", str(public_pem)], check=True, capture_output=True)
+            subprocess.run(["openssl", "pkey", "-in", str(private_path), "-pubout", "-outform", "DER",
+                            "-out", str(public_path)], check=True, capture_output=True)
+            subprocess.run(["openssl", "pkey", "-in", str(private_path), "-outform", "DER",
+                            "-out", str(private_der)], check=True, capture_output=True)
+            if is_ecdsa:
+                sign_command = ["openssl", "dgst", "-sha256", "-sign", str(private_path),
+                                "-out", str(signature_path), str(message_path)]
+                verify_command = ["openssl", "dgst", "-sha256", "-verify", str(public_pem),
+                                  "-signature", str(signature_path), str(message_path)]
+            else:
+                sign_command = ["openssl", "pkeyutl", "-sign", "-rawin", "-inkey", str(private_path),
+                                "-in", str(message_path), "-out", str(signature_path)]
+                verify_command = ["openssl", "pkeyutl", "-verify", "-rawin", "-pubin",
+                                  "-inkey", str(public_pem), "-in", str(message_path),
+                                  "-sigfile", str(signature_path)]
+            process, elapsed = timed(lambda: subprocess.run(sign_command, capture_output=True, text=True))
+            if process.returncode:
+                raise RuntimeError(f"OpenSSL signing failed for {algorithm.name}: {process.stderr}")
+            signing.append(elapsed)
+            process, elapsed = timed(lambda: subprocess.run(verify_command, capture_output=True, text=True))
+            if process.returncode:
+                raise RuntimeError(f"OpenSSL verification failed for {algorithm.name}: {process.stderr}")
+            verifying.append(elapsed)
+        return row | {
+            "backend": "OpenSSL CLI", "benchmark_status": "confirmed",
+            "provider_name": "ECDSA-P256" if is_ecdsa else "ED25519", "iterations": iterations,
+            "keygen_ms_median": median(keygen), "sign_ms_median": median(signing),
+            "verify_ms_median": median(verifying),
+            "measured_public_key_bytes": public_path.stat().st_size,
+            "secret_key_bytes": private_der.stat().st_size,
+            "measured_signature_bytes": signature_path.stat().st_size,
+            "timing_scope": "end-to-end CLI wall-clock", "comparable_group": "openssl-cli-v1",
             "notes": algorithm.notes + " Timed operations each include one OpenSSL process launch.",
         }
 
@@ -230,11 +302,20 @@ def benchmark_pqc(algorithm: Algorithm, iterations: int) -> dict[str, object]:
 
 def main() -> None:
     iterations = int(os.environ.get("PQC_RPKI_ITERATIONS", "3"))
-    rows = [
-        benchmark_rsa_openssl(algorithm, iterations) if algorithm.family == "RSA"
-        else benchmark_pqc(algorithm, iterations)
-        for algorithm in ALL_ALGORITHMS
-    ]
+    rows = []
+    for algorithm in ALL_ALGORITHMS:
+        if algorithm.family == "RSA":
+            rows.append(benchmark_rsa_openssl(algorithm, iterations))
+        elif algorithm.family in {"ECDSA", "EdDSA"}:
+            rows.append(benchmark_classical_openssl(algorithm, iterations))
+        elif algorithm.family == "Composite":
+            rows.append(base_row(algorithm) | {
+                "backend": "size model only", "benchmark_status": "unsupported",
+                "reason": "No local composite signature implementation or interoperability profile",
+                "timing_scope": "not measured", "comparable_group": "none",
+            })
+        else:
+            rows.append(benchmark_pqc(algorithm, iterations))
     write_csv(RESULTS / "primitive-bench.csv", rows)
     write_json(RESULTS / "primitive-bench.json", {
         "metadata": {

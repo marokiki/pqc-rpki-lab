@@ -1,0 +1,4 @@
+algorithm,combined_signature_bytes,component1_signature_max_bytes,component2_signature_max_bytes,iterations,reason,sign_microseconds_per_operation,sign_ops_per_second,sign_seconds,sign_time_ratio_vs_mldsa65,signature_bytes_ratio_vs_mldsa65,status,verify_microseconds_per_operation,verify_ops_per_second,verify_seconds,verify_time_ratio_vs_mldsa65
+RSA-2048+ML-DSA-44,2676,256,2420,100000,,587.2,1702.996,58.720045000,1.462,0.809,confirmed,57.88,17277.074,5.788017000,0.787
+P-256+ML-DSA-44,2492,72,2420,100000,,262.532,3809.054,26.253240000,0.653,0.753,confirmed,83.098,12034.001,8.309788000,1.13
+P-256+Falcon-512,736,72,664,100000,,2075.49,481.814,207.549013000,5.166,0.222,confirmed,54.744,18266.899,5.474383000,0.745

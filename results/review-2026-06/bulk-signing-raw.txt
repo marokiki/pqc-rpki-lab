@@ -1,0 +1,71 @@
+### RSA-2048/SHA-256
+$ openssl speed -seconds 1 -elapsed -mr rsa2048
++F2:2:2048:2963.366337:117276.000000:109223.000000:2948.000000
++F9:2:35.643564:104774.257426:2981.000000
++F10:2:36.274510:2966.336634:117652.000000
++DTP:2048:private:rsa sign:1
++R1:2993:2048:1.01
++DTP:2048:public:rsa verify:1
++R2:117276:2048:1.00
++DTP:2048:public:rsa encrypt:1
++R3:109223:2048:1.00
++DTP:2048:private:rsa decrypt:1
++R4:2948:2048:1.00
++DTP:rsa2048:keygen:1
++R15:36:rsa2048:1.01
++DTP:rsa2048:encaps:1
++R16:105822:rsa2048:1.01
++DTP:rsa2048:decaps:1
++R17:2981:rsa2048:1.00
++DTP:rsa2048:keygen:1
++R18:37:rsa2048:1.02
++DTP:rsa2048:signs:1
++R19:2996:rsa2048:1.01
++DTP:rsa2048:verify:1
++R20:117652:rsa2048:1.00
+
+### P-256/SHA-256
+$ openssl speed -seconds 1 -elapsed -mr ecdsap256
++F4:3:256:89466.000000:30522.000000
++DTP:256:sign:ecdsa:1
++R7:89466:256:1.00
++DTP:256:verify:ecdsa:1
++R8:30522:256:1.00
+
+### Ed25519
+$ openssl speed -seconds 1 -elapsed -mr ed25519
++F6:0:253:Ed25519:63516.000000:25427.000000
++DTP:253:sign:Ed25519:1
++R10:63516:253:Ed25519:1.00
++DTP:253:verify:Ed25519:1
++R11:25427:253:Ed25519:1.00
+
+### ML-DSA-44
+$ openssl speed -seconds 1 -elapsed -mr ML-DSA-44
++F10:9:22918.811881:4043.000000:20787.128713
++DTP:ML-DSA-44:keygen:1
++R18:23148:ML-DSA-44:1.01
++DTP:ML-DSA-44:signs:1
++R19:4043:ML-DSA-44:1.00
++DTP:ML-DSA-44:verify:1
++R20:20995:ML-DSA-44:1.01
+
+### ML-DSA-65
+$ openssl speed -seconds 1 -elapsed -mr ML-DSA-65
++F10:10:12133.663366:2499.000000:11953.000000
++DTP:ML-DSA-65:keygen:1
++R18:12255:ML-DSA-65:1.01
++DTP:ML-DSA-65:signs:1
++R19:2499:ML-DSA-65:1.00
++DTP:ML-DSA-65:verify:1
++R20:11953:ML-DSA-65:1.00
+
+### ML-DSA-87
+$ openssl speed -seconds 1 -elapsed -mr ML-DSA-87
++F10:11:8393.000000:2134.000000:8232.673267
++DTP:ML-DSA-87:keygen:1
++R18:8393:ML-DSA-87:1.00
++DTP:ML-DSA-87:signs:1
++R19:2134:ML-DSA-87:1.00
++DTP:ML-DSA-87:verify:1
++R20:8315:ML-DSA-87:1.01

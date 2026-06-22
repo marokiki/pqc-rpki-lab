@@ -1,10 +1,20 @@
 {
+  "ccr_design": {
+    "diagnosis": "Decode and compare ROAPayloadState.rps when hashes differ.",
+    "equality": "Compare CCR ROAPayloadState.hash values when CCR output is available.",
+    "provenance": "Compare trust-anchor/source attribution separately from VRP-set equality."
+  },
+  "method": "local canonical JSON approximation; not draft-ietf-sidrops-rpki-ccr DER",
   "result": {
     "baseline_count": 2,
+    "baseline_local_hash": "0db17e0be0b26181fc3857665671e3035cdbaabe9b69046939e313b4d6c8be4a",
     "candidate_count": 2,
+    "candidate_local_hash": "0db17e0be0b26181fc3857665671e3035cdbaabe9b69046939e313b4d6c8be4a",
     "equivalent": true,
+    "local_hash_algorithm": "sha256-canonical-json-v1-not-ccr",
     "only_baseline": [],
-    "only_candidate": []
+    "only_candidate": [],
+    "provenance_differences": []
   },
   "sources": {
     "baseline": "built-in synthetic",

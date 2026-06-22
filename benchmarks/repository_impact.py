@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 from pqc_rpki_lab.algorithms import ALL_ALGORITHMS
@@ -8,7 +9,7 @@ from pqc_rpki_lab.repository_model import AlgorithmSize, Corpus, estimate_reposi
 from pqc_rpki_lab.result_io import markdown_table, write_csv, write_json
 
 ROOT = Path(__file__).resolve().parents[1]
-RESULTS = ROOT / "results"
+RESULTS = Path(os.environ.get("PQC_RPKI_RESULTS_DIR", ROOT / "results"))
 
 
 def main() -> None:

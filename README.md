@@ -12,14 +12,16 @@ validator.
 
 ## Scope
 
-The required comparison covers:
+The comparison covers:
 
 - RSA-2048/SHA-256
-- ML-DSA-65 and ML-DSA-87
+- P-256/SHA-256 and Ed25519 as compact classical references
+- ML-DSA-44, ML-DSA-65, and ML-DSA-87
 - SLH-DSA-SHAKE-128s and SLH-DSA-SHAKE-192s
 
-ML-DSA-44 is retained as an excluded-policy comparison. Falcon, MAYO, SNOVA,
-and HAWK are optional candidates and remain outside the proposed profile.
+Small-PQ composite suites are size-model candidates, not confirmed
+interoperable algorithms. Falcon, MAYO, SNOVA, and HAWK remain research
+candidates.
 
 ## Run
 
@@ -39,6 +41,7 @@ Optional inputs:
 PQC_RPKI_CACHE=/path/to/local/rpki-cache tools/run_all.sh
 PQC_RPKI_ITERATIONS=100 tools/run_all.sh
 python3 tools/vrp_equivalence.py --baseline rsa.csv --candidate pqc.json
+make review-evidence
 ```
 
 `make install-optional-pqc` is the only network-enabled installation path. It
@@ -61,6 +64,33 @@ Core primitive timings are end-to-end OpenSSL CLI wall-clock measurements.
 Each operation includes process startup and file I/O. Compare timing values
 only when `comparable_group` is identical; these values are not pure algorithm
 cycle counts. Repository-impact results are synthetic estimates.
+
+`make review-evidence` writes OpenSSL in-process throughput and signing-only
+100,000-object/key-roll projections under `results/review-2026-06/`. These
+values do not claim complete Manifest generation. The published `draft-00`
+snapshot remains available at the Git tag and Release of the same name.
+
+The exact 100,000-operation benchmark is intentionally separate from the
+default and review targets because it can take several minutes:
+
+```sh
+make exact-100k
+```
+
+It compiles `benchmarks/exact_100k.c` in a temporary directory and writes
+results to `results/review-2026-06/exact-100k.*`. It performs 100,000 signing
+and 100,000 verification operations per algorithm; it is not a complete RPKI
+Manifest-generation benchmark.
+
+After `make install-optional-pqc`, run the sequential composite-component
+benchmark with:
+
+```sh
+make composite-100k
+```
+
+This requires both component signatures to verify, but does not implement
+the LAMPS composite ASN.1/OID format.
 
 OpenSSL generated resource-profile ML-DSA and SLH-DSA certificates and CRLs in
 the recorded environment. Pure-PQC CMS SignedData, complete MFT/ROA fixtures,

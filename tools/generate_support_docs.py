@@ -65,9 +65,10 @@ def main() -> None:
               ("public_key_bytes", "Public key bytes"), ("signature_bytes", "Signature bytes"),
               ("specification", "Standards"),
           ]) +
-          "\n\nML-DSA-65 is the standards-ready primary experiment. ML-DSA-44 is measured but excluded from the profile by the Category 3 policy floor. ML-DSA-87 is the high-assurance candidate. "
+          "\n\nP-256 and Ed25519 are compact classical counterfactuals, not current RFC 6488 profile algorithms. "
+          "ML-DSA-65 is the current primary experiment. ML-DSA-44 remains measured while its profile role is reconsidered alongside small-PQ composite suites. ML-DSA-87 is the high-assurance comparison. "
           "SLH-DSA remains a crypto-diversity candidate with significant size and signing-cost concerns. "
-          "Composite signatures, Falcon, MAYO, SNOVA, and HAWK remain outside the mandatory path until RPKI-specific profile and interoperability evidence exists.")
+          "Composite sizes are estimates until RPKI-specific X.509/CMS and validator evidence exists. Falcon, MAYO, SNOVA, and HAWK remain research candidates.")
 
     write("docs/existing-implementations.md", """# Existing Implementations
 
@@ -87,7 +88,15 @@ Primitive operations use a deterministic 32-byte message and median wall-clock t
 
 Optional algorithms use oqs-python/liboqs when available. Those measurements are in-process and belong to a separate comparable group, so they MUST NOT be directly divided by OpenSSL CLI values. A pure per-operation comparison requires all algorithms to use a common in-process API or a benchmark that subtracts and validates harness overhead.
 
-Repository impact applies standardized or candidate parameter sizes to a documented synthetic corpus. It does not require a locally executable primitive backend and is classified as `estimated`. VRP comparison normalizes prefix, maxLength, origin AS, and TA/source. CSV/JSON contain backend, timing scope, comparability group, and status fields and are the primary evidence; Markdown views retain those limitations.
+Repository impact applies standardized or candidate parameter sizes to a documented synthetic corpus. Composite rows add component sizes and exclude composite ASN.1 overhead. They are estimates, not measured objects.
+
+VRP-set equality excludes trust-anchor and source attribution. When CCR output is available, compare `ROAPayloadState.hash` and decode `rps` only when hashes differ. The current helper hashes canonical JSON and is explicitly not a CCR DER implementation. Trust-anchor and source attribution are reported separately.
+
+Bulk signing uses `openssl speed`, which keeps provider and process startup outside the timed loop. Its 100,000-manifest and key-roll values are signing-only lower bounds, not complete object-generation measurements. CSV/JSON contain backend, timing scope, comparability group, and status fields and are the primary evidence.
+
+The exact-count benchmark is a separate manual phase. It generates one key pair per algorithm, then performs exactly 100,000 EVP signing operations and 100,000 verification operations. It includes EVP context initialization in each operation but excludes key generation, process startup, RPKI object encoding, file I/O, publication, and HSM latency. The default `run_all.sh` and `make review-evidence` targets MUST NOT invoke this benchmark.
+
+The composite-component benchmark signs the same message with both named components sequentially and accepts a verification only when both component signatures verify. OpenSSL EVP provides RSA, P-256, and ML-DSA; pinned liboqs provides Falcon-512. The measurement excludes composite OIDs, ASN.1 encoding, domain separation, CMS/X.509 processing, and HSM behavior, so it MUST NOT be described as LAMPS composite interoperability.
 
 Current repository-impact data is `estimated`, not proof of global deployability. Before increasing normative language in the Internet-Draft, calibrate the estimator with a local RPKI cache supplied through `PQC_RPKI_CACHE` and produce real-cache projections.""")
 
@@ -97,8 +106,8 @@ Current repository-impact data is `estimated`, not proof of global deployability
 2. How do candidates affect certificates, CRLs, manifests, ROAs, repositories, RRDP, and caches?
 3. Can RFC 6487/6488 objects be generated using RFC 9881/9882/9909/9814 encodings without ad-hoc profiles?
 4. Which existing validators can parse, reject, or validate generated PQC RPKI objects?
-5. Can parallel RSA/PQC publication preserve identical VRP semantics?
-6. Is composite signature support needed, or is parallel publication sufficient?
+5. Do RSA and PQC validation runs produce the same CCR `ROAPayloadState.hash`?
+6. Which combination of mixed-tree migration and pure or composite signatures is operationally viable?
 7. Are Null Scheme-like reductions useful enough to justify new SIDROPS work?
 8. Which downgrade and mixed-validator failures require normative handling?
 
@@ -117,6 +126,8 @@ Internet-Drafts and research references:
 
 - draft-ietf-lamps-pq-composite-sigs
 - draft-ietf-lamps-cms-composite-sigs
+- draft-ietf-sidrops-rpki-ccr
+- draft-ietf-pquip-hybrid-signature-spectrums
 - draft-doesburg-sidrops-nullscheme, expired individual draft
 - Dirk Doesburg, *Post-Quantum Cryptography for the RPKI*, Master's thesis, Radboud University, 27 June 2025, https://www.sidnlabs.nl/en/news-and-blogs/thesis-pqc-for-the-rpki
 

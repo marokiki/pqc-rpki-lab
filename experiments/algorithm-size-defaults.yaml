@@ -5,6 +5,14 @@ algorithms:
     public_key_bytes: 270
     signature_bytes: 256
     note: Rough DER/SPKI baseline placeholder. Replace with measured values.
+  P-256/SHA-256:
+    public_key_bytes: 65
+    signature_bytes: 72
+    note: Compact classical counterfactual; conservative DER signature maximum.
+  Ed25519:
+    public_key_bytes: 32
+    signature_bytes: 64
+    note: Compact classical counterfactual.
   ML-DSA-65:
     public_key_bytes: 1952
     signature_bytes: 3309
@@ -25,3 +33,15 @@ algorithms:
     public_key_bytes: 48
     signature_bytes: 16224
     note: FIPS 205 parameter size.
+  RSA-2048+ML-DSA-44:
+    public_key_bytes: 1582
+    signature_bytes: 2676
+    note: Component sum only; composite encoding overhead excluded.
+  P-256+ML-DSA-44:
+    public_key_bytes: 1377
+    signature_bytes: 2492
+    note: Component sum only; composite encoding overhead excluded.
+  P-256+Falcon-512:
+    public_key_bytes: 962
+    signature_bytes: 738
+    note: Component sum only; FN-DSA and composite profiles remain pending.

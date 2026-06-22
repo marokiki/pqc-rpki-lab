@@ -41,6 +41,17 @@ COMPARISON_ALGORITHMS = (
               ("SLH-DSA-SHAKE-192s", "SPHINCS+-SHAKE-192s-simple"), "diversity"),
 )
 
+CLASSICAL_REFERENCE_ALGORITHMS = (
+    Algorithm("P-256/SHA-256", "ECDSA", "classical-128", 65, 72, "confirmed",
+              "FIPS 186-5; RFC 8608 for BGPsec", "OpenSSL CLI",
+              "Compact classical counterfactual; not the current RFC 6488 RPKI profile. "
+              "Signature size uses the conservative DER maximum.", track="classical-reference"),
+    Algorithm("Ed25519", "EdDSA", "classical-128", 32, 64, "confirmed",
+              "RFC 8032", "OpenSSL CLI",
+              "Compact classical counterfactual; not the current RFC 6488 RPKI profile.",
+              track="classical-reference"),
+)
+
 EXCLUDED_PROFILE_ALGORITHMS = (
     Algorithm("ML-DSA-44", "ML-DSA", "2", 1312, 2420, "confirmed",
               "FIPS 204; RFC 9881; RFC 9882", "OpenSSL default provider",
@@ -70,8 +81,24 @@ OPTIONAL_ALGORITHMS = (
               ("HAWK-512",), "optional", False),
 )
 
+COMPOSITE_ESTIMATES = (
+    Algorithm("RSA-2048+ML-DSA-44", "Composite", "hybrid", 1582, 2676, "estimated",
+              "draft-ietf-lamps-pq-composite-sigs", "size model only",
+              "Component-size sum excluding composite ASN.1 overhead; no local X.509/CMS interoperability evidence.",
+              track="composite-candidate", comparison_required=False),
+    Algorithm("P-256+ML-DSA-44", "Composite", "hybrid", 1377, 2492, "estimated",
+              "draft-ietf-lamps-pq-composite-sigs", "size model only",
+              "Component-size sum excluding composite ASN.1 overhead; no local X.509/CMS interoperability evidence.",
+              track="composite-candidate", comparison_required=False),
+    Algorithm("P-256+Falcon-512", "Composite", "hybrid", 962, 738, "estimated",
+              "draft-ietf-lamps-pq-composite-sigs; FN-DSA pending", "size model only",
+              "Component-size sum excluding composite ASN.1 overhead; Falcon/FN-DSA profile is not final.",
+              track="composite-candidate", comparison_required=False),
+)
+
 ALGORITHMS = COMPARISON_ALGORITHMS
-ALL_ALGORITHMS = COMPARISON_ALGORITHMS + EXCLUDED_PROFILE_ALGORITHMS + OPTIONAL_ALGORITHMS
+ALL_ALGORITHMS = (COMPARISON_ALGORITHMS + CLASSICAL_REFERENCE_ALGORITHMS +
+                  EXCLUDED_PROFILE_ALGORITHMS + OPTIONAL_ALGORITHMS + COMPOSITE_ESTIMATES)
 BY_NAME = {algorithm.name: algorithm for algorithm in ALL_ALGORITHMS}
 
 

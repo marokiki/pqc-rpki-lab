@@ -4,6 +4,16 @@ algorithms:
     type: classical-signature
     mandatory_profile: true
     comparison_required: true
+  - name: P-256/SHA-256
+    role: compact-classical-reference
+    type: classical-signature
+    mandatory_profile: false
+    comparison_required: true
+  - name: Ed25519
+    role: compact-classical-reference
+    type: classical-signature
+    mandatory_profile: false
+    comparison_required: true
   - name: ML-DSA-65
     role: primary-pqc-candidate
     type: pqc-signature
@@ -45,3 +55,18 @@ algorithms:
       - SPHINCS+-SHAKE-192s-simple
     mandatory_profile: false
     comparison_required: true
+  - name: RSA-2048+ML-DSA-44
+    role: composite-size-estimate
+    type: composite-signature
+    mandatory_profile: false
+    comparison_required: false
+  - name: P-256+ML-DSA-44
+    role: composite-size-estimate
+    type: composite-signature
+    mandatory_profile: false
+    comparison_required: false
+  - name: P-256+Falcon-512
+    role: composite-size-estimate
+    type: composite-signature
+    mandatory_profile: false
+    comparison_required: false

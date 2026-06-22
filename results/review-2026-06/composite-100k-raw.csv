@@ -1,0 +1,4 @@
+algorithm,status,reason,iterations,sign_seconds,verify_seconds,component1_signature_max_bytes,component2_signature_max_bytes,combined_signature_bytes
+RSA-2048+ML-DSA-44,confirmed,,100000,58.720045000,5.788017000,256,2420,2676
+P-256+ML-DSA-44,confirmed,,100000,26.253240000,8.309788000,72,2420,2492
+P-256+Falcon-512,confirmed,,100000,207.549013000,5.474383000,72,664,736

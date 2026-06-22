@@ -6,6 +6,8 @@ from pqc_rpki_lab.algorithms import (
     COMPARISON_ALGORITHMS,
     EXCLUDED_PROFILE_ALGORITHMS,
     OPTIONAL_ALGORITHMS,
+    CLASSICAL_REFERENCE_ALGORITHMS,
+    COMPOSITE_ESTIMATES,
 )
 
 
@@ -44,3 +46,9 @@ class AlgorithmsTest(unittest.TestCase):
         for name in ("Falcon-512", "Falcon-1024", "MAYO-1", "SNOVA-(24,5,4)", "HAWK-512"):
             self.assertIn(name, BY_NAME)
             self.assertEqual(BY_NAME[name].track, "optional")
+
+    def test_review_candidates_are_separate(self):
+        self.assertEqual({value.name for value in CLASSICAL_REFERENCE_ALGORITHMS},
+                         {"P-256/SHA-256", "Ed25519"})
+        self.assertEqual(len(COMPOSITE_ESTIMATES), 3)
+        self.assertTrue(all(value.status == "estimated" for value in COMPOSITE_ESTIMATES))

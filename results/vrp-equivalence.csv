@@ -1,2 +1,2 @@
-baseline_count,candidate_count,equivalent,only_baseline_count,only_candidate_count,status
-2,2,True,0,0,estimated
+baseline_count,baseline_local_hash,candidate_count,candidate_local_hash,equivalent,only_baseline_count,only_candidate_count,provenance_difference_count,status
+2,0db17e0be0b26181fc3857665671e3035cdbaabe9b69046939e313b4d6c8be4a,2,0db17e0be0b26181fc3857665671e3035cdbaabe9b69046939e313b4d6c8be4a,True,0,0,0,estimated
