@@ -130,10 +130,11 @@ def main() -> None:
         "implementation of the LAMPS composite signature format.\n\n" + table +
         "\n\n## Interpretation\n\n"
         "P-256+Falcon-512 has the smallest component-signature total, but Falcon signing dominates "
-        "its runtime. P-256+ML-DSA-44 has the lowest signing time among the measured combinations. "
-        "RSA-2048+ML-DSA-44 is smaller and verifies faster than pure ML-DSA-65 in this run, but signs "
-        "more slowly. No measured combination dominates pure ML-DSA-65 in signing time, verification "
-        "time, and size simultaneously.\n\n"
+        "its runtime. Within each ML-DSA parameter set, replacing RSA-2048 with P-256 reduces component "
+        "key and signature bytes and reduces signing time, while RSA-2048 provides faster verification "
+        "in this implementation. Larger ML-DSA parameter sets progressively increase both runtime and "
+        "size. No measured combination dominates all others in signing time, verification time, and "
+        "size simultaneously.\n\n"
         "The repository estimator remains separate because certificates contain public keys as well as "
         "signatures. Its conservative size model uses standardized maximum component sizes and adds no "
         "composite ASN.1 overhead.\n")

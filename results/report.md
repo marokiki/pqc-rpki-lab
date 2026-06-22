@@ -106,9 +106,13 @@ These rows execute both component operations and require both verifications to p
 
 | Combination | Status | Sign total s | Verify total s | Component bytes | Sign time/ML-DSA-65 | Verify time/ML-DSA-65 | Bytes/ML-DSA-65 |
 |---|---|---|---|---|---|---|---|
-| RSA-2048+ML-DSA-44 | confirmed | 58.720045000 | 5.788017000 | 2676 | 1.462 | 0.787 | 0.809 |
-| P-256+ML-DSA-44 | confirmed | 26.253240000 | 8.309788000 | 2492 | 0.653 | 1.13 | 0.753 |
-| P-256+Falcon-512 | confirmed | 207.549013000 | 5.474383000 | 736 | 5.166 | 0.745 | 0.222 |
+| RSA-2048+ML-DSA-44 | confirmed | 59.283588000 | 6.398635000 | 2676 | 1.476 | 0.87 | 0.809 |
+| P-256+ML-DSA-44 | confirmed | 26.938006000 | 8.463775000 | 2492 | 0.671 | 1.151 | 0.753 |
+| RSA-2048+ML-DSA-65 | confirmed | 74.359259000 | 8.351363000 | 3565 | 1.851 | 1.136 | 1.077 |
+| P-256+ML-DSA-65 | confirmed | 42.234073000 | 11.275192000 | 3381 | 1.051 | 1.534 | 1.022 |
+| RSA-2048+ML-DSA-87 | confirmed | 81.854859000 | 12.620553000 | 4883 | 2.037 | 1.717 | 1.476 |
+| P-256+ML-DSA-87 | confirmed | 49.750940000 | 15.382402000 | 4699 | 1.238 | 2.092 | 1.42 |
+| P-256+Falcon-512 | confirmed | 215.113181000 | 5.473413000 | 737 | 5.354 | 0.744 | 0.223 |
 
 ## Repository impact
 
@@ -129,6 +133,10 @@ These rows execute both component operations and require both verifications to p
 | HAWK-512 | 446290 | 1.515 | 499845 |
 | RSA-2048+ML-DSA-44 | 995500 | 3.3794 | 1114960 |
 | P-256+ML-DSA-44 | 930630 | 3.1592 | 1042306 |
+| RSA-2048+ML-DSA-65 | 1270370 | 4.3125 | 1422814 |
+| P-256+ML-DSA-65 | 1205500 | 4.0923 | 1350160 |
+| RSA-2048+ML-DSA-87 | 1643910 | 5.5805 | 1841179 |
+| P-256+ML-DSA-87 | 1579040 | 5.3603 | 1768525 |
 | P-256+Falcon-512 | 481560 | 1.6347 | 539347 |
 
 ## Validator capability

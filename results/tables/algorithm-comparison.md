@@ -15,4 +15,8 @@
 | HAWK-512 | optional | 1024 | 555 |
 | RSA-2048+ML-DSA-44 | composite-candidate | 1582 | 2676 |
 | P-256+ML-DSA-44 | composite-candidate | 1377 | 2492 |
+| RSA-2048+ML-DSA-65 | composite-candidate | 2222 | 3565 |
+| P-256+ML-DSA-65 | composite-candidate | 2017 | 3381 |
+| RSA-2048+ML-DSA-87 | composite-candidate | 2862 | 4883 |
+| P-256+ML-DSA-87 | composite-candidate | 2657 | 4699 |
 | P-256+Falcon-512 | composite-candidate | 962 | 738 |

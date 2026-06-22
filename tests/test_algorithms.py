@@ -50,5 +50,16 @@ class AlgorithmsTest(unittest.TestCase):
     def test_review_candidates_are_separate(self):
         self.assertEqual({value.name for value in CLASSICAL_REFERENCE_ALGORITHMS},
                          {"P-256/SHA-256", "Ed25519"})
-        self.assertEqual(len(COMPOSITE_ESTIMATES), 3)
+        self.assertEqual(
+            {value.name for value in COMPOSITE_ESTIMATES},
+            {
+                "RSA-2048+ML-DSA-44",
+                "P-256+ML-DSA-44",
+                "RSA-2048+ML-DSA-65",
+                "P-256+ML-DSA-65",
+                "RSA-2048+ML-DSA-87",
+                "P-256+ML-DSA-87",
+                "P-256+Falcon-512",
+            },
+        )
         self.assertTrue(all(value.status == "estimated" for value in COMPOSITE_ESTIMATES))

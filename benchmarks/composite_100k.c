@@ -46,6 +46,12 @@ static const struct component_spec p256 = {
 static const struct component_spec mldsa44 = {
     "ML-DSA-44", BACKEND_EVP, "ML-DSA-44", NULL, NULL, 0
 };
+static const struct component_spec mldsa65 = {
+    "ML-DSA-65", BACKEND_EVP, "ML-DSA-65", NULL, NULL, 0
+};
+static const struct component_spec mldsa87 = {
+    "ML-DSA-87", BACKEND_EVP, "ML-DSA-87", NULL, NULL, 0
+};
 static const struct component_spec falcon512 = {
     "Falcon-512", BACKEND_OQS, "Falcon-512", NULL, NULL, 0
 };
@@ -53,6 +59,10 @@ static const struct component_spec falcon512 = {
 static const struct combination combinations[] = {
     {"RSA-2048+ML-DSA-44", &rsa, &mldsa44},
     {"P-256+ML-DSA-44", &p256, &mldsa44},
+    {"RSA-2048+ML-DSA-65", &rsa, &mldsa65},
+    {"P-256+ML-DSA-65", &p256, &mldsa65},
+    {"RSA-2048+ML-DSA-87", &rsa, &mldsa87},
+    {"P-256+ML-DSA-87", &p256, &mldsa87},
     {"P-256+Falcon-512", &p256, &falcon512},
 };
 
