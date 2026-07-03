@@ -48,11 +48,12 @@ jobs:
           cd "${RUNNER_TEMP}/openssl-${OPENSSL_VERSION}"
           ./Configure \
             --prefix="${RUNNER_TEMP}/openssl" \
+            --openssldir="${RUNNER_TEMP}/openssl/ssl" \
             --libdir=lib \
             no-docs \
             no-tests
           make --jobs 2
-          make install_sw
+          make install_sw install_ssldirs
           echo "${RUNNER_TEMP}/openssl/bin" >> "${GITHUB_PATH}"
           echo "PKG_CONFIG_PATH=${RUNNER_TEMP}/openssl/lib/pkgconfig" >> "${GITHUB_ENV}"
           echo "LD_LIBRARY_PATH=${RUNNER_TEMP}/openssl/lib" >> "${GITHUB_ENV}"
