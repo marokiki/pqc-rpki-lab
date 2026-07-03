@@ -29,12 +29,51 @@ jobs:
 
   offline-run:
     runs-on: ubuntu-latest
+    env:
+      OPENSSL_VERSION: 3.6.2
+      OPENSSL_SHA256: aaf51a1fe064384f811daeaeb4ec4dce7340ec8bd893027eee676af31e83a04f
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - run: pip install -e .[test]
+      - name: Build pinned OpenSSL with ML-DSA support
+        run: |
+          archive="openssl-${OPENSSL_VERSION}.tar.gz"
+          source_url="https://github.com/openssl/openssl/releases/download/openssl-${OPENSSL_VERSION}/${archive}"
+          curl --fail --location --retry 3 --output "${RUNNER_TEMP}/${archive}" "${source_url}"
+          echo "${OPENSSL_SHA256} *${RUNNER_TEMP}/${archive}" | sha256sum --check --strict
+          tar --extract --gzip --file "${RUNNER_TEMP}/${archive}" --directory "${RUNNER_TEMP}"
+          cd "${RUNNER_TEMP}/openssl-${OPENSSL_VERSION}"
+          ./Configure \
+            --prefix="${RUNNER_TEMP}/openssl" \
+            --libdir=lib \
+            no-docs \
+            no-tests
+          make --jobs 2
+          make install_sw
+          echo "${RUNNER_TEMP}/openssl/bin" >> "${GITHUB_PATH}"
+          echo "PKG_CONFIG_PATH=${RUNNER_TEMP}/openssl/lib/pkgconfig" >> "${GITHUB_ENV}"
+          echo "LD_LIBRARY_PATH=${RUNNER_TEMP}/openssl/lib" >> "${GITHUB_ENV}"
+          echo "OPENSSL_MODULES=${RUNNER_TEMP}/openssl/lib/ossl-modules" >> "${GITHUB_ENV}"
+      - name: Confirm pinned OpenSSL ML-DSA capability
+        run: |
+          openssl version
+          openssl list -signature-algorithms | grep -F ML-DSA-65
       - run: tools/run_all.sh
+      - name: Require confirmed ML-DSA CMS signing
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("results/cms-probe/cms-api-probe.json").read_text())
+          rows = {row["mode"]: row for row in report.get("results", [])}
+          if report.get("status") != "confirmed":
+              raise SystemExit(f"CMS probe status is {report.get('status')!r}")
+          if rows.get("sha512", {}).get("status") != "confirmed":
+              raise SystemExit(f"SHA-512 CMS probe is not confirmed: {rows.get('sha512')!r}")
+          PY
       - name: Require a confirmed baseline in the generated results
         run: python tools/validate_results.py --require-confirmed RSA-2048/SHA-256
