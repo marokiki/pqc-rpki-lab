@@ -8,6 +8,7 @@ review copy.  It is not a full mmark implementation.
 
 from __future__ import annotations
 
+import argparse
 import re
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
@@ -16,10 +17,10 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "ietf" / "draft-yoshikawa-sidrops-pqc-rpki-00.md"
+SOURCE = ROOT / "ietf" / "draft-yoshikawa-sidrops-pqc-rpki-01.md"
 OUTDIR = ROOT / "ietf" / "submission"
 BIBXML_DIR = ROOT / "ietf" / "bibxml"
-DOCNAME = "draft-yoshikawa-sidrops-pqc-rpki-00"
+DOCNAME = "draft-yoshikawa-sidrops-pqc-rpki-01"
 
 
 @dataclass
@@ -42,6 +43,12 @@ class BulletList:
 @dataclass
 class NumberedList:
     items: list[str]
+
+
+@dataclass
+class Table:
+    headers: list[str]
+    rows: list[list[str]]
 
 
 def split_source(text: str) -> tuple[dict[str, object], str, str, str]:
@@ -89,6 +96,7 @@ def consume_blocks(lines: list[str]) -> list[object]:
     para: list[str] = []
     bullet: list[str] = []
     numbered: list[str] = []
+    table: list[str] = []
 
     def flush_para() -> None:
         nonlocal para
@@ -108,13 +116,30 @@ def consume_blocks(lines: list[str]) -> list[object]:
             blocks.append(NumberedList(numbered))
             numbered = []
 
+    def flush_table() -> None:
+        nonlocal table
+        if table:
+            parsed = [[cell.strip() for cell in line.strip().strip("|").split("|")] for line in table]
+            if len(parsed) < 2 or not all(re.fullmatch(r":?-+:?", cell) for cell in parsed[1]):
+                raise ValueError("invalid Markdown table")
+            blocks.append(Table(parsed[0], parsed[2:]))
+            table = []
+
     for raw in lines:
         line = raw.rstrip()
         if not line:
             flush_para()
             flush_bullet()
             flush_numbered()
+            flush_table()
             continue
+        if line.startswith("|") and line.endswith("|"):
+            flush_para()
+            flush_bullet()
+            flush_numbered()
+            table.append(line)
+            continue
+        flush_table()
         if line.startswith("* "):
             flush_para()
             flush_numbered()
@@ -138,6 +163,7 @@ def consume_blocks(lines: list[str]) -> list[object]:
     flush_para()
     flush_bullet()
     flush_numbered()
+    flush_table()
     return blocks
 
 
@@ -203,6 +229,17 @@ def add_block(parent: ET.Element, block: object) -> None:
         for item in block.items:
             li = ET.SubElement(ol, "li")
             add_t(li, item)
+    elif isinstance(block, Table):
+        table = ET.SubElement(parent, "table")
+        thead = ET.SubElement(table, "thead")
+        header_row = ET.SubElement(thead, "tr")
+        for value in block.headers:
+            add_inline(ET.SubElement(header_row, "th"), value)
+        tbody = ET.SubElement(table, "tbody")
+        for values in block.rows:
+            row = ET.SubElement(tbody, "tr")
+            for value in values:
+                add_inline(ET.SubElement(row, "td"), value)
 
 
 def add_sections(parent: ET.Element, sections: list[Section]) -> None:
@@ -211,7 +248,10 @@ def add_sections(parent: ET.Element, sections: list[Section]) -> None:
         while stack and stack[-1][0] >= sec.level:
             stack.pop()
         container = stack[-1][1]
-        element = ET.SubElement(container, "section", {"anchor": anchor(sec.title)})
+        attrs = {"anchor": anchor(sec.title)}
+        if sec.title == "Acknowledgements":
+            attrs["numbered"] = "false"
+        element = ET.SubElement(container, "section", attrs)
         ET.SubElement(element, "name").text = sec.title
         for block in sec.blocks:
             add_block(element, block)
@@ -329,9 +369,14 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
         add_bibxml(bcp14, f"reference.RFC.{number}.xml")
     for number in (
         "6480", "6487", "6488", "6916", "7935", "8182",
-        "9286", "9582", "9589", "9814", "9881", "9882", "9909",
+        "9286", "9582", "9589", "9691", "9881", "9882",
     ):
         add_bibxml(normative, f"reference.RFC.{number}.xml")
+    for name in (
+        "ietf-lamps-pq-composite-sigs",
+        "ietf-lamps-cms-composite-sigs",
+    ):
+        add_bibxml(normative, f"reference.I-D.{name}.xml")
     reference(
         normative,
         "FIPS204",
@@ -343,8 +388,27 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
         month="August",
         year="2024",
     )
+    informative = ET.SubElement(back_el, "references")
+    ET.SubElement(informative, "name").text = "Informative References"
+    for number in (
+        "7942", "8032", "8209", "8608", "9323", "9814", "9909",
+    ):
+        add_bibxml(informative, f"reference.RFC.{number}.xml")
+    for name in ("ietf-sidrops-rpki-ccr", "ietf-sidrops-aspa-profile"):
+        add_bibxml(informative, f"reference.I-D.{name}.xml")
     reference(
-        normative,
+        informative,
+        "FIPS186-5",
+        "Digital Signature Standard (DSS)",
+        "FIPS",
+        "186-5",
+        "https://doi.org/10.6028/NIST.FIPS.186-5",
+        organization="National Institute of Standards and Technology",
+        month="February",
+        year="2023",
+    )
+    reference(
+        informative,
         "FIPS205",
         "Stateless Hash-Based Digital Signature Standard",
         "FIPS",
@@ -354,15 +418,6 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
         month="August",
         year="2024",
     )
-    informative = ET.SubElement(back_el, "references")
-    ET.SubElement(informative, "name").text = "Informative References"
-    add_bibxml(informative, "reference.RFC.7942.xml")
-    for name in (
-        "ietf-lamps-pq-composite-sigs",
-        "ietf-lamps-cms-composite-sigs",
-        "doesburg-sidrops-nullscheme",
-    ):
-        add_bibxml(informative, f"reference.I-D.{name}.xml")
     reference(
         informative,
         "Doesburg2025",
@@ -377,13 +432,25 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
     )
     reference(
         informative,
+        "pqRPKI",
+        "pqRPKI: A Practical RPKI Architecture for the Post-Quantum Era",
+        target="https://arxiv.org/abs/2603.06968",
+        author_fullname="W. Li et al.",
+        month="March",
+        year="2026",
+    )
+    reference(
+        informative,
         "pqc-rpki-lab",
         "pqc-rpki-lab experimental harness",
-        target="https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-00",
+        target=(
+            "https://github.com/marokiki/pqc-rpki-lab/releases/tag/"
+            f"{DOCNAME}"
+        ),
         author_fullname="Tomoki Yoshikawa",
         author_initials="T.",
         author_surname="Yoshikawa",
-        month="June",
+        month="July",
         year="2026",
     )
     back_sections_text = back.split("# References", 1)[0].strip()
@@ -393,6 +460,12 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--revision", choices=("00", "01"), default="01")
+    args = parser.parse_args()
+    global SOURCE, DOCNAME
+    DOCNAME = f"draft-yoshikawa-sidrops-pqc-rpki-{args.revision}"
+    SOURCE = ROOT / "ietf" / f"{DOCNAME}.md"
     meta, abstract, middle, back = split_source(SOURCE.read_text())
     OUTDIR.mkdir(parents=True, exist_ok=True)
     xml_root = build_xml(meta, abstract, middle, back)

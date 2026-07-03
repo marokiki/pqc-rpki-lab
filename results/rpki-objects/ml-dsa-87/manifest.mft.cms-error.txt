@@ -1,0 +1,2 @@
+Error adding SignerInfo with key from $TMPDIR/pqc-rpki-ml-dsa-87-objects/manifest-ee.key
+805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1

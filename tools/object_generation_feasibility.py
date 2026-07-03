@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import tempfile
@@ -12,16 +13,26 @@ ROOT = Path(__file__).resolve().parents[1]
 RESULTS = ROOT / "results"
 
 ALGORITHMS = (
-    ("RSA-2048/SHA-256", "RSA", ["-pkeyopt", "rsa_keygen_bits:2048"]),
-    ("ML-DSA-65", "ML-DSA-65", []),
-    ("ML-DSA-87", "ML-DSA-87", []),
-    ("SLH-DSA-SHAKE-128s", "SLH-DSA-SHAKE-128s", []),
-    ("SLH-DSA-SHAKE-192s", "SLH-DSA-SHAKE-192s", []),
+    ("RSA-2048/SHA-256", "RSA", ["-pkeyopt", "rsa_keygen_bits:2048"], False),
+    ("P-256/SHA-256", "EC", ["-pkeyopt", "ec_paramgen_curve:P-256"], False),
+    ("Ed25519", "ED25519", [], False),
+    ("ML-DSA-44", "ML-DSA-44", [], False),
+    ("ML-DSA-65", "ML-DSA-65", [], False),
+    ("ML-DSA-87", "ML-DSA-87", [], False),
+    ("SLH-DSA-SHAKE-128s", "SLH-DSA-SHAKE-128s", [], False),
+    ("SLH-DSA-SHAKE-192s", "SLH-DSA-SHAKE-192s", [], False),
+    ("FN-DSA-512 (Falcon-512)", "falcon512", [], True),
 )
+OQS_PROVIDER_MODULES = ROOT / "local" / "build" / "oqs-provider" / "lib"
+OQS_LIBRARY = ROOT / ".local" / "oqs" / "lib"
 
 
-def run(command: list[str], *, timeout: int = 120) -> subprocess.CompletedProcess[str]:
-    return subprocess.run(command, capture_output=True, text=True, timeout=timeout)
+def run(
+    command: list[str], *, timeout: int = 120, environment: dict[str, str] | None = None,
+) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        command, capture_output=True, text=True, timeout=timeout, env=environment,
+    )
 
 
 def reason_for(process: subprocess.CompletedProcess[str], fallback: str) -> str:
@@ -35,6 +46,10 @@ def record(
 ) -> None:
     if algorithm == "RSA-2048/SHA-256":
         profile = "RFC 6487 + RFC 7935" if object_type in {"CA certificate", "EE certificate", "CRL"} else "RFC 6488 + RFC 7935"
+    elif algorithm in {"P-256/SHA-256", "Ed25519"}:
+        profile = "RFC 6487 structure; classical comparison algorithm, not RFC 7935"
+    elif algorithm.startswith("FN-DSA"):
+        profile = "RFC 6487 structure with oqs-provider experimental Falcon OID; no final FN-DSA PKIX profile"
     elif algorithm.startswith("ML-DSA"):
         profile = "RFC 6487 + RFC 9881" if object_type in {"CA certificate", "EE certificate", "CRL"} else "RFC 6488 + RFC 9882"
     else:
@@ -45,15 +60,27 @@ def record(
         "status": status,
         "classification": classification,
         "bytes": path.stat().st_size if path and path.exists() else "",
-        "backend": "OpenSSL CLI",
+        "backend": "OpenSSL CLI + oqs-provider" if algorithm.startswith("FN-DSA") else "OpenSSL CLI",
         "profile": profile,
         "reason": reason,
         "private_key_persisted": False,
     })
 
 
-def config_text(directory: Path) -> str:
+def config_text(directory: Path, *, use_oqs_provider: bool = False) -> str:
+    provider_config = "" if not use_oqs_provider else """openssl_conf=openssl_init
+[openssl_init]
+providers=provider_sect
+[provider_sect]
+default=default_sect
+oqsprovider=oqsprovider_sect
+[default_sect]
+activate=1
+[oqsprovider_sect]
+activate=1
+"""
     return f"""# EXPERIMENTAL / NOT FOR PRODUCTION
+{provider_config}
 [ca]
 default_ca=CA_default
 [CA_default]
@@ -108,7 +135,10 @@ AS.0=inherit
 """
 
 
-def generate_algorithm(openssl: str, display: str, provider_name: str, options: list[str]) -> list[dict[str, object]]:
+def generate_algorithm(
+    openssl: str, display: str, provider_name: str, options: list[str],
+    use_oqs_provider: bool,
+) -> list[dict[str, object]]:
     rows: list[dict[str, object]] = []
     with tempfile.TemporaryDirectory(prefix="pqc-rpki-objects-") as name:
         directory = Path(name)
@@ -116,7 +146,19 @@ def generate_algorithm(openssl: str, display: str, provider_name: str, options: 
         (directory / "serial").write_text("1000\n")
         (directory / "crlnumber").write_text("1000\n")
         config = directory / "openssl.cnf"
-        config.write_text(config_text(directory))
+        config.write_text(config_text(directory, use_oqs_provider=use_oqs_provider))
+        environment = os.environ.copy()
+        if use_oqs_provider:
+            if not (OQS_PROVIDER_MODULES / "oqsprovider.dylib").exists():
+                for object_type in ("CA certificate", "EE certificate", "CRL", "CMS SignedData", "MFT", "ROA"):
+                    record(rows, display, object_type, "unsupported", "oqs-provider-unavailable",
+                           reason=f"missing {OQS_PROVIDER_MODULES / 'oqsprovider.dylib'}")
+                return rows
+            environment["OPENSSL_CONF"] = str(config)
+            environment["OPENSSL_MODULES"] = str(OQS_PROVIDER_MODULES)
+            environment["DYLD_LIBRARY_PATH"] = str(OQS_LIBRARY) + (
+                ":" + environment["DYLD_LIBRARY_PATH"] if environment.get("DYLD_LIBRARY_PATH") else ""
+            )
         ca_key = directory / "ca.key"
         ca_pem = directory / "ca.pem"
         ca_der = directory / "ca.cer"
@@ -130,19 +172,22 @@ def generate_algorithm(openssl: str, display: str, provider_name: str, options: 
         cms = directory / "content.cms"
         content.write_bytes(b"EXPERIMENTAL / NOT FOR PRODUCTION\n")
 
-        key_result = run([openssl, "genpkey", "-algorithm", provider_name, *options, "-out", str(ca_key)])
+        def execute(command: list[str]) -> subprocess.CompletedProcess[str]:
+            return run(command, environment=environment)
+
+        key_result = execute([openssl, "genpkey", "-algorithm", provider_name, *options, "-out", str(ca_key)])
         if key_result.returncode:
             for object_type in ("CA certificate", "EE certificate", "CRL", "CMS SignedData", "MFT", "ROA"):
                 record(rows, display, object_type, "unsupported", "provider-algorithm-unavailable",
                        reason=reason_for(key_result, "key generation failed"))
             return rows
 
-        ca_result = run([
+        ca_result = execute([
             openssl, "req", "-new", "-x509", "-key", str(ca_key), "-config", str(config),
             "-extensions", "ca_ext", "-days", "1", "-out", str(ca_pem),
         ])
         if ca_result.returncode == 0:
-            convert = run([openssl, "x509", "-in", str(ca_pem), "-outform", "DER", "-out", str(ca_der)])
+            convert = execute([openssl, "x509", "-in", str(ca_pem), "-outform", "DER", "-out", str(ca_der)])
             status = "confirmed" if convert.returncode == 0 else "blocked"
             record(rows, display, "CA certificate", status, "rfc-profiled-x509-generated",
                    ca_der if status == "confirmed" else None, reason_for(convert, "") if status != "confirmed" else "")
@@ -150,11 +195,11 @@ def generate_algorithm(openssl: str, display: str, provider_name: str, options: 
             record(rows, display, "CA certificate", "blocked", "x509-generation-failed",
                    reason=reason_for(ca_result, "CA certificate generation failed"))
 
-        ee_key_result = run([openssl, "genpkey", "-algorithm", provider_name, *options, "-out", str(ee_key)])
-        csr_result = run([openssl, "req", "-new", "-key", str(ee_key), "-subj", "/CN=EXPERIMENTAL RPKI EE", "-out", str(ee_csr)]) if ee_key_result.returncode == 0 else ee_key_result
-        ee_result = run([openssl, "ca", "-batch", "-config", str(config), "-in", str(ee_csr), "-out", str(ee_pem)]) if csr_result.returncode == 0 and ca_result.returncode == 0 else csr_result
+        ee_key_result = execute([openssl, "genpkey", "-algorithm", provider_name, *options, "-out", str(ee_key)])
+        csr_result = execute([openssl, "req", "-new", "-key", str(ee_key), "-subj", "/CN=EXPERIMENTAL RPKI EE", "-out", str(ee_csr)]) if ee_key_result.returncode == 0 else ee_key_result
+        ee_result = execute([openssl, "ca", "-batch", "-config", str(config), "-in", str(ee_csr), "-out", str(ee_pem)]) if csr_result.returncode == 0 and ca_result.returncode == 0 else csr_result
         if ee_result.returncode == 0:
-            convert = run([openssl, "x509", "-in", str(ee_pem), "-outform", "DER", "-out", str(ee_der)])
+            convert = execute([openssl, "x509", "-in", str(ee_pem), "-outform", "DER", "-out", str(ee_der)])
             status = "confirmed" if convert.returncode == 0 else "blocked"
             record(rows, display, "EE certificate", status, "rfc-profiled-x509-generated",
                    ee_der if status == "confirmed" else None, reason_for(convert, "") if status != "confirmed" else "")
@@ -162,9 +207,9 @@ def generate_algorithm(openssl: str, display: str, provider_name: str, options: 
             record(rows, display, "EE certificate", "blocked", "certificate-signing-failed",
                    reason=reason_for(ee_result, "EE certificate generation failed"))
 
-        crl_result = run([openssl, "ca", "-gencrl", "-config", str(config), "-out", str(crl_pem)]) if ca_result.returncode == 0 else ca_result
+        crl_result = execute([openssl, "ca", "-gencrl", "-config", str(config), "-out", str(crl_pem)]) if ca_result.returncode == 0 else ca_result
         if crl_result.returncode == 0:
-            convert = run([openssl, "crl", "-in", str(crl_pem), "-outform", "DER", "-out", str(crl_der)])
+            convert = execute([openssl, "crl", "-in", str(crl_pem), "-outform", "DER", "-out", str(crl_der)])
             status = "confirmed" if convert.returncode == 0 else "blocked"
             record(rows, display, "CRL", status, "rfc-profiled-crl-generated",
                    crl_der if status == "confirmed" else None, reason_for(convert, "") if status != "confirmed" else "")
@@ -172,7 +217,7 @@ def generate_algorithm(openssl: str, display: str, provider_name: str, options: 
             record(rows, display, "CRL", "blocked", "crl-signing-failed",
                    reason=reason_for(crl_result, "CRL generation failed"))
 
-        cms_result = run([
+        cms_result = execute([
             openssl, "cms", "-sign", "-binary", "-in", str(content), "-signer", str(ee_pem),
             "-inkey", str(ee_key), "-outform", "DER", "-out", str(cms), "-nosmimecap",
             "-econtent_type", "1.2.840.113549.1.9.16.1.26",
@@ -199,10 +244,10 @@ def main() -> None:
     openssl = shutil.which("openssl")
     rows: list[dict[str, object]] = []
     if openssl:
-        for display, provider_name, options in ALGORITHMS:
-            rows.extend(generate_algorithm(openssl, display, provider_name, options))
+        for display, provider_name, options, use_oqs_provider in ALGORITHMS:
+            rows.extend(generate_algorithm(openssl, display, provider_name, options, use_oqs_provider))
     else:
-        for display, _, _ in ALGORITHMS:
+        for display, _, _, _ in ALGORITHMS:
             for object_type in ("CA certificate", "EE certificate", "CRL", "CMS SignedData", "MFT", "ROA"):
                 record(rows, display, object_type, "unsupported", "openssl-unavailable",
                        reason="OpenSSL executable not found")

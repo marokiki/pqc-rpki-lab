@@ -1,0 +1,25 @@
+    0:d=0  hl=4 l= 411 cons: SEQUENCE          
+    4:d=1  hl=3 l= 132 cons: SEQUENCE          
+    7:d=2  hl=2 l=   1 prim: INTEGER           :01
+   10:d=2  hl=2 l=  13 cons: SEQUENCE          
+   12:d=3  hl=2 l=   9 prim: OBJECT            :sha256WithRSAEncryption
+   23:d=3  hl=2 l=   0 prim: NULL              
+   25:d=2  hl=2 l=  32 cons: SEQUENCE          
+   27:d=3  hl=2 l=  30 cons: SET               
+   29:d=4  hl=2 l=  28 cons: SEQUENCE          
+   31:d=5  hl=2 l=   3 prim: OBJECT            :commonName
+   36:d=5  hl=2 l=  21 prim: UTF8STRING        :EXPERIMENTAL PQC RPKI
+   59:d=2  hl=2 l=  13 prim: UTCTIME           :260703141531Z
+   74:d=2  hl=2 l=  13 prim: UTCTIME           :260704141531Z
+   89:d=2  hl=2 l=  48 cons: cont [ 0 ]        
+   91:d=3  hl=2 l=  46 cons: SEQUENCE          
+   93:d=4  hl=2 l=  31 cons: SEQUENCE          
+   95:d=5  hl=2 l=   3 prim: OBJECT            :X509v3 Authority Key Identifier
+  100:d=5  hl=2 l=  24 prim: OCTET STRING      [HEX DUMP]:30168014481BB74AF81A4145D477968B7DF120C75CF2A04E
+  126:d=4  hl=2 l=  11 cons: SEQUENCE          
+  128:d=5  hl=2 l=   3 prim: OBJECT            :X509v3 CRL Number
+  133:d=5  hl=2 l=   4 prim: OCTET STRING      [HEX DUMP]:02021000
+  139:d=1  hl=2 l=  13 cons: SEQUENCE          
+  141:d=2  hl=2 l=   9 prim: OBJECT            :sha256WithRSAEncryption
+  152:d=2  hl=2 l=   0 prim: NULL              
+  154:d=1  hl=4 l= 257 prim: BIT STRING        

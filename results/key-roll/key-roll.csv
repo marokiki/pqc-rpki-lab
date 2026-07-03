@@ -1,0 +1,5 @@
+algorithm,aspas,child_cas,classification,file_count,manifests,model_runtime_ms,output_bytes,roas,rrdp_delta_bytes,rrdp_snapshot_bytes,rscs,rsync_transfer_bytes,status,taks
+ML-DSA-44,0,10,synthetic key-roll model using measured fixture sizes where available,112,1,0.006709,49861,100,5584,55844,0,49861,estimated,0
+ML-DSA-65,0,10,synthetic key-roll model using measured fixture sizes where available,112,1,0.004125,1014350,100,113607,1136072,0,1014350,estimated,0
+ML-DSA-87,0,10,synthetic key-roll model using measured fixture sizes where available,112,1,0.006208,86938,100,9737,97371,0,86938,estimated,0
+RSA-2048/SHA-256,0,10,synthetic key-roll model using measured fixture sizes where available,112,1,0.002959,174898,100,19589,195886,0,174898,estimated,0

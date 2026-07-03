@@ -1,0 +1,43 @@
+algorithm,artifact,layer,reason,status
+rsa,ca.cer,DER parse,,confirmed
+rsa,route.ee.cer,DER parse,,confirmed
+rsa,manifest.ee.cer,DER parse,,confirmed
+rsa,ca.crl,DER parse,,confirmed
+rsa,route.roa.econtent,DER parse,,confirmed
+rsa,manifest.mft.econtent,DER parse,,confirmed
+rsa,route.roa,CMS verify,,confirmed
+rsa,manifest.mft,CMS verify,,confirmed
+rsa,route.ee.cer,EE profile,,confirmed
+rsa,manifest.ee.cer,EE profile,,confirmed
+rsa,manifest.mft.econtent,Manifest hash,,confirmed
+ml-dsa-44,ca.cer,DER parse,,confirmed
+ml-dsa-44,route.ee.cer,DER parse,,confirmed
+ml-dsa-44,manifest.ee.cer,DER parse,,confirmed
+ml-dsa-44,ca.crl,DER parse,,confirmed
+ml-dsa-44,route.roa.econtent,DER parse,,confirmed
+ml-dsa-44,manifest.mft.econtent,DER parse,,confirmed
+ml-dsa-44,route.roa,CMS verify,CMS artifact unavailable,skipped
+ml-dsa-44,manifest.mft,CMS verify,CMS artifact unavailable,skipped
+ml-dsa-44,route.ee.cer,EE profile,,confirmed
+ml-dsa-44,manifest.ee.cer,EE profile,,confirmed
+ml-dsa-65,ca.cer,DER parse,,confirmed
+ml-dsa-65,route.ee.cer,DER parse,,confirmed
+ml-dsa-65,manifest.ee.cer,DER parse,,confirmed
+ml-dsa-65,ca.crl,DER parse,,confirmed
+ml-dsa-65,route.roa.econtent,DER parse,,confirmed
+ml-dsa-65,manifest.mft.econtent,DER parse,,confirmed
+ml-dsa-65,route.roa,CMS verify,,confirmed
+ml-dsa-65,manifest.mft,CMS verify,,confirmed
+ml-dsa-65,route.ee.cer,EE profile,,confirmed
+ml-dsa-65,manifest.ee.cer,EE profile,,confirmed
+ml-dsa-65,manifest.mft.econtent,Manifest hash,,confirmed
+ml-dsa-87,ca.cer,DER parse,,confirmed
+ml-dsa-87,route.ee.cer,DER parse,,confirmed
+ml-dsa-87,manifest.ee.cer,DER parse,,confirmed
+ml-dsa-87,ca.crl,DER parse,,confirmed
+ml-dsa-87,route.roa.econtent,DER parse,,confirmed
+ml-dsa-87,manifest.mft.econtent,DER parse,,confirmed
+ml-dsa-87,route.roa,CMS verify,CMS artifact unavailable,skipped
+ml-dsa-87,manifest.mft,CMS verify,CMS artifact unavailable,skipped
+ml-dsa-87,route.ee.cer,EE profile,,confirmed
+ml-dsa-87,manifest.ee.cer,EE profile,,confirmed

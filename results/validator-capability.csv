@@ -1,4 +1,4 @@
 existence_status,installed,network_used,pqc_object_status,reason,rsa_baseline_status,validator,version,version_status,vrp_output_status
-unsupported,False,False,unsupported,executable not found,unsupported,Routinator,,unsupported,unsupported
-unsupported,False,False,unsupported,executable not found,unsupported,rpki-client,,unsupported,unsupported
-unsupported,False,False,unsupported,executable not found,unsupported,FORT,,unsupported,unsupported
+unsupported,False,False,unsupported,executable not found; set PQC_RPKI_ROUTINATOR_BIN or PQC_RPKI_ROUTINATOR_COMMAND,unsupported,Routinator,,unsupported,unsupported
+unsupported,False,False,unsupported,executable not found; set PQC_RPKI_RPKI_CLIENT_BIN or PQC_RPKI_RPKI_CLIENT_COMMAND,unsupported,rpki-client,,unsupported,unsupported
+unsupported,False,False,unsupported,executable not found; set PQC_RPKI_FORT_BIN or PQC_RPKI_FORT_COMMAND,unsupported,FORT,,unsupported,unsupported

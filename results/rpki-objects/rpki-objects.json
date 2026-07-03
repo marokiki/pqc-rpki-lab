@@ -1,0 +1,295 @@
+{
+  "method": "OpenSSL-generated public certificates/CRLs plus minimal DER eContent encoders; private keys remain in deleted temporary directories.",
+  "private_keys_persisted": false,
+  "results": [
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "CA certificate",
+      "bytes": 1064,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/rsa/ca.cer",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "ROA EE certificate",
+      "bytes": 1082,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/rsa/route.ee.cer",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "Manifest EE certificate",
+      "bytes": 1100,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/rsa/manifest.ee.cer",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "CRL",
+      "bytes": 415,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/rsa/ca.crl",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "ROA eContent",
+      "bytes": 45,
+      "classification": "rpki-econtent-der",
+      "public_path": "testdata/rsa/route.roa.econtent",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "Manifest eContent",
+      "bytes": 146,
+      "classification": "rpki-econtent-der",
+      "public_path": "testdata/rsa/manifest.mft.econtent",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "ROA CMS",
+      "bytes": 1621,
+      "classification": "rfc6488-cms-generated",
+      "public_path": "testdata/rsa/route.roa",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "Manifest CMS",
+      "bytes": 1743,
+      "classification": "rfc6488-cms-generated",
+      "public_path": "testdata/rsa/manifest.mft",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "CA certificate",
+      "bytes": 4264,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/ml-dsa-44/ca.cer",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "ROA EE certificate",
+      "bytes": 4282,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/ml-dsa-44/route.ee.cer",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "Manifest EE certificate",
+      "bytes": 4300,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/ml-dsa-44/manifest.ee.cer",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "CRL",
+      "bytes": 2575,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/ml-dsa-44/ca.crl",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "ROA eContent",
+      "bytes": 45,
+      "classification": "rpki-econtent-der",
+      "public_path": "testdata/ml-dsa-44/route.roa.econtent",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "Manifest eContent",
+      "bytes": 146,
+      "classification": "rpki-econtent-der",
+      "public_path": "testdata/ml-dsa-44/manifest.mft.econtent",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "ROA CMS",
+      "bytes": "",
+      "classification": "cms-signing-unavailable",
+      "public_path": "results/rpki-objects/ml-dsa-44/route.roa.cms-error.txt",
+      "reason": "805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
+      "status": "blocked"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "Manifest CMS",
+      "bytes": "",
+      "classification": "cms-signing-unavailable",
+      "public_path": "results/rpki-objects/ml-dsa-44/manifest.mft.cms-error.txt",
+      "reason": "805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
+      "status": "blocked"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "CA certificate",
+      "bytes": 5793,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/ml-dsa-65/ca.cer",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "ROA EE certificate",
+      "bytes": 5811,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/ml-dsa-65/route.ee.cer",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "Manifest EE certificate",
+      "bytes": 5829,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/ml-dsa-65/manifest.ee.cer",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "CRL",
+      "bytes": 3464,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/ml-dsa-65/ca.crl",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "ROA eContent",
+      "bytes": 45,
+      "classification": "rpki-econtent-der",
+      "public_path": "testdata/ml-dsa-65/route.roa.econtent",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "Manifest eContent",
+      "bytes": 146,
+      "classification": "rpki-econtent-der",
+      "public_path": "testdata/ml-dsa-65/manifest.mft.econtent",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "ROA CMS",
+      "bytes": 9434,
+      "classification": "rfc6488-openssl-api-cms-generated",
+      "public_path": "testdata/ml-dsa-65/route.roa",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "Manifest CMS",
+      "bytes": 9556,
+      "classification": "rfc6488-openssl-api-cms-generated",
+      "public_path": "testdata/ml-dsa-65/manifest.mft",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "artifact": "CA certificate",
+      "bytes": 7751,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/ml-dsa-87/ca.cer",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "artifact": "ROA EE certificate",
+      "bytes": 7769,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/ml-dsa-87/route.ee.cer",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "artifact": "Manifest EE certificate",
+      "bytes": 7787,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/ml-dsa-87/manifest.ee.cer",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "artifact": "CRL",
+      "bytes": 4782,
+      "classification": "public-der-fixture",
+      "public_path": "testdata/ml-dsa-87/ca.crl",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "artifact": "ROA eContent",
+      "bytes": 45,
+      "classification": "rpki-econtent-der",
+      "public_path": "testdata/ml-dsa-87/route.roa.econtent",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "artifact": "Manifest eContent",
+      "bytes": 146,
+      "classification": "rpki-econtent-der",
+      "public_path": "testdata/ml-dsa-87/manifest.mft.econtent",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "artifact": "ROA CMS",
+      "bytes": "",
+      "classification": "cms-signing-unavailable",
+      "public_path": "results/rpki-objects/ml-dsa-87/route.roa.cms-error.txt",
+      "reason": "805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
+      "status": "blocked"
+    },
+    {
+      "algorithm": "ML-DSA-87",
+      "artifact": "Manifest CMS",
+      "bytes": "",
+      "classification": "cms-signing-unavailable",
+      "public_path": "results/rpki-objects/ml-dsa-87/manifest.mft.cms-error.txt",
+      "reason": "805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
+      "status": "blocked"
+    }
+  ],
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

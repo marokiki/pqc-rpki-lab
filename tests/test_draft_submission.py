@@ -9,6 +9,53 @@ class DraftSubmissionTest(unittest.TestCase):
         self.root = ET.parse(
             root_dir / "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-00.xml"
         ).getroot()
+        self.root_01 = ET.parse(
+            root_dir / "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-01.xml"
+        ).getroot()
+
+    def test_draft_01_submission_is_rendered(self):
+        self.assertEqual(
+            self.root_01.get("docName"),
+            "draft-yoshikawa-sidrops-pqc-rpki-01",
+        )
+        self.assertIsNotNone(self.root_01.find('.//xref[@target="RFC9882"]'))
+        self.assertIsNotNone(self.root_01.find('.//xref[@target="RFC9691"]'))
+        self.assertIsNotNone(self.root_01.find('.//section[@anchor="implementation-status"]'))
+        text = " ".join(self.root_01.itertext())
+        self.assertIn("id-MLDSA65-ECDSA-P256-SHA512", text)
+        self.assertIn("composite plus mixed-tree migration design", text)
+        self.assertEqual(
+            self.root_01.findtext("./front/author/address/email"),
+            "yoshikawa.tomoki.67i@st.kyoto-u.ac.jp",
+        )
+        self.assertEqual(
+            self.root_01.find('.//reference[@anchor="pqc-rpki-lab"]').get("target"),
+            "https://github.com/marokiki/pqc-rpki-lab/releases/tag/"
+            "draft-yoshikawa-sidrops-pqc-rpki-01",
+        )
+
+    def test_draft_01_tables_and_acknowledgements_render_as_rfcxml(self):
+        tables = self.root_01.findall(".//table")
+        self.assertEqual(len(tables), 4)
+        self.assertEqual(
+            [cell.text for cell in tables[0].findall("./thead/tr/th")],
+            ["Algorithm", "Cat.", "PubKey (B)", "Sig (B)"],
+        )
+        self.assertEqual(len(tables[3].findall("./tbody/tr")), 17)
+        acknowledgements = self.root_01.find('.//section[@anchor="acknowledgements"]')
+        self.assertEqual(acknowledgements.get("numbered"), "false")
+
+    def test_draft_01_distinguishes_issuer_signature_from_subject_spki(self):
+        text = " ".join(self.root_01.itertext())
+        self.assertIn(
+            "A transition certificate signed by a Current Suite issuer",
+            text,
+        )
+        self.assertIn(
+            "MUST NOT infer the subject SPKI algorithm",
+            text,
+        )
+        self.assertNotIn("verification cost grows by roughly", text)
 
     def test_bcp14_reference_group_is_complete(self):
         self.assertIsNotNone(self.root.find('.//xref[@target="BCP14"]'))

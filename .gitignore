@@ -5,3 +5,11 @@ __pycache__/
 *.egg-info/
 .local/
 .DS_Store
+local/
+tmp/
+scratch/
+*.key
+*.priv
+*.private.pem
+*-private.pem
+private*.pem

@@ -1,0 +1,58 @@
+{
+  "classification": "public synthetic model; no private keys or operational RPKI objects",
+  "nodes": [
+    {
+      "issuer": "self",
+      "issuer_signature_algorithm": "RSA-2048/SHA-256",
+      "name": "rsa-ta",
+      "spki_algorithm": "RSA-2048",
+      "status": "synthetic-fixture",
+      "subject_key_id": "rsa-ta-key"
+    },
+    {
+      "issuer": "rsa-ta",
+      "issuer_signature_algorithm": "RSA-2048/SHA-256",
+      "name": "mldsa-child-ca",
+      "spki_algorithm": "ML-DSA-65",
+      "status": "synthetic-fixture",
+      "subject_key_id": "mldsa-child-key"
+    },
+    {
+      "issuer": "mldsa-child-ca",
+      "issuer_signature_algorithm": "ML-DSA-65",
+      "name": "roa-ee",
+      "spki_algorithm": "ML-DSA-65",
+      "status": "synthetic-fixture",
+      "subject_key_id": "mldsa-roa-ee-key"
+    }
+  ],
+  "products": [
+    {
+      "issuer": "mldsa-child-ca",
+      "object_type": "Manifest",
+      "path": "child/manifest.mft",
+      "publication_scope_key_id": "mldsa-child-key",
+      "signature_algorithm": "ML-DSA-65"
+    },
+    {
+      "issuer": "mldsa-child-ca",
+      "object_type": "CRL",
+      "path": "child/ca.crl",
+      "publication_scope_key_id": "mldsa-child-key",
+      "signature_algorithm": "ML-DSA-65"
+    },
+    {
+      "issuer": "roa-ee",
+      "object_type": "ROA",
+      "path": "child/route.roa",
+      "publication_scope_key_id": "mldsa-child-key",
+      "signature_algorithm": "ML-DSA-65"
+    }
+  ],
+  "validation": {
+    "classification": "synthetic mixed-tree model; not validator interoperability evidence",
+    "failures": [],
+    "valid": true
+  },
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

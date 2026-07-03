@@ -5,6 +5,8 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 LIBOQS_TAG="0.15.0"
 LIBOQS_COMMIT="97f6b86b1b6d109cfd43cf276ae39c2e776aed80"
 LIBOQS_PYTHON_COMMIT="35eceb69d2b363cb0421085cf1ae1c682dee1acc"
+OQS_PROVIDER_TAG="0.11.0-rc1"
+OQS_PROVIDER_COMMIT="ea899227c8f4b2901330340050fec07998143d1f"
 
 if [[ "${1:-}" != "--allow-network" && "${PQC_RPKI_ALLOW_NETWORK:-0}" != "1" ]]; then
   echo "network access is disabled; pass --allow-network or set PQC_RPKI_ALLOW_NETWORK=1" >&2
@@ -25,4 +27,15 @@ test "$(git -C "$WORK/liboqs" rev-parse HEAD)" = "$LIBOQS_COMMIT"
 git clone https://github.com/open-quantum-safe/liboqs-python.git "$WORK/liboqs-python"
 git -C "$WORK/liboqs-python" checkout "$LIBOQS_PYTHON_COMMIT"
 OQS_INSTALL_PATH="$ROOT/.local/oqs" "$ROOT/.venv/bin/pip" install "$WORK/liboqs-python"
-echo "installed pinned liboqs and liboqs-python"
+git clone --depth 1 --branch "$OQS_PROVIDER_TAG" \
+  https://github.com/open-quantum-safe/oqs-provider.git "$WORK/oqs-provider"
+test "$(git -C "$WORK/oqs-provider" rev-parse HEAD)" = "$OQS_PROVIDER_COMMIT"
+OPENSSL_ROOT="$(pkg-config --variable=prefix openssl)"
+rm -rf "$ROOT/local/build/oqs-provider"
+"$ROOT/.venv/bin/cmake" -S "$WORK/oqs-provider" -B "$ROOT/local/build/oqs-provider" -GNinja \
+  -DCMAKE_MAKE_PROGRAM="$ROOT/.venv/bin/ninja" \
+  -DCMAKE_PREFIX_PATH="$ROOT/.local/oqs" \
+  -DOPENSSL_ROOT_DIR="$OPENSSL_ROOT"
+"$ROOT/.venv/bin/cmake" --build "$ROOT/local/build/oqs-provider" \
+  --parallel "${PQC_RPKI_BUILD_JOBS:-4}"
+echo "installed pinned liboqs, liboqs-python, and built oqs-provider"

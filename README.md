@@ -1,7 +1,7 @@
 # pqc-rpki-lab
 
 Experimental harness and evidence for
-`draft-yoshikawa-sidrops-pqc-rpki-00`.
+`draft-yoshikawa-sidrops-pqc-rpki`.
 
 > EXPERIMENTAL / NOT FOR PRODUCTION
 
@@ -9,6 +9,11 @@ The repository evaluates post-quantum signature migration in RPKI while
 reusing existing cryptographic and RPKI implementations. It does not implement
 cryptographic algorithms, X.509/CMS validation, RRDP, rsync, or an RPKI
 validator.
+
+Public repository contents are limited to reproducible implementation,
+measurements, public fixtures, public draft-support evidence, and explicit
+limitations. Local-only notes, review context, scratch work, and private inputs
+belong under ignored `local/`.
 
 ## Scope
 
@@ -32,8 +37,9 @@ make
 ```
 
 This runs the benchmarks, estimators, validators' presence checks, VRP
-equivalence checks, report generation, and tests. Missing optional software is
-recorded as `unsupported` or `skipped`.
+equivalence checks, CCR-style interim comparison, object payload benchmarks,
+mixed-tree fixture generation, report generation, tests, and public-boundary
+checks. Missing optional software is recorded as `unsupported` or `skipped`.
 
 Optional inputs:
 
@@ -41,12 +47,24 @@ Optional inputs:
 PQC_RPKI_CACHE=/path/to/local/rpki-cache tools/run_all.sh
 PQC_RPKI_ITERATIONS=100 tools/run_all.sh
 python3 tools/vrp_equivalence.py --baseline rsa.csv --candidate pqc.json
+make object-benchmarks
+make rpki-objects
+make key-roll
+make local-validation
+make cms-api-probe
+make message-sweep
+make validator-container-probe
+make mixed-tree
+make ccr-comparison
+make routinator-krill-scan
+make routinator-krill-interop
+make pre-publication
 make review-evidence
 ```
 
 `make install-optional-pqc` is the only network-enabled installation path. It
-installs pinned liboqs and oqs-python versions into repository-local ignored
-directories.
+installs pinned liboqs and oqs-python versions and builds a pinned oqs-provider
+under repository-local ignored directories.
 
 ## Evidence
 
@@ -58,6 +76,18 @@ in the same directory are generated views. The principal outputs are:
 - `results/object-generation-feasibility.json`
 - `results/validator-errors.json`
 - `results/vrp-equivalence.json`
+- `results/object-benchmarks/object-benchmarks.json`
+- `results/rpki-objects/rpki-objects.json`
+- `results/key-roll/key-roll.json`
+- `results/local-validation/local-validation.json`
+- `results/cms-probe/cms-api-probe.json`
+- `results/cms-generation/cms-generation.json`
+- `results/message-sweep/message-sweep.json`
+- `results/validator-probe/container-matrix.json`
+- `results/mixed-tree/mixed-tree.json`
+- `results/ccr-comparison/ccr-comparison.json`
+- `results/routinator-krill/extension-map.json`
+- `results/routinator-krill/interop-matrix.json`
 - `results/report.json`
 
 Core primitive timings are end-to-end OpenSSL CLI wall-clock measurements.
@@ -92,24 +122,51 @@ make composite-100k
 This requires both component signatures to verify, but does not implement
 the LAMPS composite ASN.1/OID format.
 
-OpenSSL generated resource-profile ML-DSA and SLH-DSA certificates and CRLs in
-the recorded environment. Pure-PQC CMS SignedData, complete MFT/ROA fixtures,
-and validator interoperability remain unsupported or unconfirmed as recorded
-in the result files.
+Generate the certificate and CRL size evidence, including experimental
+Falcon-512 X.509 encodings, with:
+
+```sh
+make certificate-sizes
+```
+
+OpenSSL 3.6.2 generated resource-profile ML-DSA certificates and CRLs. Its CMS
+CLI still fails to select a default digest for ML-DSA, while the CMS API
+succeeds when SHA-512 is supplied explicitly. The repository therefore
+contains complete ML-DSA-65 Manifest and ROA fixtures plus an independent
+manual DER reference. Pinned unmodified Routinator, rpki-client, and FORT
+containers accept the RSA baseline and reject the ML-DSA-65 repository at
+unsupported trust-anchor or algorithm checks.
+
+`results/object-benchmarks/` is an object-payload benchmark. It measures
+deterministic synthetic Manifest file-list construction and hashing, not
+complete RFC 6488 CMS generation. `results/mixed-tree/` is a public synthetic
+model for CA-boundary algorithm transition. `results/ccr-comparison/` is a
+local canonical-hash interim workflow and is not CCR `ROAPayloadState.hash`.
+`results/rpki-objects/` records public DER fixtures: RSA and ML-DSA-65 `.mft`
+and `.roa` CMS objects, ML-DSA-44/65/87 certificates and CRLs, and ML-DSA
+eContent. `results/local-validation/` records OpenSSL DER/CMS round trips, EE
+profile checks, and Manifest hash checks. `results/validator-probe/` records
+the isolated unmodified-validator experiment. `results/key-roll/` is a
+synthetic configurable key-roll model.
+`results/routinator-krill/` records the optional Routinator/Krill extension
+map, read-only source scan, and interop matrix. Configure external inputs with
+`PQC_RPKI_ROUTINATOR_SRC`, `PQC_RPKI_KRILL_SRC`,
+`PQC_RPKI_ROUTINATOR_BIN`, and `PQC_RPKI_KRILL_BIN`; suggested checkouts live
+under ignored `local/upstream/`.
 
 ## Draft
 
-The authoring source is
-`ietf/draft-yoshikawa-sidrops-pqc-rpki-00.md`. Submission artifacts are:
+The current published revision is
+`ietf/draft-yoshikawa-sidrops-pqc-rpki-01.md`.  Submission artifacts are:
 
-- `ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-00.xml`
-- `ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-00.txt`
+- `ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-01.xml`
+- `ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-01.txt`
 
 Generate the standalone XML with:
 
 ```sh
 python3 tools/render_draft_submission.py
-xml2rfc --text ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-00.xml
+xml2rfc --text ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-01.xml
 ```
 
 ## Safety
@@ -117,3 +174,13 @@ xml2rfc --text ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-00.xml
 Do not commit private keys, credentials, production TALs, or operational RPKI
 objects. Object-generation tests use temporary directories and delete their
 keys and generated objects after measurement.
+
+Before publishing or committing:
+
+```sh
+make pre-publication
+git status --short --ignored
+```
+
+`local/` is ignored and is the only intended place for non-public notes or
+scratch inputs.

@@ -1,0 +1,53 @@
+{
+  "compile_command": [
+    "cc",
+    "-O2",
+    "-Wall",
+    "-Wextra",
+    "-Werror",
+    "tools/cms_api_probe.c",
+    "-o",
+    "$TMPDIR/cms-api-probe",
+    "$(pkg-config --cflags --libs openssl)"
+  ],
+  "openssl": "OpenSSL 3.6.2 7 Apr 2026 (Library: OpenSSL 3.6.2 7 Apr 2026)\nbuilt on: Tue Apr  7 12:17:57 2026 UTC\nplatform: darwin64-arm64-cc\noptions:  bn(64,64)\ncompiler: clang -fPIC -arch arm64 -O3 -Wall -DL_ENDIAN -DOPENSSL_PIC -D_REENTRANT -DOPENSSL_BUILDING_OPENSSL -DNDEBUG\nOPENSSLDIR: \"/opt/homebrew/etc/openssl@3\"\nENGINESDIR: \"/opt/homebrew/Cellar/openssl@3/3.6.2/lib/engines-3\"\nMODULESDIR: \"/opt/homebrew/Cellar/openssl@3/3.6.2/lib/ossl-modules\"\nSeeding source: os-specific\nCPUINFO: OPENSSL_armcap=0x987d\n",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "results": [
+    {
+      "command": [
+        "$TMPDIR/cms-api-probe",
+        "default",
+        "$TMPDIR/key.pem",
+        "$TMPDIR/cert.pem",
+        "$TMPDIR/content.der",
+        "1.2.840.113549.1.9.16.1.24",
+        "$TMPDIR/output.der"
+      ],
+      "error": "805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
+      "mode": "default",
+      "output_bytes": 0,
+      "returncode": 1,
+      "status": "blocked"
+    },
+    {
+      "command": [
+        "$TMPDIR/cms-api-probe",
+        "sha512",
+        "$TMPDIR/key.pem",
+        "$TMPDIR/cert.pem",
+        "$TMPDIR/content.der",
+        "1.2.840.113549.1.9.16.1.24",
+        "$TMPDIR/output.der"
+      ],
+      "error": "",
+      "mode": "sha512",
+      "output_bytes": 9116,
+      "returncode": 0,
+      "status": "confirmed"
+    }
+  ],
+  "source": "tools/cms_api_probe.c",
+  "status": "confirmed",
+  "timestamp_utc": "2026-07-03T14:15:30.237018+00:00",
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

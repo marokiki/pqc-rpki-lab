@@ -1,0 +1,25 @@
+Processing time 0 seconds (0 seconds user, 0 seconds system)
+Skiplist entries: 0
+CCR manifest state hash: a/o/GKRhQMeJ9rq0OK+IZEohdiJPKkxZS0ynSfAxnpE=
+CCR ROA payloads hash: Qoiuu6ybN1w+qaxHlKifBhZRSq9Q4UiG0gWlwbGiDYY=
+CCR ASPA payloads hash: 5PYNCqbX89O2pklLHIYbmfZJxvnsUauvIBsg8pcyfJU=
+Route Origin Authorizations: 1 (0 failed parse, 0 invalid)
+AS Provider Attestations: 0 (0 failed parse, 0 invalid)
+BGPsec Router Certificates: 0
+Certificates: 1 (0 invalid, 0 non-functional)
+Trust Anchor Locators: 1 (0 invalid)
+Manifests: 1 (0 failed parse, 0 seqnum gaps)
+Certificate revocation lists: 1
+Trust Anchor Keys: 0
+Repositories: 2
+New files moved into validated cache: 3
+Cleanup: removed 0 files, 3 directories
+Repository cleanup: kept 0 and removed 1 superfluous files
+VRP Entries: 2 (2 unique)
+VAP Entries: 0 (0 unique, 0 overflowed)
+VSP Entries: 0 (0 unique)
+rpki-client: ta/test: pulling from rsync://example.invalid:8873/repository/ca.cer
+rpki-client: ta/test: loaded from network
+rpki-client: .rsync/example.invalid:8873/repository: pulling from rsync://example.invalid:8873/repository
+rpki-client: .rsync/example.invalid:8873/repository: loaded from network
+rpki-client: all files parsed: generating output

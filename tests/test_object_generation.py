@@ -9,10 +9,14 @@ class ObjectGenerationTest(unittest.TestCase):
             [row[0] for row in ALGORITHMS],
             [
                 "RSA-2048/SHA-256",
+                "P-256/SHA-256",
+                "Ed25519",
+                "ML-DSA-44",
                 "ML-DSA-65",
                 "ML-DSA-87",
                 "SLH-DSA-SHAKE-128s",
                 "SLH-DSA-SHAKE-192s",
+                "FN-DSA-512 (Falcon-512)",
             ],
         )
 

@@ -1,0 +1,33 @@
+algorithm,artifact,bytes,classification,public_path,reason,status
+RSA-2048/SHA-256,CA certificate,1064,public-der-fixture,testdata/rsa/ca.cer,,confirmed
+RSA-2048/SHA-256,ROA EE certificate,1082,public-der-fixture,testdata/rsa/route.ee.cer,,confirmed
+RSA-2048/SHA-256,Manifest EE certificate,1100,public-der-fixture,testdata/rsa/manifest.ee.cer,,confirmed
+RSA-2048/SHA-256,CRL,415,public-der-fixture,testdata/rsa/ca.crl,,confirmed
+RSA-2048/SHA-256,ROA eContent,45,rpki-econtent-der,testdata/rsa/route.roa.econtent,,confirmed
+RSA-2048/SHA-256,Manifest eContent,146,rpki-econtent-der,testdata/rsa/manifest.mft.econtent,,confirmed
+RSA-2048/SHA-256,ROA CMS,1621,rfc6488-cms-generated,testdata/rsa/route.roa,,confirmed
+RSA-2048/SHA-256,Manifest CMS,1743,rfc6488-cms-generated,testdata/rsa/manifest.mft,,confirmed
+ML-DSA-44,CA certificate,4264,public-der-fixture,testdata/ml-dsa-44/ca.cer,,confirmed
+ML-DSA-44,ROA EE certificate,4282,public-der-fixture,testdata/ml-dsa-44/route.ee.cer,,confirmed
+ML-DSA-44,Manifest EE certificate,4300,public-der-fixture,testdata/ml-dsa-44/manifest.ee.cer,,confirmed
+ML-DSA-44,CRL,2575,public-der-fixture,testdata/ml-dsa-44/ca.crl,,confirmed
+ML-DSA-44,ROA eContent,45,rpki-econtent-der,testdata/ml-dsa-44/route.roa.econtent,,confirmed
+ML-DSA-44,Manifest eContent,146,rpki-econtent-der,testdata/ml-dsa-44/manifest.mft.econtent,,confirmed
+ML-DSA-44,ROA CMS,,cms-signing-unavailable,results/rpki-objects/ml-dsa-44/route.roa.cms-error.txt,805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1,blocked
+ML-DSA-44,Manifest CMS,,cms-signing-unavailable,results/rpki-objects/ml-dsa-44/manifest.mft.cms-error.txt,805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1,blocked
+ML-DSA-65,CA certificate,5793,public-der-fixture,testdata/ml-dsa-65/ca.cer,,confirmed
+ML-DSA-65,ROA EE certificate,5811,public-der-fixture,testdata/ml-dsa-65/route.ee.cer,,confirmed
+ML-DSA-65,Manifest EE certificate,5829,public-der-fixture,testdata/ml-dsa-65/manifest.ee.cer,,confirmed
+ML-DSA-65,CRL,3464,public-der-fixture,testdata/ml-dsa-65/ca.crl,,confirmed
+ML-DSA-65,ROA eContent,45,rpki-econtent-der,testdata/ml-dsa-65/route.roa.econtent,,confirmed
+ML-DSA-65,Manifest eContent,146,rpki-econtent-der,testdata/ml-dsa-65/manifest.mft.econtent,,confirmed
+ML-DSA-65,ROA CMS,9434,rfc6488-openssl-api-cms-generated,testdata/ml-dsa-65/route.roa,,confirmed
+ML-DSA-65,Manifest CMS,9556,rfc6488-openssl-api-cms-generated,testdata/ml-dsa-65/manifest.mft,,confirmed
+ML-DSA-87,CA certificate,7751,public-der-fixture,testdata/ml-dsa-87/ca.cer,,confirmed
+ML-DSA-87,ROA EE certificate,7769,public-der-fixture,testdata/ml-dsa-87/route.ee.cer,,confirmed
+ML-DSA-87,Manifest EE certificate,7787,public-der-fixture,testdata/ml-dsa-87/manifest.ee.cer,,confirmed
+ML-DSA-87,CRL,4782,public-der-fixture,testdata/ml-dsa-87/ca.crl,,confirmed
+ML-DSA-87,ROA eContent,45,rpki-econtent-der,testdata/ml-dsa-87/route.roa.econtent,,confirmed
+ML-DSA-87,Manifest eContent,146,rpki-econtent-der,testdata/ml-dsa-87/manifest.mft.econtent,,confirmed
+ML-DSA-87,ROA CMS,,cms-signing-unavailable,results/rpki-objects/ml-dsa-87/route.roa.cms-error.txt,805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1,blocked
+ML-DSA-87,Manifest CMS,,cms-signing-unavailable,results/rpki-objects/ml-dsa-87/manifest.mft.cms-error.txt,805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1,blocked

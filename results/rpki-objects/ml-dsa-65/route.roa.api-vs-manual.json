@@ -1,0 +1,21 @@
+{
+  "der_identical": false,
+  "explanation": "DER is expected to differ because ML-DSA signatures are randomized and signing-time may differ; all profile-relevant structural fields are compared separately.",
+  "field_comparison": {
+    "attribute_oids": true,
+    "certificate_count": true,
+    "content_info_oid": true,
+    "digest_algorithm": true,
+    "digest_algorithms": true,
+    "econtent": true,
+    "econtent_type": true,
+    "has_crls": true,
+    "has_unsigned_attrs": true,
+    "sid": true,
+    "signature_algorithm": true,
+    "signed_data_version": true,
+    "signer_info_count": true,
+    "signer_version": true
+  },
+  "structurally_equivalent": true
+}

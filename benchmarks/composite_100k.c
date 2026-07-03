@@ -43,6 +43,9 @@ static const struct component_spec rsa = {
 static const struct component_spec p256 = {
     "P-256/SHA-256", BACKEND_EVP, "EC", "SHA256", "P-256", 0
 };
+static const struct component_spec ed25519 = {
+    "Ed25519", BACKEND_EVP, "ED25519", NULL, NULL, 0
+};
 static const struct component_spec mldsa44 = {
     "ML-DSA-44", BACKEND_EVP, "ML-DSA-44", NULL, NULL, 0
 };
@@ -57,11 +60,15 @@ static const struct component_spec falcon512 = {
 };
 
 static const struct combination combinations[] = {
+    {"FN-DSA-512 (Falcon-512)", &falcon512, NULL},
+    {"RSA-2048+P-256", &rsa, &p256},
+    {"RSA-2048+Ed25519", &rsa, &ed25519},
     {"RSA-2048+ML-DSA-44", &rsa, &mldsa44},
     {"P-256+ML-DSA-44", &p256, &mldsa44},
     {"RSA-2048+ML-DSA-65", &rsa, &mldsa65},
     {"P-256+ML-DSA-65", &p256, &mldsa65},
     {"RSA-2048+ML-DSA-87", &rsa, &mldsa87},
+    {"RSA-2048+FN-DSA-512", &rsa, &falcon512},
     {"P-256+ML-DSA-87", &p256, &mldsa87},
     {"P-256+Falcon-512", &p256, &falcon512},
 };
@@ -186,7 +193,7 @@ static void benchmark(const struct combination *combination, uint64_t iterations
     memset(&first, 0, sizeof(first));
     memset(&second, 0, sizeof(second));
     if (!initialize_component(&first, combination->first) ||
-        !initialize_component(&second, combination->second)) {
+        (combination->second != NULL && !initialize_component(&second, combination->second))) {
         printf("%s,unsupported,component initialization failed,,,,,,\n", combination->name);
         fflush(stdout);
         free_component(&first);
@@ -194,9 +201,9 @@ static void benchmark(const struct combination *combination, uint64_t iterations
         return;
     }
     if (!sign_component(&first, message, sizeof(message)) ||
-        !sign_component(&second, message, sizeof(message)) ||
+        (combination->second != NULL && !sign_component(&second, message, sizeof(message))) ||
         !verify_component(&first, message, sizeof(message)) ||
-        !verify_component(&second, message, sizeof(message))) {
+        (combination->second != NULL && !verify_component(&second, message, sizeof(message)))) {
         printf("%s,unsupported,component smoke test failed,,,,,,\n", combination->name);
         fflush(stdout);
         free_component(&first);
@@ -207,7 +214,7 @@ static void benchmark(const struct combination *combination, uint64_t iterations
     start = monotonic_seconds();
     for (index = 0; index < iterations; index++) {
         if (!sign_component(&first, message, sizeof(message)) ||
-            !sign_component(&second, message, sizeof(message))) {
+            (combination->second != NULL && !sign_component(&second, message, sizeof(message)))) {
             printf("%s,unsupported,sign failed at iteration %llu,,,,,,\n",
                    combination->name, (unsigned long long)index);
             fflush(stdout);
@@ -221,7 +228,7 @@ static void benchmark(const struct combination *combination, uint64_t iterations
     start = monotonic_seconds();
     for (index = 0; index < iterations; index++) {
         if (!verify_component(&first, message, sizeof(message)) ||
-            !verify_component(&second, message, sizeof(message))) {
+            (combination->second != NULL && !verify_component(&second, message, sizeof(message)))) {
             printf("%s,unsupported,verify failed at iteration %llu,,,,,,\n",
                    combination->name, (unsigned long long)index);
             fflush(stdout);
@@ -234,8 +241,10 @@ static void benchmark(const struct combination *combination, uint64_t iterations
 
     printf("%s,confirmed,,%llu,%.9f,%.9f,%zu,%zu,%zu\n",
            combination->name, (unsigned long long)iterations, sign_seconds, verify_seconds,
-           first.maximum_signature_length, second.maximum_signature_length,
-           first.maximum_signature_length + second.maximum_signature_length);
+           first.maximum_signature_length,
+           combination->second != NULL ? second.maximum_signature_length : 0,
+           first.maximum_signature_length +
+               (combination->second != NULL ? second.maximum_signature_length : 0));
     fflush(stdout);
     free_component(&first);
     free_component(&second);

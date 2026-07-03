@@ -1,0 +1,29 @@
+{
+  "backend": "OpenSSL CMS API with explicit EVP_sha512; independent manual DER reference path",
+  "openssl": "OpenSSL 3.6.2 7 Apr 2026 (Library: OpenSSL 3.6.2 7 Apr 2026)\nbuilt on: Tue Apr  7 12:17:57 2026 UTC\nplatform: darwin64-arm64-cc\noptions:  bn(64,64)\ncompiler: clang -fPIC -arch arm64 -O3 -Wall -DL_ENDIAN -DOPENSSL_PIC -D_REENTRANT -DOPENSSL_BUILDING_OPENSSL -DNDEBUG\nOPENSSLDIR: \"/opt/homebrew/etc/openssl@3\"\nENGINESDIR: \"/opt/homebrew/Cellar/openssl@3/3.6.2/lib/engines-3\"\nMODULESDIR: \"/opt/homebrew/Cellar/openssl@3/3.6.2/lib/ossl-modules\"\nSeeding source: os-specific\nCPUINFO: OPENSSL_armcap=0x987d\n",
+  "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+  "private_keys_persisted": false,
+  "profile": "RFC 6488 as updated by RFC 9589, with RFC 9882 ML-DSA-65 conventions",
+  "results": [
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "ROA CMS",
+      "bytes": 9434,
+      "classification": "rfc6488-openssl-api-cms-generated",
+      "public_path": "testdata/ml-dsa-65/route.roa",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "Manifest CMS",
+      "bytes": 9556,
+      "classification": "rfc6488-openssl-api-cms-generated",
+      "public_path": "testdata/ml-dsa-65/manifest.mft",
+      "reason": "",
+      "status": "confirmed"
+    }
+  ],
+  "timestamp_utc": "2026-07-03T14:15:32.227163+00:00",
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

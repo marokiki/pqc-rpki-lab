@@ -1,0 +1,12 @@
+{
+  "existence_status": "unsupported",
+  "installed": false,
+  "network_used": false,
+  "pqc_object_status": "unsupported",
+  "reason": "executable not found; set PQC_RPKI_RPKI_CLIENT_BIN or PQC_RPKI_RPKI_CLIENT_COMMAND",
+  "rsa_baseline_status": "unsupported",
+  "validator": "rpki-client",
+  "version": "",
+  "version_status": "unsupported",
+  "vrp_output_status": "unsupported"
+}

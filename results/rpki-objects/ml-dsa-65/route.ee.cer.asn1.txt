@@ -1,0 +1,56 @@
+    0:d=0  hl=4 l=5807 cons: SEQUENCE          
+    4:d=1  hl=4 l=2476 cons: SEQUENCE          
+    8:d=2  hl=2 l=   3 cons: cont [ 0 ]        
+   10:d=3  hl=2 l=   1 prim: INTEGER           :02
+   13:d=2  hl=2 l=   2 prim: INTEGER           :1000
+   17:d=2  hl=2 l=  11 cons: SEQUENCE          
+   19:d=3  hl=2 l=   9 prim: OBJECT            :ML-DSA-65
+   30:d=2  hl=2 l=  32 cons: SEQUENCE          
+   32:d=3  hl=2 l=  30 cons: SET               
+   34:d=4  hl=2 l=  28 cons: SEQUENCE          
+   36:d=5  hl=2 l=   3 prim: OBJECT            :commonName
+   41:d=5  hl=2 l=  21 prim: UTF8STRING        :EXPERIMENTAL PQC RPKI
+   64:d=2  hl=2 l=  30 cons: SEQUENCE          
+   66:d=3  hl=2 l=  13 prim: UTCTIME           :260703141531Z
+   81:d=3  hl=2 l=  13 prim: UTCTIME           :260704141531Z
+   96:d=2  hl=2 l=  30 cons: SEQUENCE          
+   98:d=3  hl=2 l=  28 cons: SET               
+  100:d=4  hl=2 l=  26 cons: SEQUENCE          
+  102:d=5  hl=2 l=   3 prim: OBJECT            :commonName
+  107:d=5  hl=2 l=  19 prim: UTF8STRING        :EXPERIMENTAL ROA EE
+  128:d=2  hl=4 l=1970 cons: SEQUENCE          
+  132:d=3  hl=2 l=  11 cons: SEQUENCE          
+  134:d=4  hl=2 l=   9 prim: OBJECT            :ML-DSA-65
+  145:d=3  hl=4 l=1953 prim: BIT STRING        
+ 2102:d=2  hl=4 l= 378 cons: cont [ 3 ]        
+ 2106:d=3  hl=4 l= 374 cons: SEQUENCE          
+ 2110:d=4  hl=2 l=  14 cons: SEQUENCE          
+ 2112:d=5  hl=2 l=   3 prim: OBJECT            :X509v3 Key Usage
+ 2117:d=5  hl=2 l=   1 prim: BOOLEAN           :255
+ 2120:d=5  hl=2 l=   4 prim: OCTET STRING      [HEX DUMP]:03020780
+ 2126:d=4  hl=2 l=  24 cons: SEQUENCE          
+ 2128:d=5  hl=2 l=   3 prim: OBJECT            :X509v3 Certificate Policies
+ 2133:d=5  hl=2 l=   1 prim: BOOLEAN           :255
+ 2136:d=5  hl=2 l=  14 prim: OCTET STRING      [HEX DUMP]:300C300A06082B06010505070E02
+ 2152:d=4  hl=2 l=  29 cons: SEQUENCE          
+ 2154:d=5  hl=2 l=   3 prim: OBJECT            :X509v3 Subject Key Identifier
+ 2159:d=5  hl=2 l=  22 prim: OCTET STRING      [HEX DUMP]:041462F519B3D7BD3DEB794E90AE2C7075D81A721319
+ 2183:d=4  hl=2 l=  31 cons: SEQUENCE          
+ 2185:d=5  hl=2 l=   3 prim: OBJECT            :X509v3 Authority Key Identifier
+ 2190:d=5  hl=2 l=  24 prim: OCTET STRING      [HEX DUMP]:30168014807757DB010A5B138DCD2935188B30517D42EBEC
+ 2216:d=4  hl=2 l=  63 cons: SEQUENCE          
+ 2218:d=5  hl=2 l=   3 prim: OBJECT            :X509v3 CRL Distribution Points
+ 2223:d=5  hl=2 l=  56 prim: OCTET STRING      [HEX DUMP]:30363034A032A030862E7273796E633A2F2F6578616D706C652E696E76616C69643A383837332F7265706F7369746F72792F63612E63726C
+ 2281:d=4  hl=2 l=  74 cons: SEQUENCE          
+ 2283:d=5  hl=2 l=   8 prim: OBJECT            :Authority Information Access
+ 2293:d=5  hl=2 l=  62 prim: OCTET STRING      [HEX DUMP]:303C303A06082B06010505073002862E7273796E633A2F2F6578616D706C652E696E76616C69643A383837332F7265706F7369746F72792F63612E636572
+ 2357:d=4  hl=2 l=  46 cons: SEQUENCE          
+ 2359:d=5  hl=2 l=   8 prim: OBJECT            :sbgp-ipAddrBlock
+ 2369:d=5  hl=2 l=   1 prim: BOOLEAN           :255
+ 2372:d=5  hl=2 l=  31 prim: OCTET STRING      [HEX DUMP]:301D300C040200013006030400C00002300D04020002300703050020010DB8
+ 2405:d=4  hl=2 l=  77 cons: SEQUENCE          
+ 2407:d=5  hl=2 l=   8 prim: OBJECT            :Subject Information Access
+ 2417:d=5  hl=2 l=  65 prim: OCTET STRING      [HEX DUMP]:303F303D06082B0601050507300B86317273796E633A2F2F6578616D706C652E696E76616C69643A383837332F7265706F7369746F72792F726F7574652E726F61
+ 2484:d=1  hl=2 l=  11 cons: SEQUENCE          
+ 2486:d=2  hl=2 l=   9 prim: OBJECT            :ML-DSA-65
+ 2497:d=1  hl=4 l=3310 prim: BIT STRING        

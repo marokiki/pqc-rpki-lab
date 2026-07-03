@@ -1,0 +1,95 @@
+    0:d=0  hl=4 l=1617 cons: SEQUENCE          
+    4:d=1  hl=2 l=   9 prim: OBJECT            :pkcs7-signedData
+   15:d=1  hl=4 l=1602 cons: cont [ 0 ]        
+   19:d=2  hl=4 l=1598 cons: SEQUENCE          
+   23:d=3  hl=2 l=   1 prim: INTEGER           :03
+   26:d=3  hl=2 l=  13 cons: SET               
+   28:d=4  hl=2 l=  11 cons: SEQUENCE          
+   30:d=5  hl=2 l=   9 prim: OBJECT            :sha256
+   41:d=3  hl=2 l=  62 cons: SEQUENCE          
+   43:d=4  hl=2 l=  11 prim: OBJECT            :id-ct-routeOriginAuthz
+   56:d=4  hl=2 l=  47 cons: cont [ 0 ]        
+   58:d=5  hl=2 l=  45 prim: OCTET STRING      [HEX DUMP]:302B020300FBF03024300E0402000130083006030400C00002301204020002300C300A03050020010DB8020130
+  105:d=3  hl=4 l=1082 cons: cont [ 0 ]        
+  109:d=4  hl=4 l=1078 cons: SEQUENCE          
+  113:d=5  hl=4 l= 798 cons: SEQUENCE          
+  117:d=6  hl=2 l=   3 cons: cont [ 0 ]        
+  119:d=7  hl=2 l=   1 prim: INTEGER           :02
+  122:d=6  hl=2 l=   2 prim: INTEGER           :1000
+  126:d=6  hl=2 l=  13 cons: SEQUENCE          
+  128:d=7  hl=2 l=   9 prim: OBJECT            :sha256WithRSAEncryption
+  139:d=7  hl=2 l=   0 prim: NULL              
+  141:d=6  hl=2 l=  32 cons: SEQUENCE          
+  143:d=7  hl=2 l=  30 cons: SET               
+  145:d=8  hl=2 l=  28 cons: SEQUENCE          
+  147:d=9  hl=2 l=   3 prim: OBJECT            :commonName
+  152:d=9  hl=2 l=  21 prim: UTF8STRING        :EXPERIMENTAL PQC RPKI
+  175:d=6  hl=2 l=  30 cons: SEQUENCE          
+  177:d=7  hl=2 l=  13 prim: UTCTIME           :260703141531Z
+  192:d=7  hl=2 l=  13 prim: UTCTIME           :260704141531Z
+  207:d=6  hl=2 l=  30 cons: SEQUENCE          
+  209:d=7  hl=2 l=  28 cons: SET               
+  211:d=8  hl=2 l=  26 cons: SEQUENCE          
+  213:d=9  hl=2 l=   3 prim: OBJECT            :commonName
+  218:d=9  hl=2 l=  19 prim: UTF8STRING        :EXPERIMENTAL ROA EE
+  239:d=6  hl=4 l= 290 cons: SEQUENCE          
+  243:d=7  hl=2 l=  13 cons: SEQUENCE          
+  245:d=8  hl=2 l=   9 prim: OBJECT            :rsaEncryption
+  256:d=8  hl=2 l=   0 prim: NULL              
+  258:d=7  hl=4 l= 271 prim: BIT STRING        
+  533:d=6  hl=4 l= 378 cons: cont [ 3 ]        
+  537:d=7  hl=4 l= 374 cons: SEQUENCE          
+  541:d=8  hl=2 l=  14 cons: SEQUENCE          
+  543:d=9  hl=2 l=   3 prim: OBJECT            :X509v3 Key Usage
+  548:d=9  hl=2 l=   1 prim: BOOLEAN           :255
+  551:d=9  hl=2 l=   4 prim: OCTET STRING      [HEX DUMP]:03020780
+  557:d=8  hl=2 l=  24 cons: SEQUENCE          
+  559:d=9  hl=2 l=   3 prim: OBJECT            :X509v3 Certificate Policies
+  564:d=9  hl=2 l=   1 prim: BOOLEAN           :255
+  567:d=9  hl=2 l=  14 prim: OCTET STRING      [HEX DUMP]:300C300A06082B06010505070E02
+  583:d=8  hl=2 l=  29 cons: SEQUENCE          
+  585:d=9  hl=2 l=   3 prim: OBJECT            :X509v3 Subject Key Identifier
+  590:d=9  hl=2 l=  22 prim: OCTET STRING      [HEX DUMP]:0414463EAC277CA7A7F0505D80852C0AC1AEAA0C355F
+  614:d=8  hl=2 l=  31 cons: SEQUENCE          
+  616:d=9  hl=2 l=   3 prim: OBJECT            :X509v3 Authority Key Identifier
+  621:d=9  hl=2 l=  24 prim: OCTET STRING      [HEX DUMP]:30168014481BB74AF81A4145D477968B7DF120C75CF2A04E
+  647:d=8  hl=2 l=  63 cons: SEQUENCE          
+  649:d=9  hl=2 l=   3 prim: OBJECT            :X509v3 CRL Distribution Points
+  654:d=9  hl=2 l=  56 prim: OCTET STRING      [HEX DUMP]:30363034A032A030862E7273796E633A2F2F6578616D706C652E696E76616C69643A383837332F7265706F7369746F72792F63612E63726C
+  712:d=8  hl=2 l=  74 cons: SEQUENCE          
+  714:d=9  hl=2 l=   8 prim: OBJECT            :Authority Information Access
+  724:d=9  hl=2 l=  62 prim: OCTET STRING      [HEX DUMP]:303C303A06082B06010505073002862E7273796E633A2F2F6578616D706C652E696E76616C69643A383837332F7265706F7369746F72792F63612E636572
+  788:d=8  hl=2 l=  46 cons: SEQUENCE          
+  790:d=9  hl=2 l=   8 prim: OBJECT            :sbgp-ipAddrBlock
+  800:d=9  hl=2 l=   1 prim: BOOLEAN           :255
+  803:d=9  hl=2 l=  31 prim: OCTET STRING      [HEX DUMP]:301D300C040200013006030400C00002300D04020002300703050020010DB8
+  836:d=8  hl=2 l=  77 cons: SEQUENCE          
+  838:d=9  hl=2 l=   8 prim: OBJECT            :Subject Information Access
+  848:d=9  hl=2 l=  65 prim: OCTET STRING      [HEX DUMP]:303F303D06082B0601050507300B86317273796E633A2F2F6578616D706C652E696E76616C69643A383837332F7265706F7369746F72792F726F7574652E726F61
+  915:d=5  hl=2 l=  13 cons: SEQUENCE          
+  917:d=6  hl=2 l=   9 prim: OBJECT            :sha256WithRSAEncryption
+  928:d=6  hl=2 l=   0 prim: NULL              
+  930:d=5  hl=4 l= 257 prim: BIT STRING        
+ 1191:d=3  hl=4 l= 426 cons: SET               
+ 1195:d=4  hl=4 l= 422 cons: SEQUENCE          
+ 1199:d=5  hl=2 l=   1 prim: INTEGER           :03
+ 1202:d=5  hl=2 l=  20 prim: cont [ 0 ]        
+ 1224:d=5  hl=2 l=  11 cons: SEQUENCE          
+ 1226:d=6  hl=2 l=   9 prim: OBJECT            :sha256
+ 1237:d=5  hl=2 l= 107 cons: cont [ 0 ]        
+ 1239:d=6  hl=2 l=  26 cons: SEQUENCE          
+ 1241:d=7  hl=2 l=   9 prim: OBJECT            :contentType
+ 1252:d=7  hl=2 l=  13 cons: SET               
+ 1254:d=8  hl=2 l=  11 prim: OBJECT            :id-ct-routeOriginAuthz
+ 1267:d=6  hl=2 l=  28 cons: SEQUENCE          
+ 1269:d=7  hl=2 l=   9 prim: OBJECT            :signingTime
+ 1280:d=7  hl=2 l=  15 cons: SET               
+ 1282:d=8  hl=2 l=  13 prim: UTCTIME           :260703141531Z
+ 1297:d=6  hl=2 l=  47 cons: SEQUENCE          
+ 1299:d=7  hl=2 l=   9 prim: OBJECT            :messageDigest
+ 1310:d=7  hl=2 l=  34 cons: SET               
+ 1312:d=8  hl=2 l=  32 prim: OCTET STRING      [HEX DUMP]:B86C9611A4D9D108E8864989AAFC9CA29E1F4C0AC8302C55A72EF5CBED73655A
+ 1346:d=5  hl=2 l=  13 cons: SEQUENCE          
+ 1348:d=6  hl=2 l=   9 prim: OBJECT            :rsaEncryption
+ 1359:d=6  hl=2 l=   0 prim: NULL              
+ 1361:d=5  hl=4 l= 256 prim: OCTET STRING      [HEX DUMP]:80206F9912CD9B45F69DC00978B062CF012E868EB1BC5588BE788FA48AA79B723E5D8F68AC8165B69D453282B10FE2485AFEAFA34927B1C03416810D6DB0927ECF5DCC562D99AF34E2AA2A960A7D149624053306E7168DF56BAB8B271ADD876F54C66E552FBA174196EE477532DF7A00E03D013E6FEDFB3325E4744A53D8B14E1F1BF9BE590E4C025DCE3424FB1D5EAE75E79F99451BF013E6E7BA9CBBB72F8CDE8D23CA0A8D3A949967A12AC99E7D04DDF3173E2D3CBAB036A232AD5CC8CA3ADF9E121EA94C0B469AEDA9729AB5BC96FC5B13058B6CF802D1EC5F34105959A8C23040B29CA7016F5177CF0FD815F9A652DA96DD5981005B8D66B8F6F2775F94

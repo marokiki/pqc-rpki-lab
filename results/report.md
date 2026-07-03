@@ -4,7 +4,7 @@
 
 ## Summary
 
-Draft-00 uses ML-DSA-65 as its primary experiment. Review evidence now includes ML-DSA-44, compact classical references, and small-PQ composite size estimates. OpenSSL generated RFC 6487-oriented CA/EE certificates and CRLs with ML-DSA, but its CMS CLI could not create pure ML-DSA SignedData. Published RPKI measurements and the local size model identify Falcon-512 as the leading size challenger. Pinned liboqs now provides primitive Falcon measurements, but X.509/CMS and validator interoperability remain unsupported.
+Draft-01 uses ML-DSA-65 as its primary experiment. Evidence includes ML-DSA-44, compact classical references, and small-PQ composite size estimates. OpenSSL 3.6.2 generated ML-DSA-65 RFC 6488 ROA and Manifest objects through the CMS API when SHA-512 was supplied explicitly; the default-digest CLI path still fails. Routinator, rpki-client, and FORT accepted the RSA baseline repository and rejected the ML-DSA-65 repository at unsupported trust-anchor or algorithm checks. Published RPKI measurements and the local size model identify Falcon-512 as the leading size challenger. Pinned liboqs now provides primitive Falcon measurements, but Falcon X.509/CMS interoperability remains unsupported.
 
 ## RFC-profiled object generation
 
@@ -16,30 +16,93 @@ Draft-00 uses ML-DSA-65 as its primary experiment. Review evidence now includes 
 | RSA-2048/SHA-256 | CMS SignedData | confirmed | 1492 | generic-cms-generated |  |
 | RSA-2048/SHA-256 | MFT | unsupported |  | rpki-payload-generator-unavailable | No existing MFT/ROA payload generator was available; ASN.1 payloads were not reimplemented. |
 | RSA-2048/SHA-256 | ROA | unsupported |  | rpki-payload-generator-unavailable | No existing MFT/ROA payload generator was available; ASN.1 payloads were not reimplemented. |
+| P-256/SHA-256 | CA certificate | confirmed | 641 | rfc-profiled-x509-generated |  |
+| P-256/SHA-256 | EE certificate | confirmed | 587 | rfc-profiled-x509-generated |  |
+| P-256/SHA-256 | CRL | confirmed | 187 | rfc-profiled-crl-generated |  |
+| P-256/SHA-256 | CMS SignedData | confirmed | 903 | generic-cms-generated |  |
+| P-256/SHA-256 | MFT | unsupported |  | rpki-payload-generator-unavailable | No existing MFT/ROA payload generator was available; ASN.1 payloads were not reimplemented. |
+| P-256/SHA-256 | ROA | unsupported |  | rpki-payload-generator-unavailable | No existing MFT/ROA payload generator was available; ASN.1 payloads were not reimplemented. |
+| Ed25519 | CA certificate | confirmed | 578 | rfc-profiled-x509-generated |  |
+| Ed25519 | EE certificate | confirmed | 524 | rfc-profiled-x509-generated |  |
+| Ed25519 | CRL | confirmed | 170 | rfc-profiled-crl-generated |  |
+| Ed25519 | CMS SignedData | unsupported |  | cms-pure-signature-unsupported | 805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=1087 |
+| Ed25519 | MFT | unsupported |  | cms-signing-unavailable | RFC 6488 object generation cannot proceed because CMS signing failed. |
+| Ed25519 | ROA | unsupported |  | cms-signing-unavailable | RFC 6488 object generation cannot proceed because CMS signing failed. |
+| ML-DSA-44 | CA certificate | confirmed | 4238 | rfc-profiled-x509-generated |  |
+| ML-DSA-44 | EE certificate | confirmed | 4184 | rfc-profiled-x509-generated |  |
+| ML-DSA-44 | CRL | confirmed | 2541 | rfc-profiled-crl-generated |  |
+| ML-DSA-44 | CMS SignedData | unsupported |  | cms-pure-signature-unsupported | 805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
+| ML-DSA-44 | MFT | unsupported |  | cms-signing-unavailable | RFC 6488 object generation cannot proceed because CMS signing failed. |
+| ML-DSA-44 | ROA | unsupported |  | cms-signing-unavailable | RFC 6488 object generation cannot proceed because CMS signing failed. |
 | ML-DSA-65 | CA certificate | confirmed | 5767 | rfc-profiled-x509-generated |  |
 | ML-DSA-65 | EE certificate | confirmed | 5713 | rfc-profiled-x509-generated |  |
 | ML-DSA-65 | CRL | confirmed | 3430 | rfc-profiled-crl-generated |  |
-| ML-DSA-65 | CMS SignedData | unsupported |  | cms-pure-signature-unsupported | 80DE56FB01000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
+| ML-DSA-65 | CMS SignedData | unsupported |  | cms-pure-signature-unsupported | 805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
 | ML-DSA-65 | MFT | unsupported |  | cms-signing-unavailable | RFC 6488 object generation cannot proceed because CMS signing failed. |
 | ML-DSA-65 | ROA | unsupported |  | cms-signing-unavailable | RFC 6488 object generation cannot proceed because CMS signing failed. |
 | ML-DSA-87 | CA certificate | confirmed | 7725 | rfc-profiled-x509-generated |  |
 | ML-DSA-87 | EE certificate | confirmed | 7671 | rfc-profiled-x509-generated |  |
 | ML-DSA-87 | CRL | confirmed | 4748 | rfc-profiled-crl-generated |  |
-| ML-DSA-87 | CMS SignedData | unsupported |  | cms-pure-signature-unsupported | 80DE56FB01000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
+| ML-DSA-87 | CMS SignedData | unsupported |  | cms-pure-signature-unsupported | 805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
 | ML-DSA-87 | MFT | unsupported |  | cms-signing-unavailable | RFC 6488 object generation cannot proceed because CMS signing failed. |
 | ML-DSA-87 | ROA | unsupported |  | cms-signing-unavailable | RFC 6488 object generation cannot proceed because CMS signing failed. |
 | SLH-DSA-SHAKE-128s | CA certificate | confirmed | 8390 | rfc-profiled-x509-generated |  |
 | SLH-DSA-SHAKE-128s | EE certificate | confirmed | 8336 | rfc-profiled-x509-generated |  |
 | SLH-DSA-SHAKE-128s | CRL | confirmed | 7977 | rfc-profiled-crl-generated |  |
-| SLH-DSA-SHAKE-128s | CMS SignedData | unsupported |  | cms-pure-signature-unsupported | 80DE56FB01000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
+| SLH-DSA-SHAKE-128s | CMS SignedData | unsupported |  | cms-pure-signature-unsupported | 805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
 | SLH-DSA-SHAKE-128s | MFT | unsupported |  | cms-signing-unavailable | RFC 6488 object generation cannot proceed because CMS signing failed. |
 | SLH-DSA-SHAKE-128s | ROA | unsupported |  | cms-signing-unavailable | RFC 6488 object generation cannot proceed because CMS signing failed. |
 | SLH-DSA-SHAKE-192s | CA certificate | confirmed | 16774 | rfc-profiled-x509-generated |  |
 | SLH-DSA-SHAKE-192s | EE certificate | confirmed | 16720 | rfc-profiled-x509-generated |  |
 | SLH-DSA-SHAKE-192s | CRL | confirmed | 16345 | rfc-profiled-crl-generated |  |
-| SLH-DSA-SHAKE-192s | CMS SignedData | unsupported |  | cms-pure-signature-unsupported | 80DE56FB01000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
+| SLH-DSA-SHAKE-192s | CMS SignedData | unsupported |  | cms-pure-signature-unsupported | 805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
 | SLH-DSA-SHAKE-192s | MFT | unsupported |  | cms-signing-unavailable | RFC 6488 object generation cannot proceed because CMS signing failed. |
 | SLH-DSA-SHAKE-192s | ROA | unsupported |  | cms-signing-unavailable | RFC 6488 object generation cannot proceed because CMS signing failed. |
+| FN-DSA-512 (Falcon-512) | CA certificate | confirmed | 2048 | rfc-profiled-x509-generated |  |
+| FN-DSA-512 (Falcon-512) | EE certificate | confirmed | 1991 | rfc-profiled-x509-generated |  |
+| FN-DSA-512 (Falcon-512) | CRL | confirmed | 764 | rfc-profiled-crl-generated |  |
+| FN-DSA-512 (Falcon-512) | CMS SignedData | unsupported |  | cms-pure-signature-unsupported | 805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
+| FN-DSA-512 (Falcon-512) | MFT | unsupported |  | cms-signing-unavailable | RFC 6488 object generation cannot proceed because CMS signing failed. |
+| FN-DSA-512 (Falcon-512) | ROA | unsupported |  | cms-signing-unavailable | RFC 6488 object generation cannot proceed because CMS signing failed. |
+
+## RPKI object fixtures
+
+RSA and ML-DSA-65 `.mft` and `.roa` fixtures are generated. ML-DSA-65 uses the OpenSSL CMS API with explicit SHA-512 and is cross-checked against an independent manual DER assembly path.
+
+| Algorithm | Artifact | Status | Classification | Bytes | Public Path | Reason |
+|---|---|---|---|---|---|---|
+| RSA-2048/SHA-256 | CA certificate | confirmed | public-der-fixture | 1064 | testdata/rsa/ca.cer |  |
+| RSA-2048/SHA-256 | ROA EE certificate | confirmed | public-der-fixture | 1082 | testdata/rsa/route.ee.cer |  |
+| RSA-2048/SHA-256 | Manifest EE certificate | confirmed | public-der-fixture | 1100 | testdata/rsa/manifest.ee.cer |  |
+| RSA-2048/SHA-256 | CRL | confirmed | public-der-fixture | 415 | testdata/rsa/ca.crl |  |
+| RSA-2048/SHA-256 | ROA eContent | confirmed | rpki-econtent-der | 45 | testdata/rsa/route.roa.econtent |  |
+| RSA-2048/SHA-256 | Manifest eContent | confirmed | rpki-econtent-der | 146 | testdata/rsa/manifest.mft.econtent |  |
+| RSA-2048/SHA-256 | ROA CMS | confirmed | rfc6488-cms-generated | 1621 | testdata/rsa/route.roa |  |
+| RSA-2048/SHA-256 | Manifest CMS | confirmed | rfc6488-cms-generated | 1743 | testdata/rsa/manifest.mft |  |
+| ML-DSA-44 | CA certificate | confirmed | public-der-fixture | 4264 | testdata/ml-dsa-44/ca.cer |  |
+| ML-DSA-44 | ROA EE certificate | confirmed | public-der-fixture | 4282 | testdata/ml-dsa-44/route.ee.cer |  |
+| ML-DSA-44 | Manifest EE certificate | confirmed | public-der-fixture | 4300 | testdata/ml-dsa-44/manifest.ee.cer |  |
+| ML-DSA-44 | CRL | confirmed | public-der-fixture | 2575 | testdata/ml-dsa-44/ca.crl |  |
+| ML-DSA-44 | ROA eContent | confirmed | rpki-econtent-der | 45 | testdata/ml-dsa-44/route.roa.econtent |  |
+| ML-DSA-44 | Manifest eContent | confirmed | rpki-econtent-der | 146 | testdata/ml-dsa-44/manifest.mft.econtent |  |
+| ML-DSA-44 | ROA CMS | blocked | cms-signing-unavailable |  | results/rpki-objects/ml-dsa-44/route.roa.cms-error.txt | 805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
+| ML-DSA-44 | Manifest CMS | blocked | cms-signing-unavailable |  | results/rpki-objects/ml-dsa-44/manifest.mft.cms-error.txt | 805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
+| ML-DSA-65 | CA certificate | confirmed | public-der-fixture | 5793 | testdata/ml-dsa-65/ca.cer |  |
+| ML-DSA-65 | ROA EE certificate | confirmed | public-der-fixture | 5811 | testdata/ml-dsa-65/route.ee.cer |  |
+| ML-DSA-65 | Manifest EE certificate | confirmed | public-der-fixture | 5829 | testdata/ml-dsa-65/manifest.ee.cer |  |
+| ML-DSA-65 | CRL | confirmed | public-der-fixture | 3464 | testdata/ml-dsa-65/ca.crl |  |
+| ML-DSA-65 | ROA eContent | confirmed | rpki-econtent-der | 45 | testdata/ml-dsa-65/route.roa.econtent |  |
+| ML-DSA-65 | Manifest eContent | confirmed | rpki-econtent-der | 146 | testdata/ml-dsa-65/manifest.mft.econtent |  |
+| ML-DSA-65 | ROA CMS | confirmed | rfc6488-openssl-api-cms-generated | 9434 | testdata/ml-dsa-65/route.roa |  |
+| ML-DSA-65 | Manifest CMS | confirmed | rfc6488-openssl-api-cms-generated | 9556 | testdata/ml-dsa-65/manifest.mft |  |
+| ML-DSA-87 | CA certificate | confirmed | public-der-fixture | 7751 | testdata/ml-dsa-87/ca.cer |  |
+| ML-DSA-87 | ROA EE certificate | confirmed | public-der-fixture | 7769 | testdata/ml-dsa-87/route.ee.cer |  |
+| ML-DSA-87 | Manifest EE certificate | confirmed | public-der-fixture | 7787 | testdata/ml-dsa-87/manifest.ee.cer |  |
+| ML-DSA-87 | CRL | confirmed | public-der-fixture | 4782 | testdata/ml-dsa-87/ca.crl |  |
+| ML-DSA-87 | ROA eContent | confirmed | rpki-econtent-der | 45 | testdata/ml-dsa-87/route.roa.econtent |  |
+| ML-DSA-87 | Manifest eContent | confirmed | rpki-econtent-der | 146 | testdata/ml-dsa-87/manifest.mft.econtent |  |
+| ML-DSA-87 | ROA CMS | blocked | cms-signing-unavailable |  | results/rpki-objects/ml-dsa-87/route.roa.cms-error.txt | 805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
+| ML-DSA-87 | Manifest CMS | blocked | cms-signing-unavailable |  | results/rpki-objects/ml-dsa-87/manifest.mft.cms-error.txt | 805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
 
 ## Primitive benchmark
 
@@ -87,18 +150,76 @@ These OpenSSL `speed` values exclude process startup. The 100,000-Manifest and k
 | ML-DSA-65 | confirmed | 2499.0 | 11953.0 | 88.274 | 0.09364 |
 | ML-DSA-87 | confirmed | 2134.0 | 8232.673 | 105.635 | 0.111966 |
 
+## Synthetic key-roll model
+
+| Algorithm | Status | Files | Output bytes | RRDP snapshot | RRDP delta | rsync bytes |
+|---|---|---|---|---|---|---|
+| ML-DSA-44 | estimated | 112 | 49861 | 55844 | 5584 | 49861 |
+| ML-DSA-65 | estimated | 112 | 1014350 | 1136072 | 113607 | 1014350 |
+| ML-DSA-87 | estimated | 112 | 86938 | 97371 | 9737 | 86938 |
+| RSA-2048/SHA-256 | estimated | 112 | 174898 | 195886 | 19589 | 174898 |
+
+## Local object validation
+
+Local validation records DER parseability, RSA and ML-DSA-65 CMS round-trips, EE profile checks, and Manifest product hashes. Independent validator results are reported separately.
+
+| Algorithm | Layer | Artifact | Status | Reason |
+|---|---|---|---|---|
+| rsa | DER parse | ca.cer | confirmed |  |
+| rsa | DER parse | route.ee.cer | confirmed |  |
+| rsa | DER parse | manifest.ee.cer | confirmed |  |
+| rsa | DER parse | ca.crl | confirmed |  |
+| rsa | DER parse | route.roa.econtent | confirmed |  |
+| rsa | DER parse | manifest.mft.econtent | confirmed |  |
+| rsa | CMS verify | route.roa | confirmed |  |
+| rsa | CMS verify | manifest.mft | confirmed |  |
+| rsa | EE profile | route.ee.cer | confirmed |  |
+| rsa | EE profile | manifest.ee.cer | confirmed |  |
+| rsa | Manifest hash | manifest.mft.econtent | confirmed |  |
+| ml-dsa-44 | DER parse | ca.cer | confirmed |  |
+| ml-dsa-44 | DER parse | route.ee.cer | confirmed |  |
+| ml-dsa-44 | DER parse | manifest.ee.cer | confirmed |  |
+| ml-dsa-44 | DER parse | ca.crl | confirmed |  |
+| ml-dsa-44 | DER parse | route.roa.econtent | confirmed |  |
+| ml-dsa-44 | DER parse | manifest.mft.econtent | confirmed |  |
+| ml-dsa-44 | CMS verify | route.roa | skipped | CMS artifact unavailable |
+| ml-dsa-44 | CMS verify | manifest.mft | skipped | CMS artifact unavailable |
+| ml-dsa-44 | EE profile | route.ee.cer | confirmed |  |
+| ml-dsa-44 | EE profile | manifest.ee.cer | confirmed |  |
+| ml-dsa-65 | DER parse | ca.cer | confirmed |  |
+| ml-dsa-65 | DER parse | route.ee.cer | confirmed |  |
+| ml-dsa-65 | DER parse | manifest.ee.cer | confirmed |  |
+| ml-dsa-65 | DER parse | ca.crl | confirmed |  |
+| ml-dsa-65 | DER parse | route.roa.econtent | confirmed |  |
+| ml-dsa-65 | DER parse | manifest.mft.econtent | confirmed |  |
+| ml-dsa-65 | CMS verify | route.roa | confirmed |  |
+| ml-dsa-65 | CMS verify | manifest.mft | confirmed |  |
+| ml-dsa-65 | EE profile | route.ee.cer | confirmed |  |
+| ml-dsa-65 | EE profile | manifest.ee.cer | confirmed |  |
+| ml-dsa-65 | Manifest hash | manifest.mft.econtent | confirmed |  |
+| ml-dsa-87 | DER parse | ca.cer | confirmed |  |
+| ml-dsa-87 | DER parse | route.ee.cer | confirmed |  |
+| ml-dsa-87 | DER parse | manifest.ee.cer | confirmed |  |
+| ml-dsa-87 | DER parse | ca.crl | confirmed |  |
+| ml-dsa-87 | DER parse | route.roa.econtent | confirmed |  |
+| ml-dsa-87 | DER parse | manifest.mft.econtent | confirmed |  |
+| ml-dsa-87 | CMS verify | route.roa | skipped | CMS artifact unavailable |
+| ml-dsa-87 | CMS verify | manifest.mft | skipped | CMS artifact unavailable |
+| ml-dsa-87 | EE profile | route.ee.cer | confirmed |  |
+| ml-dsa-87 | EE profile | manifest.ee.cer | confirmed |  |
+
 ## Exact 100,000-operation benchmark
 
 Each row is a direct loop of 100,000 signing operations followed by 100,000 verification operations. Key generation and complete RPKI object processing are excluded.
 
 | Algorithm | Status | Sign total s | Verify total s | Sign us/op | Verify us/op | Sign time/RSA | Verify time/RSA |
 |---|---|---|---|---|---|---|---|
-| RSA-2048/SHA-256 | confirmed | 37.242536000 | 0.985560000 | 372.425 | 9.856 | 1.0 | 1.0 |
-| P-256/SHA-256 | confirmed | 1.368756000 | 3.579209000 | 13.688 | 35.792 | 0.037 | 3.632 |
-| Ed25519 | confirmed | 1.673355000 | 4.037800000 | 16.734 | 40.378 | 0.045 | 4.097 |
-| ML-DSA-44 | confirmed | 24.908217000 | 4.792310000 | 249.082 | 47.923 | 0.669 | 4.863 |
-| ML-DSA-65 | confirmed | 40.175448000 | 7.352204000 | 401.754 | 73.522 | 1.079 | 7.46 |
-| ML-DSA-87 | confirmed | 49.886808000 | 11.545769000 | 498.868 | 115.458 | 1.34 | 11.715 |
+| RSA-2048/SHA-256 | confirmed | 34.327696000 | 0.986373000 | 343.277 | 9.864 | 1.0 | 1.0 |
+| P-256/SHA-256 | confirmed | 1.268314000 | 3.477508000 | 12.683 | 34.775 | 0.037 | 3.526 |
+| Ed25519 | confirmed | 1.663721000 | 4.046193000 | 16.637 | 40.462 | 0.048 | 4.102 |
+| ML-DSA-44 | confirmed | 25.081317000 | 4.958273000 | 250.813 | 49.583 | 0.731 | 5.027 |
+| ML-DSA-65 | confirmed | 40.543142000 | 7.665719000 | 405.431 | 76.657 | 1.181 | 7.772 |
+| ML-DSA-87 | confirmed | 47.943284000 | 11.742680000 | 479.433 | 117.427 | 1.397 | 11.905 |
 
 ## Composite component benchmark
 
@@ -106,13 +227,17 @@ These rows execute both component operations and require both verifications to p
 
 | Combination | Status | Sign total s | Verify total s | Component bytes | Sign time/ML-DSA-65 | Verify time/ML-DSA-65 | Bytes/ML-DSA-65 |
 |---|---|---|---|---|---|---|---|
-| RSA-2048+ML-DSA-44 | confirmed | 59.283588000 | 6.398635000 | 2676 | 1.476 | 0.87 | 0.809 |
-| P-256+ML-DSA-44 | confirmed | 26.938006000 | 8.463775000 | 2492 | 0.671 | 1.151 | 0.753 |
-| RSA-2048+ML-DSA-65 | confirmed | 74.359259000 | 8.351363000 | 3565 | 1.851 | 1.136 | 1.077 |
-| P-256+ML-DSA-65 | confirmed | 42.234073000 | 11.275192000 | 3381 | 1.051 | 1.534 | 1.022 |
-| RSA-2048+ML-DSA-87 | confirmed | 81.854859000 | 12.620553000 | 4883 | 2.037 | 1.717 | 1.476 |
-| P-256+ML-DSA-87 | confirmed | 49.750940000 | 15.382402000 | 4699 | 1.238 | 2.092 | 1.42 |
-| P-256+Falcon-512 | confirmed | 215.113181000 | 5.473413000 | 737 | 5.354 | 0.744 | 0.223 |
+| FN-DSA-512 (Falcon-512) | confirmed | 10.547208000 | 1.612536000 | 665 | 0.26 | 0.21 | 0.201 |
+| RSA-2048+P-256 | confirmed | 35.317942000 | 4.473800000 | 328 | 0.871 | 0.584 | 0.099 |
+| RSA-2048+Ed25519 | confirmed | 35.634483000 | 5.057551000 | 320 | 0.879 | 0.66 | 0.097 |
+| RSA-2048+ML-DSA-44 | confirmed | 59.198430000 | 5.784879000 | 2676 | 1.46 | 0.755 | 0.809 |
+| P-256+ML-DSA-44 | confirmed | 26.317486000 | 8.391998000 | 2492 | 0.649 | 1.095 | 0.753 |
+| RSA-2048+ML-DSA-65 | confirmed | 74.396603000 | 8.363908000 | 3565 | 1.835 | 1.091 | 1.077 |
+| P-256+ML-DSA-65 | confirmed | 41.756521000 | 10.879306000 | 3381 | 1.03 | 1.419 | 1.022 |
+| RSA-2048+ML-DSA-87 | confirmed | 81.102208000 | 12.706616000 | 4883 | 2.0 | 1.658 | 1.476 |
+| RSA-2048+FN-DSA-512 | confirmed | 44.606447000 | 2.632527000 | 920 | 1.1 | 0.343 | 0.278 |
+| P-256+ML-DSA-87 | confirmed | 49.977078000 | 15.269535000 | 4699 | 1.233 | 1.992 | 1.42 |
+| P-256+Falcon-512 | confirmed | 12.061653000 | 5.082005000 | 737 | 0.298 | 0.663 | 0.223 |
 
 ## Repository impact
 
@@ -147,6 +272,60 @@ These rows execute both component operations and require both verifications to p
 | rpki-client | False |  | unsupported | unsupported | unsupported |
 | FORT | False |  | unsupported | unsupported | unsupported |
 
+## Unmodified validator repository probe
+
+Pinned unmodified validator containers fetched isolated repositories from a local rsync daemon. No production TAL or Internet repository was used.
+
+| Validator | Repository | Status | Parser | Certificate path | Manifest | ROA | VRP output | Hard error |
+|---|---|---|---|---|---|---|---|---|
+| Routinator | rsa | accepted | accepted | accepted | accepted | accepted | present |  |
+| rpki-client | rsa | accepted | accepted | accepted | accepted | accepted | present |  |
+| FORT | rsa | accepted | accepted | accepted | accepted | accepted | present |  |
+| Routinator | ml-dsa-65 | rejected | rejected | rejected-or-not-reached | rejected-or-not-reached | rejected-or-not-reached | absent | [ERROR] Failed to read TAL /tals/test.tal: bad key info: invalid public key format (at position 6). |
+| rpki-client | ml-dsa-65 | rejected | rejected | rejected-or-not-reached | rejected-or-not-reached | rejected-or-not-reached | absent | Certificates: 1 (1 invalid, 0 non-functional) |
+| FORT | ml-dsa-65 | rejected | rejected | rejected-or-not-reached | rejected-or-not-reached | rejected-or-not-reached | absent | Jul  3 04:00:26 WRN: Validation from TAL '/tals/test.tal' yielded error -22 (Invalid argument); discarding all validation results. |
+
+## CMS API and object generation
+
+| CMS API digest mode | Status | Return code | Output bytes | Error |
+|---|---|---|---|---|
+| default | blocked | 1 | 0 | 805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1 |
+| sha512 | confirmed | 0 | 9116 |  |
+
+| Artifact | Status | Backend | Bytes | Public path |
+|---|---|---|---|---|
+| ROA CMS | confirmed | rfc6488-openssl-api-cms-generated | 9434 | testdata/ml-dsa-65/route.roa |
+| Manifest CMS | confirmed | rfc6488-openssl-api-cms-generated | 9556 | testdata/ml-dsa-65/manifest.mft |
+
+## Repeated message-size sweep
+
+| Algorithm | Message bytes | Repetitions | Status | Sign median s | Sign stdev s | Verify median s | Verify stdev s | Peak RSS median bytes |
+|---|---|---|---|---|---|---|---|---|
+| Ed25519 | 32 | 10 | confirmed | 0.0166565 | 0.0066131999852147546 | 0.040441500000000005 | 0.018693730986022502 | 5341184.0 |
+| Ed25519 | 512 | 10 | confirmed | 0.017145 | 0.0002296828973461744 | 0.040886500000000006 | 0.0026813871948841864 | 5341184.0 |
+| Ed25519 | 2048 | 10 | confirmed | 0.019014 | 0.0005195823215707875 | 0.041787000000000005 | 0.000378169582771187 | 5341184.0 |
+| Ed25519 | 8192 | 10 | confirmed | 0.026115 | 0.0005241822096264705 | 0.045107499999999995 | 0.0006635259016965526 | 5357568.0 |
+| ML-DSA-44 | 32 | 10 | confirmed | 0.2492375 | 0.02996983994766887 | 0.0477975 | 0.0024596575665007604 | 5603328.0 |
+| ML-DSA-44 | 512 | 10 | confirmed | 0.24926700000000002 | 0.007512190732402896 | 0.048516500000000004 | 0.006986570324558394 | 5529600.0 |
+| ML-DSA-44 | 2048 | 10 | confirmed | 0.24800650000000002 | 0.008460611838264286 | 0.049780000000000005 | 0.00026971005007435443 | 5537792.0 |
+| ML-DSA-44 | 8192 | 10 | confirmed | 0.2530775 | 0.014824931489067859 | 0.0555355 | 0.009765382771698083 | 5570560.0 |
+| ML-DSA-65 | 32 | 10 | confirmed | 0.405729 | 0.017569537192412197 | 0.0734105 | 0.01413849605549017 | 5652480.0 |
+| ML-DSA-65 | 512 | 10 | confirmed | 0.4008925 | 0.007362091638175182 | 0.0739315 | 0.0010952076616889718 | 5619712.0 |
+| ML-DSA-65 | 2048 | 10 | confirmed | 0.401352 | 0.007778928724445286 | 0.0752735 | 0.0006939509748934388 | 5619712.0 |
+| ML-DSA-65 | 8192 | 10 | confirmed | 0.413362 | 0.007357251679654417 | 0.08101749999999999 | 0.0034889943489015075 | 5644288.0 |
+| ML-DSA-87 | 32 | 10 | confirmed | 0.477243 | 0.012467642439976822 | 0.11596300000000001 | 0.0015355287507710317 | 5758976.0 |
+| ML-DSA-87 | 512 | 10 | confirmed | 0.46777749999999996 | 0.011902649789484318 | 0.116371 | 0.0008233567135681708 | 5775360.0 |
+| ML-DSA-87 | 2048 | 10 | confirmed | 0.478189 | 0.010645353649467086 | 0.1179915 | 0.0026760257534884325 | 5783552.0 |
+| ML-DSA-87 | 8192 | 10 | confirmed | 0.481751 | 0.011612352274386282 | 0.123285 | 0.0007850812342964535 | 5758976.0 |
+| P-256/SHA-256 | 32 | 10 | confirmed | 0.012660000000000001 | 0.0003322606239418422 | 0.034534499999999996 | 0.005360799754804419 | 5242880.0 |
+| P-256/SHA-256 | 512 | 10 | confirmed | 0.0128995 | 6.664633023155385e-05 | 0.034547499999999995 | 0.00011922136273895505 | 5242880.0 |
+| P-256/SHA-256 | 2048 | 10 | confirmed | 0.013333000000000001 | 0.00015186470586969438 | 0.035047499999999995 | 0.0004672434649682704 | 5234688.0 |
+| P-256/SHA-256 | 8192 | 10 | confirmed | 0.01533 | 0.0002886204735942652 | 0.037066 | 0.0006184714490850269 | 5259264.0 |
+| RSA-2048/SHA-256 | 32 | 10 | confirmed | 0.340326 | 0.002114198519008517 | 0.0097915 | 5.6513125319109134e-05 | 4898816.0 |
+| RSA-2048/SHA-256 | 512 | 10 | confirmed | 0.33947000000000005 | 0.00995606636065558 | 0.009933500000000001 | 4.8242903911122394e-05 | 4898816.0 |
+| RSA-2048/SHA-256 | 2048 | 10 | confirmed | 0.340194 | 0.0020684014466356513 | 0.010469 | 0.00010795163526114613 | 4890624.0 |
+| RSA-2048/SHA-256 | 8192 | 10 | confirmed | 0.341387 | 0.008301982882955663 | 0.012399 | 0.0004012827210611268 | 4915200.0 |
+
 ## Real repository measurement
 
 | Extension | Status | Count | Total bytes | Median bytes | P95 bytes | Reason |
@@ -157,11 +336,37 @@ These rows execute both component operations and require both verifications to p
 
 Equivalent: `True`.
 
+## CCR-style interim comparison
+
+The local CCR-style workflow uses canonical JSON and is not CCR `ROAPayloadState.hash` output.
+
+Equivalent: `True`.
+
+## Object payload benchmark
+
+| Workload | Objects | Payload construction ms | Hashing ms | Manifest encoding ms | CMS status | Classification |
+|---|---|---|---|---|---|---|
+| synthetic-manifest-payloads | 100000 | 61.617 | 26.734416 | 79.470667 | blocked | object-payload benchmark, not complete RFC 6488 CMS generation |
+
+## Mixed-tree model
+
+Valid synthetic model: `True`. This is not validator interoperability evidence.
+
+## Routinator/Krill extension track
+
+Routinator/Krill scan and interop runners are optional, read-only, and configured with explicit environment variables. External checkouts must remain under ignored `local/` or separate upstream worktrees.
+
+| Project | Role | Status | Source Env | Reason |
+|---|---|---|---|---|
+| Routinator | validator | skipped | PQC_RPKI_ROUTINATOR_SRC | PQC_RPKI_ROUTINATOR_SRC is not set |
+| Krill | ca-publication | skipped | PQC_RPKI_KRILL_SRC | PQC_RPKI_KRILL_SRC is not set |
+
 ## Limitations
 
 - Repository values are first-order or literature-calibrated estimates.
-- MFT and ROA payloads were not hand-encoded; no existing payload generator was available.
-- No RFC-profiled PQC RPKI object has yet been accepted by an independent validator.
+- ML-DSA-44/87 and SLH-DSA complete CMS fixtures remain unimplemented.
+- No unmodified validator accepted the ML-DSA-65 repository; rejection is expected until algorithm support is added.
+- The mixed-tree fixture is still structural rather than a complete validator repository.
 - Missing optional dependencies are recorded as unsupported, not suite failures.
 - Core primitive timings include one OpenSSL process launch per timed operation; they are end-to-end CLI measurements, not pure cryptographic cycle counts.
 - Timing comparisons are valid only within an identical `comparable_group`.

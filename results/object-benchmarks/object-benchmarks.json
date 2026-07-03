@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "method": "Build deterministic synthetic ROA-like payload records, hash each payload, and encode a deterministic Manifest file list. Complete CMS SignedData, certificate generation, DER object serialization, publication, and validator processing are outside this benchmark.",
+    "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+  },
+  "results": [
+    {
+      "classification": "object-payload benchmark, not complete RFC 6488 CMS generation",
+      "cms_assembly_status": "blocked",
+      "der_serialization_status": "payload-only",
+      "file_hashing_ms": 26.734416,
+      "manifest_payload_bytes": 10900001,
+      "manifest_payload_encoding_ms": 79.470667,
+      "objects": 100000,
+      "payload_construction_ms": 61.617,
+      "signing_status": "not-measured-here",
+      "workload": "synthetic-manifest-payloads"
+    }
+  ]
+}

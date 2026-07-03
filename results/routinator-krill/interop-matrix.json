@@ -1,0 +1,86 @@
+{
+  "binary_probes": [
+    {
+      "binary": "",
+      "binary_env": "PQC_RPKI_ROUTINATOR_BIN",
+      "project": "Routinator",
+      "reason": "PQC_RPKI_ROUTINATOR_BIN is not set",
+      "role": "validator",
+      "status": "skipped",
+      "version": ""
+    },
+    {
+      "binary": "",
+      "binary_env": "PQC_RPKI_KRILL_BIN",
+      "project": "Krill",
+      "reason": "PQC_RPKI_KRILL_BIN is not set",
+      "role": "ca-publication",
+      "status": "skipped",
+      "version": ""
+    }
+  ],
+  "classification": "interop harness; no production TALs or network fetches are used automatically",
+  "repositories": {
+    "pqc_or_mixed_tree": "",
+    "rsa_baseline": ""
+  },
+  "results": [
+    {
+      "certificate_path": "skipped",
+      "crl": "skipped",
+      "manifest": "skipped",
+      "parser": "skipped",
+      "project": "Routinator",
+      "reason": "PQC_RPKI_ROUTINATOR_BIN is not set",
+      "repository_kind": "rsa-baseline",
+      "repository_path": "",
+      "roa": "skipped",
+      "role": "validator",
+      "signature": "skipped",
+      "vrp_output": "skipped"
+    },
+    {
+      "certificate_path": "skipped",
+      "crl": "skipped",
+      "manifest": "skipped",
+      "parser": "skipped",
+      "project": "Routinator",
+      "reason": "PQC_RPKI_ROUTINATOR_BIN is not set",
+      "repository_kind": "pqc-or-mixed-tree",
+      "repository_path": "",
+      "roa": "skipped",
+      "role": "validator",
+      "signature": "skipped",
+      "vrp_output": "skipped"
+    },
+    {
+      "certificate_path": "skipped",
+      "crl": "skipped",
+      "manifest": "skipped",
+      "parser": "skipped",
+      "project": "Krill",
+      "reason": "PQC_RPKI_KRILL_BIN is not set",
+      "repository_kind": "rsa-baseline",
+      "repository_path": "",
+      "roa": "skipped",
+      "role": "ca-publication",
+      "signature": "skipped",
+      "vrp_output": "skipped"
+    },
+    {
+      "certificate_path": "skipped",
+      "crl": "skipped",
+      "manifest": "skipped",
+      "parser": "skipped",
+      "project": "Krill",
+      "reason": "PQC_RPKI_KRILL_BIN is not set",
+      "repository_kind": "pqc-or-mixed-tree",
+      "repository_path": "",
+      "roa": "skipped",
+      "role": "ca-publication",
+      "signature": "skipped",
+      "vrp_output": "skipped"
+    }
+  ],
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

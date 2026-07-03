@@ -1,0 +1,3 @@
+[ERROR] Failed to read TAL /tals/test.tal: bad key info: invalid public key format (at position 6). 
+Aborting.
+[ERROR] Fatal error. Exiting.

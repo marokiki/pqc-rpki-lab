@@ -1,0 +1,148 @@
+{
+  "classification": "read-only scanner; no upstream source is copied into this repository",
+  "extension_map": {
+    "classification": "public extension map; no upstream source vendored",
+    "projects": [
+      {
+        "binary_env": "PQC_RPKI_ROUTINATOR_BIN",
+        "extension_points": [
+          {
+            "area": "algorithm-registry",
+            "need": "Register ML-DSA and candidate composite AlgorithmIdentifiers."
+          },
+          {
+            "area": "x509-verification",
+            "need": "Verify certificate SPKI and signature algorithms across CA boundaries."
+          },
+          {
+            "area": "cms-verification",
+            "need": "Verify RFC 6488 SignedData with PQC signature algorithms."
+          },
+          {
+            "area": "manifest-consistency",
+            "need": "Reject products outside the Manifest signer issuing context."
+          },
+          {
+            "area": "mixed-tree",
+            "need": "Allow algorithm transition at CA boundaries without per-object mixing."
+          },
+          {
+            "area": "vrp-ccr-export",
+            "need": "Export VRPs or CCR-compatible ROAPayloadState for semantic comparison."
+          }
+        ],
+        "project": "Routinator",
+        "role": "validator",
+        "source_env": "PQC_RPKI_ROUTINATOR_SRC",
+        "suggested_local_path": "local/upstream/routinator/"
+      },
+      {
+        "binary_env": "PQC_RPKI_KRILL_BIN",
+        "extension_points": [
+          {
+            "area": "ca-key-algorithm",
+            "need": "Abstract CA key algorithms beyond RSA."
+          },
+          {
+            "area": "child-ca-issuance",
+            "need": "Issue child certificates whose SPKI algorithm differs from issuer signature algorithm."
+          },
+          {
+            "area": "ee-certificate",
+            "need": "Generate RFC 6488 EE certificates for PQC object signers."
+          },
+          {
+            "area": "cms-signing",
+            "need": "Sign Manifest and ROA CMS objects with selected algorithm suite."
+          },
+          {
+            "area": "publication",
+            "need": "Publish RSA baseline, PQC branch, and mixed-tree repositories reproducibly."
+          },
+          {
+            "area": "transport-size",
+            "need": "Measure RRDP snapshot, RRDP delta, and rsync output growth."
+          }
+        ],
+        "project": "Krill",
+        "role": "ca-publication",
+        "source_env": "PQC_RPKI_KRILL_SRC",
+        "suggested_local_path": "local/upstream/krill/"
+      }
+    ],
+    "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+  },
+  "scan_results": [
+    {
+      "extension_points": [
+        {
+          "area": "algorithm-registry",
+          "need": "Register ML-DSA and candidate composite AlgorithmIdentifiers."
+        },
+        {
+          "area": "x509-verification",
+          "need": "Verify certificate SPKI and signature algorithms across CA boundaries."
+        },
+        {
+          "area": "cms-verification",
+          "need": "Verify RFC 6488 SignedData with PQC signature algorithms."
+        },
+        {
+          "area": "manifest-consistency",
+          "need": "Reject products outside the Manifest signer issuing context."
+        },
+        {
+          "area": "mixed-tree",
+          "need": "Allow algorithm transition at CA boundaries without per-object mixing."
+        },
+        {
+          "area": "vrp-ccr-export",
+          "need": "Export VRPs or CCR-compatible ROAPayloadState for semantic comparison."
+        }
+      ],
+      "likely_files": [],
+      "project": "Routinator",
+      "reason": "PQC_RPKI_ROUTINATOR_SRC is not set",
+      "role": "validator",
+      "source_env": "PQC_RPKI_ROUTINATOR_SRC",
+      "source_path": "",
+      "status": "skipped"
+    },
+    {
+      "extension_points": [
+        {
+          "area": "ca-key-algorithm",
+          "need": "Abstract CA key algorithms beyond RSA."
+        },
+        {
+          "area": "child-ca-issuance",
+          "need": "Issue child certificates whose SPKI algorithm differs from issuer signature algorithm."
+        },
+        {
+          "area": "ee-certificate",
+          "need": "Generate RFC 6488 EE certificates for PQC object signers."
+        },
+        {
+          "area": "cms-signing",
+          "need": "Sign Manifest and ROA CMS objects with selected algorithm suite."
+        },
+        {
+          "area": "publication",
+          "need": "Publish RSA baseline, PQC branch, and mixed-tree repositories reproducibly."
+        },
+        {
+          "area": "transport-size",
+          "need": "Measure RRDP snapshot, RRDP delta, and rsync output growth."
+        }
+      ],
+      "likely_files": [],
+      "project": "Krill",
+      "reason": "PQC_RPKI_KRILL_SRC is not set",
+      "role": "ca-publication",
+      "source_env": "PQC_RPKI_KRILL_SRC",
+      "source_path": "",
+      "status": "skipped"
+    }
+  ],
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

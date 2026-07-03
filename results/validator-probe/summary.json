@@ -1,0 +1,51 @@
+{
+  "container_runtime": {
+    "reason": "",
+    "status": "confirmed",
+    "version": "29.1.3|28.3.0"
+  },
+  "repositories": {
+    "pqc": "testdata/validator/ml-dsa-65",
+    "rsa": "testdata/validator/rsa"
+  },
+  "results": [
+    {
+      "existence_status": "unsupported",
+      "installed": false,
+      "network_used": false,
+      "pqc_object_status": "unsupported",
+      "reason": "executable not found; set PQC_RPKI_ROUTINATOR_BIN or PQC_RPKI_ROUTINATOR_COMMAND",
+      "rsa_baseline_status": "unsupported",
+      "validator": "Routinator",
+      "version": "",
+      "version_status": "unsupported",
+      "vrp_output_status": "unsupported"
+    },
+    {
+      "existence_status": "unsupported",
+      "installed": false,
+      "network_used": false,
+      "pqc_object_status": "unsupported",
+      "reason": "executable not found; set PQC_RPKI_RPKI_CLIENT_BIN or PQC_RPKI_RPKI_CLIENT_COMMAND",
+      "rsa_baseline_status": "unsupported",
+      "validator": "rpki-client",
+      "version": "",
+      "version_status": "unsupported",
+      "vrp_output_status": "unsupported"
+    },
+    {
+      "existence_status": "unsupported",
+      "installed": false,
+      "network_used": false,
+      "pqc_object_status": "unsupported",
+      "reason": "executable not found; set PQC_RPKI_FORT_BIN or PQC_RPKI_FORT_COMMAND",
+      "rsa_baseline_status": "unsupported",
+      "validator": "FORT",
+      "version": "",
+      "version_status": "unsupported",
+      "vrp_output_status": "unsupported"
+    }
+  ],
+  "timestamp_utc": "2026-07-03T04:00:26.561715+00:00",
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

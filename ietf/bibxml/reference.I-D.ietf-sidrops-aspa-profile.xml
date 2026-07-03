@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reference anchor="I-D.ietf-sidrops-aspa-profile" target="https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-aspa-profile-27">
+   <front>
+      <title>A Profile for Autonomous System Provider Authorization</title>
+      <author initials="J." surname="Snijders" fullname="Job Snijders">
+         <organization>BSD Software Development</organization>
+      </author>
+      <author initials="A." surname="Azimov" fullname="Alexander Azimov">
+         <organization>Yandex</organization>
+      </author>
+      <author initials="E." surname="Uskov" fullname="Eugene Uskov">
+         <organization>JetLend</organization>
+      </author>
+      <author initials="R." surname="Bush" fullname="Randy Bush">
+         <organization>Internet Initiative Japan</organization>
+      </author>
+      <author initials="R." surname="Housley" fullname="Russ Housley">
+         <organization>Vigil Security, LLC</organization>
+      </author>
+      <author initials="B." surname="Maddison" fullname="Ben Maddison">
+         <organization>Workonline</organization>
+      </author>
+      <date month="June" day="19" year="2026" />
+      <abstract>
+	 <t>   This document defines a Cryptographic Message Syntax (CMS) protected
+   content type for Autonomous System Provider Authorization (ASPA)
+   objects for use with the Resource Public Key Infrastructure (RPKI).
+   An ASPA is a digitally signed object through which the issuer (the
+   holder of an Autonomous System identifier), can authorize one or more
+   other Autonomous Systems (ASes) as its transit providers.  When
+   validated, an ASPA&#x27;s eContent can be used for detection and
+   mitigation of route leaks.
+
+
+	 </t>
+      </abstract>
+   </front>
+   <seriesInfo name="Internet-Draft" value="draft-ietf-sidrops-aspa-profile-27" />
+   
+</reference>

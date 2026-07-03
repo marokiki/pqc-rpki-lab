@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <sys/resource.h>
 
 struct algorithm {
     const char *name;
@@ -82,25 +83,29 @@ static int verify_once(EVP_PKEY *key, const struct algorithm *algorithm,
     return result;
 }
 
-static void benchmark(const struct algorithm *algorithm, uint64_t iterations) {
-    static const unsigned char message[32] = {
-        0x70, 0x71, 0x63, 0x2d, 0x72, 0x70, 0x6b, 0x69,
-        0x2d, 0x6c, 0x61, 0x62, 0x2d, 0x31, 0x30, 0x30,
-        0x6b, 0x2d, 0x65, 0x78, 0x61, 0x63, 0x74, 0x2d,
-        0x62, 0x65, 0x6e, 0x63, 0x68, 0x2d, 0x76, 0x31
-    };
+static void benchmark(const struct algorithm *algorithm, uint64_t iterations, size_t message_length) {
+    unsigned char *message = NULL;
     EVP_PKEY *key = NULL;
     unsigned char *signature = NULL;
     size_t signature_capacity = 0;
     size_t signature_length = 0;
     double keygen_start, keygen_seconds, sign_start, sign_seconds, verify_start, verify_seconds;
     uint64_t index;
+    struct rusage usage;
+
+    message = OPENSSL_malloc(message_length);
+    if (message == NULL) {
+        printf("%s,unsupported,message allocation failed,,,,,,%zu,\n", algorithm->name, message_length);
+        return;
+    }
+    memset(message, 0x5a, message_length);
 
     keygen_start = monotonic_seconds();
     key = generate_key(algorithm);
     keygen_seconds = monotonic_seconds() - keygen_start;
     if (key == NULL) {
-        printf("%s,unsupported,key generation failed,,,,,\n", algorithm->name);
+        printf("%s,unsupported,key generation failed,,,,,,%zu,\n", algorithm->name, message_length);
+        OPENSSL_free(message);
         fflush(stdout);
         return;
     }
@@ -108,17 +113,19 @@ static void benchmark(const struct algorithm *algorithm, uint64_t iterations) {
     signature_capacity = (size_t)EVP_PKEY_get_size(key);
     signature = OPENSSL_malloc(signature_capacity);
     if (signature == NULL) {
-        printf("%s,unsupported,signature allocation failed,,,,,\n", algorithm->name);
+        printf("%s,unsupported,signature allocation failed,,,,,,%zu,\n", algorithm->name, message_length);
         EVP_PKEY_free(key);
+        OPENSSL_free(message);
         fflush(stdout);
         return;
     }
 
     signature_length = signature_capacity;
-    if (!sign_once(key, algorithm, message, sizeof(message), signature, &signature_length) ||
-        !verify_once(key, algorithm, message, sizeof(message), signature, signature_length)) {
-        printf("%s,unsupported,EVP sign or verify failed,,,,,\n", algorithm->name);
+    if (!sign_once(key, algorithm, message, message_length, signature, &signature_length) ||
+        !verify_once(key, algorithm, message, message_length, signature, signature_length)) {
+        printf("%s,unsupported,EVP sign or verify failed,,,,,,%zu,\n", algorithm->name, message_length);
         OPENSSL_free(signature);
+        OPENSSL_free(message);
         EVP_PKEY_free(key);
         fflush(stdout);
         return;
@@ -127,10 +134,11 @@ static void benchmark(const struct algorithm *algorithm, uint64_t iterations) {
     sign_start = monotonic_seconds();
     for (index = 0; index < iterations; index++) {
         signature_length = signature_capacity;
-        if (!sign_once(key, algorithm, message, sizeof(message), signature, &signature_length)) {
-            printf("%s,unsupported,sign failed at iteration %llu,,,,,\n",
-                   algorithm->name, (unsigned long long)index);
+        if (!sign_once(key, algorithm, message, message_length, signature, &signature_length)) {
+            printf("%s,unsupported,sign failed at iteration %llu,,,,,,%zu,\n",
+                   algorithm->name, (unsigned long long)index, message_length);
             OPENSSL_free(signature);
+            OPENSSL_free(message);
             EVP_PKEY_free(key);
             fflush(stdout);
             return;
@@ -140,10 +148,11 @@ static void benchmark(const struct algorithm *algorithm, uint64_t iterations) {
 
     verify_start = monotonic_seconds();
     for (index = 0; index < iterations; index++) {
-        if (!verify_once(key, algorithm, message, sizeof(message), signature, signature_length)) {
-            printf("%s,unsupported,verify failed at iteration %llu,,,,,\n",
-                   algorithm->name, (unsigned long long)index);
+        if (!verify_once(key, algorithm, message, message_length, signature, signature_length)) {
+            printf("%s,unsupported,verify failed at iteration %llu,,,,,,%zu,\n",
+                   algorithm->name, (unsigned long long)index, message_length);
             OPENSSL_free(signature);
+            OPENSSL_free(message);
             EVP_PKEY_free(key);
             fflush(stdout);
             return;
@@ -151,28 +160,43 @@ static void benchmark(const struct algorithm *algorithm, uint64_t iterations) {
     }
     verify_seconds = monotonic_seconds() - verify_start;
 
-    printf("%s,confirmed,,%.9f,%.9f,%.9f,%zu,%llu\n",
+    getrusage(RUSAGE_SELF, &usage);
+#ifdef __APPLE__
+    long peak_rss_bytes = usage.ru_maxrss;
+#else
+    long peak_rss_bytes = usage.ru_maxrss * 1024L;
+#endif
+    printf("%s,confirmed,,%.9f,%.9f,%.9f,%zu,%llu,%zu,%ld\n",
            algorithm->name, keygen_seconds, sign_seconds, verify_seconds,
-           signature_length, (unsigned long long)iterations);
+           signature_length, (unsigned long long)iterations, message_length, peak_rss_bytes);
     OPENSSL_free(signature);
+    OPENSSL_free(message);
     EVP_PKEY_free(key);
     fflush(stdout);
 }
 
 int main(int argc, char **argv) {
     uint64_t iterations = 100000;
+    size_t message_length = 32;
     size_t index;
-    if (argc == 2) {
+    if (argc >= 2) {
         iterations = strtoull(argv[1], NULL, 10);
         if (iterations == 0) {
             fprintf(stderr, "iterations must be positive\n");
             return 2;
         }
     }
-    printf("algorithm,status,reason,keygen_seconds,sign_seconds,verify_seconds,signature_bytes,iterations\n");
+    if (argc >= 3) {
+        message_length = (size_t)strtoull(argv[2], NULL, 10);
+        if (message_length == 0) {
+            fprintf(stderr, "message length must be positive\n");
+            return 2;
+        }
+    }
+    printf("algorithm,status,reason,keygen_seconds,sign_seconds,verify_seconds,signature_bytes,iterations,message_bytes,peak_rss_bytes\n");
     fflush(stdout);
     for (index = 0; index < sizeof(algorithms) / sizeof(algorithms[0]); index++) {
-        benchmark(&algorithms[index], iterations);
+        benchmark(&algorithms[index], iterations, message_length);
     }
     return 0;
 }

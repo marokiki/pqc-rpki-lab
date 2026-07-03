@@ -1,0 +1,2 @@
+classification,cms_assembly_status,der_serialization_status,file_hashing_ms,manifest_payload_bytes,manifest_payload_encoding_ms,objects,payload_construction_ms,signing_status,workload
+"object-payload benchmark, not complete RFC 6488 CMS generation",blocked,payload-only,26.734416,10900001,79.470667,100000,61.617,not-measured-here,synthetic-manifest-payloads

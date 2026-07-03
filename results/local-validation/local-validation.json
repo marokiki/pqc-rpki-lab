@@ -1,0 +1,300 @@
+{
+  "classification": "local parser/signature evidence; not full RPKI validator interoperability",
+  "results": [
+    {
+      "algorithm": "rsa",
+      "artifact": "ca.cer",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "rsa",
+      "artifact": "route.ee.cer",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "rsa",
+      "artifact": "manifest.ee.cer",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "rsa",
+      "artifact": "ca.crl",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "rsa",
+      "artifact": "route.roa.econtent",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "rsa",
+      "artifact": "manifest.mft.econtent",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "rsa",
+      "artifact": "route.roa",
+      "layer": "CMS verify",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "rsa",
+      "artifact": "manifest.mft",
+      "layer": "CMS verify",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "rsa",
+      "artifact": "route.ee.cer",
+      "layer": "EE profile",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "rsa",
+      "artifact": "manifest.ee.cer",
+      "layer": "EE profile",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "rsa",
+      "artifact": "manifest.mft.econtent",
+      "layer": "Manifest hash",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-44",
+      "artifact": "ca.cer",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-44",
+      "artifact": "route.ee.cer",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-44",
+      "artifact": "manifest.ee.cer",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-44",
+      "artifact": "ca.crl",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-44",
+      "artifact": "route.roa.econtent",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-44",
+      "artifact": "manifest.mft.econtent",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-44",
+      "artifact": "route.roa",
+      "layer": "CMS verify",
+      "reason": "CMS artifact unavailable",
+      "status": "skipped"
+    },
+    {
+      "algorithm": "ml-dsa-44",
+      "artifact": "manifest.mft",
+      "layer": "CMS verify",
+      "reason": "CMS artifact unavailable",
+      "status": "skipped"
+    },
+    {
+      "algorithm": "ml-dsa-44",
+      "artifact": "route.ee.cer",
+      "layer": "EE profile",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-44",
+      "artifact": "manifest.ee.cer",
+      "layer": "EE profile",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-65",
+      "artifact": "ca.cer",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-65",
+      "artifact": "route.ee.cer",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-65",
+      "artifact": "manifest.ee.cer",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-65",
+      "artifact": "ca.crl",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-65",
+      "artifact": "route.roa.econtent",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-65",
+      "artifact": "manifest.mft.econtent",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-65",
+      "artifact": "route.roa",
+      "layer": "CMS verify",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-65",
+      "artifact": "manifest.mft",
+      "layer": "CMS verify",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-65",
+      "artifact": "route.ee.cer",
+      "layer": "EE profile",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-65",
+      "artifact": "manifest.ee.cer",
+      "layer": "EE profile",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-65",
+      "artifact": "manifest.mft.econtent",
+      "layer": "Manifest hash",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-87",
+      "artifact": "ca.cer",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-87",
+      "artifact": "route.ee.cer",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-87",
+      "artifact": "manifest.ee.cer",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-87",
+      "artifact": "ca.crl",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-87",
+      "artifact": "route.roa.econtent",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-87",
+      "artifact": "manifest.mft.econtent",
+      "layer": "DER parse",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-87",
+      "artifact": "route.roa",
+      "layer": "CMS verify",
+      "reason": "CMS artifact unavailable",
+      "status": "skipped"
+    },
+    {
+      "algorithm": "ml-dsa-87",
+      "artifact": "manifest.mft",
+      "layer": "CMS verify",
+      "reason": "CMS artifact unavailable",
+      "status": "skipped"
+    },
+    {
+      "algorithm": "ml-dsa-87",
+      "artifact": "route.ee.cer",
+      "layer": "EE profile",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ml-dsa-87",
+      "artifact": "manifest.ee.cer",
+      "layer": "EE profile",
+      "reason": "",
+      "status": "confirmed"
+    }
+  ],
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

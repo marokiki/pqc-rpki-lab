@@ -1,0 +1,1052 @@
+---
+title: "Post-Quantum Signature Algorithm Profile and Migration Considerations for the Resource Public Key Infrastructure (RPKI)"
+abbrev: "PQC for RPKI"
+docname: draft-yoshikawa-sidrops-pqc-rpki-01
+category: std
+ipr: trust200902
+area: Routing
+wg: SIDROPS
+submissiontype: IETF
+date: 2026-07-04
+keyword:
+  - RPKI
+  - PQC
+  - ML-DSA
+  - SLH-DSA
+  - SIDROPS
+stand_alone: true
+author:
+  - fullname: "Tomoki Yoshikawa"
+    organization: "Graduate School of Informatics, Kyoto University"
+    email: "yoshikawa.tomoki.67i@st.kyoto-u.ac.jp"
+--- abstract
+
+This document defines an initial experimental post-quantum signature
+profile and migration design for the Resource Public Key Infrastructure
+(RPKI).  The profile uses Composite ML-DSA-65 with ECDSA P-256 for RPKI
+certificates, CRLs, certification requests, and CMS signed objects.  The
+migration design introduces the composite suite at CA boundaries through
+Mixed Certification Chains.  It preserves the existing RPKI object
+formats, repository system, validation procedure, and router-facing
+VRP/RTR model.  This revision is intended for SIDROPS evaluation and
+does not update RFC 7935.
+
+--- middle
+
+# Introduction
+
+The RPKI relies on digital signatures in resource certificates, CRLs,
+certification requests, and CMS signed objects such as manifests and
+Route Origin Authorizations (ROAs).  The deployed RPKI algorithm profile
+is based on RSA with SHA-256.  A Cryptographically Relevant Quantum
+Computer (CRQC) would invalidate the long-term security assumptions of
+the classical signature algorithms used today.  This document therefore
+describes a migration path away from CRQC-vulnerable signature
+algorithms that can be tested before an emergency transition is
+required.
+
+The design goal of this document is conservative.  RPKI already has a
+well-defined architecture, repository system, validation procedure, and
+router interface.  This document keeps those layers intact.  PQC
+processing is introduced at the Certification Authority (CA), repository,
+CMS signed object, and Relying Party (RP) validation layers.  Routers
+that consume Validated ROA Payloads (VRPs) through the RPKI-Router
+Protocol (RTR) or local files are not expected to process PQC signatures
+directly.
+
+# Requirements Language
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+"SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+"OPTIONAL" in this document are to be interpreted as described in BCP 14
+[BCP14] when, and only when, they appear in all capitals, as
+shown here.
+
+# Terminology
+
+This document uses the terminology of the RPKI architecture [RFC6480],
+the resource certificate profile [RFC6487], the RPKI signed object
+template [RFC6488], the RPKI algorithm agility procedure [RFC6916], and
+the RPKI algorithm profile [RFC7935].
+
+Current Suite:  The algorithm suite currently accepted by an RPKI
+implementation for production validation.  At the time of writing this is
+RSA-2048/SHA-256 as profiled by RFC 7935.
+
+Next Suite:  A candidate algorithm suite that is implemented and tested
+before it becomes the Current Suite.
+
+PQC Suite:  A Next Suite whose signature algorithm is intended to remain
+secure against a CRQC.
+
+Certificate Signature Algorithm:  The algorithm used by the issuer to
+sign a certificate or CRL.
+
+Subject Public Key Algorithm:  The algorithm of the key carried in a
+certificate's subjectPublicKeyInfo (SPKI).
+
+Mixed Certification Chain:  A certification path in which different
+algorithm suites are used above and below a transition certificate.
+
+Corresponding Products:  RPKI products issued under different algorithm
+suites that assert the same RPKI semantics.  For ROAs, this means the
+same set of VRPs, modulo local policy and trust anchor selection.
+
+Semantic Equivalence:  A property of two validated RPKI outputs in which
+their routing semantics are identical.  For ROA-derived VRPs, the
+comparison keys are prefix, maxLength, origin AS, and validation source or
+trust anchor context.  See also the Canonical Cache Representation
+[I-D.ietf-sidrops-rpki-ccr].
+
+Parallel Publication:  A migration technique in which a CA publishes
+corresponding products under both the Current Suite and the Next Suite
+for an extended interval.
+
+Composite Signature:  A single signature algorithm construction that
+combines a PQC algorithm and a traditional algorithm at the cryptographic
+or encoding layer.  Verification succeeds only when every component
+signature validates.
+
+# Scope
+
+This document applies to RPKI resource certificates, CRLs, certification
+requests, BGPsec Router Certificates [RFC8209], and the CMS signed objects
+that reuse the RPKI signed object template [RFC6488], including manifests
+[RFC9286], ROAs [RFC9582], Signed Checklists (RSC) [RFC9323], ASPA objects
+[I-D.ietf-sidrops-aspa-profile], and Trust Anchor Key (TAK) objects
+[RFC9691].  The CMS signed objects are treated as a single signed-object
+algorithm profile; see the Signed Object Coverage section.
+
+This document covers the RPKI signatures on BGPsec Router Certificates,
+but does not define or change the BGPsec UPDATE signature algorithm
+specified by [RFC8608].
+
+This document does not specify changes to RTR, TAL formats, RRDP
+[RFC8182], rsync, or the RPKI Certificate Policy.  These topics may
+require companion work after the basic certificate and CMS profile is
+interoperable.
+
+# Design Goals
+
+The profile has the following goals.
+
+* Preserve the existing RPKI architecture and repository model.
+* Reuse existing LAMPS PKIX and CMS encodings for PQC algorithms.
+* Avoid new RPKI object formats unless measurements show that simple
+  signature substitution is infeasible.
+* Keep routers as consumers of validated payloads, not PQC validators,
+  while acknowledging that RP validation and repository processing
+  change.
+* Apply one signature algorithm suite uniformly to all RFC 6488 signed
+  objects rather than per-object-type algorithm choices.
+* Preserve signature unforgeability if one component of the composite
+  suite is broken while the other component remains secure.
+* Support a prolonged Current Suite and Next Suite interval.
+* Make downgrade, unsupported-algorithm, and semantic-divergence cases
+  observable by RPs and operators.
+* Keep measurement and interoperability evidence reproducible outside the
+  protocol specification.
+
+# Algorithm Profile
+
+## Current Suite
+
+The Current Suite remains RSA PKCS #1 v1.5 with SHA-256 as specified by
+RFC 7935 until a separate transition timetable changes production RPKI
+policy.
+
+## Primary Experimental Candidate
+
+The primary Next Suite candidate in this revision is
+id-MLDSA65-ECDSA-P256-SHA512, as specified by
+[I-D.ietf-lamps-pq-composite-sigs] and
+[I-D.ietf-lamps-cms-composite-sigs].  It combines ML-DSA-65 with ECDSA
+P-256 and requires both component signatures to validate.  This revision
+selects the composite construction and Mixed Certification Chain as its
+migration design; deployment remains experimental until CA and RP
+interoperability is demonstrated.
+
+An implementation experiment SHOULD process the composite public key and
+certificate signatures according to
+[I-D.ietf-lamps-pq-composite-sigs] and SHOULD process composite CMS
+SignedData according to [I-D.ietf-lamps-cms-composite-sigs].
+
+RPKI CAs participating in an isolated experiment MAY use the primary
+composite suite for CA certificates, EE certificates, CRLs, and CMS
+signed objects.  They MUST NOT publish experimental objects into a
+production repository or use production keys or TALs.
+
+## Additional Candidate Suites
+
+ML-DSA-44 is a serious alternative to ML-DSA-65.  It produces smaller
+public keys and signatures and may sign and verify faster, which matters
+in a system where every RP repeatedly fetches and validates the entire
+global repository.  It is not the selected PQC component in this
+revision because this document currently uses NIST security
+Category 3 as a conservative floor for a long-lived, globally deployed
+suite; the Algorithm Selection Rationale discusses this trade-off and
+the counterarguments.
+
+ML-DSA-87 is included as a higher-security comparison candidate.  It is more
+conservative than ML-DSA-65 but carries correspondingly larger size and
+performance costs.
+
+SLH-DSA-SHAKE-128s and SLH-DSA-SHAKE-192s are included for
+cryptographic-diversity comparison.  Their primitive, PKIX, and CMS
+specifications are defined by [FIPS205], [RFC9909], and [RFC9814].  They
+are not proposed as the initial suite because their signature sizes and
+signing costs are substantially higher than ML-DSA in the available
+measurements.
+
+FN-DSA (Falcon), MAYO, SNOVA, and HAWK are additional candidates for
+future evaluation.  They are outside this profile until stable PKIX and
+CMS profiles are available and referenced by a future revision or
+separate document.
+FN-DSA in particular is discussed further in the Algorithm Selection
+Rationale, because its compact signatures make it an attractive
+candidate for the RPKI's bulk validation model.
+
+Other Composite ML-DSA combinations specified by LAMPS remain candidates
+for comparison.  Changing the component pair would not change the
+composite plus mixed-tree migration design selected by this revision.  A
+composite signature is a new algorithm from the point of view of an RP:
+a validator that only supports the RSA Current Suite cannot validate a
+composite object.
+
+## Classical Reference Points
+
+To relativize the cost of PQC candidates, this document uses two compact
+classical algorithms as non-normative reference points: ECDSA P-256 with
+SHA-256 [FIPS186-5], which is already used for BGPsec UPDATE signatures
+[RFC8608], and Ed25519 [RFC8032].  Neither is a CRQC-resistant
+algorithm, and neither is proposed here as an RPKI suite.  They
+represent the realistic lower bound for signature and key sizes in the
+non-PQ universe: the deployed RSA-2048 profile is itself several times
+larger than these curves, and PQC candidates should be compared against
+both baselines rather than against RSA alone.
+
+## Algorithm Comparison
+
+The table below summarizes the static parameters of the candidate and
+reference algorithms, taken from the defining standards.  These values
+are properties of the algorithms themselves and are independent of any
+implementation.
+
+| Algorithm | Cat. | PubKey (B) | Sig (B) |
+|---|---|---|---|
+| RSA-2048/SHA-256 | n/a | 270 | 256 |
+| P-256/SHA-256 | n/a | 65 | ~72 |
+| Ed25519 | n/a | 32 | 64 |
+| ML-DSA-44 | 2 | 1312 | 2420 |
+| ML-DSA-65 | 3 | 1952 | 3309 |
+| ML-DSA-87 | 5 | 2592 | 4627 |
+| FN-DSA-512 (Falcon) | 1 | 897 | <=666 |
+| SLH-DSA-SHAKE-128s | 1 | 32 | 7856 |
+| SLH-DSA-SHAKE-192s | 3 | 48 | 16224 |
+
+"Cat." is the NIST security category; "n/a" marks classical reference
+algorithms.  The RSA-2048 public key size is the DER-encoded SPKI
+payload, the other public key sizes are raw key encodings, and ECDSA
+signature sizes vary slightly with DER encoding.
+
+Beyond static sizes, this document evaluates candidates along the
+following dimensions: certificate and CRL size under the RPKI profile;
+CMS signed object size; signing and verification cost under the RP
+workload; repository size and distribution (RRDP and rsync) impact; CA
+key rollover and publication cycle impact; HSM support; and
+standardization and implementation maturity.
+
+Three qualitative observations from the preliminary evidence inform the
+rationale in the next section.  First, RP workload is verification
+dominated: an RP verifies repository objects but signs nothing as part
+of validation, and the deployed RSA profile is exceptionally cheap at
+verification, so the cost of a lattice migration falls
+disproportionately on RPs rather than on CAs.  Second, first-order size
+models place ML-DSA-65 near a fourfold repository size increase over
+the RSA baseline, ML-DSA-44 near threefold, and FN-DSA-512 well below
+twofold.  Third, FN-DSA verification is fast, which is directly
+relevant to the RP workload and supports keeping FN-DSA in the
+comparison set despite the maturity concerns discussed below.
+
+Preliminary measurements supporting these observations, together with
+their conditions, caveats, and the list of dimensions not yet backed by
+confirmed measurements, are collected in Appendix A of this revision
+(to be removed before publication) and are maintained in reproducible
+form by the experimental harness [pqc-rpki-lab].  Measured values are
+implementation and environment dependent and are not protocol
+requirements.
+
+## Algorithm Selection Rationale
+
+This revision selects a composite suite because a global RPKI migration
+should not depend exclusively on a newly deployed PQC algorithm.  The
+LAMPS construction accepts a composite signature only when both
+component signatures validate.  For a classical adversary, existential
+unforgeability is therefore retained when either ML-DSA-65 or ECDSA
+P-256 remains secure and the prehash construction remains collision
+resistant.  This provides a hedge against a cryptanalytic break or an
+independent implementation defect affecting one component during the
+transition.
+
+This hedge has a limit.  A CRQC defeats the ECDSA component, so security
+against a quantum adversary still depends on ML-DSA-65 remaining secure.
+The composite suite also does not protect against failures shared by
+both components or by the combiner, encoding, key management, or
+validation implementation.
+
+ML-DSA-65 is used as the PQC component of the primary experimental suite
+because it has an existing FIPS signature specification [FIPS204] and
+corresponding PKIX [RFC9881] and CMS [RFC9882] algorithm identifier
+specifications,
+because implementations are becoming widely available, and because
+Category 3 provides a conservative security margin for a suite whose
+re-migration would be a global, multi-year operation.  It is not
+selected because it is the smallest or fastest possible signature
+algorithm; it is neither.
+
+The choice between ML-DSA-44 and ML-DSA-65 is genuinely open.  The
+argument for ML-DSA-65 is conservatism: the RPKI is a single global
+system, algorithm migrations in it are slow and expensive, and a larger
+security margin reduces the probability of needing another migration.
+The argument for ML-DSA-44 is that a structural cryptanalytic break of
+module lattices would likely affect all ML-DSA parameter sets, so the
+extra category mainly protects against gradual erosion of concrete
+security estimates rather than against a qualitative break; under that
+view, the roughly 25-35% smaller keys and signatures of ML-DSA-44, or a
+small-PQ composite built on it, may be a better use of the size budget
+[Doesburg2025].  This document keeps ML-DSA-65 as the conservative
+default for experimentation, keeps ML-DSA-44 in the measured comparison,
+and records the parameter set choice as an Open Issue for SIDROPS.
+
+ML-DSA-87 provides a higher-security comparison point, but its size and
+performance costs make it unattractive as the general repository suite.
+
+FN-DSA (Falcon) is an attractive candidate on size and performance
+grounds: its signatures are roughly one fifth the size of ML-DSA-65
+signatures, and both published RPKI analysis [Doesburg2025] and
+repository-scale redesign work [pqRPKI] identify Falcon as the compact
+lattice option.  This document nevertheless treats FN-DSA as an
+additional candidate for future evaluation rather than a primary
+candidate, for the following reasons:
+
+* This document does not profile FN-DSA because it does not reference a
+  final FN-DSA standard together with stable PKIX and CMS profiles.
+
+* FN-DSA signing relies on floating-point Gaussian sampling, which is
+  difficult to implement in constant time; side-channel-resistant
+  implementations are an active research and engineering concern.  This
+  is particularly relevant for CA signing keys held in HSMs.
+
+* Availability of FN-DSA in the platforms that RPKI CAs, RIRs, HSM
+  vendors, and validator implementations actually use is a separate
+  question from the algorithm's intrinsic merits.  No production RPKI
+  CA or RP support has been demonstrated.
+
+These are reasons to sequence the evaluation, not to dismiss the
+algorithm.  FN-DSA remains in the comparison set as the compact
+signature candidate, and the conditions under which it should be
+promoted are recorded as an Open Issue.
+
+Algorithm selection for the RPKI cannot be based on software benchmarks
+alone.  HSM support for a candidate algorithm is also a deployment
+prerequisite for CAs that protect their signing keys in HSMs.
+
+# Resource Certificate and CRL Profile
+
+RPKI resource certificates and CRLs using the primary composite suite
+MUST follow [I-D.ietf-lamps-pq-composite-sigs].  The SPKI
+AlgorithmIdentifier of a subject using the composite suite MUST contain
+id-MLDSA65-ECDSA-P256-SHA512, and its parameters MUST be absent.  A
+certificate or CRL signed by a composite-suite issuer MUST use that
+identifier in its signatureAlgorithm field, with absent parameters.  A
+transition certificate signed by a Current Suite issuer instead retains
+the issuer's Current Suite signatureAlgorithm while carrying the
+composite identifier in the subject SPKI.  Public key and signature
+values MUST use the encodings defined for their respective algorithms.
+
+Resource certificate requests made under [RFC6487] for a composite-suite
+subject MUST carry the same composite SPKI identifier and encoding.  A
+proof-of-possession signature in the request MUST use the composite
+signature identifier and encoding.
+
+Pure ML-DSA certificates and CRLs used for component measurements follow
+[RFC9881], but pure ML-DSA is not the primary Next Suite selected by this
+revision.
+
+For RPKI CA certificates, the keyUsage extension MUST remain consistent
+with the resource certificate profile.  A CA certificate that is used to
+issue certificates and CRLs requires keyCertSign and cRLSign.  An EE
+certificate used for an RPKI signed object requires digitalSignature and
+MUST NOT be used as a CA certificate.
+
+This document does not change the RPKI resource extension semantics,
+certificate policy OID, certificate path validation procedure, manifest
+processing rules, or CRL processing rules.
+
+# CMS Signed Object Profile
+
+RPKI signed objects using the primary composite suite MUST follow
+[I-D.ietf-lamps-cms-composite-sigs] and the RPKI signed object template
+defined in [RFC6488], as updated by [RFC9589].
+
+The signatureAlgorithm field of SignerInfo MUST contain
+id-MLDSA65-ECDSA-P256-SHA512.  AlgorithmIdentifier parameters MUST be
+absent.
+
+For this composite suite, the digestAlgorithms field of SignedData and the
+digestAlgorithm field of SignerInfo MUST contain id-sha512.  The parameters
+field of that AlgorithmIdentifier MUST be absent.  The message-digest signed
+attribute MUST contain the SHA-512 digest of the eContent.
+
+The signedAttrs element remains REQUIRED for RPKI signed objects.  In
+accordance with [RFC6488] as updated by [RFC9589], it MUST contain exactly one
+content-type attribute, one message-digest attribute, and one signing-time
+attribute.  The binary-signing-time attribute and all other signed attributes
+MUST be absent.  The RPKI signed object profile restricts signedAttrs to
+those three attributes.
+
+The CMS eContentType and eContent for ROAs, manifests, and other RPKI
+signed objects are unchanged.  Validators MUST apply the object-specific
+validation rules after CMS signature validation exactly as they do for the
+Current Suite.
+
+# Signed Object Coverage
+
+Manifests [RFC9286], ROAs [RFC9582], Signed Checklists [RFC9323], ASPA
+objects [I-D.ietf-sidrops-aspa-profile], TAK objects
+[RFC9691], and any future object types built on the
+RFC 6488 template share one CMS structure, one EE certificate model, and
+one repository.  This document applies a single signature algorithm
+suite uniformly to all of them.  Migrating, for example, ROAs to a PQC
+suite while leaving ASPA objects on RSA would create little benefit and
+considerable complexity: the objects are protected by the same
+certification chain, distributed through the same repository, and broken
+by the same CRQC.
+
+Changing the signature algorithm does not change an object's
+eContentType, payload, or object-specific validation rules.  A future
+standards-track profile that selects a new mandatory RPKI algorithm
+suite would update [RFC7935].  An object-specific RFC needs an update
+only if that object's payload or validation semantics also change; this
+document makes no such change.
+
+BGPsec UPDATE signatures are not RFC 6488 signed objects and are not
+covered by this profile.  BGPsec Router Certificates and their covering
+CRLs and manifests are repository products and are covered, as described
+in the Scope section.
+
+# Manifests and Repository Processing
+
+## Manifest Scope During Migration
+
+A manifest covers the products published by one CA at one publication
+point, as specified by [RFC9286].  The manifest uses its own EE
+certificate and key.  Other RPKI signed objects use their own EE
+certificates and keys, while certificates and CRLs listed on a manifest
+are not CMS signed objects.  Mixed Certification Chains and composite
+signatures do not change these relationships.  This document therefore
+introduces no additional key-consistency requirement between a manifest
+and its listed products.
+
+## Parallel Publication Mechanics
+
+This document does not define new payload encodings for manifests, ROAs,
+or CRLs.  Repository operators MAY publish Current Suite and Next Suite
+products in parallel during an algorithm transition.  A repository that
+publishes parallel products MUST ensure that manifests and CRLs are
+internally consistent within each suite.
+
+During parallel publication, operators SHOULD provide a way to identify
+corresponding products across suites for measurement and debugging.  This
+identification MAY be derived from publication point structure, object
+names, CA hierarchy, or an implementation-specific mapping.  It is not a
+new on-wire RPKI object in this version.
+
+# Relying Party Behavior
+
+An RP that implements this document MUST be configurable with an accepted
+algorithm policy covering certificate SPKI algorithms and signature
+algorithms.  The policy MUST be able to represent at least:
+
+* Current Suite only;
+* Current Suite plus Next Suite;
+* Next Suite preferred with Current Suite fallback;
+* Next Suite only.
+
+An RP MUST reject a certificate whose SPKI algorithm or signature
+algorithm is not in its configured policy.  It MUST likewise reject a CRL
+or signed object whose signature algorithm is not in that policy.  The
+rejection reason SHOULD be reported distinctly from syntax errors, path
+validation failures, manifest failures, and object-specific semantic
+failures.
+
+An RP that processes Mixed Certification Chains MUST process each
+certificate or CRL signatureAlgorithm independently and verify the
+signature with the issuer's public key.  It MUST NOT infer the subject
+SPKI algorithm from the certificate signatureAlgorithm or require those
+two fields to identify the same algorithm.
+
+An RP that validates both Current Suite and Next Suite products SHOULD
+perform semantic-equivalence checks for corresponding products.  For ROAs,
+this check compares the resulting VRP set by prefix, maxLength, origin AS,
+and trust anchor context.  The Canonical Cache Representation
+[I-D.ietf-sidrops-rpki-ccr] provides a suitable mechanism: if the
+ROAPayloadState hashes of two validation runs match, the VRP sets
+consumed by routers are identical, and if they differ, the decoded
+payload states identify the divergent VRPs.  If the Current Suite and
+Next Suite produce different routing semantics, the RP SHOULD emit
+telemetry and SHOULD NOT silently merge the divergent outputs.
+
+This document does not require routers to support PQC.  Routers receive
+validated payloads through RTR or local export formats, and the semantic
+content of that output is intended to be unchanged by the algorithm
+migration.
+
+# Migration Considerations
+
+The intended migration combines a composite signature suite with a
+Mixed Certification Chain.  A parent CA using the Current Suite issues
+a child CA certificate whose SPKI contains the composite-suite public
+key.  The child CA then issues certificates and CRLs and signs CMS
+objects with the composite suite.  This moves one subtree at a time
+without creating parallel production objects with potentially different
+payloads.
+
+Before a production subtree is switched, the composite profile and the
+mixed-chain path must be supported by the issuing CA and by the RP
+population.  The transition therefore proceeds through implementation,
+test repositories under test TALs, RP readiness measurement, staged
+subtree migration, and eventual retirement of the Current Suite.
+
+## Parallel Publication and Semantic Divergence
+
+Parallel Publication is useful in test repositories for comparing a
+Current Suite branch with a candidate branch.  It is not the preferred
+production transition because independent branches can diverge through
+publication failures, timing skew, software defects, or configuration
+drift.  Experiments using parallel branches MUST compare their resulting
+VRP sets.  CCR [I-D.ietf-sidrops-rpki-ccr] may be used as the common
+representation for that comparison.
+
+## Composite Signatures
+
+Composite signatures [I-D.ietf-lamps-pq-composite-sigs]
+[I-D.ietf-lamps-cms-composite-sigs] bind a classical and a PQC signature
+to one object and one payload.  This avoids cross-branch semantic
+divergence and permits the classical component to protect the object if
+the PQC component is found to have a security defect while the classical
+component remains secure.  Conversely, ML-DSA-65 protects against a
+CRQC when ECDSA P-256 no longer does.  This hedge is a primary reason for
+selecting a composite suite rather than a pure PQC suite in this
+revision.
+
+The LAMPS verification rule requires every component signature to
+validate.  An implementation MUST NOT accept the composite signature
+when either component fails.  A composite suite is nevertheless a new
+algorithm to every RP and combines the size and processing cost of its
+components.  Its use therefore depends on stable PKIX and CMS profiles
+and interoperable CA and RP implementations.
+
+## Mixed Certification Chains and Mixed-Tree Migration
+
+The parent signs the transition certificate using the algorithm
+associated with the parent's key, while the child SPKI carries the
+composite-suite key.  Below that boundary, the child uses the composite
+suite for its CA certificates, CRLs, and CMS signed objects.  The two
+algorithm fields are independent; an RP MUST process each certificate or
+CRL signatureAlgorithm and verify the signature with the issuer's public
+key.
+
+This pattern requires no new RPKI object format.  It does require RPs to
+support both the transition certificate and the suite used below it.  A
+subtree switched before RP support is sufficiently deployed is rejected
+by legacy RPs, so RP readiness is a precondition for each production
+switch.  CA implementations and HSMs must also support the selected
+suite, and repository size, transfer, and validation costs must be
+measured before deployment.
+
+# Implementation Status
+
+This section records the status of known implementations of the protocol
+defined by this specification at the time of posting of this
+Internet-Draft, and is based on a proposal described in [RFC7942].  It is
+intended to assist IETF discussion and is to be removed before publication
+as an RFC.
+
+An experimental repository, pqc-rpki-lab, was used to evaluate this
+proposal.  The evaluation is at an early stage; the lists below
+distinguish what has actually run from what has not.
+
+Implemented:
+
+* Static algorithm metadata for the algorithms in the comparison table.
+* Primitive benchmarks using existing libraries, unified under a single
+  OpenSSL CLI code path with comparable-group metadata and an automated
+  results-validation guard.
+* A recorded bulk measurement of 100,000 signing and 100,000
+  verification operations for RSA-2048, P-256, Ed25519,
+  ML-DSA-44/65/87, and FN-DSA-512, plus sequential component
+  measurements for ten two-algorithm combinations, with conditions
+  documented alongside the results (see Appendix A).
+* Synthetic repository impact estimator.
+* Local cache size collector.
+* VRP semantic equivalence checker for CSV/JSON fixtures; on the
+  current fixtures, the classical-side and PQC-side normalized VRP
+  hashes match.  Its interim hash is computed over canonical JSON and
+  is not a CCR hash; results from it are not labeled as CCR output.
+* Mixed-tree test structure generation (RSA trust anchor, ML-DSA-65
+  child CA SPKI, child products keyed consistently); structural
+  consistency checks pass.
+* Certificate and CRL generation with OpenSSL 3.6.2 for RSA-2048,
+  P-256, Ed25519, ML-DSA-44/65/87, FN-DSA-512,
+  SLH-DSA-SHAKE-128s, and SLH-DSA-SHAKE-192s, using the applicable
+  PKIX profiles where standardized.
+* RFC 6488 ML-DSA-65 CMS SignedData generation through the OpenSSL CMS
+  API with explicit SHA-512, independently cross-checked by a minimal DER
+  assembler, including complete ROA and manifest fixtures.
+* Repeated 32-byte, 512-byte, 2-KiB, and 8-KiB primitive measurements,
+  with 1000 operations in each of 10 repetitions, key-generation timing,
+  variance, and process peak-RSS observations.
+* Isolated local-rsync validation with pinned unmodified Routinator,
+  rpki-client, and FORT containers.  All accepted the RSA baseline and
+  rejected the ML-DSA-65 trust anchor or certificate before processing
+  its complete repository.
+
+Not yet implemented or incomplete:
+
+* Complete ML-DSA-44, ML-DSA-87, and SLH-DSA CMS signed-object fixtures.
+* Acceptance by a validator extended for this profile and corresponding
+  Routinator or other validator patch evaluation.
+* Krill integration for production-like CA issuance, manifest and ROA
+  signing, and publication.
+* A complete mixed-tree repository accepted by an extended RP; the
+  current mixed-tree fixture is structural.
+* RRDP and rsync impact measurement with real object corpora.
+* CCR-based semantic equivalence testing across suites, using real RP
+  output rather than fixtures.
+* FN-DSA measurement through the same OpenSSL EVP path used for the
+  other algorithms (current FN-DSA numbers come from liboqs
+  components).
+* Measurement of actual composite encodings per the LAMPS composite
+  specifications (current composite numbers are sequential component
+  lower bounds).
+* HSM performance and support investigation.
+
+The highest-priority implementation gap is generation and validation of
+the selected Composite ML-DSA objects, followed by acceptance by an RP
+extended for the profile and production-like CA support in Krill or
+equivalent software.  The complete pure ML-DSA-65 objects and
+unmodified-validator rejection baseline provide component-level inputs
+for that work, but do not establish composite interoperability.
+
+# Security Considerations
+
+This document addresses forgery of RPKI signatures in the presence of a
+CRQC.  Existing considerations for CA compromise, repository compromise,
+operational misissuance, BGP policy mistakes, and route leaks are
+unchanged.
+
+Downgrade and inconsistent suite selection are primary concerns during a
+long transition.  An RP that supports both Current Suite and Next Suite
+products MUST make its algorithm acceptance policy explicit.  It MUST NOT
+silently accept a Current Suite product as equivalent to a missing or
+invalid Next Suite product when local policy requires the Next Suite.
+Divergent suite-selection policies across the RP population can cause
+different RPs to derive different VRP sets from the same repository;
+this is a systemic risk of the transition period itself, and it persists
+for as long as classical and PQC suites coexist.
+
+Parallel publication introduces the possibility of semantic divergence.
+For example, the RSA branch and the PQC branch might contain different
+ROA payloads, stale manifests, or different CRL state.  Validators SHOULD
+detect and report these cases rather than silently selecting one branch
+without operator visibility; see the Migration Considerations section.
+
+Mixed Certification Chains introduce the risk of confusing the
+Certificate Signature Algorithm with the Subject Public Key Algorithm.
+An implementation that assumes the two are equal may accept invalid
+chains or reject valid ones.  Implementations MUST process each
+certificate or CRL signatureAlgorithm independently, verify the signature
+with the issuer's public key, and process the subject SPKI algorithm as a
+separate field.
+
+Validators that do not support a Next Suite face a fail-open versus
+fail-closed choice: treating unsupported-algorithm objects as absent
+(potentially discarding protections the CA intended to publish) or
+treating them as errors (potentially discarding an entire publication
+point).  Neither behavior is safe in all situations; what matters is
+that the behavior is explicit, configurable, and observable, consistent
+with the "unknown algorithm" handling direction of RFC 6916.  How mixed
+deployments with unsupported validators should be handled at internet
+scale remains an Open Issue.
+
+Larger public keys, signatures, certificates, CRLs, and CMS objects
+enlarge the repository fetch and validation attack surface.  A hostile
+or misbehaving publication point can impose disproportionate transfer
+and CPU cost on RPs, and PQC object sizes raise the ceiling of that
+cost.  Implementations SHOULD enforce resource limits and telemetry for
+object size, number of objects, validation time, and memory use.
+Operators SHOULD evaluate RRDP snapshot and delta sizes before
+large-scale deployment.
+
+HSM implementations of PQC algorithms are newer than their software
+counterparts and may lag in side-channel hardening, fault-attack
+resistance, and certification.  A CA key that is protected against
+extraction but signs with a leaky implementation is not protected.
+Side-channel risk is algorithm dependent: FN-DSA's floating-point
+Gaussian sampling is a known hard case for constant-time implementation,
+which is one reason this document sequences FN-DSA after ML-DSA.
+
+ML-DSA uses randomized (hedged) signing by default.  CA implementations
+and HSMs MUST use cryptographically appropriate randomness and SHOULD
+follow the operational guidance in RFC 9881 and RFC 9882.  Randomness
+failures during signing weaken the hedge against side-channel and fault
+attacks; purely deterministic signing is not preferred on platforms
+where such attacks are a concern.
+
+Algorithm confusion is possible if AlgorithmIdentifier parameters,
+SignerInfo digestAlgorithm, CMS signed attributes, or certificate
+SubjectPublicKeyInfo encodings are inconsistently handled.  Implementations
+MUST reject malformed AlgorithmIdentifier encodings and MUST follow the
+parameter rules of the referenced LAMPS specifications.
+
+Composite signatures may protect against failures in one component
+algorithm only when every component is verified and the other component
+and the prehash construction remain secure.  Component keys MUST NOT be
+reused as standalone keys or in other composite combinations, as
+required by [I-D.ietf-lamps-pq-composite-sigs].  Reuse can enable
+stripping and cross-protocol attacks.  A shared implementation defect, a
+combiner or parser defect, or compromise of both component keys is not
+mitigated by the composite construction.  After a CRQC breaks ECDSA, the
+composite suite's unforgeability depends on ML-DSA-65.
+
+# IANA Considerations
+
+This document requests no IANA actions.  It reuses algorithm identifiers
+defined by the referenced LAMPS specifications and defines no new RPKI
+object type, file extension, or content type.
+
+# Open Issues
+
+The following issues require additional SIDROPS discussion and
+implementation evidence.  In particular, this draft should not
+promote the experimental composite suite to a production requirement
+until extended validator behavior is measured.
+
+## Algorithm Selection
+
+* Whether the final standards-track profile should retain the
+  ML-DSA-65 and ECDSA P-256 component pair selected for this experiment,
+  or use another LAMPS Composite ML-DSA combination.
+* Under what conditions FN-DSA should be promoted from a future
+  evaluation candidate: completion of the FN-DSA standard, stable
+  PKIX/CMS conventions, evidence of side-channel-resistant
+  implementations, and HSM availability.
+
+## Migration Design
+
+* Whether composite signatures combined with mixed-tree migration are
+  the appropriate production transition design, based on implementation,
+  interoperability, repository impact, and RP-readiness evidence.
+* How RP-side readiness should be measured before any production CA
+  switches suites under a mixed-tree migration, given that a switched
+  subtree is invisible to non-upgraded RPs.
+* How to handle validators that do not support the Next Suite in mixed
+  deployments (fail-open versus fail-closed, and reporting).
+* How to define a transition timetable and readiness metrics, and
+  whether that work should update or replace RFC 6916.
+
+--- back
+
+# Preliminary Measurement Results
+
+This appendix records preliminary measurements referenced by the
+Algorithm Comparison and Implementation Status sections.  All values
+were produced by the experimental harness [pqc-rpki-lab], which
+contains the corresponding scripts, raw outputs, and environment
+metadata.  This appendix is to be removed before publication as an
+RFC; the harness remains the durable record.
+
+## Measured Certificate and CRL Sizes
+
+RFC 6487-profiled certificates (including RFC 3779 resource
+extensions) and CRLs generated with the OpenSSL 3.6.2 default
+provider:
+
+| Algorithm | CA cert (B) | EE cert (B) | CRL (B) |
+|---|---|---|---|
+| RSA-2048/SHA-256 | 1038 | 984 | 381 |
+| P-256/SHA-256 | 641 | 587 | 187 |
+| Ed25519 | 578 | 524 | 170 |
+| ML-DSA-44 | 4238 | 4184 | 2541 |
+| ML-DSA-65 | 5767 | 5713 | 3430 |
+| ML-DSA-87 | 7725 | 7671 | 4748 |
+| SLH-DSA-SHAKE-128s | 8390 | 8336 | 7977 |
+| SLH-DSA-SHAKE-192s | 16774 | 16720 | 16345 |
+| FN-DSA-512 (Falcon-512) | 2048 | 1991 | 764 |
+
+The P-256 and Ed25519 rows use the same RFC 6487 structure and resource
+extensions as the other rows, but are classical comparison algorithms
+rather than RFC 7935 suites.  The FN-DSA-512 row uses the experimental
+Falcon-512 OID and encoding from oqs-provider 0.11.0-rc1 with liboqs
+0.15.0; it is a measured experimental encoding, not a final FN-DSA PKIX
+profile.  Falcon signatures are variable length, so its certificate and
+CRL sizes can vary between runs.
+
+## Synthetic Repository Size Model
+
+First-order repository size ratios relative to the RSA-2048 baseline,
+computed by applying static public key and signature sizes to a size
+model of the current global repository.  These are model outputs, not
+full-repository measurements:
+
+| Algorithm | Repository ratio |
+|---|---|
+| Ed25519 | 0.76 |
+| P-256 | 0.78 |
+| RSA-2048 | 1.00 |
+| FN-DSA-512 | 1.55 |
+| ML-DSA-44 | 3.08 |
+| ML-DSA-65 | 4.01 |
+| ML-DSA-87 | 5.28 |
+| SLH-DSA-SHAKE-128s | 6.85 |
+| SLH-DSA-SHAKE-192s | 13.38 |
+
+## Bulk Signing and Verification
+
+Wall-clock seconds for 100,000 signing operations and 100,000
+verification operations:
+
+| Algorithm | Sign (s/100k) | Verify (s/100k) |
+|---|---|---|
+| RSA-2048/SHA-256 | 34.3 | 1.0 |
+| P-256/SHA-256 | 1.3 | 3.5 |
+| Ed25519 | 1.7 | 4.0 |
+| ML-DSA-44 | 25.1 | 5.0 |
+| ML-DSA-65 | 40.5 | 7.7 |
+| ML-DSA-87 | 47.9 | 11.7 |
+| FN-DSA-512 | 10.5 | 1.6 |
+| RSA-2048 + P-256 (components) | 35.3 | 4.5 |
+| RSA-2048 + Ed25519 (components) | 35.6 | 5.1 |
+| RSA-2048 + ML-DSA-44 (components) | 59.2 | 5.8 |
+| RSA-2048 + ML-DSA-65 (components) | 74.4 | 8.4 |
+| RSA-2048 + ML-DSA-87 (components) | 81.1 | 12.7 |
+| RSA-2048 + FN-DSA-512 (components) | 44.6 | 2.6 |
+| P-256 + ML-DSA-44 (components) | 26.3 | 8.4 |
+| P-256 + ML-DSA-65 (components) | 41.8 | 10.9 |
+| P-256 + ML-DSA-87 (components) | 50.0 | 15.3 |
+| P-256 + FN-DSA-512 (components) | 12.1 | 5.1 |
+
+Conditions: Apple M4, single thread, OpenSSL 3.6.2 invoked through an
+EVP C loop, 32-byte fixed message, 100,000 iterations per data point,
+one recorded run, excluding key generation, I/O, and CMS/X.509
+construction.  Component-combination rows execute both operations
+sequentially in one process; they are lower bounds and include no
+composite encoding or CMS/X.509 overhead.  FN-DSA-512 was measured
+through liboqs 0.15.0 rather than the OpenSSL EVP path, so its rows carry
+an additional comparability caveat.  A
+single-host, single-run measurement does not establish a general
+performance ordering.
+
+## Open Measurement Tasks
+
+The following dimensions are not yet backed by confirmed measurements
+and are deliberately recorded as open tasks rather than numbers:
+
+* CA key rollover, publication cycle, and full-repository validation
+  impact; RRDP snapshot/delta and rsync transfer impact.
+* Full-validator memory footprint.  The repeated primitive sweep records
+  process peak RSS, but this is not a repository-validation measurement.
+* HSM performance and support.
+
+
+# Changes from -00
+
+This section is to be removed before publication as an RFC.
+
+* Selected ML-DSA-65 as the PQC component of the primary experimental
+  composite suite.  The Algorithm Selection Rationale retains
+  ML-DSA-44 and ML-DSA-87 as measured alternatives.
+* Added ML-DSA-44, P-256, and Ed25519 to the comparison and added an
+  Algorithm Comparison section with a table of static sizes, measured
+  certificate and CRL sizes, and synthetic repository ratios.
+* Added a recorded 100,000-operation signing/verification measurement
+  (RSA-2048, P-256, Ed25519, ML-DSA-44/65/87, FN-DSA-512, and sequential
+  RSA/P-256 component combinations) with
+  documented conditions and caveats, an analysis of the
+  verification-dominated RP workload, and a generated mixed-tree test
+  structure with passing structural consistency checks.  Following RFC
+  style, measured values are collected in Appendix A (to be removed
+  before publication) and the document body keeps only static,
+  standards-derived parameters and qualitative observations.
+* Added an OpenSSL CMS API path with explicit SHA-512, complete
+  ML-DSA-65 ROA and manifest fixtures, an independent DER-assembly
+  cross-check, and object-level size measurements.
+* Added a repeated realistic-message-size sweep with variance, key
+  generation, and process peak-RSS observations.
+* Added an isolated repository experiment with pinned unmodified
+  Routinator, rpki-client, and FORT versions.  Each accepted the RSA
+  baseline and rejected ML-DSA-65 before signed-object validation.
+* Expanded the FN-DSA/Falcon discussion: acknowledged its size and
+  performance appeal, added standardization/implementation maturity and
+  side-channel (constant-time floating-point sampling) concerns, and
+  classified it as an additional candidate for future evaluation.  This
+  incorporates, in reworded form, a community contribution to the
+  working repository.
+* Clarified that BGPsec Router Certificates are in scope while BGPsec
+  UPDATE signing remains out of scope.
+* Defined the Certificate Signature Algorithm, Subject Public Key
+  Algorithm, and Mixed Certification Chain terms needed by the
+  mixed-tree migration procedure.
+* Unified treatment of RFC 6488 signed objects (manifest, ROA, ASPA,
+  RSC, and TAK) under one algorithm profile, without changing their
+  payloads or object-specific validation semantics.
+* Selected mixed-tree migration toward a composite suite as the intended
+  direction.  Parallel publication is retained as a test method with
+  VRP comparison, rather than as the preferred production transition.
+* Selected id-MLDSA65-ECDSA-P256-SHA512 as the primary experimental
+  Next Suite and documented the security hedge obtained when either
+  component remains secure, together with its quantum and key-reuse
+  limitations.
+* Split Implementation Status into implemented and incomplete items.
+* Strengthened Security Considerations for mixed-chain algorithm
+  confusion, unsupported validators, resource consumption, signing
+  implementations, and downgrade behavior.
+* Clarified that this document requests no IANA actions.
+* Limited Open Issues to unresolved algorithm-selection and migration
+  design questions.
+* Removed implementation-specific diagnostics and kept reproducible
+  evidence in the Implementation Status section and Appendix A.
+
+# Acknowledgements
+
+The author thanks the SIDROPS and LAMPS communities for the specifications
+and implementation work that make this experiment possible.
+
+# References
+
+## Normative References
+
+[BCP14] Best Current Practice 14, comprising RFC 2119 and RFC 8174,
+https://www.rfc-editor.org/info/bcp14.
+
+[RFC6480] Lepinski, M. and S. Kent, "An Infrastructure to Support Secure
+Internet Routing", RFC 6480, DOI 10.17487/RFC6480, February 2012.
+
+[RFC6487] Huston, G., Michaelson, G., and R. Loomans, "A Profile for X.509
+PKIX Resource Certificates", RFC 6487, DOI 10.17487/RFC6487, February
+2012.
+
+[RFC6488] Lepinski, M., Chi, A., and S. Kent, "Signed Object Template for
+the Resource Public Key Infrastructure (RPKI)", RFC 6488, DOI
+10.17487/RFC6488, February 2012.
+
+[RFC6916] Gagliano, R., Kent, S., and S. Turner, "Algorithm Agility
+Procedure for the Resource Public Key Infrastructure (RPKI)", BCP 182,
+RFC 6916, DOI 10.17487/RFC6916, April 2013.
+
+[RFC7935] Huston, G. and G. Michaelson, "The Profile for Algorithms and Key
+Sizes for Use in the Resource Public Key Infrastructure", RFC 7935, DOI
+10.17487/RFC7935, August 2016.
+
+[RFC8182] Bruijnzeels, T., Muravskiy, O., Weber, B., and R. Austein, "The
+RPKI Repository Delta Protocol (RRDP)", RFC 8182, DOI 10.17487/RFC8182,
+July 2017.
+
+[RFC9286] Austein, R., Huston, G., Kent, S., and M. Lepinski, "Manifests for
+the Resource Public Key Infrastructure (RPKI)", RFC 9286, DOI
+10.17487/RFC9286, June 2022.
+
+[RFC9582] Snijders, J., Maddison, B., Lepinski, M., Kong, D., and S. Kent,
+"A Profile for Route Origin Authorizations (ROAs)", RFC 9582, DOI
+10.17487/RFC9582, May 2024.
+
+[RFC9589] Snijders, J. and T. Harrison, "On the Use of the Cryptographic
+Message Syntax (CMS) Signing-Time Attribute in Resource Public Key
+Infrastructure (RPKI) Signed Objects", RFC 9589, DOI 10.17487/RFC9589,
+May 2024.
+
+[RFC9691] Martinez, C., Michaelson, G., Harrison, T., Bruijnzeels, T., and
+R. Austein, "A Profile for Resource Public Key Infrastructure (RPKI)
+Trust Anchor Keys (TAKs)", RFC 9691, DOI 10.17487/RFC9691, December 2024.
+
+[RFC9881] Massimo, J., Kampanakis, P., Turner, S., and B. E. Westerbaan,
+"Internet X.509 Public Key Infrastructure -- Algorithm Identifiers for
+the Module-Lattice-Based Digital Signature Algorithm (ML-DSA)", RFC 9881,
+DOI 10.17487/RFC9881, October 2025.
+
+[RFC9882] Salter, B., Raine, A., and D. Van Geest, "Use of the ML-DSA
+Signature Algorithm in the Cryptographic Message Syntax (CMS)", RFC 9882,
+DOI 10.17487/RFC9882, October 2025.
+
+[FIPS204] National Institute of Standards and Technology, "Module-Lattice-
+Based Digital Signature Standard", FIPS 204, DOI 10.6028/NIST.FIPS.204,
+August 2024.
+
+[I-D.ietf-lamps-pq-composite-sigs] Ounsworth, M., et al., "Composite
+Module-Lattice-Based Digital Signature Algorithm (ML-DSA) for use in
+X.509 Public Key Infrastructure", draft-ietf-lamps-pq-composite-sigs-19,
+Work in Progress, 21 April 2026.
+
+[I-D.ietf-lamps-cms-composite-sigs] Ounsworth, M., et al., "Composite
+Module-Lattice-Based Digital Signature Algorithm (ML-DSA) for use in
+Cryptographic Message Syntax (CMS)",
+draft-ietf-lamps-cms-composite-sigs-05, Work in Progress, 22 May 2026.
+
+## Informative References
+
+[RFC7942] Sheffer, Y. and A. Farrel, "Improving Awareness of Running Code:
+The Implementation Status Section", BCP 205, RFC 7942, DOI
+10.17487/RFC7942, July 2016.
+
+[RFC8032] Josefsson, S. and I. Liusvaara, "Edwards-Curve Digital Signature
+Algorithm (EdDSA)", RFC 8032, DOI 10.17487/RFC8032, January 2017.
+
+[RFC8209] Reynolds, M., Turner, S., and S. Kent, "A Profile for BGPsec
+Router Certificates, Certificate Revocation Lists, and Certification
+Requests", RFC 8209, DOI 10.17487/RFC8209, September 2017.
+
+[RFC8608] Turner, S. and O. Borchert, "BGPsec Algorithms, Key Formats, and
+Signature Formats", RFC 8608, DOI 10.17487/RFC8608, June 2019.
+
+[RFC9323] Snijders, J., Harrison, T., and B. Maddison, "A Profile for RPKI
+Signed Checklists (RSCs)", RFC 9323, DOI 10.17487/RFC9323, November 2022.
+
+[RFC9814] Housley, R., Fluhrer, S., Kampanakis, P., and B. Westerbaan, "Use
+of the SLH-DSA Signature Algorithm in the Cryptographic Message Syntax
+(CMS)", RFC 9814, DOI 10.17487/RFC9814, July 2025.
+
+[RFC9909] Bashiri, K., Fluhrer, S., Gazdag, S., Van Geest, D., and S.
+Kousidis, "Internet X.509 Public Key Infrastructure -- Algorithm Identifiers
+for the Stateless Hash-Based Digital Signature Algorithm (SLH-DSA)", RFC
+9909, DOI 10.17487/RFC9909, December 2025.
+
+[FIPS186-5] National Institute of Standards and Technology, "Digital
+Signature Standard (DSS)", FIPS 186-5, DOI 10.6028/NIST.FIPS.186-5,
+February 2023.
+
+[FIPS205] National Institute of Standards and Technology, "Stateless Hash-
+Based Digital Signature Standard", FIPS 205, DOI 10.6028/NIST.FIPS.205,
+August 2024.
+
+[I-D.ietf-sidrops-rpki-ccr] Snijders, J., Bakker, B., Bruijnzeels, T., and
+T. Buehler, "A Profile for Resource Public Key Infrastructure (RPKI)
+Canonical Cache Representation (CCR)", draft-ietf-sidrops-rpki-ccr-11,
+Work in Progress, 1 July 2026.
+
+[I-D.ietf-sidrops-aspa-profile] Azimov, A., Uskov, E., Bush, R., Snijders,
+J., Housley, R., and B. Maddison, "A Profile for Autonomous System
+Provider Authorization", draft-ietf-sidrops-aspa-profile-27,
+Work in Progress, 19 June 2026.
+
+[Doesburg2025] Doesburg, D., "Post-Quantum Cryptography for the RPKI",
+Master's thesis, Radboud University, 27 June 2025,
+https://www.sidnlabs.nl/en/news-and-blogs/thesis-pqc-for-the-rpki.
+
+[pqRPKI] Li, W., et al., "pqRPKI: A Practical RPKI Architecture for the
+Post-Quantum Era", arXiv:2603.06968, March 2026,
+https://arxiv.org/abs/2603.06968.
+
+[pqc-rpki-lab] Yoshikawa, T., "pqc-rpki-lab experimental harness",
+release for draft-yoshikawa-sidrops-pqc-rpki-01, 2026,
+https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-01.

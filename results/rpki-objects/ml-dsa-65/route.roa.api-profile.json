@@ -1,0 +1,23 @@
+{
+  "checks": {
+    "content_info_signed_data": true,
+    "content_type_attribute_matches": true,
+    "crls_omitted": true,
+    "der_structure": true,
+    "exactly_three_allowed_signed_attributes": true,
+    "expected_econtent_type": true,
+    "message_digest_matches": true,
+    "mldsa65_signature_algorithm_without_parameters": true,
+    "one_ee_certificate": true,
+    "one_sha512_digest_algorithm_without_parameters": true,
+    "one_signer_info": true,
+    "sha512_digest_algorithm_without_parameters": true,
+    "sid_matches_ee_ski": true,
+    "signed_data_version_3": true,
+    "signer_info_version_3": true,
+    "signing_time_present": true,
+    "unsigned_attributes_omitted": true
+  },
+  "raw_signature_valid": true,
+  "valid": true
+}

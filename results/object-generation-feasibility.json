@@ -68,6 +68,204 @@
       "status": "unsupported"
     },
     {
+      "algorithm": "P-256/SHA-256",
+      "backend": "OpenSSL CLI",
+      "bytes": 641,
+      "classification": "rfc-profiled-x509-generated",
+      "object_type": "CA certificate",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure; classical comparison algorithm, not RFC 7935",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "P-256/SHA-256",
+      "backend": "OpenSSL CLI",
+      "bytes": 587,
+      "classification": "rfc-profiled-x509-generated",
+      "object_type": "EE certificate",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure; classical comparison algorithm, not RFC 7935",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "P-256/SHA-256",
+      "backend": "OpenSSL CLI",
+      "bytes": 187,
+      "classification": "rfc-profiled-crl-generated",
+      "object_type": "CRL",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure; classical comparison algorithm, not RFC 7935",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "P-256/SHA-256",
+      "backend": "OpenSSL CLI",
+      "bytes": 903,
+      "classification": "generic-cms-generated",
+      "object_type": "CMS SignedData",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure; classical comparison algorithm, not RFC 7935",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "P-256/SHA-256",
+      "backend": "OpenSSL CLI",
+      "bytes": "",
+      "classification": "rpki-payload-generator-unavailable",
+      "object_type": "MFT",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure; classical comparison algorithm, not RFC 7935",
+      "reason": "No existing MFT/ROA payload generator was available; ASN.1 payloads were not reimplemented.",
+      "status": "unsupported"
+    },
+    {
+      "algorithm": "P-256/SHA-256",
+      "backend": "OpenSSL CLI",
+      "bytes": "",
+      "classification": "rpki-payload-generator-unavailable",
+      "object_type": "ROA",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure; classical comparison algorithm, not RFC 7935",
+      "reason": "No existing MFT/ROA payload generator was available; ASN.1 payloads were not reimplemented.",
+      "status": "unsupported"
+    },
+    {
+      "algorithm": "Ed25519",
+      "backend": "OpenSSL CLI",
+      "bytes": 578,
+      "classification": "rfc-profiled-x509-generated",
+      "object_type": "CA certificate",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure; classical comparison algorithm, not RFC 7935",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "Ed25519",
+      "backend": "OpenSSL CLI",
+      "bytes": 524,
+      "classification": "rfc-profiled-x509-generated",
+      "object_type": "EE certificate",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure; classical comparison algorithm, not RFC 7935",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "Ed25519",
+      "backend": "OpenSSL CLI",
+      "bytes": 170,
+      "classification": "rfc-profiled-crl-generated",
+      "object_type": "CRL",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure; classical comparison algorithm, not RFC 7935",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "Ed25519",
+      "backend": "OpenSSL CLI",
+      "bytes": "",
+      "classification": "cms-pure-signature-unsupported",
+      "object_type": "CMS SignedData",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure; classical comparison algorithm, not RFC 7935",
+      "reason": "805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=1087",
+      "status": "unsupported"
+    },
+    {
+      "algorithm": "Ed25519",
+      "backend": "OpenSSL CLI",
+      "bytes": "",
+      "classification": "cms-signing-unavailable",
+      "object_type": "MFT",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure; classical comparison algorithm, not RFC 7935",
+      "reason": "RFC 6488 object generation cannot proceed because CMS signing failed.",
+      "status": "unsupported"
+    },
+    {
+      "algorithm": "Ed25519",
+      "backend": "OpenSSL CLI",
+      "bytes": "",
+      "classification": "cms-signing-unavailable",
+      "object_type": "ROA",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure; classical comparison algorithm, not RFC 7935",
+      "reason": "RFC 6488 object generation cannot proceed because CMS signing failed.",
+      "status": "unsupported"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "backend": "OpenSSL CLI",
+      "bytes": 4238,
+      "classification": "rfc-profiled-x509-generated",
+      "object_type": "CA certificate",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 + RFC 9881",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "backend": "OpenSSL CLI",
+      "bytes": 4184,
+      "classification": "rfc-profiled-x509-generated",
+      "object_type": "EE certificate",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 + RFC 9881",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "backend": "OpenSSL CLI",
+      "bytes": 2541,
+      "classification": "rfc-profiled-crl-generated",
+      "object_type": "CRL",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 + RFC 9881",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "backend": "OpenSSL CLI",
+      "bytes": "",
+      "classification": "cms-pure-signature-unsupported",
+      "object_type": "CMS SignedData",
+      "private_key_persisted": false,
+      "profile": "RFC 6488 + RFC 9882",
+      "reason": "805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
+      "status": "unsupported"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "backend": "OpenSSL CLI",
+      "bytes": "",
+      "classification": "cms-signing-unavailable",
+      "object_type": "MFT",
+      "private_key_persisted": false,
+      "profile": "RFC 6488 + RFC 9882",
+      "reason": "RFC 6488 object generation cannot proceed because CMS signing failed.",
+      "status": "unsupported"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "backend": "OpenSSL CLI",
+      "bytes": "",
+      "classification": "cms-signing-unavailable",
+      "object_type": "ROA",
+      "private_key_persisted": false,
+      "profile": "RFC 6488 + RFC 9882",
+      "reason": "RFC 6488 object generation cannot proceed because CMS signing failed.",
+      "status": "unsupported"
+    },
+    {
       "algorithm": "ML-DSA-65",
       "backend": "OpenSSL CLI",
       "bytes": 5767,
@@ -108,7 +306,7 @@
       "object_type": "CMS SignedData",
       "private_key_persisted": false,
       "profile": "RFC 6488 + RFC 9882",
-      "reason": "80DE56FB01000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
+      "reason": "805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
       "status": "unsupported"
     },
     {
@@ -174,7 +372,7 @@
       "object_type": "CMS SignedData",
       "private_key_persisted": false,
       "profile": "RFC 6488 + RFC 9882",
-      "reason": "80DE56FB01000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
+      "reason": "805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
       "status": "unsupported"
     },
     {
@@ -240,7 +438,7 @@
       "object_type": "CMS SignedData",
       "private_key_persisted": false,
       "profile": "RFC 6488 + RFC 9814",
-      "reason": "80DE56FB01000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
+      "reason": "805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
       "status": "unsupported"
     },
     {
@@ -306,7 +504,7 @@
       "object_type": "CMS SignedData",
       "private_key_persisted": false,
       "profile": "RFC 6488 + RFC 9814",
-      "reason": "80DE56FB01000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
+      "reason": "805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
       "status": "unsupported"
     },
     {
@@ -328,6 +526,72 @@
       "object_type": "ROA",
       "private_key_persisted": false,
       "profile": "RFC 6488 + RFC 9814",
+      "reason": "RFC 6488 object generation cannot proceed because CMS signing failed.",
+      "status": "unsupported"
+    },
+    {
+      "algorithm": "FN-DSA-512 (Falcon-512)",
+      "backend": "OpenSSL CLI + oqs-provider",
+      "bytes": 2048,
+      "classification": "rfc-profiled-x509-generated",
+      "object_type": "CA certificate",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure with oqs-provider experimental Falcon OID; no final FN-DSA PKIX profile",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "FN-DSA-512 (Falcon-512)",
+      "backend": "OpenSSL CLI + oqs-provider",
+      "bytes": 1991,
+      "classification": "rfc-profiled-x509-generated",
+      "object_type": "EE certificate",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure with oqs-provider experimental Falcon OID; no final FN-DSA PKIX profile",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "FN-DSA-512 (Falcon-512)",
+      "backend": "OpenSSL CLI + oqs-provider",
+      "bytes": 764,
+      "classification": "rfc-profiled-crl-generated",
+      "object_type": "CRL",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure with oqs-provider experimental Falcon OID; no final FN-DSA PKIX profile",
+      "reason": "",
+      "status": "confirmed"
+    },
+    {
+      "algorithm": "FN-DSA-512 (Falcon-512)",
+      "backend": "OpenSSL CLI + oqs-provider",
+      "bytes": "",
+      "classification": "cms-pure-signature-unsupported",
+      "object_type": "CMS SignedData",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure with oqs-provider experimental Falcon OID; no final FN-DSA PKIX profile",
+      "reason": "805D41F101000000:error:17000080:CMS routines:CMS_add1_signer:no default digest:crypto/cms/cms_sd.c:405:pkey nid=-1",
+      "status": "unsupported"
+    },
+    {
+      "algorithm": "FN-DSA-512 (Falcon-512)",
+      "backend": "OpenSSL CLI + oqs-provider",
+      "bytes": "",
+      "classification": "cms-signing-unavailable",
+      "object_type": "MFT",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure with oqs-provider experimental Falcon OID; no final FN-DSA PKIX profile",
+      "reason": "RFC 6488 object generation cannot proceed because CMS signing failed.",
+      "status": "unsupported"
+    },
+    {
+      "algorithm": "FN-DSA-512 (Falcon-512)",
+      "backend": "OpenSSL CLI + oqs-provider",
+      "bytes": "",
+      "classification": "cms-signing-unavailable",
+      "object_type": "ROA",
+      "private_key_persisted": false,
+      "profile": "RFC 6487 structure with oqs-provider experimental Falcon OID; no final FN-DSA PKIX profile",
       "reason": "RFC 6488 object generation cannot proceed because CMS signing failed.",
       "status": "unsupported"
     }

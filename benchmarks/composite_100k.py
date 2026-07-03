@@ -124,12 +124,14 @@ def main() -> None:
     (RESULTS / "composite-100k.md").write_text(
         "# Exact 100,000-Operation Composite Component Benchmark\n\n"
         "> EXPERIMENTAL / NOT FOR PRODUCTION\n\n"
-        "Each operation signs the same 32-byte message with both components sequentially. "
-        "Verification succeeds only when both component signatures verify. The byte count is the sum of "
+        "Each combination signs the same 32-byte message with both components sequentially; the standalone "
+        "FN-DSA-512 row signs it once. Verification of a combination succeeds only when both component "
+        "signatures verify. The byte count is the sum of "
         "the largest component signatures observed and excludes composite ASN.1 encoding. This is not an "
         "implementation of the LAMPS composite signature format.\n\n" + table +
         "\n\n## Interpretation\n\n"
-        "P-256+Falcon-512 has the smallest component-signature total, but Falcon signing dominates "
+        "FN-DSA-512 is reported both alone and with RSA-2048 and P-256. P-256+Falcon-512 has the smallest "
+        "two-component signature total, but Falcon signing dominates "
         "its runtime. Within each ML-DSA parameter set, replacing RSA-2048 with P-256 reduces component "
         "key and signature bytes and reduces signing time, while RSA-2048 provides faster verification "
         "in this implementation. Larger ML-DSA parameter sets progressively increase both runtime and "
