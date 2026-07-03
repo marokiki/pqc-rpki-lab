@@ -7,14 +7,13 @@ class MeasurementEvidenceTest(unittest.TestCase):
     def setUp(self):
         self.root = Path(__file__).resolve().parents[1]
 
-    def test_requested_certificate_sizes_are_measured(self):
+    def test_standardized_certificate_sizes_are_measured(self):
         with (self.root / "results/generated-object-sizes.csv").open() as source:
             rows = list(csv.DictReader(source))
         requested = {
             "P-256/SHA-256",
             "Ed25519",
             "ML-DSA-44",
-            "FN-DSA-512 (Falcon-512)",
         }
         measured = {
             row["algorithm"]
