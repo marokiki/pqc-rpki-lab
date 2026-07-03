@@ -49,7 +49,7 @@
       <name>Scope</name>
       <t>This document applies to RPKI resource certificates, CRLs, certification requests, BGPsec Router Certificates <xref target="RFC8209" />, and the CMS signed objects that reuse the RPKI signed object template <xref target="RFC6488" />, including manifests <xref target="RFC9286" />, ROAs <xref target="RFC9582" />, Signed Checklists (RSC) <xref target="RFC9323" />, ASPA objects <xref target="I-D.ietf-sidrops-aspa-profile" />, and Trust Anchor Key (TAK) objects <xref target="RFC9691" />.  The CMS signed objects are treated as a single signed-object algorithm profile; see the Signed Object Coverage section.</t>
       <t>This document covers the RPKI signatures on BGPsec Router Certificates, but does not define or change the BGPsec UPDATE signature algorithm specified by <xref target="RFC8608" />.</t>
-      <t>This document does not specify changes to RTR, TAL formats, RRDP <xref target="RFC8182" />, rsync, or the RPKI Certificate Policy.  These topics may require companion work after the basic certificate and CMS profile is interoperable.</t>
+      <t>This document does not specify changes to RTR, TAL formats, RRDP <xref target="RFC8182" />, rsync, the RPKI Certificate Policy, or the BPKI used to authenticate provisioning and publication relationships established through <xref target="RFC8183" />.  Readiness for BPKI trust-anchor key rollover is nevertheless a migration dependency and is recorded as an Open Issue.</t>
     </section>
     <section anchor="design-goals">
       <name>Design Goals</name>
@@ -235,7 +235,9 @@
       <name>Manifests and Repository Processing</name>
       <section anchor="manifest-scope-during-migration">
         <name>Manifest Scope During Migration</name>
-        <t>A manifest covers the products published by one CA at one publication point, as specified by <xref target="RFC9286" />.  The manifest uses its own EE certificate and key.  Other RPKI signed objects use their own EE certificates and keys, while certificates and CRLs listed on a manifest are not CMS signed objects.  Mixed Certification Chains and composite signatures do not change these relationships.  This document therefore introduces no additional key-consistency requirement between a manifest and its listed products.</t>
+        <t>A manifest covers the products of one CA instance at one publication point, as specified by <xref target="RFC9286" />.  The manifest is signed with a one-time-use EE certificate issued by that CA.  Its fileList contains the certificates issued and published by that CA, the CA's current CRL, and signed objects whose embedded EE certificates were issued by that CA.</t>
+        <t>The relevant RP check is therefore issuer and publication-scope consistency, not equality between the manifest signing key and product keys.  An RP validates the manifest EE certificate under the associated CA, verifies each listed certificate, CRL, or signed object under that same CA instance as required by its object profile, and checks the publication point, file name, and file hash according to <xref target="RFC9286" />.  A shared publication point can contain products from multiple CA instances during key rollover, but each manifest covers only its associated CA instance.</t>
+        <t>Mixed Certification Chains and composite signatures do not change these checks.  This document therefore introduces no additional requirement for the manifest EE key to equal a key used by a listed product, and it does not weaken the existing RP checks that bind every listed product to the manifest's CA scope.</t>
       </section>
       <section anchor="parallel-publication-mechanics">
         <name>Parallel Publication Mechanics</name>
@@ -402,6 +404,20 @@
           </li>
           <li>
             <t>How to define a transition timetable and readiness metrics, and whether that work should update or replace RFC 6916.</t>
+          </li>
+          <li>
+            <t>How provisioning and publication software will roll the BPKI trust anchors and EE certificates used for existing relationships, including relationships established through <xref target="RFC8183" />, before those protocols depend on a PQC algorithm.  The procedure needs overlap, rollback, and recovery behavior and can be prepared independently of the final RPKI object-signature algorithm choice.</t>
+          </li>
+        </ul>
+      </section>
+      <section anchor="operational-readiness">
+        <name>Operational Readiness</name>
+        <ul>
+          <li>
+            <t>Which PQC signature algorithms RIR CA teams and their HSM vendors plan to support, on what firmware, API, certification, and deployment timelines.</t>
+          </li>
+          <li>
+            <t>Whether claimed HSM support uses a general-purpose CPU implementation within the HSM boundary or native hardware or FPGA acceleration, and how those implementation choices affect key generation, signing latency, throughput, side-channel properties, and operational capacity.</t>
           </li>
         </ul>
       </section>
@@ -698,6 +714,18 @@
         </front>
         <seriesInfo name="RFC" value="8032" />
         <seriesInfo name="DOI" value="10.17487/RFC8032" />
+      </reference>
+      <reference anchor="RFC8183" target="https://www.rfc-editor.org/info/rfc8183">
+        <front>
+          <title>An Out-of-Band Setup Protocol for Resource Public Key Infrastructure (RPKI) Production Services</title>
+          <author fullname="R. Austein" initials="R." surname="Austein" />
+          <date month="July" year="2017" />
+          <abstract>
+            <t>This document describes an out-of-band protocol for setting up RPKI provisioning and publication protocol relationships.</t>
+          </abstract>
+        </front>
+        <seriesInfo name="RFC" value="8183" />
+        <seriesInfo name="DOI" value="10.17487/RFC8183" />
       </reference>
       <reference anchor="RFC8209" target="https://www.rfc-editor.org/info/rfc8209">
         <front>
@@ -1131,61 +1159,40 @@
       <t>This section is to be removed before publication as an RFC.</t>
       <ul>
         <li>
-          <t>Selected ML-DSA-65 as the PQC component of the primary experimental composite suite.  The Algorithm Selection Rationale retains ML-DSA-44 and ML-DSA-87 as measured alternatives.</t>
+          <t>Changed the primary experimental Next Suite from pure ML-DSA-65 to the composite id-MLDSA65-ECDSA-P256-SHA512 signature suite.</t>
         </li>
         <li>
-          <t>Added ML-DSA-44, P-256, and Ed25519 to the comparison and added an Algorithm Comparison section with a table of static sizes, measured certificate and CRL sizes, and synthetic repository ratios.</t>
+          <t>Added comparison material for ML-DSA-44, ML-DSA-87, ECDSA P-256, Ed25519, FN-DSA/Falcon, and SLH-DSA, including preliminary size and performance measurements.</t>
         </li>
         <li>
-          <t>Added a recorded 100,000-operation signing/verification measurement (RSA-2048, P-256, Ed25519, ML-DSA-44/65/87, FN-DSA-512, and sequential RSA/P-256 component combinations) with documented conditions and caveats, an analysis of the verification-dominated RP workload, and a generated mixed-tree test structure with passing structural consistency checks.  Following RFC style, measured values are collected in Appendix A (to be removed before publication) and the document body keeps only static, standards-derived parameters and qualitative observations.</t>
+          <t>Reworked the migration strategy from a primarily parallel-publication model to a mixed-tree migration model toward a composite signature suite.</t>
         </li>
         <li>
-          <t>Added an OpenSSL CMS API path with explicit SHA-512, complete ML-DSA-65 ROA and manifest fixtures, an independent DER-assembly cross-check, and object-level size measurements.</t>
+          <t>Clarified that BGPsec Router Certificates are in scope, while BGPsec UPDATE signatures are out of scope.</t>
         </li>
         <li>
-          <t>Added a repeated realistic-message-size sweep with variance, key generation, and process peak-RSS observations.</t>
+          <t>Unified the treatment of RPKI signed objects covered by RFC 6488, including manifests, ROAs, ASPA objects, RSCs, and TAK objects.</t>
         </li>
         <li>
-          <t>Added an isolated repository experiment with pinned unmodified Routinator, rpki-client, and FORT versions.  Each accepted the RSA baseline and rejected ML-DSA-65 before signed-object validation.</t>
+          <t>Added terminology for Certificate Signature Algorithm, Subject Public Key Algorithm, and Mixed Certification Chain.</t>
         </li>
         <li>
-          <t>Expanded the FN-DSA/Falcon discussion: acknowledged its size and performance appeal, added standardization/implementation maturity and side-channel (constant-time floating-point sampling) concerns, and classified it as an additional candidate for future evaluation.  This incorporates, in reworded form, a community contribution to the working repository.</t>
+          <t>Expanded the security considerations for composite signatures, mixed-chain validation, downgrade behavior, unsupported validators, resource consumption, and implementation risks.</t>
         </li>
         <li>
-          <t>Clarified that BGPsec Router Certificates are in scope while BGPsec UPDATE signing remains out of scope.</t>
-        </li>
-        <li>
-          <t>Defined the Certificate Signature Algorithm, Subject Public Key Algorithm, and Mixed Certification Chain terms needed by the mixed-tree migration procedure.</t>
-        </li>
-        <li>
-          <t>Unified treatment of RFC 6488 signed objects (manifest, ROA, ASPA, RSC, and TAK) under one algorithm profile, without changing their payloads or object-specific validation semantics.</t>
-        </li>
-        <li>
-          <t>Selected mixed-tree migration toward a composite suite as the intended direction.  Parallel publication is retained as a test method with VRP comparison, rather than as the preferred production transition.</t>
-        </li>
-        <li>
-          <t>Selected id-MLDSA65-ECDSA-P256-SHA512 as the primary experimental Next Suite and documented the security hedge obtained when either component remains secure, together with its quantum and key-reuse limitations.</t>
-        </li>
-        <li>
-          <t>Split Implementation Status into implemented and incomplete items.</t>
-        </li>
-        <li>
-          <t>Strengthened Security Considerations for mixed-chain algorithm confusion, unsupported validators, resource consumption, signing implementations, and downgrade behavior.</t>
+          <t>Added Implementation Status and Appendix A with preliminary implementation and measurement results.</t>
         </li>
         <li>
           <t>Clarified that this document requests no IANA actions.</t>
         </li>
         <li>
-          <t>Limited Open Issues to unresolved algorithm-selection and migration design questions.</t>
-        </li>
-        <li>
-          <t>Removed implementation-specific diagnostics and kept reproducible evidence in the Implementation Status section and Appendix A.</t>
+          <t>Updated Open Issues to focus on unresolved algorithm-selection, migration-design, and operational-readiness questions.</t>
         </li>
       </ul>
     </section>
     <section anchor="acknowledgements" numbered="false">
       <name>Acknowledgements</name>
-      <t>The author thanks the SIDROPS and LAMPS communities for the specifications and implementation work that make this experiment possible.</t>
+      <t>The author thanks Job Snijders, Dirk Doesburg, Loganaden Velvindron, and Ties de Kock for their reviews and comments.  The author also thanks the SIDROPS and LAMPS communities for the specifications and implementation work that make this experiment possible.</t>
     </section>
   </back>
 </rfc>

@@ -20,6 +20,7 @@ class DraftSubmissionTest(unittest.TestCase):
         )
         self.assertIsNotNone(self.root_01.find('.//xref[@target="RFC9882"]'))
         self.assertIsNotNone(self.root_01.find('.//xref[@target="RFC9691"]'))
+        self.assertIsNotNone(self.root_01.find('.//xref[@target="RFC8183"]'))
         self.assertIsNotNone(self.root_01.find('.//section[@anchor="implementation-status"]'))
         text = " ".join(self.root_01.itertext())
         self.assertIn("id-MLDSA65-ECDSA-P256-SHA512", text)
@@ -44,6 +45,20 @@ class DraftSubmissionTest(unittest.TestCase):
         self.assertEqual(len(tables[3].findall("./tbody/tr")), 17)
         acknowledgements = self.root_01.find('.//section[@anchor="acknowledgements"]')
         self.assertEqual(acknowledgements.get("numbered"), "false")
+        acknowledgement_text = " ".join(acknowledgements.itertext())
+        for reviewer in (
+            "Job Snijders",
+            "Dirk Doesburg",
+            "Loganaden Velvindron",
+            "Ties de Kock",
+        ):
+            self.assertIn(reviewer, acknowledgement_text)
+
+    def test_draft_01_records_reviewer_driven_operational_issues(self):
+        text = " ".join(self.root_01.itertext())
+        self.assertIn("issuer and publication-scope consistency", text)
+        self.assertIn("BPKI trust-anchor key rollover", text)
+        self.assertIn("general-purpose CPU implementation", text)
 
     def test_draft_01_distinguishes_issuer_signature_from_subject_spki(self):
         text = " ".join(self.root_01.itertext())

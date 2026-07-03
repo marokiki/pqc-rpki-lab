@@ -1,0 +1,12 @@
+<reference anchor="RFC8183" target="https://www.rfc-editor.org/info/rfc8183">
+  <front>
+    <title>An Out-of-Band Setup Protocol for Resource Public Key Infrastructure (RPKI) Production Services</title>
+    <author fullname="R. Austein" initials="R." surname="Austein"/>
+    <date month="July" year="2017"/>
+    <abstract>
+      <t>This document describes an out-of-band protocol for setting up RPKI provisioning and publication protocol relationships.</t>
+    </abstract>
+  </front>
+  <seriesInfo name="RFC" value="8183"/>
+  <seriesInfo name="DOI" value="10.17487/RFC8183"/>
+</reference>

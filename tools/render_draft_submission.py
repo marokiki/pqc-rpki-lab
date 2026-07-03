@@ -391,7 +391,7 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
     informative = ET.SubElement(back_el, "references")
     ET.SubElement(informative, "name").text = "Informative References"
     for number in (
-        "7942", "8032", "8209", "8608", "9323", "9814", "9909",
+        "7942", "8032", "8183", "8209", "8608", "9323", "9814", "9909",
     ):
         add_bibxml(informative, f"reference.RFC.{number}.xml")
     for name in ("ietf-sidrops-rpki-ccr", "ietf-sidrops-aspa-profile"):

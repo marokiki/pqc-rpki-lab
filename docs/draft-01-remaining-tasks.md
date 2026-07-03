@@ -23,15 +23,21 @@
    algorithms, composite EE issuance, CMS signing, and publication.
 4. Generate a complete RSA-to-composite mixed-tree repository and measure
    whether unsupported RPs drop only the child subtree.
+5. Define and test BPKI trust-anchor and EE-certificate rollover for existing
+   provisioning and publication relationships, including overlap, rollback,
+   and recovery behavior for RFC 8183-based setup.
 
 ## Additional evidence after -01
 
 1. Add complete ML-DSA-44/87 and SLH-DSA CMS fixtures where provider support
    permits.
-2. Measure real RRDP snapshots/deltas, rsync transfer, full-validator memory,
-   and HSM support.
-3. Compare real CCR `ROAPayloadState.hash` output across suites.
-4. Measure complete composite encodings rather than sequential component
+2. Measure real RRDP snapshots/deltas, rsync transfer, and full-validator
+   memory.
+3. Obtain PQC support roadmaps from RIR CA teams and HSM vendors, distinguish
+   general-purpose CPU implementations from native hardware or FPGA support,
+   and measure signing latency, throughput, and key-generation behavior.
+4. Compare real CCR `ROAPayloadState.hash` output across suites.
+5. Measure complete composite encodings rather than sequential component
    lower bounds.
 
 The first section is a posting gate. The implementation and additional
