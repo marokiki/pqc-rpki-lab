@@ -1147,6 +1147,12 @@ Internet-Draft                PQC for RPKI                     July 2026
               DOI 10.17487/RFC8182, July 2017,
               <https://www.rfc-editor.org/info/rfc8182>.
 
+   [RFC8209]  Reynolds, M., Turner, S., and S. Kent, "A Profile for
+              BGPsec Router Certificates, Certificate Revocation Lists,
+              and Certification Requests", RFC 8209,
+              DOI 10.17487/RFC8209, September 2017,
+              <https://www.rfc-editor.org/info/rfc8209>.
+
    [RFC9286]  Austein, R., Huston, G., Kent, S., and M. Lepinski,
               "Manifests for the Resource Public Key Infrastructure
               (RPKI)", RFC 9286, DOI 10.17487/RFC9286, June 2022,
@@ -1163,12 +1169,6 @@ Internet-Draft                PQC for RPKI                     July 2026
               Objects", RFC 9589, DOI 10.17487/RFC9589, May 2024,
               <https://www.rfc-editor.org/info/rfc9589>.
 
-   [RFC9691]  Martinez, C., Michaelson, G., Harrison, T., Bruijnzeels,
-              T., and R. Austein, "A Profile for Resource Public Key
-              Infrastructure (RPKI) Trust Anchor Keys (TAKs)", RFC 9691,
-              DOI 10.17487/RFC9691, December 2024,
-              <https://www.rfc-editor.org/info/rfc9691>.
-
 
 
 
@@ -1177,6 +1177,12 @@ Yoshikawa                Expires 5 January 2027                [Page 21]
 
 Internet-Draft                PQC for RPKI                     July 2026
 
+
+   [RFC9691]  Martinez, C., Michaelson, G., Harrison, T., Bruijnzeels,
+              T., and R. Austein, "A Profile for Resource Public Key
+              Infrastructure (RPKI) Trust Anchor Keys (TAKs)", RFC 9691,
+              DOI 10.17487/RFC9691, December 2024,
+              <https://www.rfc-editor.org/info/rfc9691>.
 
    [RFC9881]  Massimo, J., Kampanakis, P., Turner, S., and B. E.
               Westerbaan, "Internet X.509 Public Key Infrastructure --
@@ -1219,12 +1225,6 @@ Internet-Draft                PQC for RPKI                     July 2026
               RFC 7942, DOI 10.17487/RFC7942, July 2016,
               <https://www.rfc-editor.org/info/rfc7942>.
 
-   [RFC8032]  Josefsson, S. and I. Liusvaara, "Edwards-Curve Digital
-              Signature Algorithm (EdDSA)", RFC 8032,
-              DOI 10.17487/RFC8032, January 2017,
-              <https://www.rfc-editor.org/info/rfc8032>.
-
-
 
 
 
@@ -1234,16 +1234,15 @@ Yoshikawa                Expires 5 January 2027                [Page 22]
 Internet-Draft                PQC for RPKI                     July 2026
 
 
+   [RFC8032]  Josefsson, S. and I. Liusvaara, "Edwards-Curve Digital
+              Signature Algorithm (EdDSA)", RFC 8032,
+              DOI 10.17487/RFC8032, January 2017,
+              <https://www.rfc-editor.org/info/rfc8032>.
+
    [RFC8183]  Austein, R., "An Out-of-Band Setup Protocol for Resource
               Public Key Infrastructure (RPKI) Production Services",
               RFC 8183, DOI 10.17487/RFC8183, July 2017,
               <https://www.rfc-editor.org/info/rfc8183>.
-
-   [RFC8209]  Reynolds, M., Turner, S., and S. Kent, "A Profile for
-              BGPsec Router Certificates, Certificate Revocation Lists,
-              and Certification Requests", RFC 8209,
-              DOI 10.17487/RFC8209, September 2017,
-              <https://www.rfc-editor.org/info/rfc8209>.
 
    [RFC8608]  Turner, S. and O. Borchert, "BGPsec Algorithms, Key
               Formats, and Signature Formats", RFC 8608,
@@ -1276,20 +1275,6 @@ Internet-Draft                PQC for RPKI                     July 2026
               2026, <https://datatracker.ietf.org/doc/html/draft-ietf-
               sidrops-rpki-ccr-11>.
 
-
-
-
-
-
-
-
-
-
-Yoshikawa                Expires 5 January 2027                [Page 23]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
    [I-D.ietf-sidrops-aspa-profile]
               Snijders, J., Azimov, A., Uskov, E., Bush, R., Housley,
               R., and B. Maddison, "A Profile for Autonomous System
@@ -1297,6 +1282,13 @@ Internet-Draft                PQC for RPKI                     July 2026
               draft-ietf-sidrops-aspa-profile-27, 19 June 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-
               aspa-profile-27>.
+
+
+
+Yoshikawa                Expires 5 January 2027                [Page 23]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
 
    [FIPS186-5]
               National Institute of Standards and Technology, "Digital
@@ -1335,6 +1327,14 @@ A.1.  Measured Certificate and CRL Sizes
    RFC 6487-profiled certificates (including RFC 3779 resource
    extensions) and CRLs generated with the OpenSSL 3.6.2 default
    provider:
+
+
+
+
+
+
+
+
 
 
 

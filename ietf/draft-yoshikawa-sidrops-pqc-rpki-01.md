@@ -955,6 +955,10 @@ Sizes for Use in the Resource Public Key Infrastructure", RFC 7935, DOI
 RPKI Repository Delta Protocol (RRDP)", RFC 8182, DOI 10.17487/RFC8182,
 July 2017.
 
+[RFC8209] Reynolds, M., Turner, S., and S. Kent, "A Profile for BGPsec
+Router Certificates, Certificate Revocation Lists, and Certification
+Requests", RFC 8209, DOI 10.17487/RFC8209, September 2017.
+
 [RFC9286] Austein, R., Huston, G., Kent, S., and M. Lepinski, "Manifests for
 the Resource Public Key Infrastructure (RPKI)", RFC 9286, DOI
 10.17487/RFC9286, June 2022.
@@ -1007,10 +1011,6 @@ Algorithm (EdDSA)", RFC 8032, DOI 10.17487/RFC8032, January 2017.
 [RFC8183] Austein, R., "An Out-of-Band Setup Protocol for Resource Public
 Key Infrastructure (RPKI) Production Services", RFC 8183, DOI
 10.17487/RFC8183, July 2017.
-
-[RFC8209] Reynolds, M., Turner, S., and S. Kent, "A Profile for BGPsec
-Router Certificates, Certificate Revocation Lists, and Certification
-Requests", RFC 8209, DOI 10.17487/RFC8209, September 2017.
 
 [RFC8608] Turner, S. and O. Borchert, "BGPsec Algorithms, Key Formats, and
 Signature Formats", RFC 8608, DOI 10.17487/RFC8608, June 2019.

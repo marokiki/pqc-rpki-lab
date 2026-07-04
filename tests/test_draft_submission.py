@@ -60,6 +60,21 @@ class DraftSubmissionTest(unittest.TestCase):
         self.assertIn("BPKI trust-anchor key rollover", text)
         self.assertIn("general-purpose CPU implementation", text)
 
+    def test_rfc8209_is_normative(self):
+        reference_sections = self.root_01.findall("./back/references")
+        normative = next(
+            section
+            for section in reference_sections
+            if section.findtext("name") == "Normative References"
+        )
+        informative = next(
+            section
+            for section in reference_sections
+            if section.findtext("name") == "Informative References"
+        )
+        self.assertIsNotNone(normative.find('./reference[@anchor="RFC8209"]'))
+        self.assertIsNone(informative.find('./reference[@anchor="RFC8209"]'))
+
     def test_draft_01_distinguishes_issuer_signature_from_subject_spki(self):
         text = " ".join(self.root_01.itertext())
         self.assertIn(

@@ -368,7 +368,7 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
     for number in ("2119", "8174"):
         add_bibxml(bcp14, f"reference.RFC.{number}.xml")
     for number in (
-        "6480", "6487", "6488", "6916", "7935", "8182",
+        "6480", "6487", "6488", "6916", "7935", "8182", "8209",
         "9286", "9582", "9589", "9691", "9881", "9882",
     ):
         add_bibxml(normative, f"reference.RFC.{number}.xml")
@@ -391,7 +391,7 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
     informative = ET.SubElement(back_el, "references")
     ET.SubElement(informative, "name").text = "Informative References"
     for number in (
-        "7942", "8032", "8183", "8209", "8608", "9323", "9814", "9909",
+        "7942", "8032", "8183", "8608", "9323", "9814", "9909",
     ):
         add_bibxml(informative, f"reference.RFC.{number}.xml")
     for name in ("ietf-sidrops-rpki-ccr", "ietf-sidrops-aspa-profile"):
