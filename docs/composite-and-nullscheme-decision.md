@@ -21,7 +21,9 @@ Operational concerns:
 
 ## Composite signature track
 
-Composite ML-DSA for X.509 and CMS is relevant because it can bind classical and PQC signatures inside one object. This may reduce branch consistency problems, but it introduces new RPKI questions:
+Composite ML-DSA raw signing and verification are implemented against `draft-ietf-lamps-pq-composite-sigs-19`. The implementation covers the Draft-19 message representative, ML-DSA context binding, both component operations, raw public-key and signature concatenation, and all-component verification. The measured variants are ML-DSA-44 with P-256, ML-DSA-65 with P-256, and ML-DSA-87 with P-384. Draft-19 does not define ML-DSA-87 with P-256.
+
+The raw implementation does not yet define an RPKI X.509/CMS profile or demonstrate validator interoperability. Composite may reduce branch consistency problems, but it introduces RPKI questions:
 
 - Can legacy RPs parse or cleanly reject composite objects?
 - Does composite reduce or increase total repository size compared with parallel publication?
@@ -29,7 +31,7 @@ Composite ML-DSA for X.509 and CMS is relevant because it can bind classical and
 - Is a composite signature profile stable enough for RPKI Standards Track dependency?
 - Does composite complicate CA key management and rollover?
 
-Decision status: `future work`, not mainline for draft-00.
+Measured results and reproduction commands are in `results/draft-composite-2026-07/`. Decision status remains `separate analysis track`; the raw construction is implemented, while RPKI profiling and interoperability remain future work.
 
 ## Null Scheme track
 
@@ -48,5 +50,5 @@ The next draft revision should include a non-normative decision matrix comparing
 | RSA only | works | none | baseline | none | existing RFCs |
 | Parallel RSA/PQC | works for RSA branch | yes for PQC-aware RPs | high | high unless equivalence checked | RPKI PQC profile |
 | PQC only | fails for legacy RPs | yes | medium/high | low | full migration required |
-| Composite | likely unsupported by legacy RPs | hybrid | unknown | lower branch risk | LAMPS composite + RPKI profile |
+| Composite | likely unsupported by legacy RPs | hybrid | 3.16x, 4.09x, or 5.40x in the first-order raw-size model | lower branch risk | LAMPS composite + RPKI profile |
 | Null Scheme-like | unknown | depends on design | potentially lower | unknown | new SIDROPS work |

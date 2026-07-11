@@ -40,6 +40,22 @@ class MeasurementEvidenceTest(unittest.TestCase):
             self.assertEqual(rows[name]["status"], "confirmed", name)
             self.assertEqual(int(rows[name]["iterations"]), 100_000, name)
 
+    def test_draft_19_composite_variants_have_100k_results(self):
+        path = self.root / "results/draft-composite-2026-07/draft-composite-100k.csv"
+        with path.open() as source:
+            rows = {row["variant"]: row for row in csv.DictReader(source)}
+        requested = {
+            "ML-DSA-44 + ECDSA P-256",
+            "ML-DSA-65 + ECDSA P-256",
+            "ML-DSA-87 + ECDSA P-384",
+        }
+        self.assertEqual(set(rows), requested)
+        for name in requested:
+            self.assertEqual(rows[name]["status"], "confirmed", name)
+            self.assertEqual(int(rows[name]["iterations"]), 100_000, name)
+            self.assertGreater(float(rows[name]["sign_seconds"]), 0, name)
+            self.assertGreater(float(rows[name]["verify_seconds"]), 0, name)
+
     def test_draft_contains_measured_values_without_tbd(self):
         draft = (
             self.root / "ietf/draft-yoshikawa-sidrops-pqc-rpki-01.md"

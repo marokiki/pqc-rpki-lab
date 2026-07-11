@@ -1,0 +1,4 @@
+variant,iterations,sign_seconds,verify_seconds,public_key_bytes,signature_bytes_min,signature_bytes_max,signature_bytes_mean
+ML-DSA-44 + ECDSA P-256,100000,26.049569,8.300573,1377,2488,2492,2491.000
+ML-DSA-65 + ECDSA P-256,100000,45.611158,11.933963,2017,3377,3381,3379.994
+ML-DSA-87 + ECDSA P-384,100000,59.410493,32.772383,2689,4727,4731,4729.998

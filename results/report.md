@@ -261,7 +261,7 @@ These rows execute both component operations and require both verifications to p
 | RSA-2048+ML-DSA-65 | 1270370 | 4.3125 | 1422814 |
 | P-256+ML-DSA-65 | 1205500 | 4.0923 | 1350160 |
 | RSA-2048+ML-DSA-87 | 1643910 | 5.5805 | 1841179 |
-| P-256+ML-DSA-87 | 1579040 | 5.3603 | 1768525 |
+| P-384+ML-DSA-87 | 1589920 | 5.3972 | 1780710 |
 | P-256+Falcon-512 | 481560 | 1.6347 | 539347 |
 
 ## Validator capability

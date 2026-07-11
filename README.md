@@ -122,6 +122,17 @@ make composite-100k
 This requires both component signatures to verify, but does not implement
 the LAMPS composite ASN.1/OID format.
 
+Run the Draft-19 raw Composite ML-DSA benchmark separately with:
+
+```sh
+make draft-composite-100k
+```
+
+This implements the message representative, ML-DSA context binding, raw key
+and signature concatenation, and all-component verification from
+`draft-ietf-lamps-pq-composite-sigs-19`. It does not implement an RPKI-specific
+X.509/CMS profile or validator interoperability.
+
 Generate the certificate and CRL size evidence, including experimental
 Falcon-512 X.509 encodings, with:
 

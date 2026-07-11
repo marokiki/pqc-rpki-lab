@@ -1,0 +1,73 @@
+{
+  "metadata": {
+    "application_context": "empty",
+    "classification": "draft-compliant raw Composite ML-DSA Sign/Verify benchmark",
+    "compile_command": [
+      "cc",
+      "-O3",
+      "-Wall",
+      "-Wextra",
+      "-Werror",
+      "benchmarks/draft_composite_100k.c",
+      "-o",
+      "$TMPDIR/draft-composite-100k",
+      "$(pkg-config --cflags --libs openssl)"
+    ],
+    "draft_revision_date": "2026-04-21",
+    "excluded": "key generation, file I/O, X.509, CMS, and HSM latency",
+    "iterations_per_variant": 100000,
+    "message_bytes": 32,
+    "openssl": "OpenSSL 3.6.2 7 Apr 2026 (Library: OpenSSL 3.6.2 7 Apr 2026)",
+    "platform": "macOS-26.5.2-arm64-arm-64bit-Mach-O",
+    "specification": "draft-ietf-lamps-pq-composite-sigs-19",
+    "timing_scope": "message representative, two signatures or verifications, and signature concatenation",
+    "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+  },
+  "results": [
+    {
+      "iterations": "100000",
+      "public_key_bytes": "1377",
+      "repository_growth_ratio_vs_rsa": "3.1584",
+      "repository_total_bytes": "930400",
+      "sign_microseconds_per_operation": "260.496",
+      "sign_seconds": "26.049569",
+      "signature_bytes_max": "2492",
+      "signature_bytes_mean": "2491.000",
+      "signature_bytes_min": "2488",
+      "status": "confirmed",
+      "variant": "ML-DSA-44 + ECDSA P-256",
+      "verify_microseconds_per_operation": "83.006",
+      "verify_seconds": "8.300573"
+    },
+    {
+      "iterations": "100000",
+      "public_key_bytes": "2017",
+      "repository_growth_ratio_vs_rsa": "4.0915",
+      "repository_total_bytes": "1205270",
+      "sign_microseconds_per_operation": "456.112",
+      "sign_seconds": "45.611158",
+      "signature_bytes_max": "3381",
+      "signature_bytes_mean": "3379.994",
+      "signature_bytes_min": "3377",
+      "status": "confirmed",
+      "variant": "ML-DSA-65 + ECDSA P-256",
+      "verify_microseconds_per_operation": "119.340",
+      "verify_seconds": "11.933963"
+    },
+    {
+      "iterations": "100000",
+      "public_key_bytes": "2689",
+      "repository_growth_ratio_vs_rsa": "5.3965",
+      "repository_total_bytes": "1589690",
+      "sign_microseconds_per_operation": "594.105",
+      "sign_seconds": "59.410493",
+      "signature_bytes_max": "4731",
+      "signature_bytes_mean": "4729.998",
+      "signature_bytes_min": "4727",
+      "status": "confirmed",
+      "variant": "ML-DSA-87 + ECDSA P-384",
+      "verify_microseconds_per_operation": "327.724",
+      "verify_seconds": "32.772383"
+    }
+  ]
+}

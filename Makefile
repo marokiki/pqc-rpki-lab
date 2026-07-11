@@ -1,4 +1,4 @@
-.PHONY: all certificate-sizes ccr-comparison cms-api-probe composite-100k exact-100k key-roll local-validation message-sweep mixed-tree object-benchmarks pre-publication regenerate-reports review-evidence routinator-krill-interop routinator-krill-scan rpki-objects test validator-container-probe verify-artifacts install-optional-pqc clean
+.PHONY: all certificate-sizes ccr-comparison cms-api-probe composite-100k draft-composite-100k exact-100k key-roll local-validation message-sweep mixed-tree object-benchmarks pre-publication regenerate-reports review-evidence routinator-krill-interop routinator-krill-scan rpki-objects test validator-container-probe verify-artifacts install-optional-pqc clean
 
 all:
 	./tools/run_all.sh
@@ -62,6 +62,9 @@ validator-container-probe: rpki-objects
 
 composite-100k:
 	PYTHONPATH=src .venv/bin/python benchmarks/composite_100k.py --iterations 100000
+
+draft-composite-100k:
+	PYTHONPATH=src python3 benchmarks/draft_composite_100k.py --iterations 100000
 
 install-optional-pqc:
 	./tools/install_optional_pqc.sh --allow-network

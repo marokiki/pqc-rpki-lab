@@ -58,8 +58,9 @@ class AlgorithmsTest(unittest.TestCase):
                 "RSA-2048+ML-DSA-65",
                 "P-256+ML-DSA-65",
                 "RSA-2048+ML-DSA-87",
-                "P-256+ML-DSA-87",
+                "P-384+ML-DSA-87",
                 "P-256+Falcon-512",
             },
         )
-        self.assertTrue(all(value.status == "estimated" for value in COMPOSITE_ESTIMATES))
+        self.assertTrue(all(value.status in {"estimated", "confirmed-raw"}
+                            for value in COMPOSITE_ESTIMATES))

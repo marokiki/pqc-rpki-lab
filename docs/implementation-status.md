@@ -10,6 +10,7 @@ planning notes.
 |---|---|---|---|
 | Primitive signature benchmarks | implemented | `results/primitive-bench.*`, `results/review-2026-06/exact-100k.*` | Primitive measurements are not complete RPKI object generation. |
 | Composite component benchmarks | partially implemented | `results/review-2026-06/composite-100k.*` | Sequential component operations only; no LAMPS composite ASN.1/OID encoding. |
+| Draft-19 raw Composite ML-DSA | implemented and measured | `results/draft-composite-2026-07/draft-composite-100k.*` | Sign/Verify, domain separation, context binding, and raw concatenation are implemented; X.509/CMS/RPKI profile interoperability remains open. |
 | Repository-size model | implemented estimate | `results/repository-impact.*` | Model-driven unless complete DER objects are measured. |
 | ML-DSA certificates and CRLs | partially implemented | `results/object-generation-feasibility.*` | OpenSSL capability depends on local provider support. |
 | ML-DSA CMS SignedData | implemented for ML-DSA-65 | `results/cms-probe/`, `results/cms-generation/` | Requires the OpenSSL CMS API with explicit SHA-512; the generic CLI path still fails. |

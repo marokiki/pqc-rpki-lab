@@ -1,0 +1,4 @@
+iterations,public_key_bytes,repository_growth_ratio_vs_rsa,repository_total_bytes,sign_microseconds_per_operation,sign_seconds,signature_bytes_max,signature_bytes_mean,signature_bytes_min,status,variant,verify_microseconds_per_operation,verify_seconds
+100000,1377,3.1584,930400,260.496,26.049569,2492,2491.000,2488,confirmed,ML-DSA-44 + ECDSA P-256,83.006,8.300573
+100000,2017,4.0915,1205270,456.112,45.611158,3381,3379.994,3377,confirmed,ML-DSA-65 + ECDSA P-256,119.340,11.933963
+100000,2689,5.3965,1589690,594.105,59.410493,4731,4729.998,4727,confirmed,ML-DSA-87 + ECDSA P-384,327.724,32.772383
