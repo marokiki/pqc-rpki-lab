@@ -274,6 +274,7 @@ def reference(
     author_initials: str | None = None,
     author_surname: str | None = None,
     organization: str | None = None,
+    day: str | None = None,
     month: str | None = None,
     year: str | None = None,
 ) -> None:
@@ -294,6 +295,8 @@ def reference(
     if organization:
         ET.SubElement(author, "organization").text = organization
     date_attrs: dict[str, str] = {}
+    if day:
+        date_attrs["day"] = day
     if month:
         date_attrs["month"] = month
     if year:
@@ -461,7 +464,7 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
         ),
         target=(
             "https://github.com/marokiki/pqc-rpki-lab/tree/"
-            "8279b7b608be9874a846d2b19b217e85ce4f45ca"
+            "75b745a9c69a7ca0bbe473a786b173c20fde1fd1"
             if DOCNAME.endswith("-02")
             else "https://github.com/marokiki/pqc-rpki-lab/releases/tag/"
             f"{DOCNAME}"
@@ -469,6 +472,7 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
         author_fullname="Tomoki Yoshikawa",
         author_initials="T.",
         author_surname="Yoshikawa",
+        day="27",
         month="July",
         year="2026",
     )

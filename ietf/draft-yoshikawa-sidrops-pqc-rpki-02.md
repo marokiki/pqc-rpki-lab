@@ -428,9 +428,10 @@ eContent, and object-specific validation rules remain unchanged.
 
 The development implementation generated ROA and manifest SignedData
 using these encodings.  The public evidence snapshot has generated and
-validated complete pure ML-DSA-65 manifests and ROAs.  The composite
-implementation and its detailed fixtures remain non-public, and
-independent RP interoperability remains open work.
+validated complete pure ML-DSA-65 manifests and ROAs.  The public
+reference implementation also includes Composite certificates, CRLs,
+manifests, ROAs, an experimental RP extension, and sanitized result
+summaries.  Independent RP interoperability remains open work.
 
 # Signed Object Coverage
 
@@ -501,15 +502,15 @@ RPKI object.
 The public experiment has generated complete RFC 6488 ML-DSA-65 CMS
 SignedData, including ROA and manifest fixtures, together with
 ML-DSA-65 certificates and CRLs.  It has also measured the raw Draft-19
-Composite ML-DSA construction.  In separate non-public development
-work, OpenSSL 3.6.2 and a Composite provider generated complete
-Composite X.509 certificates, CRLs, ROAs, and manifests.  An
-experimental rpki-client extension accepted a small RSA-to-composite
-mixed-tree repository and produced the expected two VRPs.  The
-unmodified client and the patched client's default mode rejected the
-transition child certificate at its unsupported Composite SPKI.  These
-results establish one E2E implementation path, not independent
-interoperability or production readiness.
+Composite ML-DSA construction.  OpenSSL 3.6.2 and a Composite provider
+generated complete Composite X.509 certificates, CRLs, ROAs, and
+manifests.  An experimental rpki-client extension accepted complete pure
+ML-DSA-65 and Composite standalone repositories and a small
+RSA-to-composite mixed-tree repository.  Each produced the same two VRPs
+as the RSA baseline.  The unmodified client and the patched client's
+default mode rejected the unsupported Next Suite.  These results
+establish one E2E implementation path, not independent interoperability
+or production readiness.
 
 Unmodified Routinator, rpki-client, and FORT versions accepted the RSA
 baseline and rejected the ML-DSA-65 trust anchor or certificate before
@@ -543,14 +544,15 @@ object-specific semantic failures.  The unmodified RPs tested so far
 accept the RSA baseline and reject the ML-DSA-65 repository before
 processing all of its objects.
 
-The experimental rpki-client extension delegates Composite
-cryptographic operations to an OpenSSL provider.  Its default mode
-retains the Current Suite policy.  Its explicit experimental mode also
-accepts id-MLDSA65-ECDSA-P256-SHA512 SPKIs and certificate, CRL, and CMS
-signatures, together with SHA-512 in Composite CMS SignedData.
-Unsupported OIDs, non-absent parameters, digest mismatches, component
-signature failures, certificate path failures, and manifest hash
-failures were exercised as separate negative cases.
+The experimental rpki-client extension delegates pure ML-DSA-65 and
+Composite cryptographic operations to OpenSSL providers.  Its default
+mode retains the Current Suite policy.  Its explicit experimental mode
+also accepts id-ml-dsa-65 and id-MLDSA65-ECDSA-P256-SHA512 SPKIs and
+certificate, CRL, and CMS signatures, together with SHA-512 in the
+corresponding CMS SignedData.  Unsupported OIDs, non-absent parameters,
+digest mismatches, pure and component signature failures, certificate
+path failures, and manifest hash failures were exercised as separate
+negative cases.
 
 Mixed Certification Chain processing treats certificate and CRL
 signatureAlgorithm fields independently from the subject SPKI algorithm.
@@ -897,12 +899,14 @@ RFC; the harness remains the durable record.
 ## Reproducibility Metadata
 
 The evidence snapshot cited by this revision is Git commit
-8279b7b608be9874a846d2b19b217e85ce4f45ca.  The measurements were run
-on macOS 26.5.2 arm64 on an Apple M4.  The repeated primitive sweep used
+75b745a9c69a7ca0bbe473a786b173c20fde1fd1.  The repeated primitive
+measurements were run on macOS 26.5.2 arm64 on an Apple M4 using
 OpenSSL 3.6.2 and a C harness compiled with
 `cc -O2 -Wall -Wextra -Werror`.  The recorded environment also identifies
 Python 3.14.4 and liboqs 0.15.0.  The Draft-19 composite benchmark used
-`cc -O3 -Wall -Wextra -Werror` with OpenSSL 3.6.2.
+`cc -O3 -Wall -Wextra -Werror` with OpenSSL 3.6.2.  The small-scale E2E
+and fresh-key measurements below were run separately on the stated
+12-vCPU x86-64 host.
 
 The evidence reference is fixed to that commit rather than to a mutable
 development branch.  A final posted revision also needs a fixed commit
@@ -921,26 +925,37 @@ usage deltas, and maximum RSS is in KiB.
 
 | Scenario | Generation wall (s) | Generation CPU (s) | Generation RSS (KiB) |
 |---|---:|---:|---:|
-| RSA baseline | 0.590 +/- 0.089 [0.442, 0.851] | 0.619 +/- 0.096 [0.461, 0.903] | 22400 +/- 84 [22144, 22656] |
-| Pure ML-DSA-65 | 0.331 +/- 0.010 [0.314, 0.362] | 0.335 +/- 0.010 [0.317, 0.366] | 22400 +/- 36 [22268, 22528] |
-| Composite standalone | 0.352 +/- 0.011 [0.338, 0.382] | 0.355 +/- 0.011 [0.341, 0.385] | 22272 +/- 62 [22272, 22400] |
-| RSA-to-Composite mixed tree | 0.626 +/- 0.074 [0.487, 0.824] | 0.644 +/- 0.080 [0.497, 0.856] | 21248 +/- 89 [21120, 21504] |
+| RSA baseline | 0.606 +/- 0.094 [0.427, 0.893] | 0.635 +/- 0.102 [0.444, 0.947] | 22400 +/- 58 [22268, 22528] |
+| Pure ML-DSA-65 | 0.335 +/- 0.010 [0.314, 0.361] | 0.339 +/- 0.010 [0.318, 0.365] | 22396 +/- 25 [22268, 22400] |
+| Composite standalone | 0.355 +/- 0.011 [0.339, 0.388] | 0.359 +/- 0.011 [0.342, 0.392] | 22396 +/- 37 [22268, 22400] |
+| RSA-to-Composite mixed tree | 0.619 +/- 0.072 [0.514, 0.839] | 0.638 +/- 0.078 [0.526, 0.874] | 21248 +/- 80 [21120, 21504] |
 
 | Scenario | Validation wall (s) | Validation CPU (s) | Validation RSS (KiB) |
 |---|---:|---:|---:|
-| RSA baseline | 0.0135 +/- 0.0009 [0.0114, 0.0184] | 0.0138 +/- 0.0009 [0.0116, 0.0186] | 7424 +/- 26 [7168, 7424] |
-| Pure ML-DSA-65 rejection | 0.0117 +/- 0.0009 [0.0096, 0.0172] | 0.0120 +/- 0.0009 [0.0098, 0.0173] | 7296 +/- 30 [7040, 7296] |
-| Composite standalone | 0.0186 +/- 0.0011 [0.0160, 0.0258] | 0.0188 +/- 0.0011 [0.0162, 0.0263] | 7424 +/- 26 [7296, 7456] |
-| RSA-to-Composite mixed tree | 0.0195 +/- 0.0013 [0.0168, 0.0252] | 0.0195 +/- 0.0012 [0.0169, 0.0248] | 7424 +/- 32 [7296, 7584] |
+| RSA baseline | 0.0136 +/- 0.0010 [0.0116, 0.0190] | 0.0138 +/- 0.0010 [0.0118, 0.0191] | 7424 +/- 25 [7168, 7424] |
+| Pure ML-DSA-65 | 0.0158 +/- 0.0011 [0.0134, 0.0220] | 0.0160 +/- 0.0011 [0.0135, 0.0223] | 7424 +/- 17 [7296, 7424] |
+| Composite standalone | 0.0189 +/- 0.0013 [0.0162, 0.0285] | 0.0190 +/- 0.0013 [0.0164, 0.0288] | 7424 +/- 22 [7296, 7516] |
+| RSA-to-Composite mixed tree | 0.0200 +/- 0.0014 [0.0167, 0.0269] | 0.0200 +/- 0.0014 [0.0168, 0.0269] | 7424 +/- 29 [7296, 7584] |
 
-The RSA, Composite standalone, and mixed-tree validations each produced
-the expected two VRPs.  Pure ML-DSA-65 was intentionally rejected
-because the experimental RP extension enabled only the evaluated
-Composite suite.  The four required repository products occupied 4843
-bytes for RSA and 28247 bytes for pure ML-DSA-65 in every repetition.
+All four validation scenarios produced the expected two VRPs in the
+experimental policy mode.  The unmodified client and the patched
+client's default mode continued to reject pure ML-DSA-65 and Composite.
+The four required repository products had a median of 4843 bytes for
+RSA and occupied 28247 bytes for pure ML-DSA-65 in every repetition.
 Composite standalone had a median of 28855 bytes and range of
-[28851, 28861].  The seven products across both mixed-tree publication
-points had a median of 29095 bytes and range of [29090, 29099].
+[28851, 28859].  The seven products across both mixed-tree publication
+points had a median of 29095 bytes and range of [29092, 29098].
+
+Each standalone generation invokes a new process and generates three
+fresh key pairs: one CA key and two one-time-use EE keys.  RSA-2048 key
+generation dominates this small fixture and is probabilistic.  In a
+separate 1000-repetition measurement using one `openssl genpkey`
+subprocess per sample, median fresh-key generation was 0.0877 seconds
+for RSA-2048, 0.00719 seconds for ML-DSA-65, and 0.00880 seconds for the
+Composite suite.  Consequently, the shorter ML-DSA-65 and Composite
+generation totals do not mean that PQC signing or complete repository
+processing is faster.  The separate 100,000-operation measurements show
+higher ML-DSA-65 and Composite verification costs than RSA.
 
 These very small validation runs measure complete local RP processes,
 but must not be extrapolated to global RPKI validation.  They exclude
@@ -1253,6 +1268,6 @@ Post-Quantum Era", arXiv:2603.06968, March 2026,
 https://arxiv.org/abs/2603.06968.
 
 [pqc-rpki-lab] Yoshikawa, T., "pqc-rpki-lab experimental evidence
-snapshot", Git commit 8279b7b608be9874a846d2b19b217e85ce4f45ca,
-11 July 2026,
-https://github.com/marokiki/pqc-rpki-lab/tree/8279b7b608be9874a846d2b19b217e85ce4f45ca.
+snapshot", Git commit 75b745a9c69a7ca0bbe473a786b173c20fde1fd1,
+27 July 2026,
+https://github.com/marokiki/pqc-rpki-lab/tree/75b745a9c69a7ca0bbe473a786b173c20fde1fd1.

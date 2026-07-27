@@ -105,7 +105,7 @@ Table of Contents
      A.1.  Reproducibility Metadata  . . . . . . . . . . . . . . . .  26
      A.2.  Small-Scale E2E Measurement . . . . . . . . . . . . . . .  27
      A.3.  Measured Certificate and CRL Sizes  . . . . . . . . . . .  29
-     A.4.  Synthetic Repository Size Model . . . . . . . . . . . . .  29
+     A.4.  Synthetic Repository Size Model . . . . . . . . . . . . .  30
 
 
 
@@ -620,9 +620,10 @@ Internet-Draft                PQC for RPKI                     July 2026
 
    The development implementation generated ROA and manifest SignedData
    using these encodings.  The public evidence snapshot has generated
-   and validated complete pure ML-DSA-65 manifests and ROAs.  The
-   composite implementation and its detailed fixtures remain non-public,
-   and independent RP interoperability remains open work.
+   and validated complete pure ML-DSA-65 manifests and ROAs.  The public
+   reference implementation also includes Composite certificates, CRLs,
+   manifests, ROAs, an experimental RP extension, and sanitized result
+   summaries.  Independent RP interoperability remains open work.
 
 9.  Signed Object Coverage
 
@@ -665,7 +666,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    product keys.  An RP validates the manifest EE certificate under the
    associated CA, verifies each listed certificate, CRL, or signed
    object under that same CA instance as required by its object profile,
-   and checks the publication point, file name, and file hash according
 
 
 
@@ -674,6 +674,7 @@ Yoshikawa                Expires 25 January 2027               [Page 12]
 Internet-Draft                PQC for RPKI                     July 2026
 
 
+   and checks the publication point, file name, and file hash according
    to [RFC9286].  A shared publication point can contain products from
    multiple CA instances during key rollover, but each manifest covers
    only its associated CA instance.
@@ -701,14 +702,14 @@ Internet-Draft                PQC for RPKI                     July 2026
    The public experiment has generated complete RFC 6488 ML-DSA-65 CMS
    SignedData, including ROA and manifest fixtures, together with ML-
    DSA-65 certificates and CRLs.  It has also measured the raw Draft-19
-   Composite ML-DSA construction.  In separate non-public development
-   work, OpenSSL 3.6.2 and a Composite provider generated complete
-   Composite X.509 certificates, CRLs, ROAs, and manifests.  An
-   experimental rpki-client extension accepted a small RSA-to-composite
-   mixed-tree repository and produced the expected two VRPs.  The
-   unmodified client and the patched client's default mode rejected the
-   transition child certificate at its unsupported Composite SPKI.
-   These results establish one E2E implementation path, not independent
+   Composite ML-DSA construction.  OpenSSL 3.6.2 and a Composite
+   provider generated complete Composite X.509 certificates, CRLs, ROAs,
+   and manifests.  An experimental rpki-client extension accepted
+   complete pure ML-DSA-65 and Composite standalone repositories and a
+   small RSA-to-composite mixed-tree repository.  Each produced the same
+   two VRPs as the RSA baseline.  The unmodified client and the patched
+   client's default mode rejected the unsupported Next Suite.  These
+   results establish one E2E implementation path, not independent
    interoperability or production readiness.
 
    Unmodified Routinator, rpki-client, and FORT versions accepted the
@@ -716,7 +717,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    before processing its complete repository.  This is an unsupported-
    algorithm baseline, not evidence that a mixed chain provides
    compatibility with legacy RPs.
-
 
 
 
@@ -759,14 +759,15 @@ Internet-Draft                PQC for RPKI                     July 2026
    tested so far accept the RSA baseline and reject the ML-DSA-65
    repository before processing all of its objects.
 
-   The experimental rpki-client extension delegates Composite
-   cryptographic operations to an OpenSSL provider.  Its default mode
-   retains the Current Suite policy.  Its explicit experimental mode
-   also accepts id-MLDSA65-ECDSA-P256-SHA512 SPKIs and certificate, CRL,
-   and CMS signatures, together with SHA-512 in Composite CMS
-   SignedData.  Unsupported OIDs, non-absent parameters, digest
-   mismatches, component signature failures, certificate path failures,
-   and manifest hash failures were exercised as separate negative cases.
+   The experimental rpki-client extension delegates pure ML-DSA-65 and
+   Composite cryptographic operations to OpenSSL providers.  Its default
+   mode retains the Current Suite policy.  Its explicit experimental
+   mode also accepts id-ml-dsa-65 and id-MLDSA65-ECDSA-P256-SHA512 SPKIs
+   and certificate, CRL, and CMS signatures, together with SHA-512 in
+   the corresponding CMS SignedData.  Unsupported OIDs, non-absent
+   parameters, digest mismatches, pure and component signature failures,
+   certificate path failures, and manifest hash failures were exercised
+   as separate negative cases.
 
    Mixed Certification Chain processing treats certificate and CRL
    signatureAlgorithm fields independently from the subject SPKI
@@ -777,7 +778,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    products, it separately compares their semantic outputs.  For ROAs,
    semantic equivalence means equality of the canonical VRP sets by
    prefix, maxLength, and origin AS.  When both runs use the same CCR
-   version and hash algorithm, equal ROAPayloadState hashes establish
 
 
 
@@ -786,6 +786,7 @@ Yoshikawa                Expires 25 January 2027               [Page 14]
 Internet-Draft                PQC for RPKI                     July 2026
 
 
+   version and hash algorithm, equal ROAPayloadState hashes establish
    equality of those canonical VRP sets [I-D.ietf-sidrops-rpki-ccr].
    TrustAnchorState is compared separately.  ROAPayloadState does not
    preserve per-VRP certificate-chain or publication provenance, so
@@ -833,7 +834,6 @@ Internet-Draft                PQC for RPKI                     July 2026
     +------------+---------------+-------------+----------------------+
 
                                   Table 2
-
 
 
 
@@ -1430,8 +1430,8 @@ Internet-Draft                PQC for RPKI                     July 2026
 
    [pqc-rpki-lab]
               Yoshikawa, T., "pqc-rpki-lab experimental evidence
-              snapshot", July 2026, <https://github.com/marokiki/pqc-
-              rpki-lab/tree/8279b7b608be9874a846d2b19b217e85ce4f45ca>.
+              snapshot", 27 July 2026, <https://github.com/marokiki/pqc-
+              rpki-lab/tree/75b745a9c69a7ca0bbe473a786b173c20fde1fd1>.
 
 Appendix A.  Measurement Details
 
@@ -1445,9 +1445,9 @@ Appendix A.  Measurement Details
 A.1.  Reproducibility Metadata
 
    The evidence snapshot cited by this revision is Git commit
-   8279b7b608be9874a846d2b19b217e85ce4f45ca.  The measurements were run
-   on macOS 26.5.2 arm64 on an Apple M4.  The repeated primitive sweep
-   used OpenSSL 3.6.2 and a C harness compiled with cc -O2 -Wall -Wextra
+   75b745a9c69a7ca0bbe473a786b173c20fde1fd1.  The repeated primitive
+   measurements were run on macOS 26.5.2 arm64 on an Apple M4 using
+   OpenSSL 3.6.2 and a C harness compiled with cc -O2 -Wall -Wextra
    -Werror.  The recorded environment also identifies Python 3.14.4 and
    liboqs 0.15.0.  The Draft-19 composite benchmark used cc -O3 -Wall
 
@@ -1458,7 +1458,9 @@ Yoshikawa                Expires 25 January 2027               [Page 26]
 Internet-Draft                PQC for RPKI                     July 2026
 
 
-   -Wextra -Werror with OpenSSL 3.6.2.
+   -Wextra -Werror with OpenSSL 3.6.2.  The small-scale E2E and fresh-
+   key measurements below were run separately on the stated 12-vCPU
+   x86-64 host.
 
    The evidence reference is fixed to that commit rather than to a
    mutable development branch.  A final posted revision also needs a
@@ -1480,26 +1482,24 @@ A.2.  Small-Scale E2E Measurement
    | Scenario         | Generation wall | Generation      | Generation |
    |                  | (s)             | CPU (s)         | RSS (KiB)  |
    +==================+=================+=================+============+
-   | RSA baseline     | 0.590 +/- 0.089 | 0.619 +/-       | 22400 +/-  |
-   |                  | [0.442, 0.851]  | 0.096 [0.461,   | 84 [22144, |
-   |                  |                 | 0.903]          | 22656]     |
+   | RSA baseline     | 0.606 +/- 0.094 | 0.635 +/-       | 22400 +/-  |
+   |                  | [0.427, 0.893]  | 0.102 [0.444,   | 58 [22268, |
+   |                  |                 | 0.947]          | 22528]     |
    +------------------+-----------------+-----------------+------------+
-   | Pure ML-DSA-65   | 0.331 +/- 0.010 | 0.335 +/-       | 22400 +/-  |
-   |                  | [0.314, 0.362]  | 0.010 [0.317,   | 36 [22268, |
-   |                  |                 | 0.366]          | 22528]     |
+   | Pure ML-DSA-65   | 0.335 +/- 0.010 | 0.339 +/-       | 22396 +/-  |
+   |                  | [0.314, 0.361]  | 0.010 [0.318,   | 25 [22268, |
+   |                  |                 | 0.365]          | 22400]     |
    +------------------+-----------------+-----------------+------------+
-   | Composite        | 0.352 +/- 0.011 | 0.355 +/-       | 22272 +/-  |
-   | standalone       | [0.338, 0.382]  | 0.011 [0.341,   | 62 [22272, |
-   |                  |                 | 0.385]          | 22400]     |
+   | Composite        | 0.355 +/- 0.011 | 0.359 +/-       | 22396 +/-  |
+   | standalone       | [0.339, 0.388]  | 0.011 [0.342,   | 37 [22268, |
+   |                  |                 | 0.392]          | 22400]     |
    +------------------+-----------------+-----------------+------------+
-   | RSA-to-Composite | 0.626 +/- 0.074 | 0.644 +/-       | 21248 +/-  |
-   | mixed tree       | [0.487, 0.824]  | 0.080 [0.497,   | 89 [21120, |
-   |                  |                 | 0.856]          | 21504]     |
+   | RSA-to-Composite | 0.619 +/- 0.072 | 0.638 +/-       | 21248 +/-  |
+   | mixed tree       | [0.514, 0.839]  | 0.078 [0.526,   | 80 [21120, |
+   |                  |                 | 0.874]          | 21504]     |
    +------------------+-----------------+-----------------+------------+
 
                                   Table 3
-
-
 
 
 
@@ -1518,38 +1518,57 @@ Internet-Draft                PQC for RPKI                     July 2026
    | Scenario         | Validation wall | Validation      | Validation |
    |                  | (s)             | CPU (s)         | RSS (KiB)  |
    +==================+=================+=================+============+
-   | RSA baseline     | 0.0135 +/-      | 0.0138 +/-      | 7424 +/-   |
-   |                  | 0.0009 [0.0114, | 0.0009          | 26 [7168,  |
-   |                  | 0.0184]         | [0.0116,        | 7424]      |
-   |                  |                 | 0.0186]         |            |
+   | RSA baseline     | 0.0136 +/-      | 0.0138 +/-      | 7424 +/-   |
+   |                  | 0.0010 [0.0116, | 0.0010          | 25 [7168,  |
+   |                  | 0.0190]         | [0.0118,        | 7424]      |
+   |                  |                 | 0.0191]         |            |
    +------------------+-----------------+-----------------+------------+
-   | Pure ML-DSA-65   | 0.0117 +/-      | 0.0120 +/-      | 7296 +/-   |
-   | rejection        | 0.0009 [0.0096, | 0.0009          | 30 [7040,  |
-   |                  | 0.0172]         | [0.0098,        | 7296]      |
-   |                  |                 | 0.0173]         |            |
+   | Pure ML-DSA-65   | 0.0158 +/-      | 0.0160 +/-      | 7424 +/-   |
+   |                  | 0.0011 [0.0134, | 0.0011          | 17 [7296,  |
+   |                  | 0.0220]         | [0.0135,        | 7424]      |
+   |                  |                 | 0.0223]         |            |
    +------------------+-----------------+-----------------+------------+
-   | Composite        | 0.0186 +/-      | 0.0188 +/-      | 7424 +/-   |
-   | standalone       | 0.0011 [0.0160, | 0.0011          | 26 [7296,  |
-   |                  | 0.0258]         | [0.0162,        | 7456]      |
-   |                  |                 | 0.0263]         |            |
+   | Composite        | 0.0189 +/-      | 0.0190 +/-      | 7424 +/-   |
+   | standalone       | 0.0013 [0.0162, | 0.0013          | 22 [7296,  |
+   |                  | 0.0285]         | [0.0164,        | 7516]      |
+   |                  |                 | 0.0288]         |            |
    +------------------+-----------------+-----------------+------------+
-   | RSA-to-Composite | 0.0195 +/-      | 0.0195 +/-      | 7424 +/-   |
-   | mixed tree       | 0.0013 [0.0168, | 0.0012          | 32 [7296,  |
-   |                  | 0.0252]         | [0.0169,        | 7584]      |
-   |                  |                 | 0.0248]         |            |
+   | RSA-to-Composite | 0.0200 +/-      | 0.0200 +/-      | 7424 +/-   |
+   | mixed tree       | 0.0014 [0.0167, | 0.0014          | 29 [7296,  |
+   |                  | 0.0269]         | [0.0168,        | 7584]      |
+   |                  |                 | 0.0269]         |            |
    +------------------+-----------------+-----------------+------------+
 
                                   Table 4
 
-   The RSA, Composite standalone, and mixed-tree validations each
-   produced the expected two VRPs.  Pure ML-DSA-65 was intentionally
-   rejected because the experimental RP extension enabled only the
-   evaluated Composite suite.  The four required repository products
-   occupied 4843 bytes for RSA and 28247 bytes for pure ML-DSA-65 in
+   All four validation scenarios produced the expected two VRPs in the
+   experimental policy mode.  The unmodified client and the patched
+   client's default mode continued to reject pure ML-DSA-65 and
+   Composite.  The four required repository products had a median of
+   4843 bytes for RSA and occupied 28247 bytes for pure ML-DSA-65 in
    every repetition.  Composite standalone had a median of 28855 bytes
-   and range of [28851, 28861].  The seven products across both mixed-
+   and range of [28851, 28859].  The seven products across both mixed-
    tree publication points had a median of 29095 bytes and range of
-   [29090, 29099].
+   [29092, 29098].
+
+   Each standalone generation invokes a new process and generates three
+   fresh key pairs: one CA key and two one-time-use EE keys.  RSA-2048
+   key generation dominates this small fixture and is probabilistic.  In
+   a separate 1000-repetition measurement using one openssl genpkey
+   subprocess per sample, median fresh-key generation was 0.0877 seconds
+   for RSA-2048, 0.00719 seconds for ML-DSA-65, and 0.00880 seconds for
+   the Composite suite.  Consequently, the shorter ML-DSA-65 and
+   Composite generation totals do not mean that PQC signing or complete
+   repository processing is faster.  The separate 100,000-operation
+   measurements show higher ML-DSA-65 and Composite verification costs
+   than RSA.
+
+
+
+Yoshikawa                Expires 25 January 2027               [Page 28]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
 
    These very small validation runs measure complete local RP processes,
    but must not be extrapolated to global RPKI validation.  They exclude
@@ -1559,16 +1578,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    primitive sign/verify loops, not 100,000 complete E2E validations.
    These results complement, but do not replace, the open full-
    repository measurements below.
-
-
-
-
-
-
-Yoshikawa                Expires 25 January 2027               [Page 28]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
 
 A.3.  Measured Certificate and CRL Sizes
 
@@ -1608,6 +1617,15 @@ A.3.  Measured Certificate and CRL Sizes
    final FN-DSA PKIX profile.  Falcon signatures are variable length, so
    its certificate and CRL sizes can vary between runs.
 
+
+
+
+
+Yoshikawa                Expires 25 January 2027               [Page 29]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
 A.4.  Synthetic Repository Size Model
 
    First-order repository size ratios relative to the RSA-2048 baseline,
@@ -1617,14 +1635,6 @@ A.4.  Synthetic Repository Size Model
    payload assumptions are respectively 1500, 1500, 600, 1500, and 200
    bytes.  The model uses 12% RRDP snapshot overhead, 5% local-cache
    overhead, and a 10% changed-object fraction for a delta.
-
-
-
-
-Yoshikawa                Expires 25 January 2027               [Page 29]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
 
    For certificates, the model adds both a public-key input and a
    signature input to the base payload.  For CRLs, manifests, and ROAs,
@@ -1664,16 +1674,6 @@ A.5.  Repeated Primitive Timing
    standard deviation across ten repetitions of 1000 operations on a
    fixed 32-byte message.  Values are wall-clock seconds per 1000
    operations.
-
-
-
-
-
-
-
-
-
-
 
 
 
