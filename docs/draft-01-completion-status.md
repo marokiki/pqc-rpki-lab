@@ -1,6 +1,9 @@
 # Draft-01 Completion Status
 
 > EXPERIMENTAL / NOT FOR PRODUCTION
+>
+> Historical snapshot. For current draft-02 E2E status, see
+> `docs/implementation-status.md` and `results/composite-e2e/`.
 
 This repository now contains the public-safe implementation and evidence that
 can be produced without vendoring Routinator/Krill, using production TALs, or

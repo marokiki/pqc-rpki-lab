@@ -1,5 +1,45 @@
 {
   "cases": {
+    "composite_standalone": {
+      "patched_default": {
+        "crl_count": 0,
+        "invalid_certificates": 1,
+        "manifest_count": 0,
+        "rejection": "ta/test/ca.cer: RFC 7935: wrong signature algorithm nid 1509 (MLDSA65-ECDSA-P256-SHA512), want sha256WithRSAEncryption",
+        "returncode": 0,
+        "vrp_count": 0,
+        "vrps": []
+      },
+      "patched_experimental": {
+        "crl_count": 1,
+        "invalid_certificates": 0,
+        "manifest_count": 1,
+        "rejection": "",
+        "returncode": 0,
+        "vrp_count": 2,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          },
+          {
+            "asn": "AS64496",
+            "max_length": 48,
+            "prefix": "2001:db8::/32"
+          }
+        ]
+      },
+      "unmodified": {
+        "crl_count": 0,
+        "invalid_certificates": 1,
+        "manifest_count": 0,
+        "rejection": "ta/test/ca.cer: RFC 7935: wrong signature algorithm nid 1509 (MLDSA65-ECDSA-P256-SHA512), want sha256WithRSAEncryption",
+        "returncode": 0,
+        "vrp_count": 0,
+        "vrps": []
+      }
+    },
     "mixed_tree": {
       "patched_default": {
         "crl_count": 1,
@@ -79,9 +119,71 @@
         "vrp_count": 0,
         "vrps": []
       }
+    },
+    "rsa_baseline": {
+      "patched_default": {
+        "crl_count": 1,
+        "invalid_certificates": 0,
+        "manifest_count": 1,
+        "rejection": "",
+        "returncode": 0,
+        "vrp_count": 2,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          },
+          {
+            "asn": "AS64496",
+            "max_length": 48,
+            "prefix": "2001:db8::/32"
+          }
+        ]
+      },
+      "patched_experimental": {
+        "crl_count": 1,
+        "invalid_certificates": 0,
+        "manifest_count": 1,
+        "rejection": "",
+        "returncode": 0,
+        "vrp_count": 2,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          },
+          {
+            "asn": "AS64496",
+            "max_length": 48,
+            "prefix": "2001:db8::/32"
+          }
+        ]
+      },
+      "unmodified": {
+        "crl_count": 1,
+        "invalid_certificates": 0,
+        "manifest_count": 1,
+        "rejection": "",
+        "returncode": 0,
+        "vrp_count": 2,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          },
+          {
+            "asn": "AS64496",
+            "max_length": 48,
+            "prefix": "2001:db8::/32"
+          }
+        ]
+      }
     }
   },
-  "classification": "small-scale local pure ML-DSA-65 and mixed-tree RP comparison",
+  "classification": "small-scale local RSA, pure ML-DSA-65, Composite standalone, and mixed-tree RP comparison",
   "policy": {
     "patched_default": "Current Suite only",
     "patched_experimental": "Current Suite plus pure ML-DSA-65 and id-MLDSA65-ECDSA-P256-SHA512",

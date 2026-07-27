@@ -7,8 +7,9 @@ Experimental harness and evidence for
 
 The repository evaluates post-quantum signature migration in RPKI while
 reusing existing cryptographic and RPKI implementations. It does not implement
-cryptographic algorithms, X.509/CMS validation, RRDP, rsync, or an RPKI
-validator.
+cryptographic algorithms, RRDP, rsync, or a production RPKI validator. It
+provides fixture generation and experimental patches that delegate X.509/CMS
+cryptography to OpenSSL providers and validation policy to existing RP code.
 
 Public repository contents are limited to reproducible implementation,
 measurements, public fixtures, public draft-support evidence, and explicit
@@ -162,18 +163,30 @@ The key-generation target uses 1,000 fresh `openssl genpkey` subprocesses per
 algorithm and records raw samples only below `local/`.
 
 The E2E targets use pure ML-DSA-65 and
-id-MLDSA65-ECDSA-P256-SHA512. The mixed-tree transition certificate has an RSA
-signature and Composite SPKI. The child publication point contains a Composite
-CRL, manifest, and ROA. The rpki-client development patch remains Current
-Suite-only by default and enables both experimental suites only with its
-existing experimental option.
+id-MLDSA65-ECDSA-P256-SHA512, OID `1.3.6.1.5.5.7.6.45`. The
+mixed-tree transition certificate has an RSA signature and Composite SPKI. The
+child publication point contains a Composite CRL, manifest, and ROA. The
+rpki-client development patch remains Current Suite-only by default and
+enables both experimental suites only with its existing experimental option.
 
 The experiment pins OpenSSL 3.6.2 at
-`fe686e15b8d1d907c8801da26330bcf189f63413`, the Composite provider at
-`2263161f998715860df433ad820d7c0f0880c43d`, rpki-client-portable at
-`b7d6e2fc289d69a77cbb2ebd646b3453c7e5e2b7`, and its OpenBSD source at
-`577166e30b2a454faed6b9ac8a9788844174fc43`. Apply the provider integration
-fix and public RP reference patch before building:
+`fe686e15d84334b284f883118ed92f64b409b3aa`, the Composite provider at
+`2263161f6b058fe0195a98b6fad088c2d4a2595f`, rpki-client-portable at
+`b7d6e2fc4522751515444b45f07ce68cc0b3497b`, and its OpenBSD source at
+`577166e3dda1990fd9c54679b5d74ffc0ec5dec5`. The machine-readable source of
+these pins is `experiments/composite-dependencies.json`.
+
+Build the complete ignored dependency tree and run the RP matrix with:
+
+```sh
+make composite-bootstrap
+```
+
+This is the only network-enabled Composite bootstrap target. It refuses to
+replace existing checkout paths and disables their push URLs. Validate an
+existing build without network access with `make composite-bootstrap-check`.
+The bootstrap applies the provider integration fix and public RP reference
+patch before building:
 
 ```sh
 git -C local/upstream/composite-provider apply \

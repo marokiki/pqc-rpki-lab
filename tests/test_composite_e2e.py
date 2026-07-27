@@ -84,6 +84,26 @@ class CompositeE2ETests(unittest.TestCase):
         self.assertIn('MLDSA65_OID "2.16.840.1.101.3.4.3.18"', patch)
         self.assertIn("pure ML-DSA-65 support is experimental", patch)
 
+    def test_rp_matrix_covers_all_four_scenarios(self) -> None:
+        summary = json.loads(
+            (
+                ROOT
+                / "results"
+                / "composite-e2e"
+                / "rp-validation-matrix.json"
+            ).read_text()
+        )
+        self.assertEqual(
+            set(summary["cases"]),
+            {
+                "rsa_baseline",
+                "pure_mldsa65",
+                "composite_standalone",
+                "mixed_tree",
+            },
+        )
+        self.assertTrue(summary["success"])
+
     def test_keygen_summary_is_separate_from_e2e_and_primitives(self) -> None:
         summary = json.loads(
             (

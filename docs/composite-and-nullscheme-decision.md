@@ -4,7 +4,10 @@
 
 ## Current recommendation
 
-For draft-00 and the next implementation phase, keep the mainline transition model as parallel RSA/PQC publication. Keep composite signatures and Null Scheme-like designs as separate analysis tracks.
+Parallel publication, Composite signatures, and Mixed Certification Chains
+remain independent migration choices. Draft-02 reports Composite and
+Mixed-tree feasibility without selecting a production transition model.
+Null Scheme-like designs remain a separate analysis track.
 
 ## Why parallel publication first
 
@@ -23,7 +26,11 @@ Operational concerns:
 
 Composite ML-DSA raw signing and verification are implemented against `draft-ietf-lamps-pq-composite-sigs-19`. The implementation covers the Draft-19 message representative, ML-DSA context binding, both component operations, raw public-key and signature concatenation, and all-component verification. The measured variants are ML-DSA-44 with P-256, ML-DSA-65 with P-256, and ML-DSA-87 with P-384. Draft-19 does not define ML-DSA-87 with P-256.
 
-The raw implementation does not yet define an RPKI X.509/CMS profile or demonstrate validator interoperability. Composite may reduce branch consistency problems, but it introduces RPKI questions:
+The repository now defines an experimental RPKI X.509/CMS profile for
+id-MLDSA65-ECDSA-P256-SHA512 and demonstrates one controlled E2E path through
+an experimental rpki-client patch. This is not independent interoperability.
+Composite may reduce branch consistency problems, but it introduces RPKI
+questions:
 
 - Can legacy RPs parse or cleanly reject composite objects?
 - Does composite reduce or increase total repository size compared with parallel publication?
@@ -31,7 +38,10 @@ The raw implementation does not yet define an RPKI X.509/CMS profile or demonstr
 - Is a composite signature profile stable enough for RPKI Standards Track dependency?
 - Does composite complicate CA key management and rollover?
 
-Measured results and reproduction commands are in `results/draft-composite-2026-07/`. Decision status remains `separate analysis track`; the raw construction is implemented, while RPKI profiling and interoperability remain future work.
+Raw measurements are in `results/draft-composite-2026-07/`; complete object,
+RP, negative-test, and E2E results are in `results/composite-e2e/`. Decision
+status remains `experimental`; independent RP acceptance and production-like
+CA issuance remain future work.
 
 ## Null Scheme track
 

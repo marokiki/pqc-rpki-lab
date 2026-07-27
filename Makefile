@@ -1,4 +1,4 @@
-.PHONY: all certificate-sizes ccr-comparison cms-api-probe composite-100k composite-e2e composite-e2e-rp-matrix composite-e2e-negative composite-e2e-benchmark composite-keygen-benchmark draft-composite-100k exact-100k key-roll local-validation message-sweep mixed-tree object-benchmarks pre-publication regenerate-reports review-evidence routinator-krill-interop routinator-krill-scan rpki-objects test validator-container-probe verify-artifacts install-optional-pqc clean
+.PHONY: all certificate-sizes ccr-comparison cms-api-probe composite-100k composite-bootstrap composite-bootstrap-check composite-e2e composite-e2e-rp-matrix composite-e2e-negative composite-e2e-benchmark composite-keygen-benchmark draft-composite-100k exact-100k key-roll local-validation message-sweep mixed-tree object-benchmarks pre-publication regenerate-reports review-evidence routinator-krill-interop routinator-krill-scan rpki-objects test validator-container-probe verify-artifacts install-optional-pqc clean
 
 COMPOSITE_OPENSSL ?= $(CURDIR)/local/build/openssl-3.6.2-install/bin/openssl
 COMPOSITE_OPENSSL_LIBDIR ?= $(CURDIR)/local/build/openssl-3.6.2-install/lib64
@@ -40,10 +40,20 @@ composite-e2e:
 composite-e2e-rp-matrix: composite-e2e
 	$(COMPOSITE_ENV) PYTHONPATH=src python3 tools/generate_rpki_objects.py \
 		--algorithm ml-dsa-65 \
-		--output-root local/e2e/standalone \
+		--output-root local/e2e/rp-matrix-pure \
+		--openssl "$(COMPOSITE_OPENSSL)"
+	$(COMPOSITE_ENV) PYTHONPATH=src python3 tools/generate_rpki_objects.py \
+		--algorithm composite-mldsa65-p256 \
+		--output-root local/e2e/rp-matrix-composite \
+		--openssl "$(COMPOSITE_OPENSSL)"
+	$(COMPOSITE_ENV) PYTHONPATH=src python3 tools/generate_rpki_objects.py \
+		--algorithm rsa \
+		--output-root local/e2e/rp-matrix-rsa \
 		--openssl "$(COMPOSITE_OPENSSL)"
 	$(COMPOSITE_ENV) PYTHONPATH=src python3 tools/composite_rp_matrix.py \
-		--pure-fixture local/e2e/standalone/testdata/validator/ml-dsa-65 \
+		--pure-fixture local/e2e/rp-matrix-pure/testdata/validator/ml-dsa-65 \
+		--composite-fixture local/e2e/rp-matrix-composite/testdata/validator/composite-mldsa65-p256 \
+		--rsa-fixture local/e2e/rp-matrix-rsa/testdata/validator/rsa \
 		--unmodified local/build/rpki-client-baseline/src/rpki-client \
 		--patched local/build/rpki-client-composite/src/rpki-client
 
@@ -70,6 +80,12 @@ composite-keygen-benchmark:
 		--repetitions 1000 \
 		--openssl "$(COMPOSITE_OPENSSL)"
 
+composite-bootstrap:
+	./tools/bootstrap_composite_e2e.sh --allow-network
+
+composite-bootstrap-check:
+	./tools/bootstrap_composite_e2e.sh --check-only
+
 cms-api-probe:
 	PYTHONPATH=src python3 tools/cms_api_probe.py
 
@@ -84,6 +100,7 @@ regenerate-reports: object-benchmarks mixed-tree ccr-comparison routinator-krill
 
 pre-publication:
 	PYTHONPATH=src python3 tools/check_required_artifacts.py
+	PYTHONPATH=src python3 tools/check_composite_evidence.py
 	PYTHONPATH=src python3 tools/pre_publication_check.py
 
 verify-artifacts:

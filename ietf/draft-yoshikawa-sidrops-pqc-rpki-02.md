@@ -181,7 +181,7 @@ production transition timetable.
 ## Composite Configuration Evaluated in This Revision
 
 The composite configuration evaluated in this revision is
-id-MLDSA65-ECDSA-P256-SHA512, as specified by
+id-MLDSA65-ECDSA-P256-SHA512 (OID 1.3.6.1.5.5.7.6.45), as specified by
 [I-D.ietf-lamps-pq-composite-sigs] and
 [I-D.ietf-lamps-cms-composite-sigs].  It combines ML-DSA-65 with ECDSA
 P-256 and requires both component signatures to validate.  This revision
@@ -713,7 +713,8 @@ Implemented:
   Suite-only behavior by default and accepts the evaluated Composite
   suite only with an explicit experimental option.  The extended RP
   produced the expected IPv4 and IPv6 VRPs from the mixed tree.
-* Twelve negative cases covering component corruption, component order,
+* 15 negative cases covering component and pure signature corruption,
+  component order,
   truncation, unsupported OID, non-absent parameters, certificate
   signatureAlgorithm mismatch, CRL and CMS signature corruption,
   SHA-256 substitution, certificate path failure, and manifest hash

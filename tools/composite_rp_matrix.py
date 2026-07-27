@@ -19,6 +19,10 @@ DEFAULT_PURE_FIXTURE = (
     ROOT / "local" / "e2e" / "standalone"
     / "testdata" / "validator" / "ml-dsa-65"
 )
+DEFAULT_COMPOSITE_FIXTURE = (
+    ROOT / "testdata" / "validator" / "composite-mldsa65-p256"
+)
+DEFAULT_RSA_FIXTURE = ROOT / "testdata" / "validator" / "rsa"
 DEFAULT_WORK = ROOT / "local" / "e2e" / "rp-matrix"
 DEFAULT_RESULT = ROOT / "results" / "composite-e2e" / "rp-validation-matrix.json"
 
@@ -94,6 +98,10 @@ def main() -> None:
     parser.add_argument(
         "--pure-fixture", type=Path, default=DEFAULT_PURE_FIXTURE
     )
+    parser.add_argument(
+        "--composite-fixture", type=Path, default=DEFAULT_COMPOSITE_FIXTURE
+    )
+    parser.add_argument("--rsa-fixture", type=Path, default=DEFAULT_RSA_FIXTURE)
     parser.add_argument("--work", type=Path, default=DEFAULT_WORK)
     parser.add_argument("--result", type=Path, default=DEFAULT_RESULT)
     parser.add_argument("--unmodified", type=Path, required=True)
@@ -101,10 +109,40 @@ def main() -> None:
     args = parser.parse_args()
     fixture = args.fixture.resolve()
     pure_fixture = args.pure_fixture.resolve()
+    composite_fixture = args.composite_fixture.resolve()
+    rsa_fixture = args.rsa_fixture.resolve()
     work = args.work.resolve()
     reset_generated_directory(work, allowed_root=ROOT / "local")
     env = os.environ.copy()
     cases = {
+        "rsa_baseline": {
+            "unmodified": run_case(
+                "rsa-unmodified", args.unmodified.resolve(), [], rsa_fixture,
+                "ca.cer", work, env,
+            ),
+            "patched_default": run_case(
+                "rsa-patched-default", args.patched.resolve(), [], rsa_fixture,
+                "ca.cer", work, env,
+            ),
+            "patched_experimental": run_case(
+                "rsa-patched-experimental", args.patched.resolve(), ["-x"],
+                rsa_fixture, "ca.cer", work, env,
+            ),
+        },
+        "composite_standalone": {
+            "unmodified": run_case(
+                "composite-unmodified", args.unmodified.resolve(), [],
+                composite_fixture, "ca.cer", work, env,
+            ),
+            "patched_default": run_case(
+                "composite-patched-default", args.patched.resolve(), [],
+                composite_fixture, "ca.cer", work, env,
+            ),
+            "patched_experimental": run_case(
+                "composite-patched-experimental", args.patched.resolve(),
+                ["-x"], composite_fixture, "ca.cer", work, env,
+            ),
+        },
         "mixed_tree": {
             "unmodified": run_case(
                 "mixed-unmodified", args.unmodified.resolve(), [], fixture,
@@ -138,19 +176,27 @@ def main() -> None:
         {"asn": "AS64496", "prefix": "192.0.2.0/24", "max_length": 24},
         {"asn": "AS64496", "prefix": "2001:db8::/32", "max_length": 48},
     ]
-    success = all(
+    experimental_success = all(
         suite["unmodified"]["vrp_count"] == 0
         and suite["unmodified"]["invalid_certificates"] == 1
         and suite["patched_default"]["vrp_count"] == 0
         and suite["patched_default"]["invalid_certificates"] == 1
         and suite["patched_experimental"]["invalid_certificates"] == 0
         and suite["patched_experimental"]["vrps"] == expected_vrps
-        for suite in cases.values()
+        for name, suite in cases.items()
+        if name != "rsa_baseline"
     )
+    rsa_success = all(
+        result["invalid_certificates"] == 0
+        and result["vrps"] == expected_vrps
+        for result in cases["rsa_baseline"].values()
+    )
+    success = experimental_success and rsa_success
     result = {
         "warning": "EXPERIMENTAL / NOT FOR PRODUCTION",
         "classification": (
-            "small-scale local pure ML-DSA-65 and mixed-tree RP comparison"
+            "small-scale local RSA, pure ML-DSA-65, Composite standalone, "
+            "and mixed-tree RP comparison"
         ),
         "policy": {
             "unmodified": "Current Suite only",

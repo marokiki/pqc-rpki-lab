@@ -94,7 +94,7 @@
       </section>
       <section anchor="composite-configuration-evaluated-in-this-revision">
         <name>Composite Configuration Evaluated in This Revision</name>
-        <t>The composite configuration evaluated in this revision is id-MLDSA65-ECDSA-P256-SHA512, as specified by <xref target="I-D.ietf-lamps-pq-composite-sigs" /> and <xref target="I-D.ietf-lamps-cms-composite-sigs" />.  It combines ML-DSA-65 with ECDSA P-256 and requires both component signatures to validate.  This revision uses the composite construction and a Mixed Certification Chain as a concrete design for measurement.  This choice is an experimental input, not a recommendation for production deployment.</t>
+        <t>The composite configuration evaluated in this revision is id-MLDSA65-ECDSA-P256-SHA512 (OID 1.3.6.1.5.5.7.6.45), as specified by <xref target="I-D.ietf-lamps-pq-composite-sigs" /> and <xref target="I-D.ietf-lamps-cms-composite-sigs" />.  It combines ML-DSA-65 with ECDSA P-256 and requires both component signatures to validate.  This revision uses the composite construction and a Mixed Certification Chain as a concrete design for measurement.  This choice is an experimental input, not a recommendation for production deployment.</t>
         <t>The object experiment applies <xref target="I-D.ietf-lamps-pq-composite-sigs" /> to composite public keys and certificate signatures, and <xref target="I-D.ietf-lamps-cms-composite-sigs" /> to composite CMS SignedData.  A non-public development implementation has generated complete composite X.509 certificates, CRLs, ROAs, and manifests and has validated an RSA-to-composite mixed tree with an experimentally extended rpki-client.  This is single-implementation laboratory evidence, not independent interoperability evidence.</t>
         <t>Experiments with the composite suite belong in isolated repositories under test TALs.  Experimental objects, production repositories, production keys, and production TALs are deliberately kept separate.</t>
       </section>
@@ -369,7 +369,7 @@
           <t>An experimental rpki-client extension that preserves Current Suite-only behavior by default and accepts the evaluated Composite suite only with an explicit experimental option.  The extended RP produced the expected IPv4 and IPv6 VRPs from the mixed tree.</t>
         </li>
         <li>
-          <t>Twelve negative cases covering component corruption, component order, truncation, unsupported OID, non-absent parameters, certificate signatureAlgorithm mismatch, CRL and CMS signature corruption, SHA-256 substitution, certificate path failure, and manifest hash mismatch.</t>
+          <t>15 negative cases covering component and pure signature corruption, component order, truncation, unsupported OID, non-absent parameters, certificate signatureAlgorithm mismatch, CRL and CMS signature corruption, SHA-256 substitution, certificate path failure, and manifest hash mismatch.</t>
         </li>
         <li>
           <t>X86-64 small-scale E2E measurements using 100 complete generation repetitions and 1000 local RP-validation repetitions per scenario. These are not measurements of a real repository, RRDP, or rsync.</t>

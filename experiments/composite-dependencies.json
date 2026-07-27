@@ -1,0 +1,19 @@
+{
+  "composite_provider": {
+    "commit": "2263161f6b058fe0195a98b6fad088c2d4a2595f",
+    "url": "https://github.com/CompositeCrypto/composite-provider.git"
+  },
+  "openssl": {
+    "commit": "fe686e15d84334b284f883118ed92f64b409b3aa",
+    "url": "https://github.com/openssl/openssl.git",
+    "version": "3.6.2"
+  },
+  "rpki_client_openbsd": {
+    "commit": "577166e3dda1990fd9c54679b5d74ffc0ec5dec5",
+    "url": "https://github.com/rpki-client/rpki-client-openbsd.git"
+  },
+  "rpki_client_portable": {
+    "commit": "b7d6e2fc4522751515444b45f07ce68cc0b3497b",
+    "url": "https://github.com/rpki-client/rpki-client-portable.git"
+  }
+}
