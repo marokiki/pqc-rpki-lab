@@ -42,7 +42,7 @@ class DraftSubmissionTest(unittest.TestCase):
         self.assertEqual(
             self.root_02.find('.//reference[@anchor="pqc-rpki-lab"]').get("target"),
             "https://github.com/marokiki/pqc-rpki-lab/tree/"
-            "0d572a851c29411bda4460e5c76394e6f4ec23c9",
+            "8279b7b608be9874a846d2b19b217e85ce4f45ca",
         )
 
     def test_draft_02_records_review_boundaries(self):

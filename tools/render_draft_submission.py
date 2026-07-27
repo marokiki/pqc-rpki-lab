@@ -461,7 +461,7 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
         ),
         target=(
             "https://github.com/marokiki/pqc-rpki-lab/tree/"
-            "0d572a851c29411bda4460e5c76394e6f4ec23c9"
+            "8279b7b608be9874a846d2b19b217e85ce4f45ca"
             if DOCNAME.endswith("-02")
             else "https://github.com/marokiki/pqc-rpki-lab/releases/tag/"
             f"{DOCNAME}"

@@ -919,7 +919,7 @@
           <date month="March" year="2026" />
         </front>
       </reference>
-      <reference anchor="pqc-rpki-lab" target="https://github.com/marokiki/pqc-rpki-lab/tree/0d572a851c29411bda4460e5c76394e6f4ec23c9">
+      <reference anchor="pqc-rpki-lab" target="https://github.com/marokiki/pqc-rpki-lab/tree/8279b7b608be9874a846d2b19b217e85ce4f45ca">
         <front>
           <title>pqc-rpki-lab experimental evidence snapshot</title>
           <author fullname="Tomoki Yoshikawa" initials="T." surname="Yoshikawa" />
@@ -932,7 +932,7 @@
       <t>This appendix records measurements referenced by the Size Model Inputs, Experimental Results Summary, and Implementation Status sections.  All values were produced by the experimental harness <xref target="pqc-rpki-lab" />, which contains the corresponding scripts, raw outputs, and environment metadata.  This appendix is to be removed before publication as an RFC; the harness remains the durable record.</t>
       <section anchor="reproducibility-metadata">
         <name>Reproducibility Metadata</name>
-        <t>The evidence snapshot cited by this revision is Git commit 0d572a851c29411bda4460e5c76394e6f4ec23c9.  The measurements were run on macOS 26.5.2 arm64 on an Apple M4.  The repeated primitive sweep used OpenSSL 3.6.2 and a C harness compiled with <tt>cc -O2 -Wall -Wextra -Werror</tt>.  The recorded environment also identifies Python 3.14.4 and liboqs 0.15.0.  The Draft-19 composite benchmark used <tt>cc -O3 -Wall -Wextra -Werror</tt> with OpenSSL 3.6.2.</t>
+        <t>The evidence snapshot cited by this revision is Git commit 8279b7b608be9874a846d2b19b217e85ce4f45ca.  The measurements were run on macOS 26.5.2 arm64 on an Apple M4.  The repeated primitive sweep used OpenSSL 3.6.2 and a C harness compiled with <tt>cc -O2 -Wall -Wextra -Werror</tt>.  The recorded environment also identifies Python 3.14.4 and liboqs 0.15.0.  The Draft-19 composite benchmark used <tt>cc -O3 -Wall -Wextra -Werror</tt> with OpenSSL 3.6.2.</t>
         <t>The evidence reference is fixed to that commit rather than to a mutable development branch.  A final posted revision also needs a fixed commit or tag containing the corresponding submission artifacts.</t>
       </section>
       <section anchor="small-scale-e2e-measurement">

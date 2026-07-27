@@ -897,7 +897,7 @@ RFC; the harness remains the durable record.
 ## Reproducibility Metadata
 
 The evidence snapshot cited by this revision is Git commit
-0d572a851c29411bda4460e5c76394e6f4ec23c9.  The measurements were run
+8279b7b608be9874a846d2b19b217e85ce4f45ca.  The measurements were run
 on macOS 26.5.2 arm64 on an Apple M4.  The repeated primitive sweep used
 OpenSSL 3.6.2 and a C harness compiled with
 `cc -O2 -Wall -Wextra -Werror`.  The recorded environment also identifies
@@ -1253,6 +1253,6 @@ Post-Quantum Era", arXiv:2603.06968, March 2026,
 https://arxiv.org/abs/2603.06968.
 
 [pqc-rpki-lab] Yoshikawa, T., "pqc-rpki-lab experimental evidence
-snapshot", Git commit 0d572a851c29411bda4460e5c76394e6f4ec23c9,
+snapshot", Git commit 8279b7b608be9874a846d2b19b217e85ce4f45ca,
 11 July 2026,
-https://github.com/marokiki/pqc-rpki-lab/tree/0d572a851c29411bda4460e5c76394e6f4ec23c9.
+https://github.com/marokiki/pqc-rpki-lab/tree/8279b7b608be9874a846d2b19b217e85ce4f45ca.
