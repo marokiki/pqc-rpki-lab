@@ -30,5 +30,12 @@ digest mismatches, certificate and CRL signature failures, invalid
 certification paths, and manifest hash mismatches. The Routinator work also
 exposed and fixed a long-form DER length bug in rpki-rs signed-attribute
 reconstruction when the SHA-512 attributes exceeded 127 octets.
-Independent cryptographic implementations and production-scale repository
-transport remain open.
+
+An experimental Krill 0.16.0 extension uses the same patched rpki-rs and
+OpenSSL/provider backend to create a Composite child below an RSA testbed
+parent. The child publishes its CRL, Manifest, and one ROA. Experimental
+rpki-client and Routinator both derive the expected VRP; their default modes
+reject that phase. Krill then performs a child key roll back to RSA, after
+which both default and experimental RP modes derive the expected VRP. This
+demonstrates an isolated CA lifecycle path, but not independent cryptography,
+production protocol operation, or repository-scale transport.

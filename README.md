@@ -176,6 +176,9 @@ The experiment pins OpenSSL 3.6.2 at
 `577166e3dda1990fd9c54679b5d74ffc0ec5dec5`. The second-RP experiment pins
 Routinator 0.15.2 at `0cf9104efa730ebc2de6bbd880e9bcee50de10d9`
 and rpki-rs 0.19.3 at `56d3811d3ee44a7b93eab33e5b1853cbcd4dee70`.
+The CA experiment pins Krill 0.16.0 at
+`b2a26cd9f44a385d8a62a0199b082f44e5062039` and builds it with Rust
+1.88.0.
 The machine-readable source of these pins is
 `experiments/composite-dependencies.json`.
 
@@ -215,6 +218,24 @@ from a second RP implementation, not an independent cryptographic
 implementation. The experimental path is enabled only by
 `PQC_RPKI_EXPERIMENTAL=1`.
 
+Build the experimental Krill CA, run RSA-parent to Composite-child issuance,
+publish a ROA, and roll the child back to RSA with:
+
+```sh
+make krill-experimental-bootstrap
+# For an existing checkout and build:
+make krill-experimental-e2e
+make krill-experimental-bootstrap-check
+```
+
+Run `make composite-bootstrap` and
+`make routinator-experimental-bootstrap` first on a new machine. The Krill
+bootstrap applies the public patch to the pinned checkout, disables its push
+URL, builds with the sibling patched rpki-rs, runs the fixed rollover
+scenario, and validates both publication phases with experimental rpki-client
+and Routinator. The suite selector and captured CA state remain below
+`local/`; only the patch and sanitized acceptance matrix are public.
+
 Generate the certificate and CRL size evidence, including experimental
 Falcon-512 X.509 encodings, with:
 
@@ -245,8 +266,11 @@ the isolated unmodified-validator experiment. `results/key-roll/` is a
 synthetic configurable key-roll model.
 `results/composite-e2e/routinator-matrix.json` and
 `routinator-negative-summary.json` record the second-RP E2E result.
-`results/routinator-krill/` records the earlier Routinator/Krill extension
-map and source scan. Configure external inputs with
+`results/composite-e2e/krill-rollover.json` records the Krill-issued
+Composite publication and RSA rollback result. This is a small, isolated
+local-rsync CA experiment, not a production deployment or repository-scale
+measurement. `results/routinator-krill/` retains the earlier extension map
+and source scan. Configure external inputs with
 `PQC_RPKI_ROUTINATOR_SRC`, `PQC_RPKI_KRILL_SRC`,
 `PQC_RPKI_ROUTINATOR_BIN`, and `PQC_RPKI_KRILL_BIN`; suggested checkouts live
 under ignored `local/upstream/`.

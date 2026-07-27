@@ -1,0 +1,492 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 8e37e96..defce1a 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -43,7 +43,7 @@ pin-project-lite = "0.2.16"
+ rand            = "0.10"
+ regex           = { version = "1.11.1", default-features = false, features = [ "std" ] }
+ reqwest         = { version = "0.13.2", features = ["json"] }
+-rpki            = { version = "0.19.2", features = ["ca", "compat", "rrdp"] }
++rpki            = { path = "../rpki-rs", features = ["ca", "compat", "rrdp", "experimental-pqc"] }
+ rustls-pemfile  = "2.2.0"
+ serde           = { version = "1.0", features = ["derive", "rc"] }
+ serde_json      = "1.0"
+diff --git a/src/commons/crypto/signing/dispatch/krillsigner.rs b/src/commons/crypto/signing/dispatch/krillsigner.rs
+index 005a101..aa46b2d 100644
+--- a/src/commons/crypto/signing/dispatch/krillsigner.rs
++++ b/src/commons/crypto/signing/dispatch/krillsigner.rs
+@@ -227,7 +227,7 @@ impl KrillSigner {
+ 
+     pub fn create_key(&self) -> CryptoResult<KeyIdentifier> {
+         self.router
+-            .create_key(PublicKeyFormat::Rsa)
++            .create_key(configured_public_key_format())
+             .map_err(crypto::Error::signer)
+     }
+ 
+@@ -271,8 +271,15 @@ impl KrillSigner {
+         key_id: &KeyIdentifier,
+         data: &D,
+     ) -> CryptoResult<RpkiSignature> {
++        let key = self.router
++            .get_key_info(key_id)
++            .map_err(crypto::Error::key_error)?;
+         self.router
+-            .sign(key_id, RpkiSignatureAlgorithm::default(), data)
++            .sign(
++                key_id,
++                RpkiSignatureAlgorithm::for_public_key(key.algorithm()),
++                data,
++            )
+             .map_err(crypto::Error::signing)
+     }
+ 
+@@ -417,6 +424,24 @@ impl KrillSigner {
+     }
+ }
+ 
++fn configured_public_key_format() -> PublicKeyFormat {
++    if std::env::var_os("PQC_RPKI_EXPERIMENTAL").as_deref()
++        != Some(std::ffi::OsStr::new("1"))
++    {
++        return PublicKeyFormat::Rsa;
++    }
++    let suite = std::env::var_os("PQC_RPKI_KRILL_SUITE_FILE")
++        .and_then(|path| std::fs::read_to_string(path).ok())
++        .map(|value| value.trim().to_string())
++        .or_else(|| std::env::var("PQC_RPKI_KRILL_SUITE").ok())
++        .unwrap_or_else(|| "rsa".to_string());
++    match suite.as_str() {
++        "mldsa65" => PublicKeyFormat::MlDsa65,
++        "composite" => PublicKeyFormat::MlDsa65EcdsaP256Sha512,
++        _ => PublicKeyFormat::Rsa,
++    }
++}
++
+ impl KrillSigner {
+     fn build_signers(
+         signer_builder: SignerBuilderFn,
+diff --git a/src/commons/crypto/signing/dispatch/signerprovider.rs b/src/commons/crypto/signing/dispatch/signerprovider.rs
+index 5ef5931..f30641a 100644
+--- a/src/commons/crypto/signing/dispatch/signerprovider.rs
++++ b/src/commons/crypto/signing/dispatch/signerprovider.rs
+@@ -1,5 +1,5 @@
+ use rpki::crypto::{
+-    signer::{KeyError, SigningAlgorithm},
++    signer::KeyError,
+     KeyIdentifier, PublicKey, PublicKeyFormat, RpkiSignature, Signature,
+     SignatureAlgorithm, SigningError,
+ };
+@@ -281,14 +281,6 @@ impl SignerProvider {
+         algorithm: Alg,
+         data: &D,
+     ) -> Result<Signature<Alg>, SigningError<SignerError>> {
+-        let signing_algorithm = algorithm.signing_algorithm();
+-        if !matches!(signing_algorithm, SigningAlgorithm::RsaSha256) {
+-            return Err(SignerError::UnsupportedSigningAlg(
+-                signing_algorithm,
+-            )
+-            .into());
+-        }
+-
+         match self {
+             SignerProvider::OpenSsl(_, signer) => {
+                 signer.sign(key, algorithm, data)
+@@ -313,13 +305,6 @@ impl SignerProvider {
+         algorithm: Alg,
+         data: &D,
+     ) -> Result<(Signature<Alg>, PublicKey), SignerError> {
+-        let signing_algorithm = algorithm.signing_algorithm();
+-        if !matches!(signing_algorithm, SigningAlgorithm::RsaSha256) {
+-            return Err(SignerError::UnsupportedSigningAlg(
+-                signing_algorithm,
+-            ));
+-        }
+-
+         match self {
+             SignerProvider::OpenSsl(_, signer) => {
+                 signer.sign_one_off(algorithm, data)
+diff --git a/src/commons/crypto/signing/signers/error.rs b/src/commons/crypto/signing/signers/error.rs
+index 08eb70f..961c82f 100644
+--- a/src/commons/crypto/signing/signers/error.rs
++++ b/src/commons/crypto/signing/signers/error.rs
+@@ -58,6 +58,15 @@ impl fmt::Display for SignerError {
+                     SigningAlgorithm::EcdsaP256Sha256 => {
+                         write!(f, "Signing with EcdsaP256 not supported")
+                     }
++                    SigningAlgorithm::MlDsa65 => {
++                        write!(f, "Signing with ML-DSA-65 not supported")
++                    }
++                    SigningAlgorithm::MlDsa65EcdsaP256Sha512 => {
++                        write!(
++                            f,
++                            "Signing with Composite ML-DSA-65 and P-256 not supported"
++                        )
++                    }
+                 }
+             }
+         }
+diff --git a/src/commons/crypto/signing/signers/softsigner.rs b/src/commons/crypto/signing/signers/softsigner.rs
+index 3a7a5d6..44d3225 100644
+--- a/src/commons/crypto/signing/signers/softsigner.rs
++++ b/src/commons/crypto/signing/signers/softsigner.rs
+@@ -1,6 +1,7 @@
+ //! Support for signing things using software keys (through openssl) and
+ //! storing them unencrypted on disk.
+ use std::{
++    process::Command,
+     str::FromStr,
+     sync::{Arc, RwLock},
+ };
+@@ -111,7 +112,7 @@ impl OpenSslSigner {
+     ) -> Result<(PublicKey, String), SignerError> {
+         // For the OpenSslSigner we use the KeyIdentifier as the internal key
+         // id so the two are the same.
+-        let key_id = self.build_key()?;
++        let key_id = self.build_key(PublicKeyFormat::Rsa)?;
+         let internal_key_id = key_id.to_string();
+         let key_pair = self.load_key(&key_id)?;
+         let public_key = key_pair.subject_public_key_info()?;
+@@ -144,8 +145,11 @@ impl OpenSslSigner {
+         Ok(store)
+     }
+ 
+-    fn build_key(&self) -> Result<KeyIdentifier, SignerError> {
+-        let kp = OpenSslKeyPair::build()?;
++    fn build_key(
++        &self,
++        algorithm: PublicKeyFormat,
++    ) -> Result<KeyIdentifier, SignerError> {
++        let kp = OpenSslKeyPair::build(algorithm)?;
+         self.store_key(kp)
+     }
+ 
+@@ -173,18 +177,26 @@ impl OpenSslSigner {
+         data: &D,
+     ) -> Result<Signature<Alg>, SignerError> {
+         let signing_algorithm = algorithm.signing_algorithm();
+-        if !matches!(signing_algorithm, SigningAlgorithm::RsaSha256) {
+-            return Err(SignerError::UnsupportedSigningAlg(
+-                signing_algorithm,
+-            ));
+-        }
+-
+-        let mut signer =
+-            ::openssl::sign::Signer::new(MessageDigest::sha256(), pkey)?;
+-        signer.update(data.as_ref())?;
+-
+-        let signature =
+-            Signature::new(algorithm, Bytes::from(signer.sign_to_vec()?));
++        let mut signer = match signing_algorithm {
++            SigningAlgorithm::RsaSha256 => {
++                ::openssl::sign::Signer::new(MessageDigest::sha256(), pkey)?
++            }
++            SigningAlgorithm::MlDsa65 => {
++                ::openssl::sign::Signer::new_without_digest(pkey)?
++            }
++            SigningAlgorithm::MlDsa65EcdsaP256Sha512 => {
++                ::openssl::sign::Signer::new(MessageDigest::sha512(), pkey)?
++            }
++            _ => {
++                return Err(SignerError::UnsupportedSigningAlg(
++                    signing_algorithm,
++                ))
++            }
++        };
++        let signature = Signature::new(
++            algorithm,
++            Bytes::from(signer.sign_oneshot_to_vec(data.as_ref())?),
++        );
+ 
+         Ok(signature)
+     }
+@@ -237,9 +249,9 @@ impl OpenSslSigner {
+ impl OpenSslSigner {
+     pub fn create_key(
+         &self,
+-        _algorithm: PublicKeyFormat,
++        algorithm: PublicKeyFormat,
+     ) -> Result<KeyIdentifier, SignerError> {
+-        let key_id = self.build_key()?;
++        let key_id = self.build_key(algorithm)?;
+         self.remember_key_id(&key_id)?;
+ 
+         Ok(key_id)
+@@ -292,7 +304,7 @@ impl OpenSslSigner {
+         algorithm: Alg,
+         data: &D,
+     ) -> Result<(Signature<Alg>, PublicKey), SignerError> {
+-        let kp = OpenSslKeyPair::build()?;
++        let kp = OpenSslKeyPair::build(algorithm.public_key_format())?;
+         let signature =
+             Self::sign_with_key(kp.pkey.as_ref(), algorithm, data)?;
+         let key = kp.subject_public_key_info()?;
+@@ -316,7 +328,7 @@ impl Serialize for OpenSslKeyPair {
+         let bytes: Vec<u8> = self
+             .pkey
+             .as_ref()
+-            .private_key_to_der()
++            .private_key_to_pem_pkcs8()
+             .map_err(ser::Error::custom)?;
+ 
+         BASE64_ENGINE.encode(bytes).serialize(s)
+@@ -338,18 +350,52 @@ impl<'de> Deserialize<'de> for OpenSslKeyPair {
+ }
+ 
+ impl OpenSslKeyPair {
+-    fn build() -> Result<OpenSslKeyPair, SignerError> {
+-        // Issues unwrapping this indicate a bug in the openssl library.
+-        // So, there is no way to recover.
+-        let rsa = Rsa::generate(2048)?;
+-        let pkey = PKey::from_rsa(rsa)?;
++    fn build(algorithm: PublicKeyFormat) -> Result<OpenSslKeyPair, SignerError> {
++        let pkey = match algorithm {
++            PublicKeyFormat::Rsa => PKey::from_rsa(Rsa::generate(2048)?)?,
++            PublicKeyFormat::MlDsa65
++            | PublicKeyFormat::MlDsa65EcdsaP256Sha512 => {
++                if std::env::var_os("PQC_RPKI_EXPERIMENTAL").as_deref()
++                    != Some(std::ffi::OsStr::new("1"))
++                {
++                    return Err(SignerError::other(
++                        "experimental PQC key generation is disabled"
++                    ));
++                }
++                let name = match algorithm {
++                    PublicKeyFormat::MlDsa65 => "ML-DSA-65",
++                    PublicKeyFormat::MlDsa65EcdsaP256Sha512 => {
++                        "MLDSA65-ECDSA-P256-SHA512"
++                    }
++                    _ => unreachable!(),
++                };
++                let openssl = std::env::var_os("PQC_RPKI_OPENSSL")
++                    .unwrap_or_else(|| "openssl".into());
++                let output = Command::new(openssl)
++                    .args(["genpkey", "-algorithm", name])
++                    .output()
++                    .map_err(SignerError::other)?;
++                if !output.status.success() {
++                    return Err(SignerError::other(format!(
++                        "experimental OpenSSL key generation failed: {}",
++                        String::from_utf8_lossy(&output.stderr).trim()
++                    )));
++                }
++                PKey::private_key_from_pem(&output.stdout)?
++            }
++            _ => {
++                return Err(SignerError::other(
++                    "unsupported experimental key format"
++                ))
++            }
++        };
+         Ok(OpenSslKeyPair { pkey })
+     }
+ 
+     fn subject_public_key_info(&self) -> Result<PublicKey, SignerError> {
+-        let rsa = self.pkey.rsa().map_err(SignerError::other)?;
+-        let bytes =
+-            Bytes::from(rsa.public_key_to_der().map_err(SignerError::other)?);
++        let bytes = Bytes::from(
++            self.pkey.public_key_to_der().map_err(SignerError::other)?
++        );
+ 
+         PublicKey::decode(bytes).map_err(SignerError::other)
+     }
+@@ -369,7 +415,8 @@ impl OpenSslKeyPair {
+             SignerError::other("Cannot parse private key base64")
+         })?;
+ 
+-        PKey::private_key_from_der(&bytes)
++        PKey::private_key_from_pem(&bytes)
++            .or_else(|_| PKey::private_key_from_der(&bytes))
+             .map(|pkey| OpenSslKeyPair { pkey })
+             .map_err(|e| {
+                 SignerError::Other(format!("Invalid private key: {e}"))
+@@ -397,7 +444,7 @@ pub mod tests {
+ 
+     #[test]
+     fn should_serialize_and_deserialize_key() {
+-        let key = OpenSslKeyPair::build().unwrap();
++        let key = OpenSslKeyPair::build(PublicKeyFormat::Rsa).unwrap();
+         let json = serde_json::to_string(&key).unwrap();
+         let key_des: OpenSslKeyPair =
+             serde_json::from_str(json.as_str()).unwrap();
+@@ -408,6 +455,32 @@ pub mod tests {
+         assert_eq!(json, json_from_des);
+     }
+ 
++    #[test]
++    fn experimental_keys_roundtrip_and_sign() {
++        if std::env::var_os("PQC_RPKI_EXPERIMENTAL").as_deref()
++            != Some(std::ffi::OsStr::new("1"))
++        {
++            return;
++        }
++        for format in [
++            PublicKeyFormat::MlDsa65,
++            PublicKeyFormat::MlDsa65EcdsaP256Sha512,
++        ] {
++            let key = OpenSslKeyPair::build(format).unwrap();
++            let public = key.subject_public_key_info().unwrap();
++            assert_eq!(public.algorithm(), format);
++            let algorithm = RpkiSignatureAlgorithm::for_public_key(format);
++            let signature = OpenSslSigner::sign_with_key(
++                key.pkey.as_ref(), algorithm, &b"krill-pqc-test"[..]
++            ).unwrap();
++            public.verify(b"krill-pqc-test", &signature).unwrap();
++
++            let json = serde_json::to_string(&key).unwrap();
++            let decoded: OpenSslKeyPair = serde_json::from_str(&json).unwrap();
++            assert_eq!(decoded.subject_public_key_info().unwrap().algorithm(), format);
++        }
++    }
++
+     #[test]
+     fn import_existing_pkcs1_openssl_key() {
+         test::test_in_memory(|storage_uri| {
+diff --git a/src/server/ca/publishing.rs b/src/server/ca/publishing.rs
+index 79ad6d3..fad7ae3 100644
+--- a/src/server/ca/publishing.rs
++++ b/src/server/ca/publishing.rs
+@@ -9,7 +9,9 @@ use rpki::{rrdp, uri};
+ use rpki::ca::idexchange::CaHandle;
+ use rpki::ca::provisioning::ResourceClassName;
+ use rpki::ca::publication::Base64;
+-use rpki::crypto::{DigestAlgorithm, KeyIdentifier};
++use rpki::crypto::{
++    DigestAlgorithm, KeyIdentifier, RpkiSignatureAlgorithm,
++};
+ use rpki::repository::crl::{Crl, TbsCertList};
+ use rpki::repository::manifest::{FileAndHash, Manifest, ManifestContent};
+ use rpki::repository::sigobj::SignedObjectBuilder;
+@@ -1591,9 +1593,12 @@ impl PublishedCrl {
+         signer: &KrillSigner,
+     ) -> KrillResult<Self> {
+         let serial_number = Serial::from(revision.number);
++        let signature = RpkiSignatureAlgorithm::for_public_key(
++            signer.get_key_info(&aki)?.algorithm()
++        );
+ 
+         let crl = TbsCertList::new(
+-            Default::default(),
++            signature,
+             issuer,
+             revision.this_update,
+             revision.next_update,
+diff --git a/tests/functional_pqc_rollover.rs b/tests/functional_pqc_rollover.rs
+new file mode 100644
+index 0000000..9140407
+--- /dev/null
++++ b/tests/functional_pqc_rollover.rs
+@@ -0,0 +1,112 @@
++//! Experimental RSA-parent to Composite-child issuance and rollback test.
++
++use std::{fs, io, path::Path};
++
++use krill::api::roa::RoaConfigurationUpdates;
++use rpki::{
++    crypto::PublicKeyFormat,
++    repository::resources::ResourceSet,
++};
++
++mod common;
++
++
++#[tokio::test]
++async fn functional_pqc_rollover() {
++    let Some(suite_file) = std::env::var_os("PQC_RPKI_KRILL_SUITE_FILE") else {
++        return;
++    };
++    fs::write(&suite_file, "rsa\n").unwrap();
++
++    let (server, tempdir)
++        = common::KrillServer::start_with_file_storage_and_testbed().await;
++    let parent = common::ca_handle("testbed");
++    let child = common::ca_handle("PQC-CA");
++    let resources = common::resources("AS64496", "192.0.2.0/24", "2001:db8::/32");
++    let rcn = common::rcn(0);
++
++    assert!(server.wait_for_ca_resources(&parent, &ResourceSet::all()).await);
++    let parent_key = server.ca_key_for_rcn(&parent, &rcn).await;
++    assert_eq!(
++        parent_key.incoming_cert.to_cert().unwrap()
++            .subject_public_key_info().algorithm(),
++        PublicKeyFormat::Rsa,
++    );
++
++    fs::write(&suite_file, "composite\n").unwrap();
++    server.create_ca_with_repo(&child).await;
++    server.register_ca_with_parent(&child, &parent, &resources).await;
++
++    let composite_key = server.ca_key_for_rcn(&child, &rcn).await;
++    assert_eq!(
++        composite_key.incoming_cert.to_cert().unwrap()
++            .subject_public_key_info().algorithm(),
++        PublicKeyFormat::MlDsa65EcdsaP256Sha512,
++    );
++
++    let roa = common::roa_conf("192.0.2.0/24-24 => 64496");
++    server.client().roas_update(
++        &child,
++        RoaConfigurationUpdates {
++            added: vec![roa.clone()],
++            removed: vec![],
++        },
++    ).await.unwrap();
++    let mut expected = server.expected_objects(&child);
++    expected.push_mft_and_crl(&rcn).await;
++    expected.push_roas([&roa]);
++    assert!(expected.wait_for_published().await);
++    copy_repository(tempdir.path(), "composite");
++    write_tal("composite", &server.client().testbed_tal().await.unwrap());
++
++    fs::write(&suite_file, "rsa\n").unwrap();
++    server.client().ca_init_keyroll(&child).await.unwrap();
++    assert!(server.wait_for_state_new_key(&child).await);
++    let rollback_key = server.ca_new_key_for_rcn(&child, &rcn).await;
++    assert_eq!(
++        rollback_key.incoming_cert.to_cert().unwrap()
++            .subject_public_key_info().algorithm(),
++        PublicKeyFormat::Rsa,
++    );
++    server.client().ca_activate_keyroll(&child).await.unwrap();
++    assert!(server.wait_for_state_active(&child).await);
++    copy_repository(tempdir.path(), "rollback");
++    write_tal("rollback", &server.client().testbed_tal().await.unwrap());
++}
++
++
++fn copy_repository(source: &Path, phase: &str) {
++    let Some(root) = std::env::var_os("PQC_RPKI_KRILL_OUTPUT") else {
++        return;
++    };
++    let target = Path::new(&root).join(phase).join("state");
++    if target.exists() {
++        fs::remove_dir_all(&target).unwrap();
++    }
++    fs::create_dir_all(&target).unwrap();
++    copy_tree(source, &target).unwrap();
++}
++
++
++fn write_tal(phase: &str, tal: &str) {
++    let Some(root) = std::env::var_os("PQC_RPKI_KRILL_OUTPUT") else {
++        return;
++    };
++    let target = Path::new(&root).join(phase).join("testbed.tal");
++    fs::write(target, tal).unwrap();
++}
++
++
++fn copy_tree(source: &Path, target: &Path) -> io::Result<()> {
++    for entry in fs::read_dir(source)? {
++        let entry = entry?;
++        let destination = target.join(entry.file_name());
++        if entry.file_type()?.is_dir() {
++            fs::create_dir_all(&destination)?;
++            copy_tree(&entry.path(), &destination)?;
++        } else {
++            fs::copy(entry.path(), destination)?;
++        }
++    }
++    Ok(())
++}

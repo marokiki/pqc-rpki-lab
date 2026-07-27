@@ -720,6 +720,13 @@ Implemented:
   repositories in experimental mode and retained rejection of the
   experimental suites in default mode.  It shares the experiment's
   OpenSSL and Composite provider cryptographic backend.
+* An experimental Krill 0.16.0 extension that created a Composite child
+  below an RSA testbed parent, published its CRL, manifest, and ROA, and
+  then rolled the child key back to RSA.  Experimental rpki-client and
+  Routinator derived the expected VRP during the Composite phase; after
+  rollback, their default and experimental modes all derived it.  The
+  test used an isolated local publication service and does not establish
+  production readiness.
 * 15 negative cases covering component and pure signature corruption,
   component order,
   truncation, unsupported OID, non-absent parameters, certificate
@@ -735,8 +742,6 @@ Not yet implemented or incomplete:
 * Complete ML-DSA-44, ML-DSA-87, and SLH-DSA CMS signed-object fixtures.
 * Acceptance using a cryptographic implementation independent of the
   pinned OpenSSL and Composite provider used by both experimental RPs.
-* Krill integration for production-like CA issuance, manifest and ROA
-  signing, and publication.
 * RRDP and rsync impact measurement with real object corpora.
 * CCR-based semantic equivalence testing across suites, using real RP
   output rather than fixtures.
@@ -745,11 +750,12 @@ Not yet implemented or incomplete:
   components).
 * HSM performance and support investigation.
 
-The highest-priority remaining implementation gap is production-like CA
-support in Krill or equivalent software, followed by an independent
+The highest-priority remaining implementation gap is repository-scale
+publication and validation measurement, followed by an independent
 cryptographic implementation.  The public reference implementation
-establishes two RP processing paths but does not establish cryptographic
-implementation independence.
+establishes two RP processing paths and a small Krill CA lifecycle path,
+but does not establish cryptographic implementation independence or
+production readiness.
 
 # Security Considerations
 
@@ -1111,8 +1117,8 @@ signature sizes; they are not complete-repository measurements.
 The following dimensions are not yet backed by confirmed measurements
 and are deliberately recorded as open tasks rather than numbers:
 
-* CA key rollover, publication cycle, and full-repository validation
-  impact; RRDP snapshot/delta and rsync transfer impact.
+* Repository-scale CA key rollover, publication cycle, and full
+  validation impact; RRDP snapshot/delta and rsync transfer impact.
 * Full-validator memory footprint.  The repeated primitive sweep records
   process peak RSS, but this is not a repository-validation measurement.
 * HSM performance and support.
@@ -1141,6 +1147,8 @@ This section is to be removed before publication as an RFC.
   reference.
 * Added Draft-19 Composite ML-DSA measurements for ML-DSA-44 with P-256,
   ML-DSA-65 with P-256, and ML-DSA-87 with P-384.
+* Added experimental Krill Composite-child issuance, publication, and
+  rollback evidence validated by both experimental RPs.
 * Kept a future production algorithm profile and transition procedure as
   separate standards work informed by these results.
 

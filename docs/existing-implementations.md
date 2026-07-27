@@ -4,8 +4,8 @@
 |---|---|---|
 | PQC primitives | liboqs / oqs-python | Conditional benchmark |
 | Provider/PKIX/CMS | OpenSSL 3 default and Composite providers | ML-DSA and Composite certificates, CRLs, CMS signing, and local verification |
-| CA/publication | Krill | Future isolated repository |
-| Validation | Routinator, rpki-client, FORT | Unmodified rejection probes plus one experimental rpki-client E2E path |
+| CA/publication | Experimental Krill 0.16.0 patch | Isolated RSA-parent to Composite-child issuance, publication, and RSA rollback |
+| Validation | Routinator, rpki-client, FORT | Unmodified rejection probes plus experimental rpki-client and Routinator E2E paths |
 | Router consumers | BIRD/OpenBGPD | VRP consumers only |
 
 The default run performs no network access and never uses production TALs or
@@ -16,7 +16,7 @@ RRDP, rsync, and RTR are not reimplemented. The experimental rpki-client
 patch changes algorithm policy and delegates cryptography to OpenSSL; it is not
 a new validator implementation.
 
-Routinator and Krill experiments are opt-in through explicit environment
-variables. Suggested local upstream checkouts live under ignored
-`local/upstream/`; upstream source stays local while reproducible,
-public-safe experimental patches are stored under `patches/`.
+Routinator and Krill experiments are opt-in. Suggested local upstream
+checkouts live under ignored `local/upstream/`; upstream source and CA state
+stay local while reproducible, public-safe experimental patches and sanitized
+results are stored in tracked paths.

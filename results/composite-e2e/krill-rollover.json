@@ -1,0 +1,106 @@
+{
+  "classification": "Krill CA issuance, publication, and rollback validated through isolated local rsync; not a production deployment",
+  "expected_vrps": [
+    {
+      "asn": "AS64496",
+      "max_length": 24,
+      "prefix": "192.0.2.0/24"
+    }
+  ],
+  "phases": {
+    "composite": {
+      "routinator_default": {
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0,
+        "vrps": []
+      },
+      "routinator_experimental": {
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 1,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          }
+        ]
+      },
+      "rpki_client_default": {
+        "invalid_certificates": 1,
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0,
+        "vrps": []
+      },
+      "rpki_client_experimental": {
+        "invalid_certificates": 0,
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 1,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          }
+        ]
+      }
+    },
+    "rollback": {
+      "routinator_default": {
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 1,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          }
+        ]
+      },
+      "routinator_experimental": {
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 1,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          }
+        ]
+      },
+      "rpki_client_default": {
+        "invalid_certificates": 0,
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 1,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          }
+        ]
+      },
+      "rpki_client_experimental": {
+        "invalid_certificates": 0,
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 1,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          }
+        ]
+      }
+    }
+  },
+  "success": true,
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

@@ -15,11 +15,137 @@ index 26a9e05..5a7a7e5 100644
  name = "readroa"
  required-features = [ "repository" ]
 -
+diff --git a/src/ca/csr.rs b/src/ca/csr.rs
+index 11111e2..3b780b5 100644
+--- a/src/ca/csr.rs
++++ b/src/ca/csr.rs
+@@ -233,7 +233,7 @@ impl Csr<(), ()> {
+ 
+         let (alg, signature) = signer.sign(
+             key,
+-            RpkiSignatureAlgorithm::default(),
++            RpkiSignatureAlgorithm::for_public_key(pub_key.algorithm()),
+             &content
+         )?.unwrap();
+ 
+@@ -696,4 +696,3 @@ mod signer_test {
+         router_cert.validate_router(&ca_cert, true).unwrap();
+     }
+ }
+-
+diff --git a/src/ca/idcert.rs b/src/ca/idcert.rs
+index 63d4c2e..b5c751e 100644
+--- a/src/ca/idcert.rs
++++ b/src/ca/idcert.rs
+@@ -354,6 +354,9 @@ pub struct TbsIdCert {
+     /// The serial number.
+     serial_number: Serial,
+ 
++    /// The signature algorithm used by the issuing identity key.
++    signature: RpkiSignatureAlgorithm,
++
+     /// The name of the issuer.
+     ///
+     /// It isn’t really relevant even in the RPKI remote protocols.
+@@ -462,7 +465,7 @@ impl TbsIdCert {
+             cons.take_constructed_if(Tag::CTX_0, |c| c.skip_u8_if(2))?;
+ 
+             let serial_number = Serial::take_from(cons)?;
+-            let _sig = RpkiSignatureAlgorithm::x509_take_from(cons)?;
++            let signature = RpkiSignatureAlgorithm::x509_take_from(cons)?;
+             let issuer = Name::take_from(cons)?;
+             let validity = Validity::take_from(cons)?;
+             let subject = Name::take_from(cons)?;
+@@ -517,6 +520,7 @@ impl TbsIdCert {
+ 
+             Ok(TbsIdCert {
+                 serial_number,
++                signature,
+                 issuer,
+                 validity,
+                 subject,
+@@ -600,7 +604,7 @@ impl TbsIdCert {
+         encode::sequence((
+             encode::sequence_as(Tag::CTX_0, 2.encode()), // version
+             self.serial_number.encode(),
+-            RpkiSignatureAlgorithm::default().x509_encode(),
++            self.signature.x509_encode(),
+             self.issuer.encode_ref(),
+             self.validity.encode(),
+             self.subject.encode_ref(),
+@@ -673,6 +677,9 @@ impl TbsIdCert {
+ 
+         TbsIdCert {
+             serial_number,
++            signature: RpkiSignatureAlgorithm::for_public_key(
++                issuing_key.algorithm()
++            ),
+             issuer,
+             validity,
+             subject,
+@@ -691,7 +698,7 @@ impl TbsIdCert {
+     ) -> Result<IdCert, SigningError<S::Error>> {
+         let data = Captured::from_values(Mode::Der, self.encode_ref());
+         let signature = signer.sign(
+-            key, RpkiSignatureAlgorithm::default(), &data
++            key, self.signature, &data
+         )?;
+         Ok(IdCert {
+             signed_data: SignedData::new(data, signature),
+diff --git a/src/ca/sigmsg.rs b/src/ca/sigmsg.rs
+index 882d397..5a8e551 100644
+--- a/src/ca/sigmsg.rs
++++ b/src/ca/sigmsg.rs
+@@ -9,7 +9,7 @@ use bytes::Bytes;
+ use crate::oid;
+ use crate::crypto::{
+     DigestAlgorithm, KeyIdentifier, RpkiSignature, RpkiSignatureAlgorithm,
+-    SignatureAlgorithm, Signer, SigningError, PublicKey
++    SignatureAlgorithm, Signer, SigningError, PublicKey, PublicKeyFormat
+ };
+ use crate::repository::error::{
+     InspectionError, ValidationError, VerificationError
+@@ -296,7 +296,14 @@ impl SignedMessage {
+         // - create and sign new CRL
+         // - include EE cert
+ 
+-        let digest_algorithm = DigestAlgorithm::default();
++        let issuing_public_key = signer.get_key_info(issuing_key_id)?;
++        let signature_algorithm = RpkiSignatureAlgorithm::for_public_key(
++            issuing_public_key.algorithm()
++        );
++        let digest_algorithm = match issuing_public_key.algorithm() {
++            PublicKeyFormat::Rsa => DigestAlgorithm::sha256(),
++            _ => DigestAlgorithm::sha512(),
++        };
+         let content_type = Oid(oid::PROTOCOL_CONTENT_TYPE.0.into());
+         
+         // Produce signed attributes
+@@ -310,7 +317,7 @@ impl SignedMessage {
+         );
+         
+         let (signature, ee_key) = signer.sign_one_off(
+-            RpkiSignatureAlgorithm::default(), &signed_attrs.encode_verify()
++            signature_algorithm, &signed_attrs.encode_verify()
+         )?;
+         let sid = ee_key.key_identifier();
+         
+@@ -481,7 +488,9 @@ impl SignedMessageCrl {
+     ) -> Result<Self, SigningError<S::Error>> {
+         let issuing_pub_key = signer.get_key_info(issuing_key_id)?;
+         
+-        let signature = RpkiSignatureAlgorithm::default();
++        let signature = RpkiSignatureAlgorithm::for_public_key(
++            issuing_pub_key.algorithm()
++        );
+         let issuer = Name::from_pub_key(&issuing_pub_key);
+         
+         let this_update = validity.not_before();
 diff --git a/src/crypto/digest.rs b/src/crypto/digest.rs
-index 22d7aa2..8e8e505 100644
+index 22d7aa2..9643ab0 100644
 --- a/src/crypto/digest.rs
 +++ b/src/crypto/digest.rs
-@@ -26,22 +26,29 @@ pub use ring::digest::Digest;
+@@ -26,22 +26,34 @@ pub use ring::digest::Digest;
  ///
  /// [RFC 7935]: https://tools.ietf.org/html/rfc7935
  #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
@@ -35,6 +161,11 @@ index 22d7aa2..8e8e505 100644
      pub fn sha256() -> Self {
 -        DigestAlgorithm(())
 +        DigestAlgorithm::Sha256
++    }
++
++    /// Creates a value representing SHA-512 for the experimental suite.
++    pub fn sha512() -> Self {
++        DigestAlgorithm::Sha512
      }
  
      /// Returns whether the algorithm is in fact SHA-256.
@@ -53,7 +184,7 @@ index 22d7aa2..8e8e505 100644
      }
  }
  
-@@ -50,7 +57,7 @@ impl DigestAlgorithm {
+@@ -50,7 +62,7 @@ impl DigestAlgorithm {
  impl DigestAlgorithm {
      /// Returns the digest of `data` using this algorithm.
      pub fn digest(self, data: &[u8]) -> Digest {
@@ -62,7 +193,7 @@ index 22d7aa2..8e8e505 100644
      }
  
      /// Calculates the digest for the content of a file.
-@@ -72,7 +79,7 @@ impl DigestAlgorithm {
+@@ -72,7 +84,7 @@ impl DigestAlgorithm {
  
      /// Returns a digest context for multi-step calculation of the digest.
      pub fn start(self) -> Context {
@@ -71,7 +202,7 @@ index 22d7aa2..8e8e505 100644
      }
  }
  
-@@ -144,9 +151,15 @@ impl DigestAlgorithm {
+@@ -144,9 +156,15 @@ impl DigestAlgorithm {
      fn from_constructed<S: decode::Source>(
          cons: &mut decode::Constructed<S>
      ) -> Result<Self, DecodeError<S::Error>> {
@@ -90,7 +221,7 @@ index 22d7aa2..8e8e505 100644
      }
  
      /// Parses a SET OF DigestAlgorithmIdentifiers.
-@@ -172,12 +185,19 @@ impl DigestAlgorithm {
+@@ -172,12 +190,19 @@ impl DigestAlgorithm {
          cons: &mut decode::Constructed<S>,
      ) -> Result<Self, DecodeError<S::Error>> {
          oid::SHA256.skip_if(cons)?;
@@ -112,7 +243,7 @@ index 22d7aa2..8e8e505 100644
      }
  
      /// Provides an encoder for a identifier as the sole value of a set.
-@@ -189,10 +209,29 @@ impl DigestAlgorithm {
+@@ -189,8 +214,27 @@ impl DigestAlgorithm {
  
      /// Provides an encoder for just the object identifier of the algorithm.
      pub fn encode_oid(self) -> impl encode::Values {
@@ -125,25 +256,23 @@ index 22d7aa2..8e8e505 100644
 +                encode::Choice2::Two(oid::SHA512.encode())
 +            }
 +        }
-+    }
+     }
 +
 +    fn ring_algorithm(self) -> &'static digest::Algorithm {
 +        match self {
 +            DigestAlgorithm::Sha256 => &digest::SHA256,
 +            DigestAlgorithm::Sha512 => &digest::SHA512,
 +        }
-     }
- }
- 
++    }
++}
++
 +fn experimental_enabled() -> bool {
 +    std::env::var_os("PQC_RPKI_EXPERIMENTAL").as_deref()
 +        == Some(std::ffi::OsStr::new("1"))
-+}
-+
+ }
  
- //------------ Sha1 ----------------------------------------------------------
  
-@@ -230,4 +269,3 @@ impl io::Write for Context {
+@@ -230,4 +274,3 @@ impl io::Write for Context {
          Ok(())
      }
  }
@@ -339,7 +468,7 @@ index 3ad520b..2e8dadd 100644
  /// # As `SubjectPublicKeyInfo`
  ///
 diff --git a/src/crypto/signature.rs b/src/crypto/signature.rs
-index d55a937..bc27ad0 100644
+index d55a937..a264478 100644
 --- a/src/crypto/signature.rs
 +++ b/src/crypto/signature.rs
 @@ -54,6 +54,7 @@ pub trait SignatureAlgorithm: Sized {
@@ -364,7 +493,31 @@ index d55a937..bc27ad0 100644
  /// # ASN.1 Values
  ///
  /// Signature algorithm identifiers appear in certificates and other objects
-@@ -104,11 +112,31 @@ impl RpkiSignatureAlgorithm {
+@@ -100,15 +108,55 @@ pub struct RpkiSignatureAlgorithm {
+ /// [RFC 4055]: https://tools.ietf.org/html/rfc4055
+ /// [RFC 7935]: https://tools.ietf.org/html/rfc7935
+ impl RpkiSignatureAlgorithm {
++    /// Returns the signature algorithm matching a public key format.
++    pub fn for_public_key(format: PublicKeyFormat) -> Self {
++        let kind = match format {
++            PublicKeyFormat::Rsa => RpkiSignatureAlgorithmKind::RsaSha256,
++            PublicKeyFormat::MlDsa65 => RpkiSignatureAlgorithmKind::MlDsa65,
++            PublicKeyFormat::MlDsa65EcdsaP256Sha512 => {
++                RpkiSignatureAlgorithmKind::MlDsa65EcdsaP256Sha512
++            }
++            PublicKeyFormat::EcdsaP256 => {
++                panic!("ECDSA P-256 is not an RPKI repository signing suite")
++            }
++        };
++        Self {
++            kind,
++            has_parameter: matches!(
++                kind, RpkiSignatureAlgorithmKind::RsaSha256
++            ),
++        }
++    }
++
+     /// Parses the algorithm identifier for X.509 objects.
      fn x509_from_constructed<S: decode::Source>(
          cons: &mut decode::Constructed<S>
      ) -> Result<Self, DecodeError<S::Error>> {
@@ -401,7 +554,7 @@ index d55a937..bc27ad0 100644
      }
  
      /// Takes a signature algorithm identifier for CMS objects.
-@@ -126,32 +154,80 @@ impl RpkiSignatureAlgorithm {
+@@ -126,32 +174,80 @@ impl RpkiSignatureAlgorithm {
          cons: &mut decode::Constructed<S>
      ) -> Result<Self, DecodeError<S::Error>> {
          let oid = Oid::take_from(cons)?;
@@ -498,7 +651,7 @@ index d55a937..bc27ad0 100644
      }
  }
  
-@@ -160,7 +236,10 @@ impl RpkiSignatureAlgorithm {
+@@ -160,7 +256,10 @@ impl RpkiSignatureAlgorithm {
  
  impl Default for RpkiSignatureAlgorithm {
      fn default() -> Self {
@@ -510,7 +663,7 @@ index d55a937..bc27ad0 100644
      }
  }
  
-@@ -168,12 +247,28 @@ impl Default for RpkiSignatureAlgorithm {
+@@ -168,12 +267,28 @@ impl Default for RpkiSignatureAlgorithm {
  //--- SignatureAlgorithm
  
  impl SignatureAlgorithm for RpkiSignatureAlgorithm {
@@ -543,7 +696,7 @@ index d55a937..bc27ad0 100644
      }
  
      fn x509_take_from<S: decode::Source>(
-@@ -183,13 +278,37 @@ impl SignatureAlgorithm for RpkiSignatureAlgorithm {
+@@ -183,13 +298,37 @@ impl SignatureAlgorithm for RpkiSignatureAlgorithm {
      }
  
      fn x509_encode(&self) -> Self::Encoder {
@@ -585,7 +738,7 @@ index d55a937..bc27ad0 100644
  
  //------------ BgpsecSignatureAlgorithm --------------------------------------
  
-@@ -263,4 +382,3 @@ impl<Alg> Signature<Alg> {
+@@ -263,4 +402,3 @@ impl<Alg> Signature<Alg> {
          (self.algorithm, self.value)
      }
  }
@@ -651,10 +804,44 @@ index 50e259d..08a8969 100644
  pub const EXTENSION_REQUEST: ConstOid
      = Oid(&[42, 134, 72, 134, 247, 13, 1, 9, 14]);
 -
+diff --git a/src/repository/cert.rs b/src/repository/cert.rs
+index 30d0ace..99e9cc6 100644
+--- a/src/repository/cert.rs
++++ b/src/repository/cert.rs
+@@ -1228,10 +1228,14 @@ impl TbsCert {
+ 
+     /// Converts the value into a signed certificate.
+     pub fn into_cert<S: Signer>(
+-        self,
++        mut self,
+         signer: &S,
+         key: &S::KeyId,
+     ) -> Result<Cert, SigningError<S::Error>> {
++        let issuer_public_key = signer.get_key_info(key)?;
++        self.signature = RpkiSignatureAlgorithm::for_public_key(
++            issuer_public_key.algorithm()
++        );
+         let data = Captured::from_values(Mode::Der, self.encode_ref());
+         let signature = signer.sign(key, self.signature, &data)?;
+         Ok(Cert {
+@@ -2949,4 +2953,3 @@ mod signer_test {
+     }
+ }
+ 
+-
 diff --git a/src/repository/sigobj.rs b/src/repository/sigobj.rs
-index 370be53..12ad646 100644
+index 370be53..bd2ee02 100644
 --- a/src/repository/sigobj.rs
 +++ b/src/repository/sigobj.rs
+@@ -11,7 +11,7 @@ use bcder::string::OctetStringSource;
+ use bytes::Bytes;
+ use crate::{oid, uri};
+ use crate::crypto::{
+-    Digest, DigestAlgorithm, KeyIdentifier, RpkiSignature,
++    Digest, DigestAlgorithm, KeyIdentifier, PublicKeyFormat, RpkiSignature,
+     RpkiSignatureAlgorithm, Signer, SigningError
+ };
+ use super::cert::{Cert, KeyUsage, Overclaim, ResourceCert, TbsCert};
 @@ -561,8 +561,12 @@ impl SignedAttrs {
          if len < 128 {
              res.push(len as u8)
@@ -669,7 +856,35 @@ index 370be53..12ad646 100644
              res.push((len >> 8) as u8);
              res.push(len as u8);
          }
-@@ -1211,5 +1215,3 @@ mod signer_test {
+@@ -852,13 +856,16 @@ impl SignedObjectBuilder {
+     }
+ 
+     pub fn finalize<S: Signer>(
+-        self,
++        mut self,
+         content_type: Oid<Bytes>,
+         content: Bytes,
+         signer: &S,
+         issuer_key: &S::KeyId,
+     ) -> Result<SignedObject, SigningError<S::Error>> {
+         let issuer_pub = signer.get_key_info(issuer_key)?;
++        if !matches!(issuer_pub.algorithm(), PublicKeyFormat::Rsa) {
++            self.digest_algorithm = DigestAlgorithm::sha512();
++        }
+ 
+         // Produce signed attributes.
+         let message_digest = self.digest_algorithm.digest(&content).into();
+@@ -870,7 +877,8 @@ impl SignedObjectBuilder {
+ 
+         // Sign signed attributes with a one-off key.
+         let (signature, key_info) = signer.sign_one_off(
+-            RpkiSignatureAlgorithm::default(), &signed_attrs.encode_verify()
++            RpkiSignatureAlgorithm::for_public_key(issuer_pub.algorithm()),
++            &signed_attrs.encode_verify()
+         )?;
+         let sid = key_info.key_identifier();
+ 
+@@ -1211,5 +1219,3 @@ mod signer_test {
  /// [`DigestAlgorithm`]: crate::crypto::digest::DigestAlgorithm
  /// [`oid`]: crate::oid
  pub mod spec { }

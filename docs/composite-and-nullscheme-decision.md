@@ -28,7 +28,10 @@ Composite ML-DSA raw signing and verification are implemented against `draft-iet
 
 The repository now defines an experimental RPKI X.509/CMS profile for
 id-MLDSA65-ECDSA-P256-SHA512 and demonstrates one controlled E2E path through
-an experimental rpki-client patch. This is not independent interoperability.
+experimental rpki-client and Routinator patches. Krill also exercises
+RSA-parent to Composite-child issuance, publication, and RSA rollback in an
+isolated testbed. These implementations share one OpenSSL/provider backend,
+so they are not independent cryptographic interoperability.
 Composite may reduce branch consistency problems, but it introduces RPKI
 questions:
 
@@ -40,8 +43,8 @@ questions:
 
 Raw measurements are in `results/draft-composite-2026-07/`; complete object,
 RP, negative-test, and E2E results are in `results/composite-e2e/`. Decision
-status remains `experimental`; independent RP acceptance and production-like
-CA issuance remain future work.
+status remains `experimental`; independent cryptographic implementation and
+repository-scale operational evidence remain future work.
 
 ## Null Scheme track
 

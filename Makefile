@@ -1,4 +1,4 @@
-.PHONY: all certificate-sizes ccr-comparison cms-api-probe composite-100k composite-bootstrap composite-bootstrap-check composite-e2e composite-e2e-rp-matrix composite-e2e-negative composite-e2e-benchmark composite-keygen-benchmark draft-composite-100k exact-100k key-roll local-validation message-sweep mixed-tree object-benchmarks pre-publication regenerate-reports review-evidence routinator-experimental-bootstrap routinator-experimental-bootstrap-check routinator-experimental-build routinator-experimental-matrix routinator-experimental-negative routinator-krill-interop routinator-krill-scan rpki-objects test validator-container-probe verify-artifacts install-optional-pqc clean
+.PHONY: all certificate-sizes ccr-comparison cms-api-probe composite-100k composite-bootstrap composite-bootstrap-check composite-e2e composite-e2e-rp-matrix composite-e2e-negative composite-e2e-benchmark composite-keygen-benchmark draft-composite-100k exact-100k key-roll krill-experimental-bootstrap krill-experimental-bootstrap-check krill-experimental-build krill-experimental-e2e local-validation message-sweep mixed-tree object-benchmarks pre-publication regenerate-reports review-evidence routinator-experimental-bootstrap routinator-experimental-bootstrap-check routinator-experimental-build routinator-experimental-matrix routinator-experimental-negative routinator-krill-interop routinator-krill-scan rpki-objects test validator-container-probe verify-artifacts install-optional-pqc clean
 
 COMPOSITE_OPENSSL ?= $(CURDIR)/local/build/openssl-3.6.2-install/bin/openssl
 COMPOSITE_OPENSSL_LIBDIR ?= $(CURDIR)/local/build/openssl-3.6.2-install/lib64
@@ -9,6 +9,7 @@ RUSTUP_HOME ?= $(CURDIR)/local/build/rustup-home
 CARGO_HOME ?= $(CURDIR)/local/build/cargo-home
 ROUTINATOR_SOURCE ?= $(CURDIR)/local/upstream/routinator
 ROUTINATOR_BIN ?= $(ROUTINATOR_SOURCE)/target/debug/routinator
+KRILL_SOURCE ?= $(CURDIR)/local/upstream/krill
 RUST_ENV = RUSTUP_HOME="$(RUSTUP_HOME)" CARGO_HOME="$(CARGO_HOME)" OPENSSL_DIR="$(CURDIR)/local/build/openssl-3.6.2-install" LD_LIBRARY_PATH="$(COMPOSITE_OPENSSL_LIBDIR):$${LD_LIBRARY_PATH}"
 
 all:
@@ -115,6 +116,19 @@ routinator-experimental-matrix: composite-e2e-rp-matrix routinator-experimental-
 routinator-experimental-negative: composite-e2e-negative routinator-experimental-build
 	$(COMPOSITE_ENV) PYTHONPATH=src:tools python3 \
 		tools/routinator_negative_tests.py --binary "$(ROUTINATOR_BIN)"
+
+krill-experimental-build:
+	cd "$(KRILL_SOURCE)" && $(RUST_ENV) \
+		"$(CARGO_HOME)/bin/cargo" +1.88.0 build --no-default-features
+
+krill-experimental-bootstrap:
+	./tools/bootstrap_krill_experimental.sh --allow-network
+
+krill-experimental-bootstrap-check:
+	./tools/bootstrap_krill_experimental.sh --check-only
+
+krill-experimental-e2e: krill-experimental-build
+	./tools/run_krill_experimental.sh
 
 cms-api-probe:
 	PYTHONPATH=src python3 tools/cms_api_probe.py

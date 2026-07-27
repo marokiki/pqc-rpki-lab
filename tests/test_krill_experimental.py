@@ -1,0 +1,46 @@
+from __future__ import annotations
+
+import json
+import unittest
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+class KrillExperimentalEvidenceTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.result = json.loads(
+            (ROOT / "results/composite-e2e/krill-rollover.json").read_text()
+        )
+
+    def test_composite_issuance_and_rsa_rollback(self) -> None:
+        self.assertTrue(self.result["success"])
+        for mode, row in self.result["phases"]["composite"].items():
+            expected = "accepted" if mode.endswith("experimental") else "rejected"
+            self.assertEqual(row["status"], expected)
+        for row in self.result["phases"]["rollback"].values():
+            self.assertEqual(row["status"], "accepted")
+            self.assertEqual(row["vrp_count"], 1)
+
+    def test_both_experimental_rps_produce_expected_vrp(self) -> None:
+        expected = self.result["expected_vrps"]
+        phase = self.result["phases"]["composite"]
+        self.assertEqual(phase["rpki_client_experimental"]["vrps"], expected)
+        self.assertEqual(phase["routinator_experimental"]["vrps"], expected)
+
+    def test_public_evidence_has_no_local_path(self) -> None:
+        text = json.dumps(self.result)
+        self.assertNotIn("/" + "home" + "/", text)
+        self.assertNotIn("/" + "Users" + "/", text)
+
+    def test_patch_contains_research_gates_and_issuance_test(self) -> None:
+        patch = (ROOT / "patches/krill-experimental-pqc.patch").read_text()
+        self.assertIn("PQC_RPKI_EXPERIMENTAL", patch)
+        self.assertIn("PQC_RPKI_KRILL_SUITE_FILE", patch)
+        self.assertIn("sign_oneshot_to_vec", patch)
+        self.assertIn("functional_pqc_rollover", patch)
+        self.assertIn("MlDsa65EcdsaP256Sha512", patch)
+
+
+if __name__ == "__main__":
+    unittest.main()

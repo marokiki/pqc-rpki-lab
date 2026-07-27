@@ -2,9 +2,9 @@
 
 > EXPERIMENTAL / NOT FOR PRODUCTION
 
-This public plan describes how Routinator and Krill should be used for
-draft-01 interoperability work. It does not vendor upstream source code and
-does not claim upstream support exists.
+This document records the extension plan and its current experimental
+implementation. It does not vendor upstream source code or claim upstream
+support.
 
 ## Local-only upstream checkouts
 
@@ -17,13 +17,12 @@ PQC_RPKI_ROUTINATOR_BIN=/path/to/routinator
 PQC_RPKI_KRILL_BIN=/path/to/krill
 ```
 
-The suggested checkout location is under ignored `local/upstream/`. Work-in-
-progress upstream patches should stay in their own worktrees or branches, not
-inside this public repository.
+The pinned checkouts and CA state stay below ignored `local/`. Public,
+reviewable patches are stored under `patches/`.
 
 ## Routinator extension points
 
-| Area | Required work |
+| Area | Experimental status |
 |---|---|
 | Algorithm registry | Register ML-DSA and standards-track composite AlgorithmIdentifiers. |
 | X.509 verification | Accept or reject certificate SPKI/signature algorithm combinations according to the selected profile. |
@@ -36,12 +35,12 @@ inside this public repository.
 
 | Area | Required work |
 |---|---|
-| CA key abstraction | Support CA keys beyond RSA while preserving current RSA behavior. |
-| Child CA issuance | Allow issuer signature algorithm and child SPKI algorithm to differ at CA boundaries. |
-| EE certificates | Generate RFC 6488 EE certificates for selected object-signing algorithms. |
-| CMS signing | Produce Manifest and ROA CMS SignedData with the selected algorithm suite. |
-| Publication repository | Publish RSA baseline, PQC branch, and mixed-tree repositories reproducibly. |
-| Transport measurement | Measure RRDP snapshot, RRDP delta, and rsync output size. |
+| CA key abstraction | Implemented for RSA, pure ML-DSA-65, and the selected Composite suite behind an experimental gate. |
+| Child CA issuance | Implemented for an RSA parent and Composite child in the fixed testbed scenario. |
+| EE certificates | Implemented for the Composite child publication point. |
+| CMS signing | Composite Manifest and ROA signing implemented with explicit SHA-512. |
+| Publication repository | Composite publication and rollback-to-RSA snapshots are captured below `local/` and summarized publicly. |
+| Transport measurement | Still open beyond the isolated fixture. |
 
 ## Public evidence
 
@@ -51,3 +50,6 @@ binary/repository experiment status when explicit binaries and generated
 repositories are configured. Missing inputs are recorded as `skipped`, not as
 algorithm failure.
 
+`make krill-experimental-e2e` runs the implemented issuance and rollback
+scenario and validates both phases with rpki-client and Routinator. The
+result is `results/composite-e2e/krill-rollover.json`.

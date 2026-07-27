@@ -21,6 +21,7 @@ def find_inconsistencies() -> list[str]:
     routinator_negative = load(
         "results/composite-e2e/routinator-negative-summary.json"
     )
+    krill = load("results/composite-e2e/krill-rollover.json")
     benchmark = load("results/composite-e2e/benchmark-summary.json")
     summary = load("results/composite-e2e/summary.json")
     pins = load("experiments/composite-dependencies.json")
@@ -49,9 +50,35 @@ def find_inconsistencies() -> list[str]:
         or len(routinator_negative["results"]) != len(negative["results"])
     ):
         failures.append("Routinator negative evidence does not match primary RP")
+    if not krill["success"]:
+        failures.append("Krill issuance and rollback evidence is not successful")
+    expected_krill = {
+        "composite": {
+            "rpki_client_default": "rejected",
+            "rpki_client_experimental": "accepted",
+            "routinator_default": "rejected",
+            "routinator_experimental": "accepted",
+        },
+        "rollback": {
+            "rpki_client_default": "accepted",
+            "rpki_client_experimental": "accepted",
+            "routinator_default": "accepted",
+            "routinator_experimental": "accepted",
+        },
+    }
+    for phase, modes in expected_krill.items():
+        for mode, expected in modes.items():
+            if krill["phases"][phase][mode]["status"] != expected:
+                failures.append(
+                    f"Krill {phase}/{mode} is not recorded as {expected}"
+                )
 
     public_routinator = json.dumps(
-        {"matrix": routinator_matrix, "negative": routinator_negative}
+        {
+            "matrix": routinator_matrix,
+            "negative": routinator_negative,
+            "krill": krill,
+        }
     )
     private_path_markers = ("/" + "home" + "/", "/" + "Users" + "/")
     if any(marker in public_routinator for marker in private_path_markers):

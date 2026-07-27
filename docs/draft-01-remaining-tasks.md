@@ -1,6 +1,10 @@
 # Draft-01 Remaining Tasks
 
 > EXPERIMENTAL / NOT FOR PRODUCTION
+>
+> Historical draft-01 plan. The Composite objects, two experimental RP paths,
+> and small Krill issuance/rollback scenario listed below are now implemented.
+> See `docs/implementation-status.md` for current status.
 
 ## Required before posting -01
 
