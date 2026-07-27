@@ -1,4 +1,4 @@
-.PHONY: all certificate-sizes ccr-comparison cms-api-probe composite-100k composite-e2e composite-e2e-rp-matrix composite-e2e-negative composite-e2e-benchmark draft-composite-100k exact-100k key-roll local-validation message-sweep mixed-tree object-benchmarks pre-publication regenerate-reports review-evidence routinator-krill-interop routinator-krill-scan rpki-objects test validator-container-probe verify-artifacts install-optional-pqc clean
+.PHONY: all certificate-sizes ccr-comparison cms-api-probe composite-100k composite-e2e composite-e2e-rp-matrix composite-e2e-negative composite-e2e-benchmark composite-keygen-benchmark draft-composite-100k exact-100k key-roll local-validation message-sweep mixed-tree object-benchmarks pre-publication regenerate-reports review-evidence routinator-krill-interop routinator-krill-scan rpki-objects test validator-container-probe verify-artifacts install-optional-pqc clean
 
 COMPOSITE_OPENSSL ?= $(CURDIR)/local/build/openssl-3.6.2-install/bin/openssl
 COMPOSITE_OPENSSL_LIBDIR ?= $(CURDIR)/local/build/openssl-3.6.2-install/lib64
@@ -38,12 +38,22 @@ composite-e2e:
 		--openssl "$(COMPOSITE_OPENSSL)"
 
 composite-e2e-rp-matrix: composite-e2e
+	$(COMPOSITE_ENV) PYTHONPATH=src python3 tools/generate_rpki_objects.py \
+		--algorithm ml-dsa-65 \
+		--output-root local/e2e/standalone \
+		--openssl "$(COMPOSITE_OPENSSL)"
 	$(COMPOSITE_ENV) PYTHONPATH=src python3 tools/composite_rp_matrix.py \
+		--pure-fixture local/e2e/standalone/testdata/validator/ml-dsa-65 \
 		--unmodified local/build/rpki-client-baseline/src/rpki-client \
 		--patched local/build/rpki-client-composite/src/rpki-client
 
 composite-e2e-negative: composite-e2e
+	$(COMPOSITE_ENV) PYTHONPATH=src python3 tools/generate_rpki_objects.py \
+		--algorithm ml-dsa-65 \
+		--output-root local/e2e/standalone \
+		--openssl "$(COMPOSITE_OPENSSL)"
 	$(COMPOSITE_ENV) PYTHONPATH=src python3 tools/composite_negative_tests.py \
+		--pure-fixture local/e2e/standalone/testdata/validator/ml-dsa-65 \
 		--openssl "$(COMPOSITE_OPENSSL)" \
 		--rpki-client local/build/rpki-client-composite/src/rpki-client
 
@@ -54,6 +64,11 @@ composite-e2e-benchmark: composite-e2e
 		--openssl "$(COMPOSITE_OPENSSL)" \
 		--baseline-rpki-client local/build/rpki-client-baseline/src/rpki-client \
 		--patched-rpki-client local/build/rpki-client-composite/src/rpki-client
+
+composite-keygen-benchmark:
+	$(COMPOSITE_ENV) PYTHONPATH=src python3 tools/keygen_benchmark.py \
+		--repetitions 1000 \
+		--openssl "$(COMPOSITE_OPENSSL)"
 
 cms-api-probe:
 	PYTHONPATH=src python3 tools/cms_api_probe.py

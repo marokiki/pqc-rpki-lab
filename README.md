@@ -151,18 +151,22 @@ make composite-e2e
 make composite-e2e-rp-matrix
 make composite-e2e-negative
 make composite-e2e-benchmark
+make composite-keygen-benchmark
 ```
 
 The E2E benchmark performs 100 complete generation repetitions and 1,000 RP
 validation repetitions per scenario. The separate primitive Composite
 benchmarks use 100,000 sign and verify operations; those counts describe
 different workloads and are not compared as if they were interchangeable.
+The key-generation target uses 1,000 fresh `openssl genpkey` subprocesses per
+algorithm and records raw samples only below `local/`.
 
-The E2E target uses id-MLDSA65-ECDSA-P256-SHA512. The mixed-tree transition
-certificate has an RSA signature and Composite SPKI. The child publication
-point contains a Composite CRL, manifest, and ROA. The rpki-client development
-patch remains Current Suite-only by default and enables the Composite suite
-only with its existing experimental option.
+The E2E targets use pure ML-DSA-65 and
+id-MLDSA65-ECDSA-P256-SHA512. The mixed-tree transition certificate has an RSA
+signature and Composite SPKI. The child publication point contains a Composite
+CRL, manifest, and ROA. The rpki-client development patch remains Current
+Suite-only by default and enables both experimental suites only with its
+existing experimental option.
 
 The experiment pins OpenSSL 3.6.2 at
 `fe686e15b8d1d907c8801da26330bcf189f63413`, the Composite provider at
@@ -192,6 +196,8 @@ contains complete ML-DSA-65 Manifest and ROA fixtures plus an independent
 manual DER reference. Pinned unmodified Routinator, rpki-client, and FORT
 containers accept the RSA baseline and reject the ML-DSA-65 repository at
 unsupported trust-anchor or algorithm checks.
+The patched rpki-client retains that rejection in default mode and validates
+the complete pure ML-DSA-65 repository only in experimental mode.
 
 `results/object-benchmarks/` is an object-payload benchmark. It measures
 deterministic synthetic Manifest file-list construction and hashing, not

@@ -72,6 +72,34 @@ class CompositeE2ETests(unittest.TestCase):
                 set(summary["generation"][scenario]["artifact_total_bytes"]),
                 {"median", "stdev", "min", "max"},
             )
+        self.assertEqual(summary["vrp_counts"]["pure-mldsa65"], [2])
+        self.assertIn(
+            "successfully validated", summary["pure_mldsa65_note"]
+        )
+
+    def test_rp_patch_includes_pure_mldsa65_experimental_suite(self) -> None:
+        patch = (
+            ROOT / "patches" / "rpki-client-composite-experimental.patch"
+        ).read_text()
+        self.assertIn('MLDSA65_OID "2.16.840.1.101.3.4.3.18"', patch)
+        self.assertIn("pure ML-DSA-65 support is experimental", patch)
+
+    def test_keygen_summary_is_separate_from_e2e_and_primitives(self) -> None:
+        summary = json.loads(
+            (
+                ROOT / "results" / "composite-e2e" / "keygen-summary.json"
+            ).read_text()
+        )
+        self.assertEqual(summary["repetitions_per_algorithm"], 1000)
+        self.assertIn("fresh-key generation", summary["classification"])
+        self.assertEqual(
+            set(summary["seconds"]),
+            {"rsa-2048", "pure-mldsa65", "composite-mldsa65-p256"},
+        )
+        self.assertGreater(
+            summary["seconds"]["rsa-2048"]["median"],
+            summary["seconds"]["pure-mldsa65"]["median"],
+        )
 
     def test_generated_directory_requires_safe_marked_location(self) -> None:
         from pqc_rpki_lab.workspace import reset_generated_directory
@@ -95,7 +123,7 @@ class CompositeE2ETests(unittest.TestCase):
         path = ROOT / "results" / "composite-e2e" / "negative-summary.json"
         summary = json.loads(path.read_text())
         self.assertTrue(summary["all_rejected"])
-        self.assertEqual(len(summary["results"]), 12)
+        self.assertEqual(len(summary["results"]), 15)
         for result in summary["results"]:
             self.assertTrue(result["reason_code"])
             self.assertTrue(result["rejected"])

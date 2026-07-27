@@ -22,6 +22,10 @@ from pqc_rpki_lab.workspace import reset_generated_directory
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FIXTURE = ROOT / "local" / "e2e" / "current"
+DEFAULT_PURE_FIXTURE = (
+    ROOT / "local" / "e2e" / "standalone"
+    / "testdata" / "validator" / "ml-dsa-65"
+)
 DEFAULT_OUTPUT = ROOT / "local" / "negative"
 DEFAULT_RESULT = ROOT / "results" / "composite-e2e" / "negative-summary.json"
 COMPOSITE_OID = "1.3.6.1.5.5.7.6.45"
@@ -41,6 +45,9 @@ REASON_CODES = {
     "tbs-outer-signature-mismatch": "certificate-algorithm-mismatch",
     "certificate-path-invalid": "certificate-path-invalid",
     "manifest-hash-mismatch": "manifest-hash-mismatch",
+    "pure-signature-corrupt": "cms-signature-invalid",
+    "pure-signature-parameters-present": "malformed-parameters",
+    "pure-cms-sha256-intrusion": "cms-digest-mismatch",
 }
 
 
@@ -151,15 +158,38 @@ def classify_cms(data: bytes) -> list[str]:
     return failures
 
 
+def classify_pure_mldsa65_cms(data: bytes) -> list[str]:
+    try:
+        item = inspect_signed_object(data)
+    except (IndexError, ValueError) as error:
+        return [f"der:{error}"]
+    failures = []
+    if item["digest_algorithms"] != [(OID_SHA512, True)]:
+        failures.append("digestAlgorithms")
+    if item["digest_algorithm"] != (OID_SHA512, True):
+        failures.append("signerInfo.digestAlgorithm")
+    if item["signature_algorithm"] != (OID_ML_DSA_65, True):
+        failures.append("signatureAlgorithm")
+    signature = item["signature"]
+    assert isinstance(signature, bytes)
+    if len(signature) != MLDSA65_SIGNATURE_BYTES:
+        failures.append("signature.length")
+    return failures
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--fixture", type=Path, default=DEFAULT_FIXTURE)
+    parser.add_argument(
+        "--pure-fixture", type=Path, default=DEFAULT_PURE_FIXTURE
+    )
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--result", type=Path, default=DEFAULT_RESULT)
     parser.add_argument("--openssl", required=True)
     parser.add_argument("--rpki-client", required=True)
     args = parser.parse_args()
     fixture = args.fixture.resolve()
+    pure_fixture = args.pure_fixture.resolve()
     output = args.output.resolve()
     reset_generated_directory(output, allowed_root=ROOT / "local")
     env = os.environ.copy()
@@ -236,7 +266,67 @@ def main() -> None:
                 "profile_failures": classify_cms(data),
                 "openssl": observed,
                 "rpki_client": rpki,
-                "rejected": observed["returncode"] != 0 or rpki_rejected,
+                "rejected": rpki_rejected,
+            }
+        )
+
+    pure_roa = (pure_fixture / "repository" / "route.roa").read_bytes()
+    pure_item = inspect_signed_object(pure_roa)
+    pure_signature = pure_item["signature"]
+    assert isinstance(pure_signature, bytes)
+    damaged_pure = bytearray(pure_signature)
+    damaged_pure[0] ^= 1
+    pure_mutations = {
+        "pure-signature-corrupt": rebuild_cms(
+            pure_roa,
+            signature=bytes(damaged_pure),
+            signature_oid=OID_ML_DSA_65,
+        ),
+        "pure-signature-parameters-present": rebuild_cms(
+            pure_roa,
+            signature_oid=OID_ML_DSA_65,
+            signature_null=True,
+        ),
+        "pure-cms-sha256-intrusion": rebuild_cms(
+            pure_roa,
+            signature_oid=OID_ML_DSA_65,
+            digest_oid=SHA256_OID,
+        ),
+    }
+    for name, data in pure_mutations.items():
+        path = output / f"{name}.roa"
+        path.write_bytes(data)
+        observed = command_result(
+            [
+                args.openssl, "cms", "-verify", "-inform", "DER", "-binary",
+                "-in", str(path), "-noverify", "-out", os.devnull,
+            ],
+            env,
+        )
+        rpki = command_result(
+            [
+                args.rpki_client, "-x", "-d", str(file_cache), "-t",
+                str(fixture / "test.tal"), "-vv", "-f", str(path),
+            ],
+            env,
+        )
+        rpki_text = f"{rpki['stdout']}\n{rpki['stderr']}"
+        rpki_rejected = (
+            "Validation:               N/A" in rpki_text
+            or "CMS verification error" in rpki_text
+            or "parameters MUST be absent" in rpki_text
+            or "CMS digest is" in rpki_text
+        )
+        results.append(
+            {
+                "name": name,
+                "reason_code": REASON_CODES[name],
+                "class": "CMS",
+                "expected": "reject",
+                "profile_failures": classify_pure_mldsa65_cms(data),
+                "openssl": observed,
+                "rpki_client": rpki,
+                "rejected": rpki_rejected,
             }
         )
 

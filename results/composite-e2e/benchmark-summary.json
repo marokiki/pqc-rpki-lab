@@ -2,12 +2,12 @@
   "artifact_sizes_bytes": {
     "composite-standalone": {
       "ca.cer": 5926,
-      "ca.crl": 3532,
+      "ca.crl": 3533,
       "manifest.ee.cer": 5962,
-      "manifest.mft": 9758,
+      "manifest.mft": 9760,
       "manifest.mft.econtent": 146,
-      "route.ee.cer": 5945,
-      "route.roa": 9638,
+      "route.ee.cer": 5944,
+      "route.roa": 9637,
       "route.roa.econtent": 45
     },
     "pure-mldsa65": {
@@ -32,9 +32,9 @@
     },
     "rsa-to-composite-mixed": {
       "child.cer": 2926,
-      "child/child.crl": 3543,
+      "child/child.crl": 3542,
       "child/child.mft": 9788,
-      "child/route.roa": 9664,
+      "child/route.roa": 9667,
       "ta.cer": 1039,
       "ta.crl": 411,
       "ta.mft": 1722
@@ -49,28 +49,28 @@
   "generation": {
     "composite-standalone": {
       "artifact_total_bytes": {
-        "max": 28861,
+        "max": 28859,
         "median": 28855.0,
         "min": 28851,
-        "stdev": 1.6556911340322902
+        "stdev": 1.470243572207055
       },
       "cpu_seconds": {
-        "max": 0.3851770000000059,
-        "median": 0.35544049999999316,
-        "min": 0.34073899999999924,
-        "stdev": 0.010914744050840553
+        "max": 0.3917949999999948,
+        "median": 0.3592084999999958,
+        "min": 0.3419279999999958,
+        "stdev": 0.011431155480378541
       },
       "max_rss_kib": {
         "max": 22400,
-        "median": 22272.0,
-        "min": 22272,
-        "stdev": 62.140928135126444
+        "median": 22396.0,
+        "min": 22268,
+        "stdev": 36.62132734024828
       },
       "wall_seconds": {
-        "max": 0.381587969,
-        "median": 0.352252536,
-        "min": 0.33758518,
-        "stdev": 0.010764140408227896
+        "max": 0.388033719,
+        "median": 0.35502921249999997,
+        "min": 0.338866039,
+        "stdev": 0.011215134956601482
       }
     },
     "pure-mldsa65": {
@@ -81,79 +81,79 @@
         "stdev": 0.0
       },
       "cpu_seconds": {
-        "max": 0.36572900000000175,
-        "median": 0.33491250000000417,
-        "min": 0.31746099999999977,
-        "stdev": 0.009699650946937791
+        "max": 0.3653089999999928,
+        "median": 0.338984999999993,
+        "min": 0.3175959999999982,
+        "stdev": 0.010362530542291172
       },
       "max_rss_kib": {
-        "max": 22528,
-        "median": 22400.0,
+        "max": 22400,
+        "median": 22396.0,
         "min": 22268,
-        "stdev": 35.657155344653155
+        "stdev": 25.372728539425033
       },
       "wall_seconds": {
-        "max": 0.361585918,
-        "median": 0.33095395699999997,
-        "min": 0.314245631,
-        "stdev": 0.009544455296955596
+        "max": 0.360635143,
+        "median": 0.33454292500000005,
+        "min": 0.314407782,
+        "stdev": 0.01005281152886579
       }
     },
     "rsa-baseline": {
       "artifact_total_bytes": {
         "max": 4843,
         "median": 4843.0,
-        "min": 4843,
-        "stdev": 0.0
+        "min": 4842,
+        "stdev": 0.1
       },
       "cpu_seconds": {
-        "max": 0.9028880000000001,
-        "median": 0.6190639999999994,
-        "min": 0.4605540000000006,
-        "stdev": 0.09602145844270327
+        "max": 0.9470870000000025,
+        "median": 0.6353545,
+        "min": 0.4435209999999987,
+        "stdev": 0.10185004005436944
       },
       "max_rss_kib": {
-        "max": 22656,
+        "max": 22528,
         "median": 22400.0,
-        "min": 22144,
-        "stdev": 84.17135960513991
+        "min": 22268,
+        "stdev": 58.24047674352547
       },
       "wall_seconds": {
-        "max": 0.851162448,
-        "median": 0.5896292985,
-        "min": 0.441670551,
-        "stdev": 0.08877215158168149
+        "max": 0.892603203,
+        "median": 0.6063846275,
+        "min": 0.427038855,
+        "stdev": 0.09429408543805778
       }
     },
     "rsa-to-composite-mixed": {
       "artifact_total_bytes": {
-        "max": 29099,
+        "max": 29098,
         "median": 29095.0,
-        "min": 29090,
-        "stdev": 1.542135473355638
+        "min": 29092,
+        "stdev": 1.5843617075030627
       },
       "cpu_seconds": {
-        "max": 0.8558510000000012,
-        "median": 0.6436310000000063,
-        "min": 0.49719500000000494,
-        "stdev": 0.07963068957131732
+        "max": 0.873724000000017,
+        "median": 0.6381039999999985,
+        "min": 0.5261720000000025,
+        "stdev": 0.07750125286947934
       },
       "max_rss_kib": {
         "max": 21504,
         "median": 21248.0,
         "min": 21120,
-        "stdev": 89.1277598493173
+        "stdev": 80.08076730981848
       },
       "wall_seconds": {
-        "max": 0.82353281,
-        "median": 0.6256520915,
-        "min": 0.486535765,
-        "stdev": 0.07446085573599945
+        "max": 0.838981115,
+        "median": 0.6186008510000001,
+        "min": 0.513999938,
+        "stdev": 0.07175477515125872
       }
     }
   },
   "generation_repetitions": 100,
-  "pure_mldsa65_note": "Generated and measured, but rejected by the RP because this experimental patch intentionally enables only the Composite suite.",
+  "pure_mldsa65_note": "Generated and successfully validated by the patched RP in experimental mode; default mode remains Current Suite-only.",
   "timing_method": {
     "cpu": "RUSAGE_CHILDREN user plus system delta",
     "max_rss": "GNU time %M for each child process",
@@ -162,82 +162,82 @@
   "validation": {
     "composite-standalone": {
       "cpu_seconds": {
-        "max": 0.026270999999987055,
-        "median": 0.018816499999982028,
-        "min": 0.016217999999987853,
-        "stdev": 0.0010944961191825767
+        "max": 0.028846000000008587,
+        "median": 0.01902599999997534,
+        "min": 0.01641599999998533,
+        "stdev": 0.0013074547960381833
       },
       "max_rss_kib": {
-        "max": 7456,
+        "max": 7516,
         "median": 7424.0,
         "min": 7296,
-        "stdev": 26.086441659192204
+        "stdev": 22.44579331718168
       },
       "wall_seconds": {
-        "max": 0.025776544,
-        "median": 0.0186404835,
-        "min": 0.015961386,
-        "stdev": 0.0011176979270358842
+        "max": 0.028483762,
+        "median": 0.018891322500000002,
+        "min": 0.01617712,
+        "stdev": 0.001331536934154693
       }
     },
     "pure-mldsa65": {
       "cpu_seconds": {
-        "max": 0.017291999999983432,
-        "median": 0.011959000000004494,
-        "min": 0.009824999999992201,
-        "stdev": 0.0008809079756049135
+        "max": 0.022323999999997568,
+        "median": 0.015985499999995767,
+        "min": 0.013533000000009565,
+        "stdev": 0.0010605357026750423
       },
       "max_rss_kib": {
-        "max": 7296,
-        "median": 7296.0,
-        "min": 7040,
-        "stdev": 30.29871964972138
+        "max": 7424,
+        "median": 7424.0,
+        "min": 7296,
+        "stdev": 16.554971793726835
       },
       "wall_seconds": {
-        "max": 0.01720468,
-        "median": 0.0116716535,
-        "min": 0.009617276,
-        "stdev": 0.000879979464702756
+        "max": 0.02203477,
+        "median": 0.015750391000000002,
+        "min": 0.013410644,
+        "stdev": 0.0010635401357712957
       }
     },
     "rsa-baseline": {
       "cpu_seconds": {
-        "max": 0.01858800000000116,
-        "median": 0.013764999999995808,
-        "min": 0.011577000000002613,
-        "stdev": 0.000922402612660854
+        "max": 0.019116999999987172,
+        "median": 0.013829499999992834,
+        "min": 0.011824000000018486,
+        "stdev": 0.000987093626220519
       },
       "max_rss_kib": {
         "max": 7424,
         "median": 7424.0,
         "min": 7168,
-        "stdev": 26.08202845271449
+        "stdev": 25.146248981465163
       },
       "wall_seconds": {
-        "max": 0.018409856,
-        "median": 0.013513627,
-        "min": 0.011434513,
-        "stdev": 0.0009250805545400138
+        "max": 0.019012402,
+        "median": 0.0135887515,
+        "min": 0.01155253,
+        "stdev": 0.000989841931086902
       }
     },
     "rsa-to-composite-mixed": {
       "cpu_seconds": {
-        "max": 0.024760999999998035,
-        "median": 0.01949849999999742,
-        "min": 0.016942000000000235,
-        "stdev": 0.001248811409133399
+        "max": 0.026921999999999002,
+        "median": 0.020000500000016075,
+        "min": 0.016836000000012064,
+        "stdev": 0.0013938347558439096
       },
       "max_rss_kib": {
         "max": 7584,
         "median": 7424.0,
         "min": 7296,
-        "stdev": 31.52830502925931
+        "stdev": 28.73224568219376
       },
       "wall_seconds": {
-        "max": 0.025209924,
-        "median": 0.01945324,
-        "min": 0.016770324,
-        "stdev": 0.0012803345160540807
+        "max": 0.026878643,
+        "median": 0.019988075,
+        "min": 0.016661885,
+        "stdev": 0.0014076006260534304
       }
     }
   },
@@ -247,7 +247,7 @@
       2
     ],
     "pure-mldsa65": [
-      0
+      2
     ],
     "rsa-baseline": [
       2

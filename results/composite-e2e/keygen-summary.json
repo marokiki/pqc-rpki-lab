@@ -1,0 +1,26 @@
+{
+  "classification": "fresh-key generation subprocess benchmark; not signing, verification, repository, RRDP, or rsync performance",
+  "repetitions_per_algorithm": 1000,
+  "seconds": {
+    "composite-mldsa65-p256": {
+      "max": 0.014542108,
+      "median": 0.0087977755,
+      "min": 0.008036791,
+      "stdev": 0.0012271075195712032
+    },
+    "pure-mldsa65": {
+      "max": 0.013732088,
+      "median": 0.0071860445,
+      "min": 0.00662348,
+      "stdev": 0.0007803608960679098
+    },
+    "rsa-2048": {
+      "max": 0.366227707,
+      "median": 0.0877122115,
+      "min": 0.022857329,
+      "stdev": 0.05476805210537975
+    }
+  },
+  "timing_scope": "one OpenSSL genpkey subprocess per sample, including process and provider startup",
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

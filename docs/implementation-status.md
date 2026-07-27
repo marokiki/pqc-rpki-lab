@@ -10,7 +10,7 @@ planning notes.
 |---|---|---|---|
 | Primitive signature benchmarks | implemented | `results/primitive-bench.*`, `results/review-2026-06/exact-100k.*` | Primitive measurements are not complete RPKI object generation. |
 | Composite component benchmarks | partially implemented | `results/review-2026-06/composite-100k.*` | Sequential component operations only; no LAMPS composite ASN.1/OID encoding. |
-| Draft-19 raw Composite ML-DSA | implemented and measured | `results/draft-composite-2026-07/draft-composite-100k.*` | Sign/Verify, domain separation, context binding, and raw concatenation are implemented; X.509/CMS/RPKI profile interoperability remains open. |
+| Draft-19 raw Composite ML-DSA | implemented and measured | `results/draft-composite-2026-07/draft-composite-100k.*` | Sign/Verify, domain separation, context binding, and raw concatenation are implemented; independent interoperability remains open. |
 | Repository-size model | implemented estimate | `results/repository-impact.*` | Model-driven unless complete DER objects are measured. |
 | ML-DSA certificates and CRLs | partially implemented | `results/object-generation-feasibility.*` | OpenSSL capability depends on local provider support. |
 | ML-DSA CMS SignedData | implemented for ML-DSA-65 | `results/cms-probe/`, `results/cms-generation/` | Requires the OpenSSL CMS API with explicit SHA-512; the generic CLI path still fails. |
@@ -22,5 +22,6 @@ planning notes.
 | Mixed-tree migration model | implemented synthetic fixture | `results/mixed-tree/`, `testdata/mixed-tree/` | Public model only; not validator interoperability evidence. |
 | Manifest key consistency | implemented model checks | `src/pqc_rpki_lab/rpki_objects.py` | Models issuer/signing context; does not replace a validator. |
 | CCR-style semantic comparison | implemented interim tool | `results/ccr-comparison/` | Local canonical JSON hash, not CCR `ROAPayloadState.hash`. |
-| Validator interoperability | measured rejection | `results/validator-probe/` | Routinator 0.15.2, rpki-client 9.8, and FORT 1.6.8 accept RSA and reject ML-DSA-65. |
+| Unmodified validator interoperability | measured rejection | `results/validator-probe/` | Routinator 0.15.2, rpki-client 9.8, and FORT 1.6.8 accept RSA and reject ML-DSA-65. |
+| Experimental rpki-client E2E | implemented | `patches/rpki-client-composite-experimental.patch`, `results/composite-e2e/` | Experimental mode validates pure ML-DSA-65, Composite standalone, and RSA-to-Composite mixed-tree fixtures; default mode remains Current Suite-only. |
 | Routinator/Krill extension track | implemented harness | `results/routinator-krill/` | Read-only scan and matrix only unless explicit local upstream inputs are configured. |

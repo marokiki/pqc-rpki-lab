@@ -74,6 +74,35 @@
       "rejected": true
     },
     {
+      "class": "CMS",
+      "expected": "reject",
+      "name": "pure-signature-corrupt",
+      "profile_failures": [],
+      "reason_code": "cms-signature-invalid",
+      "rejected": true
+    },
+    {
+      "class": "CMS",
+      "expected": "reject",
+      "name": "pure-signature-parameters-present",
+      "profile_failures": [
+        "signatureAlgorithm"
+      ],
+      "reason_code": "malformed-parameters",
+      "rejected": true
+    },
+    {
+      "class": "CMS",
+      "expected": "reject",
+      "name": "pure-cms-sha256-intrusion",
+      "profile_failures": [
+        "digestAlgorithms",
+        "signerInfo.digestAlgorithm"
+      ],
+      "reason_code": "cms-digest-mismatch",
+      "rejected": true
+    },
+    {
       "class": "CRL",
       "expected": "reject",
       "name": "crl-signature-corrupt",

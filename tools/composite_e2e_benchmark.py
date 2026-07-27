@@ -216,7 +216,7 @@ def main() -> None:
             "binary": args.patched_rpki_client,
             "flags": ["-x"],
             "certificate": "ca.cer",
-            "expected_vrps": 0,
+            "expected_vrps": 2,
         },
         "composite-standalone": {
             "fixture": LOCAL / "standalone" / "testdata" / "validator"
@@ -327,8 +327,8 @@ def main() -> None:
             for scenario, values in vrp_observations.items()
         },
         "pure_mldsa65_note": (
-            "Generated and measured, but rejected by the RP because this "
-            "experimental patch intentionally enables only the Composite suite."
+            "Generated and successfully validated by the patched RP in "
+            "experimental mode; default mode remains Current Suite-only."
         ),
         "timing_method": {
             "wall": "Python time.perf_counter_ns around each child process",
