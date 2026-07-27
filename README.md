@@ -173,8 +173,11 @@ The experiment pins OpenSSL 3.6.2 at
 `fe686e15d84334b284f883118ed92f64b409b3aa`, the Composite provider at
 `2263161f6b058fe0195a98b6fad088c2d4a2595f`, rpki-client-portable at
 `b7d6e2fc4522751515444b45f07ce68cc0b3497b`, and its OpenBSD source at
-`577166e3dda1990fd9c54679b5d74ffc0ec5dec5`. The machine-readable source of
-these pins is `experiments/composite-dependencies.json`.
+`577166e3dda1990fd9c54679b5d74ffc0ec5dec5`. The second-RP experiment pins
+Routinator 0.15.2 at `0cf9104efa730ebc2de6bbd880e9bcee50de10d9`
+and rpki-rs 0.19.3 at `56d3811d3ee44a7b93eab33e5b1853cbcd4dee70`.
+The machine-readable source of these pins is
+`experiments/composite-dependencies.json`.
 
 Build the complete ignored dependency tree and run the RP matrix with:
 
@@ -194,6 +197,23 @@ git -C local/upstream/composite-provider apply \
 git -C local/upstream/rpki-client-portable/openbsd apply \
   ../../../../patches/rpki-client-composite-experimental.patch
 ```
+
+Build the second experimental RP and run its four-scenario and 15-case
+negative matrices with:
+
+```sh
+make routinator-experimental-bootstrap
+make routinator-experimental-negative
+```
+
+The bootstrap applies public patches to pinned Routinator and rpki-rs
+checkouts below `local/upstream/`. It uses the same OpenSSL 3.6.2 and
+Composite provider as the generator and rpki-client experiment, but
+Routinator/rpki-rs provide an independently implemented repository, resource
+certificate, CRL, CMS, manifest, and ROA processing path. This is evidence
+from a second RP implementation, not an independent cryptographic
+implementation. The experimental path is enabled only by
+`PQC_RPKI_EXPERIMENTAL=1`.
 
 Generate the certificate and CRL size evidence, including experimental
 Falcon-512 X.509 encodings, with:
@@ -223,8 +243,10 @@ eContent. `results/local-validation/` records OpenSSL DER/CMS round trips, EE
 profile checks, and Manifest hash checks. `results/validator-probe/` records
 the isolated unmodified-validator experiment. `results/key-roll/` is a
 synthetic configurable key-roll model.
-`results/routinator-krill/` records the optional Routinator/Krill extension
-map, read-only source scan, and interop matrix. Configure external inputs with
+`results/composite-e2e/routinator-matrix.json` and
+`routinator-negative-summary.json` record the second-RP E2E result.
+`results/routinator-krill/` records the earlier Routinator/Krill extension
+map and source scan. Configure external inputs with
 `PQC_RPKI_ROUTINATOR_SRC`, `PQC_RPKI_KRILL_SRC`,
 `PQC_RPKI_ROUTINATOR_BIN`, and `PQC_RPKI_KRILL_BIN`; suggested checkouts live
 under ignored `local/upstream/`.

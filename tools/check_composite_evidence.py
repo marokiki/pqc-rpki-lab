@@ -17,6 +17,10 @@ def load(path: str) -> dict:
 def find_inconsistencies() -> list[str]:
     negative = load("results/composite-e2e/negative-summary.json")
     matrix = load("results/composite-e2e/rp-validation-matrix.json")
+    routinator_matrix = load("results/composite-e2e/routinator-matrix.json")
+    routinator_negative = load(
+        "results/composite-e2e/routinator-negative-summary.json"
+    )
     benchmark = load("results/composite-e2e/benchmark-summary.json")
     summary = load("results/composite-e2e/summary.json")
     pins = load("experiments/composite-dependencies.json")
@@ -37,6 +41,21 @@ def find_inconsistencies() -> list[str]:
         failures.append("RP matrix is not successful")
     if not negative["all_rejected"]:
         failures.append("not all negative cases were rejected")
+    routinator_cases = set(routinator_matrix["cases"])
+    if routinator_cases != expected_cases or not routinator_matrix["success"]:
+        failures.append("Routinator matrix is not successful for all four scenarios")
+    if (
+        not routinator_negative["all_rejected"]
+        or len(routinator_negative["results"]) != len(negative["results"])
+    ):
+        failures.append("Routinator negative evidence does not match primary RP")
+
+    public_routinator = json.dumps(
+        {"matrix": routinator_matrix, "negative": routinator_negative}
+    )
+    private_path_markers = ("/" + "home" + "/", "/" + "Users" + "/")
+    if any(marker in public_routinator for marker in private_path_markers):
+        failures.append("Routinator public evidence contains an absolute user path")
 
     negative_count = len(negative["results"])
     count_phrase = f"{negative_count} negative cases"

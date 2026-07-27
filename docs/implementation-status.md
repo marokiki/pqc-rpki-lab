@@ -24,4 +24,5 @@ planning notes.
 | CCR-style semantic comparison | implemented interim tool | `results/ccr-comparison/` | Local canonical JSON hash, not CCR `ROAPayloadState.hash`. |
 | Unmodified validator interoperability | measured rejection | `results/validator-probe/` | Routinator 0.15.2, rpki-client 9.8, and FORT 1.6.8 accept RSA and reject ML-DSA-65. |
 | Experimental rpki-client E2E | implemented | `patches/rpki-client-composite-experimental.patch`, `results/composite-e2e/` | Experimental mode validates pure ML-DSA-65, Composite standalone, and RSA-to-Composite mixed-tree fixtures; default mode remains Current Suite-only. |
-| Routinator/Krill extension track | implemented harness | `results/routinator-krill/` | Read-only scan and matrix only unless explicit local upstream inputs are configured. |
+| Experimental Routinator E2E | implemented | `patches/rpki-rs-experimental-pqc.patch`, `patches/routinator-experimental-pqc.patch`, `results/composite-e2e/routinator-*.json` | A second RP implementation validates all four scenarios and rejects all 15 negative cases. It shares the experiment's OpenSSL/provider cryptographic backend. |
+| Krill extension track | source-mapped only | `results/routinator-krill/` | Production-like CA issuance and rollover remain open. |

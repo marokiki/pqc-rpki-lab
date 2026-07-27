@@ -21,8 +21,8 @@
   },
   "artifacts": {
     "child.cer": 2926,
-    "child/child.crl": 3543,
-    "child/child.mft": 9788,
+    "child/child.crl": 3542,
+    "child/child.mft": 9790,
     "child/route.roa": 9666,
     "ta.cer": 1039,
     "ta.crl": 411,
@@ -31,8 +31,8 @@
   "classification": "small-scale E2E fixture; not a real repository benchmark",
   "composite_algorithm": "MLDSA65-ECDSA-P256-SHA512",
   "composite_oid": "1.3.6.1.5.5.7.6.45",
-  "generated_at": "2026-07-27T09:13:13.684602+00:00",
-  "generation_wall_seconds": 0.5487521379982354,
+  "generated_at": "2026-07-27T09:40:28.840489+00:00",
+  "generation_wall_seconds": 0.6326506360019266,
   "output": "local/e2e/current",
   "verification": {
     "child": "OK",

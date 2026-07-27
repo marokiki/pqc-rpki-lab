@@ -19,12 +19,20 @@ from pqc_rpki_lab.cms import (
     parse_one,
 )
 from pqc_rpki_lab.workspace import reset_generated_directory
+from pqc_rpki_lab.rpki_asn1 import (
+    OID_CT_MFT,
+    manifest_econtent,
+    parse_manifest_econtent,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_FIXTURE = ROOT / "local" / "e2e" / "current"
 DEFAULT_PURE_FIXTURE = (
     ROOT / "local" / "e2e" / "standalone"
     / "testdata" / "validator" / "ml-dsa-65"
+)
+DEFAULT_PURE_PRIVATE = (
+    ROOT / "local" / "e2e" / "rp-matrix-private" / "ml-dsa-65"
 )
 DEFAULT_OUTPUT = ROOT / "local" / "negative"
 DEFAULT_RESULT = ROOT / "results" / "composite-e2e" / "negative-summary.json"
@@ -76,12 +84,17 @@ def rebuild_cms(
     signature_oid: str = COMPOSITE_OID,
     signature_null: bool = False,
     digest_oid: str = OID_SHA512,
+    certificate_der: bytes | None = None,
 ) -> bytes:
     item = inspect_signed_object(source)
     root, _ = parse_one(source)
     signed_data = root.children()[1].children()[0]
     fields = signed_data.children()
-    certificate_der = fields[3].children()[0].encoded
+    actual_certificate = (
+        fields[3].children()[0].encoded
+        if certificate_der is None
+        else certificate_der
+    )
     attrs = item["signed_attrs_der"]
     assert isinstance(attrs, bytes)
     attrs_value = parse_one(attrs)[0].value
@@ -102,7 +115,7 @@ def rebuild_cms(
             der.object_identifier(item["econtent_type"]),
             der.tlv(0xA0, der.octet_string(item["econtent"])),
         ),
-        der.tlv(0xA0, certificate_der),
+        der.tlv(0xA0, actual_certificate),
         der.set_of(signer_info),
     )
     return der.sequence(
@@ -177,11 +190,125 @@ def classify_pure_mldsa65_cms(data: bytes) -> list[str]:
     return failures
 
 
+def compile_cms_helper(openssl: str, output: Path, env: dict[str, str]) -> Path:
+    prefix = Path(openssl).resolve().parents[1]
+    executable = output / "cms-api-probe"
+    process = subprocess.run(
+        [
+            "cc",
+            str(ROOT / "tools" / "cms_api_probe.c"),
+            "-I",
+            str(prefix / "include"),
+            "-L",
+            str(prefix / "lib64"),
+            f"-Wl,-rpath,{prefix / 'lib64'}",
+            "-lcrypto",
+            "-o",
+            str(executable),
+        ],
+        env=env,
+        capture_output=True,
+        text=True,
+    )
+    if process.returncode:
+        raise RuntimeError(process.stderr)
+    return executable
+
+
+def sign_manifest(
+    *,
+    openssl: str,
+    cms_helper: Path,
+    repository: Path,
+    manifest_relative: Path,
+    signer: Path,
+    key: Path,
+    digest: str,
+    api: bool,
+    scratch: Path,
+    env: dict[str, str],
+) -> None:
+    manifest_path = repository / manifest_relative
+    parsed = inspect_signed_object(manifest_path.read_bytes())
+    details = parse_manifest_econtent(parsed["econtent"])
+    directory = manifest_path.parent
+    content = manifest_econtent(
+        [
+            (entry["file"], (directory / entry["file"]).read_bytes())
+            for entry in details["entries"]
+        ],
+        manifest_number=int(details["manifest_number"]),
+        this_update=str(details["this_update"]),
+        next_update=str(details["next_update"]),
+    )
+    econtent = scratch / f"{manifest_relative.as_posix().replace('/', '-')}.econtent"
+    econtent.write_bytes(content)
+    if api:
+        command = [
+            str(cms_helper),
+            digest,
+            str(key),
+            str(signer),
+            str(econtent),
+            OID_CT_MFT,
+            str(manifest_path),
+        ]
+    else:
+        command = [
+            openssl,
+            "cms",
+            "-sign",
+            "-binary",
+            "-in",
+            str(econtent),
+            "-signer",
+            str(signer),
+            "-inkey",
+            str(key),
+            "-md",
+            digest,
+            "-outform",
+            "DER",
+            "-out",
+            str(manifest_path),
+            "-nosmimecap",
+            "-nodetach",
+            "-keyid",
+            "-econtent_type",
+            OID_CT_MFT,
+        ]
+    process = subprocess.run(
+        command, env=env, capture_output=True, text=True
+    )
+    if process.returncode:
+        raise RuntimeError(process.stderr)
+
+
+def materialize_case(
+    *,
+    output: Path,
+    name: str,
+    fixture: Path,
+    target: Path | None,
+    data: bytes | None,
+) -> Path:
+    case = output / "repositories" / name
+    repository = case / "repository"
+    shutil.copytree(fixture / "repository", repository)
+    shutil.copyfile(fixture / "test.tal", case / "test.tal")
+    if target is not None and data is not None:
+        (repository / target).write_bytes(data)
+    return case
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--fixture", type=Path, default=DEFAULT_FIXTURE)
     parser.add_argument(
         "--pure-fixture", type=Path, default=DEFAULT_PURE_FIXTURE
+    )
+    parser.add_argument(
+        "--pure-private", type=Path, default=DEFAULT_PURE_PRIVATE
     )
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
     parser.add_argument("--result", type=Path, default=DEFAULT_RESULT)
@@ -190,9 +317,12 @@ def main() -> None:
     args = parser.parse_args()
     fixture = args.fixture.resolve()
     pure_fixture = args.pure_fixture.resolve()
+    pure_private = args.pure_private.resolve()
     output = args.output.resolve()
     reset_generated_directory(output, allowed_root=ROOT / "local")
     env = os.environ.copy()
+    cms_helper = compile_cms_helper(args.openssl, output, env)
+    routinator_cases: dict[str, str] = {}
     file_cache = output / "file-cache"
     prepare_cache(fixture, file_cache)
 
@@ -269,6 +399,26 @@ def main() -> None:
                 "rejected": rpki_rejected,
             }
         )
+        case = materialize_case(
+            output=output,
+            name=name,
+            fixture=fixture,
+            target=Path("child/route.roa"),
+            data=data,
+        )
+        sign_manifest(
+            openssl=args.openssl,
+            cms_helper=cms_helper,
+            repository=case / "repository",
+            manifest_relative=Path("child/child.mft"),
+            signer=fixture / "private" / "child-mft-ee.pem",
+            key=fixture / "private" / "child-mft-ee.key",
+            digest="sha512",
+            api=False,
+            scratch=output,
+            env=env,
+        )
+        routinator_cases[name] = str(case)
 
     pure_roa = (pure_fixture / "repository" / "route.roa").read_bytes()
     pure_item = inspect_signed_object(pure_roa)
@@ -329,6 +479,26 @@ def main() -> None:
                 "rejected": rpki_rejected,
             }
         )
+        case = materialize_case(
+            output=output,
+            name=name,
+            fixture=pure_fixture,
+            target=Path("route.roa"),
+            data=data,
+        )
+        sign_manifest(
+            openssl=args.openssl,
+            cms_helper=cms_helper,
+            repository=case / "repository",
+            manifest_relative=Path("manifest.mft"),
+            signer=pure_private / "manifest-ee.pem",
+            key=pure_private / "manifest-ee.key",
+            digest="sha512",
+            api=True,
+            scratch=output,
+            env=env,
+        )
+        routinator_cases[name] = str(case)
 
     crl = fixture / "repository" / "child" / "child.crl"
     corrupt_crl = output / "crl-signature-corrupt.crl"
@@ -351,6 +521,26 @@ def main() -> None:
             "rejected": crl_observed["returncode"] != 0,
         }
     )
+    crl_case = materialize_case(
+        output=output,
+        name="crl-signature-corrupt",
+        fixture=fixture,
+        target=Path("child/child.crl"),
+        data=corrupt_crl.read_bytes(),
+    )
+    sign_manifest(
+        openssl=args.openssl,
+        cms_helper=cms_helper,
+        repository=crl_case / "repository",
+        manifest_relative=Path("child/child.mft"),
+        signer=fixture / "private" / "child-mft-ee.pem",
+        key=fixture / "private" / "child-mft-ee.key",
+        digest="sha512",
+        api=False,
+        scratch=output,
+        env=env,
+    )
+    routinator_cases["crl-signature-corrupt"] = str(crl_case)
 
     cms_root = parse_one(roa)[0]
     ee_der = cms_root.children()[1].children()[0].children()[3].children()[0].encoded
@@ -383,6 +573,27 @@ def main() -> None:
             "rejected": mismatch_observed["returncode"] != 0,
         }
     )
+    mismatch_roa = rebuild_cms(roa, certificate_der=mismatch.read_bytes())
+    mismatch_case = materialize_case(
+        output=output,
+        name="tbs-outer-signature-mismatch",
+        fixture=fixture,
+        target=Path("child/route.roa"),
+        data=mismatch_roa,
+    )
+    sign_manifest(
+        openssl=args.openssl,
+        cms_helper=cms_helper,
+        repository=mismatch_case / "repository",
+        manifest_relative=Path("child/child.mft"),
+        signer=fixture / "private" / "child-mft-ee.pem",
+        key=fixture / "private" / "child-mft-ee.key",
+        digest="sha512",
+        api=False,
+        scratch=output,
+        env=env,
+    )
+    routinator_cases["tbs-outer-signature-mismatch"] = str(mismatch_case)
 
     path_invalid = output / "certificate-path-invalid.cer"
     path_invalid.write_bytes(
@@ -416,6 +627,26 @@ def main() -> None:
             "rejected": path_observed["returncode"] != 0,
         }
     )
+    path_case = materialize_case(
+        output=output,
+        name="certificate-path-invalid",
+        fixture=fixture,
+        target=Path("child.cer"),
+        data=path_invalid.read_bytes(),
+    )
+    sign_manifest(
+        openssl=args.openssl,
+        cms_helper=cms_helper,
+        repository=path_case / "repository",
+        manifest_relative=Path("ta.mft"),
+        signer=fixture / "private" / "ta-mft-ee.pem",
+        key=fixture / "private" / "ta-mft-ee.key",
+        digest="sha256",
+        api=False,
+        scratch=output,
+        env=env,
+    )
+    routinator_cases["certificate-path-invalid"] = str(path_case)
 
     bad_repo = output / "manifest-hash-repository"
     shutil.copytree(fixture / "repository", bad_repo)
@@ -468,12 +699,17 @@ def main() -> None:
             ),
         }
     )
+    manifest_case = output / "repositories" / "manifest-hash-mismatch"
+    shutil.copytree(bad_repo, manifest_case / "repository")
+    shutil.copyfile(fixture / "test.tal", manifest_case / "test.tal")
+    routinator_cases["manifest-hash-mismatch"] = str(manifest_case)
 
     summary = {
         "warning": "EXPERIMENTAL / NOT FOR PRODUCTION",
         "classification": "generated negative fixtures; artifacts stay local",
         "results": results,
         "all_rejected": all(result["rejected"] for result in results),
+        "routinator_repositories": routinator_cases,
     }
     (output / "summary.json").write_text(
         json.dumps(summary, indent=2, sort_keys=True) + "\n"

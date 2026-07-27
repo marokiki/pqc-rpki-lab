@@ -1,10 +1,15 @@
-.PHONY: all certificate-sizes ccr-comparison cms-api-probe composite-100k composite-bootstrap composite-bootstrap-check composite-e2e composite-e2e-rp-matrix composite-e2e-negative composite-e2e-benchmark composite-keygen-benchmark draft-composite-100k exact-100k key-roll local-validation message-sweep mixed-tree object-benchmarks pre-publication regenerate-reports review-evidence routinator-krill-interop routinator-krill-scan rpki-objects test validator-container-probe verify-artifacts install-optional-pqc clean
+.PHONY: all certificate-sizes ccr-comparison cms-api-probe composite-100k composite-bootstrap composite-bootstrap-check composite-e2e composite-e2e-rp-matrix composite-e2e-negative composite-e2e-benchmark composite-keygen-benchmark draft-composite-100k exact-100k key-roll local-validation message-sweep mixed-tree object-benchmarks pre-publication regenerate-reports review-evidence routinator-experimental-bootstrap routinator-experimental-bootstrap-check routinator-experimental-build routinator-experimental-matrix routinator-experimental-negative routinator-krill-interop routinator-krill-scan rpki-objects test validator-container-probe verify-artifacts install-optional-pqc clean
 
 COMPOSITE_OPENSSL ?= $(CURDIR)/local/build/openssl-3.6.2-install/bin/openssl
 COMPOSITE_OPENSSL_LIBDIR ?= $(CURDIR)/local/build/openssl-3.6.2-install/lib64
 COMPOSITE_PROVIDER_MODULE ?= $(CURDIR)/local/build/composite-provider/composite.so
 COMPOSITE_OPENSSL_CONF ?= $(CURDIR)/experiments/openssl-composite.cnf
 COMPOSITE_ENV = LD_LIBRARY_PATH="$(COMPOSITE_OPENSSL_LIBDIR):$${LD_LIBRARY_PATH}" OPENSSL_CONF="$(COMPOSITE_OPENSSL_CONF)" PQC_COMPOSITE_PROVIDER_MODULE="$(COMPOSITE_PROVIDER_MODULE)"
+RUSTUP_HOME ?= $(CURDIR)/local/build/rustup-home
+CARGO_HOME ?= $(CURDIR)/local/build/cargo-home
+ROUTINATOR_SOURCE ?= $(CURDIR)/local/upstream/routinator
+ROUTINATOR_BIN ?= $(ROUTINATOR_SOURCE)/target/debug/routinator
+RUST_ENV = RUSTUP_HOME="$(RUSTUP_HOME)" CARGO_HOME="$(CARGO_HOME)" OPENSSL_DIR="$(CURDIR)/local/build/openssl-3.6.2-install" LD_LIBRARY_PATH="$(COMPOSITE_OPENSSL_LIBDIR):$${LD_LIBRARY_PATH}"
 
 all:
 	./tools/run_all.sh
@@ -60,10 +65,12 @@ composite-e2e-rp-matrix: composite-e2e
 composite-e2e-negative: composite-e2e
 	$(COMPOSITE_ENV) PYTHONPATH=src python3 tools/generate_rpki_objects.py \
 		--algorithm ml-dsa-65 \
-		--output-root local/e2e/standalone \
+		--output-root local/e2e/negative-pure \
+		--private-output local/e2e/rp-matrix-private \
 		--openssl "$(COMPOSITE_OPENSSL)"
 	$(COMPOSITE_ENV) PYTHONPATH=src python3 tools/composite_negative_tests.py \
-		--pure-fixture local/e2e/standalone/testdata/validator/ml-dsa-65 \
+		--pure-fixture local/e2e/negative-pure/testdata/validator/ml-dsa-65 \
+		--pure-private local/e2e/rp-matrix-private/ml-dsa-65 \
 		--openssl "$(COMPOSITE_OPENSSL)" \
 		--rpki-client local/build/rpki-client-composite/src/rpki-client
 
@@ -85,6 +92,29 @@ composite-bootstrap:
 
 composite-bootstrap-check:
 	./tools/bootstrap_composite_e2e.sh --check-only
+
+routinator-experimental-build:
+	cd "$(ROUTINATOR_SOURCE)" && $(RUST_ENV) \
+		"$(CARGO_HOME)/bin/cargo" build --no-default-features
+
+routinator-experimental-bootstrap:
+	./tools/bootstrap_routinator_experimental.sh --allow-network
+
+routinator-experimental-bootstrap-check:
+	./tools/bootstrap_routinator_experimental.sh --check-only
+
+routinator-experimental-matrix: composite-e2e-rp-matrix routinator-experimental-build
+	$(COMPOSITE_ENV) PYTHONPATH=src python3 \
+		tools/routinator_experimental_matrix.py \
+		--binary "$(ROUTINATOR_BIN)" \
+		--rsa-fixture local/e2e/rp-matrix-rsa/testdata/validator/rsa \
+		--pure-fixture local/e2e/rp-matrix-pure/testdata/validator/ml-dsa-65 \
+		--composite-fixture local/e2e/rp-matrix-composite/testdata/validator/composite-mldsa65-p256 \
+		--mixed-fixture local/e2e/current
+
+routinator-experimental-negative: composite-e2e-negative routinator-experimental-build
+	$(COMPOSITE_ENV) PYTHONPATH=src:tools python3 \
+		tools/routinator_negative_tests.py --binary "$(ROUTINATOR_BIN)"
 
 cms-api-probe:
 	PYTHONPATH=src python3 tools/cms_api_probe.py

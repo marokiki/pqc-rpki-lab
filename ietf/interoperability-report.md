@@ -16,8 +16,19 @@ option, it validates pure ML-DSA-65, Composite standalone, and an
 RSA-to-Composite mixed tree; each successful fixture produces the same two
 VRPs as the RSA baseline.
 
-Negative tests separately reject corrupt component and pure ML-DSA signatures,
+An experimental Routinator 0.15.2/rpki-rs 0.19.3 extension independently
+processes the repository, certificate path, CRL, CMS, manifest, ROA, and VRP
+output. In experimental mode it produces the same two VRPs for the RSA, pure
+ML-DSA-65, Composite standalone, and mixed-tree fixtures. In default mode it
+continues to reject the experimental suites. Its cryptographic operations use
+the same OpenSSL/provider backend as the generator, so this is second-RP
+evidence but not independent cryptographic implementation evidence.
+
+Negative tests in both experimental RPs separately reject corrupt component and pure ML-DSA signatures,
 component reordering and truncation, unknown OIDs, non-absent parameters,
 digest mismatches, certificate and CRL signature failures, invalid
-certification paths, and manifest hash mismatches. Independent RP
-interoperability and production-scale repository transport remain open.
+certification paths, and manifest hash mismatches. The Routinator work also
+exposed and fixed a long-form DER length bug in rpki-rs signed-attribute
+reconstruction when the SHA-512 attributes exceeded 127 octets.
+Independent cryptographic implementations and production-scale repository
+transport remain open.

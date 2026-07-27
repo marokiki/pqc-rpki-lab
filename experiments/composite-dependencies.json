@@ -15,5 +15,15 @@
   "rpki_client_portable": {
     "commit": "b7d6e2fc4522751515444b45f07ce68cc0b3497b",
     "url": "https://github.com/rpki-client/rpki-client-portable.git"
+  },
+  "rpki_rs": {
+    "commit": "56d3811d3ee44a7b93eab33e5b1853cbcd4dee70",
+    "url": "https://github.com/NLnetLabs/rpki-rs.git",
+    "version": "0.19.3"
+  },
+  "routinator": {
+    "commit": "0cf9104efa730ebc2de6bbd880e9bcee50de10d9",
+    "url": "https://github.com/NLnetLabs/routinator.git",
+    "version": "0.15.2"
   }
 }

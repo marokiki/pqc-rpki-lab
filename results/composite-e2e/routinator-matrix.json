@@ -1,0 +1,131 @@
+{
+  "cases": {
+    "composite_standalone": {
+      "default": {
+        "reason": "[ERROR] Failed to read TAL $REPO/local/routinator-experimental/composite_standalone-default/tals/test.tal: bad key info: invalid public key format (at position 6).",
+        "returncode": 1,
+        "status": "rejected",
+        "vrp_count": 0,
+        "vrps": []
+      },
+      "experimental": {
+        "reason": "",
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 2,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          },
+          {
+            "asn": "AS64496",
+            "max_length": 48,
+            "prefix": "2001:db8::/32"
+          }
+        ]
+      }
+    },
+    "mixed_tree": {
+      "default": {
+        "reason": "[INFO] rsync://example.invalid/repository/: certificate rsync://example.invalid/repository/child.cer: failed to decode.",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0,
+        "vrps": []
+      },
+      "experimental": {
+        "reason": "",
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 2,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          },
+          {
+            "asn": "AS64496",
+            "max_length": 48,
+            "prefix": "2001:db8::/32"
+          }
+        ]
+      }
+    },
+    "pure_mldsa65": {
+      "default": {
+        "reason": "[ERROR] Failed to read TAL $REPO/local/routinator-experimental/pure_mldsa65-default/tals/test.tal: bad key info: invalid public key format (at position 6).",
+        "returncode": 1,
+        "status": "rejected",
+        "vrp_count": 0,
+        "vrps": []
+      },
+      "experimental": {
+        "reason": "",
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 2,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          },
+          {
+            "asn": "AS64496",
+            "max_length": 48,
+            "prefix": "2001:db8::/32"
+          }
+        ]
+      }
+    },
+    "rsa_baseline": {
+      "default": {
+        "reason": "",
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 2,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          },
+          {
+            "asn": "AS64496",
+            "max_length": 48,
+            "prefix": "2001:db8::/32"
+          }
+        ]
+      },
+      "experimental": {
+        "reason": "",
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 2,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 24,
+            "prefix": "192.0.2.0/24"
+          },
+          {
+            "asn": "AS64496",
+            "max_length": 48,
+            "prefix": "2001:db8::/32"
+          }
+        ]
+      }
+    }
+  },
+  "classification": "isolated local-rsync second-RP experiment; OpenSSL provider cryptography is shared with the generator",
+  "implementation": "Routinator 0.15.2 with experimental rpki-rs backend",
+  "policy": {
+    "default": "Current Suite only",
+    "experimental": "Current Suite plus pure ML-DSA-65 and id-MLDSA65-ECDSA-P256-SHA512"
+  },
+  "success": true,
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

@@ -1,0 +1,143 @@
+{
+  "all_rejected": true,
+  "classification": "sanitized second-RP negative-test results; generated repositories and full logs stay below local/",
+  "implementation": "Routinator 0.15.2 with experimental rpki-rs backend",
+  "results": [
+    {
+      "expected": "reject",
+      "name": "certificate-path-invalid",
+      "observed_reason": "[INFO] rsync://example.invalid/repository/: CA certificagte rsync://example.invalid/repository/child.cer: signature verification failed.",
+      "reason_code": "certificate-path-invalid",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    },
+    {
+      "expected": "reject",
+      "name": "cms-sha256-intrusion",
+      "observed_reason": "[INFO] rsync://example.invalid/repository/child/: ROA rsync://example.invalid/repository/child/route.roa: message digest mismatch in signed object.",
+      "reason_code": "cms-digest-mismatch",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    },
+    {
+      "expected": "reject",
+      "name": "cms-signature-corrupt",
+      "observed_reason": "[INFO] rsync://example.invalid/repository/child/: ROA rsync://example.invalid/repository/child/route.roa: signature verification failed.",
+      "reason_code": "cms-signature-invalid",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    },
+    {
+      "expected": "reject",
+      "name": "component-ecdsa-corrupt",
+      "observed_reason": "[INFO] rsync://example.invalid/repository/child/: ROA rsync://example.invalid/repository/child/route.roa: signature verification failed.",
+      "reason_code": "component-signature-invalid",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    },
+    {
+      "expected": "reject",
+      "name": "component-mldsa-corrupt",
+      "observed_reason": "[INFO] rsync://example.invalid/repository/child/: ROA rsync://example.invalid/repository/child/route.roa: signature verification failed.",
+      "reason_code": "component-signature-invalid",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    },
+    {
+      "expected": "reject",
+      "name": "component-order-reversed",
+      "observed_reason": "[INFO] rsync://example.invalid/repository/child/: ROA rsync://example.invalid/repository/child/route.roa: signature verification failed.",
+      "reason_code": "component-order-invalid",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    },
+    {
+      "expected": "reject",
+      "name": "crl-signature-corrupt",
+      "observed_reason": "[INFO] rsync://example.invalid/repository/child/: CRL rsync://example.invalid/repository/child/child.crl: signature verification failed.",
+      "reason_code": "crl-signature-invalid",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    },
+    {
+      "expected": "reject",
+      "name": "manifest-hash-mismatch",
+      "observed_reason": "[INFO] rsync://example.invalid/repository/child/: rsync://example.invalid/repository/child/route.roa: file has wrong manifest hash.",
+      "reason_code": "manifest-hash-mismatch",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    },
+    {
+      "expected": "reject",
+      "name": "pure-cms-sha256-intrusion",
+      "observed_reason": "[INFO] rsync://example.invalid:8873/repository/: ROA rsync://example.invalid:8873/repository/route.roa: message digest mismatch in signed object.",
+      "reason_code": "cms-digest-mismatch",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    },
+    {
+      "expected": "reject",
+      "name": "pure-signature-corrupt",
+      "observed_reason": "[INFO] rsync://example.invalid:8873/repository/: ROA rsync://example.invalid:8873/repository/route.roa: signature verification failed.",
+      "reason_code": "cms-signature-invalid",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    },
+    {
+      "expected": "reject",
+      "name": "pure-signature-parameters-present",
+      "observed_reason": "[INFO] rsync://example.invalid:8873/repository/: ROA rsync://example.invalid:8873/repository/route.roa: failed to decode.",
+      "reason_code": "malformed-parameters",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    },
+    {
+      "expected": "reject",
+      "name": "signature-parameters-present",
+      "observed_reason": "[INFO] rsync://example.invalid/repository/child/: ROA rsync://example.invalid/repository/child/route.roa: failed to decode.",
+      "reason_code": "malformed-parameters",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    },
+    {
+      "expected": "reject",
+      "name": "signature-truncated",
+      "observed_reason": "[INFO] rsync://example.invalid/repository/child/: ROA rsync://example.invalid/repository/child/route.roa: signature verification failed.",
+      "reason_code": "signature-encoding-invalid",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    },
+    {
+      "expected": "reject",
+      "name": "tbs-outer-signature-mismatch",
+      "observed_reason": "[INFO] rsync://example.invalid/repository/child/: ROA rsync://example.invalid/repository/child/route.roa: signature algorithm mismatch in certificate.",
+      "reason_code": "certificate-algorithm-mismatch",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    },
+    {
+      "expected": "reject",
+      "name": "unsupported-signature-oid",
+      "observed_reason": "[INFO] rsync://example.invalid/repository/child/: ROA rsync://example.invalid/repository/child/route.roa: failed to decode.",
+      "reason_code": "unsupported-algorithm",
+      "rejected": true,
+      "returncode": 0,
+      "vrp_count": 0
+    }
+  ],
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

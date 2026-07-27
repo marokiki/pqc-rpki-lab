@@ -713,6 +713,13 @@ Implemented:
   Suite-only behavior by default and accepts the evaluated Composite
   suite only with an explicit experimental option.  The extended RP
   produced the expected IPv4 and IPv6 VRPs from the mixed tree.
+* An experimental Routinator 0.15.2/rpki-rs 0.19.3 extension that
+  independently processes the repository, resource certificate path,
+  CRL, CMS, manifest, ROA, and VRP output.  It produced the same two
+  VRPs for the RSA, pure ML-DSA-65, Composite standalone, and mixed-tree
+  repositories in experimental mode and retained rejection of the
+  experimental suites in default mode.  It shares the experiment's
+  OpenSSL and Composite provider cryptographic backend.
 * 15 negative cases covering component and pure signature corruption,
   component order,
   truncation, unsupported OID, non-absent parameters, certificate
@@ -726,7 +733,8 @@ Implemented:
 Not yet implemented or incomplete:
 
 * Complete ML-DSA-44, ML-DSA-87, and SLH-DSA CMS signed-object fixtures.
-* Independent acceptance by a second validator implementation.
+* Acceptance using a cryptographic implementation independent of the
+  pinned OpenSSL and Composite provider used by both experimental RPs.
 * Krill integration for production-like CA issuance, manifest and ROA
   signing, and publication.
 * RRDP and rsync impact measurement with real object corpora.
@@ -737,11 +745,11 @@ Not yet implemented or incomplete:
   components).
 * HSM performance and support investigation.
 
-The highest-priority remaining implementation gap is independent
-acceptance by a second RP, followed by production-like CA support in
-Krill or equivalent software.  The public reference implementation
-establishes one controlled E2E path but does not establish independent
-interoperability.
+The highest-priority remaining implementation gap is production-like CA
+support in Krill or equivalent software, followed by an independent
+cryptographic implementation.  The public reference implementation
+establishes two RP processing paths but does not establish cryptographic
+implementation independence.
 
 # Security Considerations
 

@@ -17,9 +17,12 @@ This note is maintained in the style of an RFC 7942 implementation-status sectio
 | Pure ML-DSA-65 CMS SignedData, MFT, and ROA | implemented | `testdata/ml-dsa-65/`, `results/rpki-objects/` |
 | Composite CMS SignedData, MFT, and ROA | implemented | `testdata/composite-mldsa65-p256/`, `results/composite-e2e/` |
 | Experimental rpki-client validation | implemented | pure ML-DSA-65, Composite standalone, and mixed-tree fixtures produce two VRPs in experimental mode |
-| Independent multi-validator PQC acceptance | not implemented | unmodified Routinator, rpki-client, and FORT reject the unsupported suite |
+| Experimental Routinator validation | implemented | a second RP parser and validation path produces the same two VRPs for all four scenarios and rejects all 15 negative cases |
+| Independent cryptographic implementation | not implemented | both experimental RPs and the generator use the same pinned OpenSSL and Composite provider |
 
 Current repository-scale results remain synthetic or literature-calibrated
 estimates. Complete small-scale pure ML-DSA-65 and Composite RPKI objects are
-generated and accepted by the experimental rpki-client extension. This is one
-local implementation path, not independent interoperability evidence.
+generated and accepted by experimental rpki-client and Routinator extensions.
+The RP processing implementations are distinct, but their cryptographic
+backend is shared; this is not independent cryptographic interoperability
+evidence.

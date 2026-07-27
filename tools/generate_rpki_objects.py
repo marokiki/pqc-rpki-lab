@@ -20,6 +20,7 @@ from pqc_rpki_lab.cms import (
 )
 from pqc_rpki_lab.result_io import markdown_table, write_csv, write_json
 from pqc_rpki_lab.rpki_asn1 import OID_CT_MFT, OID_CT_ROA, manifest_econtent, roa_econtent
+from pqc_rpki_lab.workspace import reset_generated_directory
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_ROOT = ROOT
@@ -28,6 +29,7 @@ TESTDATA = ROOT / "testdata"
 CMS_RESULTS = ROOT / "results" / "cms-generation"
 CMS_API_SOURCE = ROOT / "tools" / "cms_api_probe.c"
 BASE_URI = "rsync://example.invalid:8873/repository/"
+PRIVATE_OUTPUT: Path | None = None
 
 ALGORITHMS = (
     ("RSA-2048/SHA-256", "rsa", "RSA", ["-pkeyopt", "rsa_keygen_bits:2048"]),
@@ -497,11 +499,23 @@ def generate_algorithm(openssl: str, display: str, slug: str, provider_name: str
                         "reason": reason_for(cms_result, "CMS signing failed"),
                     })
         write_validator_repository(openssl, slug, ca_pem, artifact_root)
+        if PRIVATE_OUTPUT is not None:
+            private = PRIVATE_OUTPUT / slug
+            private.mkdir(parents=True, exist_ok=True)
+            for source in (
+                ca_key,
+                ca_pem,
+                roa_key,
+                roa_pem,
+                mft_key,
+                mft_pem,
+            ):
+                shutil.copyfile(source, private / source.name)
     return rows
 
 
 def main() -> None:
-    global OUTPUT_ROOT, RESULTS, TESTDATA, CMS_RESULTS
+    global OUTPUT_ROOT, RESULTS, TESTDATA, CMS_RESULTS, PRIVATE_OUTPUT
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "--algorithm",
@@ -520,12 +534,27 @@ def main() -> None:
         "--openssl",
         help="OpenSSL executable; defaults to the first openssl on PATH",
     )
+    parser.add_argument(
+        "--private-output",
+        type=Path,
+        help=(
+            "persist generated keys and PEM certificates below an ignored "
+            "local/ path for follow-on laboratory tests"
+        ),
+    )
     args = parser.parse_args()
     if args.output_root:
         OUTPUT_ROOT = args.output_root.resolve()
         RESULTS = OUTPUT_ROOT / "results" / "rpki-objects"
         TESTDATA = OUTPUT_ROOT / "testdata"
         CMS_RESULTS = OUTPUT_ROOT / "results" / "cms-generation"
+    if args.private_output:
+        PRIVATE_OUTPUT = args.private_output.resolve()
+        if not PRIVATE_OUTPUT.is_relative_to(ROOT / "local"):
+            raise SystemExit("--private-output must stay below local/")
+        reset_generated_directory(
+            PRIVATE_OUTPUT, allowed_root=ROOT / "local"
+        )
     openssl = args.openssl or shutil.which("openssl")
     rows: list[dict[str, object]] = []
     if not openssl:
@@ -544,7 +573,7 @@ def main() -> None:
     write_csv(RESULTS / "rpki-objects.csv", rows)
     write_json(RESULTS / "rpki-objects.json", {
         "warning": "EXPERIMENTAL / NOT FOR PRODUCTION",
-        "private_keys_persisted": False,
+        "private_keys_persisted": PRIVATE_OUTPUT is not None,
         "method": "OpenSSL-generated public certificates/CRLs plus minimal DER eContent encoders; private keys remain in deleted temporary directories.",
         "results": rows,
     })

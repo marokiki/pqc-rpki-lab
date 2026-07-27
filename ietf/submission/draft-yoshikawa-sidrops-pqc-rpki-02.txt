@@ -1026,6 +1026,14 @@ Internet-Draft                PQC for RPKI                     July 2026
       suite only with an explicit experimental option.  The extended RP
       produced the expected IPv4 and IPv6 VRPs from the mixed tree.
 
+   *  An experimental Routinator 0.15.2/rpki-rs 0.19.3 extension that
+      independently processes the repository, resource certificate path,
+      CRL, CMS, manifest, ROA, and VRP output.  It produced the same two
+      VRPs for the RSA, pure ML-DSA-65, Composite standalone, and mixed-
+      tree repositories in experimental mode and retained rejection of
+      the experimental suites in default mode.  It shares the
+      experiment's OpenSSL and Composite provider cryptographic backend.
+
    *  15 negative cases covering component and pure signature
       corruption, component order, truncation, unsupported OID, non-
       absent parameters, certificate signatureAlgorithm mismatch, CRL
@@ -1041,12 +1049,22 @@ Internet-Draft                PQC for RPKI                     July 2026
    *  Complete ML-DSA-44, ML-DSA-87, and SLH-DSA CMS signed-object
       fixtures.
 
-   *  Independent acceptance by a second validator implementation.
+   *  Acceptance using a cryptographic implementation independent of the
+      pinned OpenSSL and Composite provider used by both experimental
+      RPs.
 
    *  Krill integration for production-like CA issuance, manifest and
       ROA signing, and publication.
 
    *  RRDP and rsync impact measurement with real object corpora.
+
+
+
+
+Yoshikawa                Expires 25 January 2027               [Page 19]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
 
    *  CCR-based semantic equivalence testing across suites, using real
       RP output rather than fixtures.
@@ -1057,20 +1075,11 @@ Internet-Draft                PQC for RPKI                     July 2026
 
    *  HSM performance and support investigation.
 
-
-
-
-
-Yoshikawa                Expires 25 January 2027               [Page 19]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
-   The highest-priority remaining implementation gap is independent
-   acceptance by a second RP, followed by production-like CA support in
-   Krill or equivalent software.  The public reference implementation
-   establishes one controlled E2E path but does not establish
-   independent interoperability.
+   The highest-priority remaining implementation gap is production-like
+   CA support in Krill or equivalent software, followed by an
+   independent cryptographic implementation.  The public reference
+   implementation establishes two RP processing paths but does not
+   establish cryptographic implementation independence.
 
 15.  Security Considerations
 
@@ -1104,15 +1113,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    verifies the signature with the issuer's public key, and processes
    the subject SPKI algorithm as a separate field.
 
-   Validators that do not support a Next Suite face a fail-open versus
-   fail-closed choice: treating unsupported-algorithm objects as absent
-   (potentially discarding protections the CA intended to publish) or
-   treating them as errors (potentially discarding an entire publication
-   point).  Neither behavior is safe in all situations; what matters is
-   that the behavior is explicit, configurable, and observable.  How
-   mixed deployments with unsupported validators should be handled at
-   Internet scale remains a question for further work.
-
 
 
 
@@ -1121,6 +1121,15 @@ Yoshikawa                Expires 25 January 2027               [Page 20]
 
 Internet-Draft                PQC for RPKI                     July 2026
 
+
+   Validators that do not support a Next Suite face a fail-open versus
+   fail-closed choice: treating unsupported-algorithm objects as absent
+   (potentially discarding protections the CA intended to publish) or
+   treating them as errors (potentially discarding an entire publication
+   point).  Neither behavior is safe in all situations; what matters is
+   that the behavior is explicit, configurable, and observable.  How
+   mixed deployments with unsupported validators should be handled at
+   Internet scale remains a question for further work.
 
    Larger public keys, signatures, certificates, CRLs, and CMS objects
    enlarge the repository fetch and validation attack surface.  A
@@ -1161,15 +1170,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    strongly unforgeable component.  The experiment follows the
    component-key separation rules in [I-D.ietf-lamps-pq-composite-sigs];
    reuse as standalone keys or in other composite combinations can
-   enable stripping and cross-protocol attacks.  A defect in one
-   component is tolerated only if the other component and the combiner,
-   parser, encoding, key management, and all-component validation path
-   are unaffected.  A shared implementation defect or compromise of both
-   component keys is not mitigated by the composite construction.  After
-   a CRQC breaks ECDSA, the composite suite's unforgeability depends on
-   ML-DSA-65.
-
-
 
 
 
@@ -1177,6 +1177,14 @@ Yoshikawa                Expires 25 January 2027               [Page 21]
 
 Internet-Draft                PQC for RPKI                     July 2026
 
+
+   enable stripping and cross-protocol attacks.  A defect in one
+   component is tolerated only if the other component and the combiner,
+   parser, encoding, key management, and all-component validation path
+   are unaffected.  A shared implementation defect or compromise of both
+   component keys is not mitigated by the composite construction.  After
+   a CRQC breaks ECDSA, the composite suite's unforgeability depends on
+   ML-DSA-65.
 
 16.  IANA Considerations
 
@@ -1218,14 +1226,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    *  How to define a transition timetable and readiness metrics, and
       whether that work should update or replace RFC 6916.
 
-   *  Whether one-time-use EE certificates for RPKI signed objects
-      should use the same Next Suite as the CMS signature, a distinct
-      certificate signature algorithm, or a null-signature construction,
-      considering both security and validation cost.
-
-   *  How provisioning and publication software will roll the BPKI trust
-      anchors and EE certificates used for existing relationships,
-      including relationships established through [RFC8183], before
 
 
 
@@ -1234,6 +1234,14 @@ Yoshikawa                Expires 25 January 2027               [Page 22]
 Internet-Draft                PQC for RPKI                     July 2026
 
 
+   *  Whether one-time-use EE certificates for RPKI signed objects
+      should use the same Next Suite as the CMS signature, a distinct
+      certificate signature algorithm, or a null-signature construction,
+      considering both security and validation cost.
+
+   *  How provisioning and publication software will roll the BPKI trust
+      anchors and EE certificates used for existing relationships,
+      including relationships established through [RFC8183], before
       those protocols depend on a PQC algorithm.  The procedure needs
       overlap, rollback, and recovery behavior and can be prepared
       independently of the final RPKI object-signature algorithm choice.
@@ -1271,15 +1279,7 @@ Internet-Draft                PQC for RPKI                     July 2026
               (RPKI)", BCP 182, RFC 6916, DOI 10.17487/RFC6916, April
               2013, <https://www.rfc-editor.org/info/rfc6916>.
 
-   [RFC7935]  Huston, G. and G. Michaelson, Ed., "The Profile for
-              Algorithms and Key Sizes for Use in the Resource Public
-              Key Infrastructure", RFC 7935, DOI 10.17487/RFC7935,
-              August 2016, <https://www.rfc-editor.org/info/rfc7935>.
 
-   [RFC8182]  Bruijnzeels, T., Muravskiy, O., Weber, B., and R. Austein,
-              "The RPKI Repository Delta Protocol (RRDP)", RFC 8182,
-              DOI 10.17487/RFC8182, July 2017,
-              <https://www.rfc-editor.org/info/rfc8182>.
 
 
 
@@ -1289,6 +1289,16 @@ Yoshikawa                Expires 25 January 2027               [Page 23]
 
 Internet-Draft                PQC for RPKI                     July 2026
 
+
+   [RFC7935]  Huston, G. and G. Michaelson, Ed., "The Profile for
+              Algorithms and Key Sizes for Use in the Resource Public
+              Key Infrastructure", RFC 7935, DOI 10.17487/RFC7935,
+              August 2016, <https://www.rfc-editor.org/info/rfc7935>.
+
+   [RFC8182]  Bruijnzeels, T., Muravskiy, O., Weber, B., and R. Austein,
+              "The RPKI Repository Delta Protocol (RRDP)", RFC 8182,
+              DOI 10.17487/RFC8182, July 2017,
+              <https://www.rfc-editor.org/info/rfc8182>.
 
    [RFC8209]  Reynolds, M., Turner, S., and S. Kent, "A Profile for
               BGPsec Router Certificates, Certificate Revocation Lists,
@@ -1325,6 +1335,17 @@ Internet-Draft                PQC for RPKI                     July 2026
               DOI 10.17487/RFC9881, October 2025,
               <https://www.rfc-editor.org/info/rfc9881>.
 
+
+
+
+
+
+
+Yoshikawa                Expires 25 January 2027               [Page 24]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
    [RFC9882]  Salter, B., Raine, A., and D. Van Geest, "Use of the ML-
               DSA Signature Algorithm in the Cryptographic Message
               Syntax (CMS)", RFC 9882, DOI 10.17487/RFC9882, October
@@ -1338,13 +1359,6 @@ Internet-Draft                PQC for RPKI                     July 2026
               ietf-lamps-pq-composite-sigs-19, 21 April 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-lamps-
               pq-composite-sigs-19>.
-
-
-
-Yoshikawa                Expires 25 January 2027               [Page 24]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
 
    [I-D.ietf-lamps-cms-composite-sigs]
               Ounsworth, M., Gray, J., Klaussner, J., and D. Van Geest,
@@ -1379,6 +1393,15 @@ Internet-Draft                PQC for RPKI                     July 2026
               DOI 10.17487/RFC8608, June 2019,
               <https://www.rfc-editor.org/info/rfc8608>.
 
+
+
+
+
+Yoshikawa                Expires 25 January 2027               [Page 25]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
    [RFC9323]  Snijders, J., Harrison, T., and B. Maddison, "A Profile
               for RPKI Signed Checklists (RSCs)", RFC 9323,
               DOI 10.17487/RFC9323, November 2022,
@@ -1389,18 +1412,6 @@ Internet-Draft                PQC for RPKI                     July 2026
               Cryptographic Message Syntax (CMS)", RFC 9814,
               DOI 10.17487/RFC9814, July 2025,
               <https://www.rfc-editor.org/info/rfc9814>.
-
-
-
-
-
-
-
-
-Yoshikawa                Expires 25 January 2027               [Page 25]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
 
    [RFC9909]  Bashiri, K., Fluhrer, S., Gazdag, S., Van Geest, D., and
               S. Kousidis, "Internet X.509 Public Key Infrastructure --
@@ -1439,6 +1450,14 @@ Internet-Draft                PQC for RPKI                     July 2026
               June 2025, <https://www.sidnlabs.nl/en/news-and-blogs/
               thesis-pqc-for-the-rpki>.
 
+
+
+
+Yoshikawa                Expires 25 January 2027               [Page 26]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
    [pqRPKI]   al., W. L. E., "pqRPKI: A Practical RPKI Architecture for
               the Post-Quantum Era", March 2026,
               <https://arxiv.org/abs/2603.06968>.
@@ -1447,16 +1466,6 @@ Internet-Draft                PQC for RPKI                     July 2026
               Yoshikawa, T., "pqc-rpki-lab experimental evidence
               snapshot", 27 July 2026, <https://github.com/marokiki/pqc-
               rpki-lab/tree/75b745a9c69a7ca0bbe473a786b173c20fde1fd1>.
-
-
-
-
-
-
-Yoshikawa                Expires 25 January 2027               [Page 26]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
 
 Appendix A.  Measurement Details
 
@@ -1494,15 +1503,6 @@ A.2.  Small-Scale E2E Measurement
    plus or minus sample standard deviation, with minimum and maximum in
    brackets.  Wall time uses a monotonic nanosecond clock, CPU time uses
    child-resource usage deltas, and maximum RSS is in KiB.
-
-
-
-
-
-
-
-
-
 
 
 

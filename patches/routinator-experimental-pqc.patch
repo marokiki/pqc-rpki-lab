@@ -1,0 +1,39 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 0339eb8..4ef97ac 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1355,8 +1355,6 @@ dependencies = [
+ [[package]]
+ name = "rpki"
+ version = "0.19.3"
+-source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "9157a0b503ef5d3821bae79d2d4f44e1f5655eacdcc1b67623dd4403cd9ee302"
+ dependencies = [
+  "arbitrary",
+  "base64",
+@@ -1365,6 +1363,7 @@ dependencies = [
+  "chrono",
+  "futures-util",
+  "log",
++ "openssl",
+  "quick-xml",
+  "ring",
+  "serde",
+diff --git a/Cargo.toml b/Cargo.toml
+index 1b1a006..c03a9fc 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -34,7 +34,7 @@ pin-project-lite = "0.2.4"
+ rand            = "0.9.0"
+ reqwest         = { version = "0.12.4", default-features = false, features = ["blocking", "rustls-tls", "gzip" ] }
+ ring            = "0.17"
+-rpki            = { version = "0.19.3", features = [ "repository", "rrdp", "rtr", "serde", "slurm" ] }
++rpki            = { path = "../rpki-rs", features = [ "repository", "rrdp", "rtr", "serde", "slurm", "experimental-pqc" ] }
+ rustls-pemfile  = "2.1.2"
+ serde           = { version = "1.0.95", features = [ "derive" ] }
+ serde_json      = "1.0.57"
+@@ -128,4 +128,3 @@ assets = [
+ [package.metadata.generate-rpm.requires]
+ shadow-utils = "*"
+ rsync = "*"
+-

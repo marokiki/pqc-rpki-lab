@@ -1,0 +1,677 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 26a9e05..5a7a7e5 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -67,6 +67,7 @@ xml = [ "quick-xml" ]
+ arbitrary = ["dep:arbitrary", "chrono/arbitrary"]
+ serde-support = ["serde"]
+ softkeys = [ "openssl" ]
++experimental-pqc = [ "openssl" ]
+ 
+ # Dummy features for Windows CI runs where we don’t want to have to deal
+ # with OpenSSL
+@@ -83,4 +84,3 @@ required-features = [ "repository" ]
+ [[bin]]
+ name = "readroa"
+ required-features = [ "repository" ]
+-
+diff --git a/src/crypto/digest.rs b/src/crypto/digest.rs
+index 22d7aa2..8e8e505 100644
+--- a/src/crypto/digest.rs
++++ b/src/crypto/digest.rs
+@@ -26,22 +26,29 @@ pub use ring::digest::Digest;
+ ///
+ /// [RFC 7935]: https://tools.ietf.org/html/rfc7935
+ #[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
+-pub struct DigestAlgorithm(());
++pub enum DigestAlgorithm {
++    #[default]
++    Sha256,
++    Sha512,
++}
+ 
+ impl DigestAlgorithm {
+     /// Creates a value representing the SHA-256 algorithm.
+     pub fn sha256() -> Self {
+-        DigestAlgorithm(())
++        DigestAlgorithm::Sha256
+     }
+ 
+     /// Returns whether the algorithm is in fact SHA-256.
+     pub fn is_sha256(self) -> bool {
+-        true
++        self == DigestAlgorithm::Sha256
+     }
+ 
+     /// Returns the digest size in octets for this algorithm.
+     pub fn digest_len(&self) -> usize {
+-        32
++        match self {
++            DigestAlgorithm::Sha256 => 32,
++            DigestAlgorithm::Sha512 => 64,
++        }
+     }
+ }
+ 
+@@ -50,7 +57,7 @@ impl DigestAlgorithm {
+ impl DigestAlgorithm {
+     /// Returns the digest of `data` using this algorithm.
+     pub fn digest(self, data: &[u8]) -> Digest {
+-        digest::digest(&digest::SHA256, data)
++        digest::digest(self.ring_algorithm(), data)
+     }
+ 
+     /// Calculates the digest for the content of a file.
+@@ -72,7 +79,7 @@ impl DigestAlgorithm {
+ 
+     /// Returns a digest context for multi-step calculation of the digest.
+     pub fn start(self) -> Context {
+-        Context(digest::Context::new(&digest::SHA256))
++        Context(digest::Context::new(self.ring_algorithm()))
+     }
+ }
+ 
+@@ -144,9 +151,15 @@ impl DigestAlgorithm {
+     fn from_constructed<S: decode::Source>(
+         cons: &mut decode::Constructed<S>
+     ) -> Result<Self, DecodeError<S::Error>> {
+-        oid::SHA256.skip_if(cons)?;
+-        cons.take_opt_null()?;
+-        Ok(DigestAlgorithm::default())
++        let algorithm = bcder::Oid::take_from(cons)?;
++        if algorithm == oid::SHA256 {
++            cons.take_opt_null()?;
++            Ok(DigestAlgorithm::Sha256)
++        } else if experimental_enabled() && algorithm == oid::SHA512 {
++            Ok(DigestAlgorithm::Sha512)
++        } else {
++            Err(cons.content_err("invalid digest algorithm"))
++        }
+     }
+ 
+     /// Parses a SET OF DigestAlgorithmIdentifiers.
+@@ -172,12 +185,19 @@ impl DigestAlgorithm {
+         cons: &mut decode::Constructed<S>,
+     ) -> Result<Self, DecodeError<S::Error>> {
+         oid::SHA256.skip_if(cons)?;
+-        Ok(Self::default())
++        Ok(Self::Sha256)
+     }
+ 
+     /// Provides an encoder for a single algorithm identifier.
+     pub fn encode(self) -> impl encode::Values {
+-        encode::sequence(oid::SHA256.encode())
++        encode::sequence(match self {
++            DigestAlgorithm::Sha256 => {
++                encode::Choice2::One(oid::SHA256.encode())
++            }
++            DigestAlgorithm::Sha512 => {
++                encode::Choice2::Two(oid::SHA512.encode())
++            }
++        })
+     }
+ 
+     /// Provides an encoder for a identifier as the sole value of a set.
+@@ -189,10 +209,29 @@ impl DigestAlgorithm {
+ 
+     /// Provides an encoder for just the object identifier of the algorithm.
+     pub fn encode_oid(self) -> impl encode::Values {
+-        oid::SHA256.encode()
++        match self {
++            DigestAlgorithm::Sha256 => {
++                encode::Choice2::One(oid::SHA256.encode())
++            }
++            DigestAlgorithm::Sha512 => {
++                encode::Choice2::Two(oid::SHA512.encode())
++            }
++        }
++    }
++
++    fn ring_algorithm(self) -> &'static digest::Algorithm {
++        match self {
++            DigestAlgorithm::Sha256 => &digest::SHA256,
++            DigestAlgorithm::Sha512 => &digest::SHA512,
++        }
+     }
+ }
+ 
++fn experimental_enabled() -> bool {
++    std::env::var_os("PQC_RPKI_EXPERIMENTAL").as_deref()
++        == Some(std::ffi::OsStr::new("1"))
++}
++
+ 
+ //------------ Sha1 ----------------------------------------------------------
+ 
+@@ -230,4 +269,3 @@ impl io::Write for Context {
+         Ok(())
+     }
+ }
+-
+diff --git a/src/crypto/keys.rs b/src/crypto/keys.rs
+index 3ad520b..2e8dadd 100644
+--- a/src/crypto/keys.rs
++++ b/src/crypto/keys.rs
+@@ -17,6 +17,12 @@ use crate::oid;
+ #[cfg(feature = "serde")] use crate::util::base64;
+ use crate::util::hex;
+ use super::signature::{RpkiSignatureAlgorithm, Signature, SignatureAlgorithm};
++#[cfg(feature = "experimental-pqc")]
++use openssl::hash::MessageDigest;
++#[cfg(feature = "experimental-pqc")]
++use openssl::pkey::{PKey, Public};
++#[cfg(feature = "experimental-pqc")]
++use openssl::sign::Verifier;
+ 
+ 
+ //------------ PublicKeyFormat -----------------------------------------------
+@@ -41,6 +47,12 @@ pub enum PublicKeyFormat {
+     ///
+     /// These keys must be used by all BGPSec router certificates.
+     EcdsaP256,
++
++    /// A pure ML-DSA-65 public key accepted only by the lab feature.
++    MlDsa65,
++
++    /// The evaluated Composite ML-DSA-65 plus ECDSA P-256 public key.
++    MlDsa65EcdsaP256Sha512,
+ }
+ 
+ impl PublicKeyFormat {
+@@ -50,7 +62,12 @@ impl PublicKeyFormat {
+     /// repository itself, i.e., CA certificates and EE certificates for
+     /// signed objects.
+     pub fn allow_rpki_cert(self) -> bool {
+-        matches!(self, PublicKeyFormat::Rsa)
++        matches!(
++            self,
++            PublicKeyFormat::Rsa
++                | PublicKeyFormat::MlDsa65
++                | PublicKeyFormat::MlDsa65EcdsaP256Sha512
++        )
+     }
+ 
+     /// Returns whether the format is acceptable for router certificates.
+@@ -108,6 +125,15 @@ impl PublicKeyFormat{
+             oid::SECP256R1.skip_if(cons)?;
+             Ok(PublicKeyFormat::EcdsaP256)
+         }
++        else if experimental_enabled() && alg == oid::ML_DSA_65 {
++            Ok(PublicKeyFormat::MlDsa65)
++        }
++        else if
++            experimental_enabled()
++            && alg == oid::ML_DSA_65_ECDSA_P256_SHA512
++        {
++            Ok(PublicKeyFormat::MlDsa65EcdsaP256Sha512)
++        }
+         else {
+             Err(cons.content_err("invalid public key format"))
+         }
+@@ -117,20 +143,32 @@ impl PublicKeyFormat{
+     pub fn encode(self) -> impl encode::Values {
+         match self {
+             PublicKeyFormat::Rsa => {
+-                encode::Choice2::One(
++                encode::Choice2::One(encode::Choice2::One(
+                     encode::sequence((
+                         oid::RSA_ENCRYPTION.encode(),
+                         ().encode(),
+                     ))
+-                )
++                ))
+             }
+             PublicKeyFormat::EcdsaP256 => {
+-                encode::Choice2::Two(
++                encode::Choice2::One(encode::Choice2::Two(
+                     encode::sequence((
+                         oid::EC_PUBLIC_KEY.encode(),
+                         oid::SECP256R1.encode(),
+                     ))
+-                )
++                ))
++            }
++            PublicKeyFormat::MlDsa65 => {
++                encode::Choice2::Two(encode::Choice2::One(
++                    encode::sequence(oid::ML_DSA_65.encode())
++                ))
++            }
++            PublicKeyFormat::MlDsa65EcdsaP256Sha512 => {
++                encode::Choice2::Two(encode::Choice2::Two(
++                    encode::sequence(
++                        oid::ML_DSA_65_ECDSA_P256_SHA512.encode()
++                    )
++                ))
+             }
+         }
+     }
+@@ -152,13 +190,17 @@ impl PublicKeyFormat{
+                     bits, message, signature
+                 ).map_err(Into::into)
+             }
++            PublicKeyFormat::MlDsa65
++            | PublicKeyFormat::MlDsa65EcdsaP256Sha512 => {
++                Err(SignatureVerificationError(()))
++            }
+         }
+     }
+ }
+ 
+ impl From<RpkiSignatureAlgorithm> for PublicKeyFormat {
+-    fn from(_: RpkiSignatureAlgorithm) -> Self {
+-        PublicKeyFormat::Rsa
++    fn from(value: RpkiSignatureAlgorithm) -> Self {
++        value.public_key_format()
+     }
+ }
+ 
+@@ -280,14 +322,67 @@ impl PublicKey {
+         if signature.algorithm().public_key_format() != self.algorithm {
+             return Err(SignatureVerificationError(()))
+         }
+-        self.algorithm.verify(
+-            Input::from(self.bits()),
+-            Input::from(message),
+-            Input::from(signature.value().as_ref())
+-        )
++        match self.algorithm {
++            PublicKeyFormat::MlDsa65
++            | PublicKeyFormat::MlDsa65EcdsaP256Sha512 => {
++                verify_experimental(
++                    self.algorithm,
++                    &self.to_info_bytes(),
++                    message,
++                    signature.value().as_ref(),
++                )
++            }
++            _ => self.algorithm.verify(
++                Input::from(self.bits()),
++                Input::from(message),
++                Input::from(signature.value().as_ref())
++            )
++        }
+     }
+ }
+ 
++fn experimental_enabled() -> bool {
++    std::env::var_os("PQC_RPKI_EXPERIMENTAL").as_deref()
++        == Some(std::ffi::OsStr::new("1"))
++}
++
++#[cfg(feature = "experimental-pqc")]
++fn verify_experimental(
++    algorithm: PublicKeyFormat,
++    spki: &[u8],
++    message: &[u8],
++    signature: &[u8],
++) -> Result<(), SignatureVerificationError> {
++    let key: PKey<Public> = PKey::public_key_from_der(spki)
++        .map_err(|_| SignatureVerificationError(()))?;
++    let mut verifier = match algorithm {
++        PublicKeyFormat::MlDsa65 => Verifier::new_without_digest(&key),
++        PublicKeyFormat::MlDsa65EcdsaP256Sha512 => {
++            Verifier::new(MessageDigest::sha512(), &key)
++        }
++        _ => return Err(SignatureVerificationError(())),
++    }.map_err(|_| SignatureVerificationError(()))?;
++    verifier.verify_oneshot(signature, message)
++        .map_err(|_| SignatureVerificationError(()))
++        .and_then(|valid| {
++            if valid {
++                Ok(())
++            } else {
++                Err(SignatureVerificationError(()))
++            }
++        })
++}
++
++#[cfg(not(feature = "experimental-pqc"))]
++fn verify_experimental(
++    _algorithm: PublicKeyFormat,
++    _spki: &[u8],
++    _message: &[u8],
++    _signature: &[u8],
++) -> Result<(), SignatureVerificationError> {
++    Err(SignatureVerificationError(()))
++}
++
+ 
+ /// # As `SubjectPublicKeyInfo`
+ ///
+diff --git a/src/crypto/signature.rs b/src/crypto/signature.rs
+index d55a937..bc27ad0 100644
+--- a/src/crypto/signature.rs
++++ b/src/crypto/signature.rs
+@@ -54,6 +54,7 @@ pub trait SignatureAlgorithm: Sized {
+ /// [RFC 7935]: https://tools.ietf.org/html/rfc7935
+ #[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+ pub struct RpkiSignatureAlgorithm {
++    kind: RpkiSignatureAlgorithmKind,
+     /// Is the parameter field present?
+     ///
+     /// If `true`, then a parameter field is present and NULL. Otherwise it
+@@ -63,6 +64,13 @@ pub struct RpkiSignatureAlgorithm {
+     has_parameter: bool
+ }
+ 
++#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
++enum RpkiSignatureAlgorithmKind {
++    RsaSha256,
++    MlDsa65,
++    MlDsa65EcdsaP256Sha512,
++}
++
+ /// # ASN.1 Values
+ ///
+ /// Signature algorithm identifiers appear in certificates and other objects
+@@ -104,11 +112,31 @@ impl RpkiSignatureAlgorithm {
+     fn x509_from_constructed<S: decode::Source>(
+         cons: &mut decode::Constructed<S>
+     ) -> Result<Self, DecodeError<S::Error>> {
+-        oid::SHA256_WITH_RSA_ENCRYPTION.skip_if(cons)?;
+-        let has_parameter = cons.take_opt_primitive_if(
+-            Tag::NULL, |_| Ok(())
+-        )?.is_some();
+-        Ok(RpkiSignatureAlgorithm { has_parameter })
++        let algorithm = Oid::take_from(cons)?;
++        if algorithm == oid::SHA256_WITH_RSA_ENCRYPTION {
++            let has_parameter = cons.take_opt_primitive_if(
++                Tag::NULL, |_| Ok(())
++            )?.is_some();
++            Ok(RpkiSignatureAlgorithm {
++                kind: RpkiSignatureAlgorithmKind::RsaSha256,
++                has_parameter,
++            })
++        } else if experimental_enabled() && algorithm == oid::ML_DSA_65 {
++            Ok(RpkiSignatureAlgorithm {
++                kind: RpkiSignatureAlgorithmKind::MlDsa65,
++                has_parameter: false,
++            })
++        } else if
++            experimental_enabled()
++            && algorithm == oid::ML_DSA_65_ECDSA_P256_SHA512
++        {
++            Ok(RpkiSignatureAlgorithm {
++                kind: RpkiSignatureAlgorithmKind::MlDsa65EcdsaP256Sha512,
++                has_parameter: false,
++            })
++        } else {
++            Err(cons.content_err("invalid signature algorithm"))
++        }
+     }
+ 
+     /// Takes a signature algorithm identifier for CMS objects.
+@@ -126,32 +154,80 @@ impl RpkiSignatureAlgorithm {
+         cons: &mut decode::Constructed<S>
+     ) -> Result<Self, DecodeError<S::Error>> {
+         let oid = Oid::take_from(cons)?;
+-        if
+-            oid != oid::RSA_ENCRYPTION
+-            && oid != oid::SHA256_WITH_RSA_ENCRYPTION
++        if oid == oid::RSA_ENCRYPTION
++            || oid == oid::SHA256_WITH_RSA_ENCRYPTION
+         {
+-            return Err(cons.content_err("invalid signature algorithm"))
++            let has_parameter = cons.take_opt_primitive_if(
++                Tag::NULL, |_| Ok(())
++            )?.is_some();
++            Ok(RpkiSignatureAlgorithm {
++                kind: RpkiSignatureAlgorithmKind::RsaSha256,
++                has_parameter,
++            })
++        } else if experimental_enabled() && oid == oid::ML_DSA_65 {
++            Ok(RpkiSignatureAlgorithm {
++                kind: RpkiSignatureAlgorithmKind::MlDsa65,
++                has_parameter: false,
++            })
++        } else if
++            experimental_enabled()
++            && oid == oid::ML_DSA_65_ECDSA_P256_SHA512
++        {
++            Ok(RpkiSignatureAlgorithm {
++                kind: RpkiSignatureAlgorithmKind::MlDsa65EcdsaP256Sha512,
++                has_parameter: false,
++            })
++        } else {
++            Err(cons.content_err("invalid signature algorithm"))
+         }
+-        let has_parameter = cons.take_opt_primitive_if(
+-            Tag::NULL, |_| Ok(())
+-        )?.is_some();
+-        Ok(RpkiSignatureAlgorithm { has_parameter })
+     }
+ 
+     /// Provides an encoder for X.509 objects.
+     pub fn x509_encode(self) -> impl encode::Values {
+-        encode::sequence((
+-            oid::SHA256_WITH_RSA_ENCRYPTION.encode(),
+-            ().encode(),
+-        ))
++        match self.kind {
++            RpkiSignatureAlgorithmKind::RsaSha256 => {
++                encode::Choice2::One(encode::sequence((
++                    oid::SHA256_WITH_RSA_ENCRYPTION.encode(),
++                    ().encode(),
++                )))
++            }
++            RpkiSignatureAlgorithmKind::MlDsa65 => {
++                encode::Choice2::Two(encode::Choice2::One(
++                    encode::sequence(oid::ML_DSA_65.encode())
++                ))
++            }
++            RpkiSignatureAlgorithmKind::MlDsa65EcdsaP256Sha512 => {
++                encode::Choice2::Two(encode::Choice2::Two(
++                    encode::sequence(
++                        oid::ML_DSA_65_ECDSA_P256_SHA512.encode()
++                    )
++                ))
++            }
++        }
+     }
+ 
+     /// Provides an encoder for CMS objects.
+     pub fn cms_encode(self) -> impl encode::Values {
+-        encode::sequence((
+-            oid::RSA_ENCRYPTION.encode(),
+-            ().encode(),
+-        ))
++        match self.kind {
++            RpkiSignatureAlgorithmKind::RsaSha256 => {
++                encode::Choice2::One(encode::sequence((
++                    oid::RSA_ENCRYPTION.encode(),
++                    ().encode(),
++                )))
++            }
++            RpkiSignatureAlgorithmKind::MlDsa65 => {
++                encode::Choice2::Two(encode::Choice2::One(
++                    encode::sequence(oid::ML_DSA_65.encode())
++                ))
++            }
++            RpkiSignatureAlgorithmKind::MlDsa65EcdsaP256Sha512 => {
++                encode::Choice2::Two(encode::Choice2::Two(
++                    encode::sequence(
++                        oid::ML_DSA_65_ECDSA_P256_SHA512.encode()
++                    )
++                ))
++            }
++        }
+     }
+ }
+ 
+@@ -160,7 +236,10 @@ impl RpkiSignatureAlgorithm {
+ 
+ impl Default for RpkiSignatureAlgorithm {
+     fn default() -> Self {
+-        RpkiSignatureAlgorithm { has_parameter: true }
++        RpkiSignatureAlgorithm {
++            kind: RpkiSignatureAlgorithmKind::RsaSha256,
++            has_parameter: true,
++        }
+     }
+ }
+ 
+@@ -168,12 +247,28 @@ impl Default for RpkiSignatureAlgorithm {
+ //--- SignatureAlgorithm
+ 
+ impl SignatureAlgorithm for RpkiSignatureAlgorithm {
+-    type Encoder = encode::Constructed<(
+-        encode::Primitive<ConstOid>, encode::Primitive<()>
+-    )>;
++    type Encoder = encode::Choice2<
++        encode::Constructed<(
++            encode::Primitive<ConstOid>, encode::Primitive<()>
++        )>,
++        encode::Choice2<
++            encode::Constructed<encode::Primitive<ConstOid>>,
++            encode::Constructed<encode::Primitive<ConstOid>>,
++        >,
++    >;
+ 
+     fn signing_algorithm(&self) -> SigningAlgorithm {
+-        SigningAlgorithm::RsaSha256
++        match self.kind {
++            RpkiSignatureAlgorithmKind::RsaSha256 => {
++                SigningAlgorithm::RsaSha256
++            }
++            RpkiSignatureAlgorithmKind::MlDsa65 => {
++                SigningAlgorithm::MlDsa65
++            }
++            RpkiSignatureAlgorithmKind::MlDsa65EcdsaP256Sha512 => {
++                SigningAlgorithm::MlDsa65EcdsaP256Sha512
++            }
++        }
+     }
+ 
+     fn x509_take_from<S: decode::Source>(
+@@ -183,13 +278,37 @@ impl SignatureAlgorithm for RpkiSignatureAlgorithm {
+     }
+ 
+     fn x509_encode(&self) -> Self::Encoder {
+-        encode::Constructed::new(
+-            Tag::SEQUENCE,
+-            (oid::SHA256_WITH_RSA_ENCRYPTION.encode(), ().encode())
+-        )
++        match self.kind {
++            RpkiSignatureAlgorithmKind::RsaSha256 => {
++                encode::Choice2::One(encode::Constructed::new(
++                    Tag::SEQUENCE,
++                    (oid::SHA256_WITH_RSA_ENCRYPTION.encode(), ().encode())
++                ))
++            }
++            RpkiSignatureAlgorithmKind::MlDsa65 => {
++                encode::Choice2::Two(encode::Choice2::One(
++                    encode::Constructed::new(
++                        Tag::SEQUENCE, oid::ML_DSA_65.encode()
++                    )
++                ))
++            }
++            RpkiSignatureAlgorithmKind::MlDsa65EcdsaP256Sha512 => {
++                encode::Choice2::Two(encode::Choice2::Two(
++                    encode::Constructed::new(
++                        Tag::SEQUENCE,
++                        oid::ML_DSA_65_ECDSA_P256_SHA512.encode()
++                    )
++                ))
++            }
++        }
+     }
+ }
+ 
++fn experimental_enabled() -> bool {
++    std::env::var_os("PQC_RPKI_EXPERIMENTAL").as_deref()
++        == Some(std::ffi::OsStr::new("1"))
++}
++
+ 
+ //------------ BgpsecSignatureAlgorithm --------------------------------------
+ 
+@@ -263,4 +382,3 @@ impl<Alg> Signature<Alg> {
+         (self.algorithm, self.value)
+     }
+ }
+-
+diff --git a/src/crypto/signer.rs b/src/crypto/signer.rs
+index dafc5a9..c9f1200 100644
+--- a/src/crypto/signer.rs
++++ b/src/crypto/signer.rs
+@@ -72,6 +72,12 @@ pub enum SigningAlgorithm {
+ 
+     /// ECDSA using the P-256 curva and SHA-256.
+     EcdsaP256Sha256,
++
++    /// Pure ML-DSA-65 in the experimental RPKI profile.
++    MlDsa65,
++
++    /// Composite ML-DSA-65 and ECDSA P-256 with SHA-512.
++    MlDsa65EcdsaP256Sha512,
+ }
+ 
+ impl SigningAlgorithm {
+@@ -80,6 +86,10 @@ impl SigningAlgorithm {
+         match self {
+             SigningAlgorithm::RsaSha256 => PublicKeyFormat::Rsa,
+             SigningAlgorithm::EcdsaP256Sha256 => PublicKeyFormat::EcdsaP256,
++            SigningAlgorithm::MlDsa65 => PublicKeyFormat::MlDsa65,
++            SigningAlgorithm::MlDsa65EcdsaP256Sha512 => {
++                PublicKeyFormat::MlDsa65EcdsaP256Sha512
++            }
+         }
+     }
+ }
+@@ -154,4 +164,3 @@ impl<S: fmt::Display> fmt::Display for SigningError<S> {
+         }
+     }
+ }
+-
+diff --git a/src/oid.rs b/src/oid.rs
+index 50e259d..08a8969 100644
+--- a/src/oid.rs
++++ b/src/oid.rs
+@@ -14,6 +14,18 @@ use bcder::{ConstOid, Oid};
+ pub const SHA256: ConstOid
+     = Oid(&[96, 134, 72, 1, 101, 3, 4, 2, 1]);
+ 
++/// Experimental SHA-512 use for the PQC RPKI laboratory.
++pub const SHA512: ConstOid
++    = Oid(&[96, 134, 72, 1, 101, 3, 4, 2, 3]);
++
++/// id-ml-dsa-65 from FIPS 204 algorithm identifiers.
++pub const ML_DSA_65: ConstOid
++    = Oid(&[96, 134, 72, 1, 101, 3, 4, 3, 18]);
++
++/// id-MLDSA65-ECDSA-P256-SHA512 from the evaluated LAMPS draft.
++pub const ML_DSA_65_ECDSA_P256_SHA512: ConstOid
++    = Oid(&[43, 6, 1, 5, 5, 7, 6, 45]);
++
+ /// [RFC 4055](https://tools.ietf.org/html/rfc4055) `rsaEncryption`
+ ///
+ /// Identifies an RSA public key with no limitation to either RSASSA-PSS or
+@@ -106,4 +118,3 @@ pub const ROUTE_ORIGIN_AUTHZ: ConstOid
+ /// [RFC 2985](https://tools.ietf.org/html/rfc2985) `extensionRequest`
+ pub const EXTENSION_REQUEST: ConstOid
+     = Oid(&[42, 134, 72, 134, 247, 13, 1, 9, 14]);
+-
+diff --git a/src/repository/sigobj.rs b/src/repository/sigobj.rs
+index 370be53..12ad646 100644
+--- a/src/repository/sigobj.rs
++++ b/src/repository/sigobj.rs
+@@ -561,8 +561,12 @@ impl SignedAttrs {
+         if len < 128 {
+             res.push(len as u8)
+         }
++        else if len < 0x100 {
++            res.push(0x81);
++            res.push(len as u8);
++        }
+         else if len < 0x10000 {
+-            res.push(2);
++            res.push(0x82);
+             res.push((len >> 8) as u8);
+             res.push(len as u8);
+         }
+@@ -1211,5 +1215,3 @@ mod signer_test {
+ /// [`DigestAlgorithm`]: crate::crypto::digest::DigestAlgorithm
+ /// [`oid`]: crate::oid
+ pub mod spec { }
+-
+-
