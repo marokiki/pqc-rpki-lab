@@ -1,0 +1,222 @@
+{
+  "classification": "single public-cache snapshot topology and size profile",
+  "collected_at": "2026-07-27T11:40:21+00:00",
+  "object_bytes": 1053874726,
+  "object_count": 550210,
+  "object_type_counts": {
+    "asa": 2552,
+    "cer": 53566,
+    "crl": 55385,
+    "gbr": 1,
+    "mft": 55396,
+    "other": 105,
+    "roa": 383205
+  },
+  "object_types": {
+    "asa": {
+      "count": 2552,
+      "max_bytes": 3070,
+      "median_bytes": 1801.0,
+      "min_bytes": 1685,
+      "p95_bytes": 2123,
+      "total_bytes": 4764077
+    },
+    "cer": {
+      "count": 53566,
+      "max_bytes": 102689,
+      "median_bytes": 1537.0,
+      "min_bytes": 898,
+      "p95_bytes": 1827,
+      "total_bytes": 84431241
+    },
+    "crl": {
+      "count": 55385,
+      "max_bytes": 1766661,
+      "median_bytes": 510,
+      "min_bytes": 409,
+      "p95_bytes": 698,
+      "total_bytes": 40021342
+    },
+    "gbr": {
+      "count": 1,
+      "max_bytes": 1922,
+      "median_bytes": 1922,
+      "min_bytes": 1922,
+      "p95_bytes": 1922,
+      "total_bytes": 1922
+    },
+    "mft": {
+      "count": 55396,
+      "max_bytes": 3869107,
+      "median_bytes": 2072.0,
+      "min_bytes": 1786,
+      "p95_bytes": 3002,
+      "total_bytes": 146629302
+    },
+    "other": {
+      "count": 105,
+      "max_bytes": 20135,
+      "median_bytes": 383,
+      "min_bytes": 120,
+      "p95_bytes": 4206,
+      "total_bytes": 192187
+    },
+    "roa": {
+      "count": 383205,
+      "max_bytes": 194541,
+      "median_bytes": 2125,
+      "min_bytes": 1700,
+      "p95_bytes": 2135,
+      "total_bytes": 777834655
+    }
+  },
+  "publication_points": {
+    "count": 54960,
+    "objects_per_point": {
+      "count": 54960,
+      "max_bytes": 48949,
+      "median_bytes": 3.0,
+      "min_bytes": 1,
+      "p95_bytes": 13,
+      "total_bytes": 550210
+    }
+  },
+  "routinator_archives": {
+    "archive_count": 102,
+    "bytes_per_archive": {
+      "count": 102,
+      "max_bytes": 496585539,
+      "median_bytes": 50430.0,
+      "min_bytes": 2541,
+      "p95_bytes": 30975302,
+      "total_bytes": 1053874726
+    },
+    "method": "Routinator v0.15 archive headers supply current object names and payload sizes; source objects are not copied",
+    "object_bytes": 1053874726,
+    "object_count": 550210,
+    "object_type_counts": {
+      "asa": 2552,
+      "cer": 53566,
+      "crl": 55385,
+      "gbr": 1,
+      "mft": 55396,
+      "other": 105,
+      "roa": 383205
+    },
+    "object_types": {
+      "asa": {
+        "count": 2552,
+        "max_bytes": 3070,
+        "median_bytes": 1801.0,
+        "min_bytes": 1685,
+        "p95_bytes": 2123,
+        "total_bytes": 4764077
+      },
+      "cer": {
+        "count": 53566,
+        "max_bytes": 102689,
+        "median_bytes": 1537.0,
+        "min_bytes": 898,
+        "p95_bytes": 1827,
+        "total_bytes": 84431241
+      },
+      "crl": {
+        "count": 55385,
+        "max_bytes": 1766661,
+        "median_bytes": 510,
+        "min_bytes": 409,
+        "p95_bytes": 698,
+        "total_bytes": 40021342
+      },
+      "gbr": {
+        "count": 1,
+        "max_bytes": 1922,
+        "median_bytes": 1922,
+        "min_bytes": 1922,
+        "p95_bytes": 1922,
+        "total_bytes": 1922
+      },
+      "mft": {
+        "count": 55396,
+        "max_bytes": 3869107,
+        "median_bytes": 2072.0,
+        "min_bytes": 1786,
+        "p95_bytes": 3002,
+        "total_bytes": 146629302
+      },
+      "other": {
+        "count": 105,
+        "max_bytes": 20135,
+        "median_bytes": 383,
+        "min_bytes": 120,
+        "p95_bytes": 4206,
+        "total_bytes": 192187
+      },
+      "roa": {
+        "count": 383205,
+        "max_bytes": 194541,
+        "median_bytes": 2125,
+        "min_bytes": 1700,
+        "p95_bytes": 2135,
+        "total_bytes": 777834655
+      }
+    },
+    "objects_per_archive": {
+      "count": 102,
+      "max_bytes": 231951,
+      "median_bytes": 23.5,
+      "min_bytes": 3,
+      "p95_bytes": 16501,
+      "total_bytes": 550210
+    },
+    "publication_points": {
+      "count": 54960,
+      "objects_per_point": {
+        "count": 54960,
+        "max_bytes": 48949,
+        "median_bytes": 3.0,
+        "min_bytes": 1,
+        "p95_bytes": 13,
+        "total_bytes": 550210
+      }
+    }
+  },
+  "rrdp_transport_files": {
+    "delta.xml": {
+      "file_count": 0,
+      "gzip_bytes": 0,
+      "uncompressed_bytes": 0
+    },
+    "notification.xml": {
+      "file_count": 0,
+      "gzip_bytes": 0,
+      "uncompressed_bytes": 0
+    },
+    "snapshot.xml": {
+      "file_count": 0,
+      "gzip_bytes": 0,
+      "uncompressed_bytes": 0
+    }
+  },
+  "source_label": "Routinator 0.15.2 RRDP-only single snapshot, 2026-07-27; ARIN TA unavailable; validation produced 980019 VRPs",
+  "synthetic_corpus": {
+    "contains_source_objects": false,
+    "format": "pqc-rpki-synthetic-corpus-v1",
+    "resigning_inputs": {
+      "mean_object_bytes": 1915,
+      "object_type_counts": {
+        "asa": 2552,
+        "cer": 53566,
+        "crl": 55385,
+        "gbr": 1,
+        "mft": 55396,
+        "other": 105,
+        "roa": 383205
+      },
+      "publication_point_count": 54960
+    },
+    "seed": 20260727,
+    "source": "aggregate count and size distributions above"
+  },
+  "warning": "PUBLIC CACHE AGGREGATE; CONTAINS NO COPIED RPKI OBJECTS"
+}

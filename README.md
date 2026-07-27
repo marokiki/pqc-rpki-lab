@@ -226,6 +226,8 @@ make krill-experimental-bootstrap
 # For an existing checkout and build:
 make krill-experimental-e2e
 make krill-experimental-bootstrap-check
+# Runs 10 one-ROA reliability checks, then the 1,000-ROA scenario:
+make krill-scaled-e2e
 ```
 
 Run `make composite-bootstrap` and
@@ -235,6 +237,30 @@ URL, builds with the sibling patched rpki-rs, runs the fixed rollover
 scenario, and validates both publication phases with experimental rpki-client
 and Routinator. The suite selector and captured CA state remain below
 `local/`; only the patch and sanitized acceptance matrix are public.
+
+Reduce an operator-supplied Routinator cache to an aggregate-only topology and
+object-size profile with:
+
+```sh
+make public-cache-profile \
+  PQC_RPKI_CACHE=/path/to/routinator-cache \
+  PUBLIC_CACHE_LABEL="Routinator cache snapshot YYYY-MM-DD"
+```
+
+The checked-in snapshot profile contains counts and size distributions only;
+it contains no copied RPKI objects. The measured snapshot had 550,210 objects
+across 54,960 publication points and produced 980,019 VRPs, with the ARIN trust
+anchor unavailable during collection. It is a single cold snapshot, not a
+longitudinal or global-RPKI corpus.
+
+`tools/summarize_scaled_krill.py` publishes the sanitized boundary result from
+the local 1,000-ROA Krill run. Krill generated and published the objects and
+both experimental RPs validated the Composite phase with 1,000 VRPs. All RP
+modes validated the RSA rollback with the same 1,000 VRPs. An earlier
+filesystem-only capture intermittently exposed an incomplete publication
+state; the final harness waits for object-count convergence, adds a two-second
+quiescence interval, and overlays Krill's publication API `current_files` into
+the canonical rsync module layout.
 
 Generate the certificate and CRL size evidence, including experimental
 Falcon-512 X.509 encodings, with:
@@ -269,7 +295,11 @@ synthetic configurable key-roll model.
 `results/composite-e2e/krill-rollover.json` records the Krill-issued
 Composite publication and RSA rollback result. This is a small, isolated
 local-rsync CA experiment, not a production deployment or repository-scale
-measurement. `results/routinator-krill/` retains the earlier extension map
+measurement. `results/scaled-corpus/public-cache-profile.json` records the
+aggregate-only public-cache profile, and
+`results/scaled-corpus/krill-scaled-summary.json` records the 1,000-ROA
+Composite issuance/validation and RSA rollback result.
+`results/routinator-krill/` retains the earlier extension map
 and source scan. Configure external inputs with
 `PQC_RPKI_ROUTINATOR_SRC`, `PQC_RPKI_KRILL_SRC`,
 `PQC_RPKI_ROUTINATOR_BIN`, and `PQC_RPKI_KRILL_BIN`; suggested checkouts live

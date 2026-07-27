@@ -1,0 +1,153 @@
+{
+  "capture": {
+    "completion_condition": "published object count converged",
+    "layout": "canonical rsync repository module path",
+    "quiescence_seconds": 2,
+    "source": "Krill publication API current_files"
+  },
+  "classification": "single-CA object-count scaling result; not a real-repository, warm-cache, incremental-validation, or throughput benchmark",
+  "conclusion": "Krill generated and published 1000 ROAs. Both experimental RPs validated the Composite state and all modes validated RSA rollback, each producing the expected 1000 VRPs.",
+  "contains_absolute_paths": false,
+  "contains_private_keys": false,
+  "contains_raw_objects": false,
+  "generation": {
+    "exit_status": 0,
+    "max_rss_kib": 121164,
+    "system_seconds": 4.08,
+    "user_seconds": 135.06,
+    "wall_seconds": 141.59
+  },
+  "one_roa_composite_reliability": {
+    "attempts": 10,
+    "failed": 0,
+    "passed": 10
+  },
+  "rollback_success": true,
+  "scaled_composite_success": true,
+  "topology": {
+    "asn_layout": "distinct sequential ASNs in delegated range",
+    "child_ca_count": 1,
+    "child_publication_point_count": 1,
+    "parent_ca_count": 1,
+    "roa_count": 1000,
+    "vrp_count": 1000
+  },
+  "transport": {
+    "composite": {
+      "rrdp": {
+        "delta": {
+          "file_count": 1,
+          "gzip_bytes": 9183568,
+          "uncompressed_bytes": 13133009
+        },
+        "notification": {
+          "file_count": 1,
+          "gzip_bytes": 304,
+          "uncompressed_bytes": 524
+        },
+        "snapshot": {
+          "file_count": 1,
+          "gzip_bytes": 9189879,
+          "uncompressed_bytes": 13145725
+        }
+      },
+      "rsync": {
+        "bytes": 9797552,
+        "file_count": 1008,
+        "object_type_counts": {
+          "cer": 2,
+          "crl": 3,
+          "mft": 3,
+          "roa": 1000
+        }
+      }
+    },
+    "rollback": {
+      "rrdp": {
+        "delta": {
+          "file_count": 1,
+          "gzip_bytes": 1073040,
+          "uncompressed_bytes": 2506346
+        },
+        "notification": {
+          "file_count": 1,
+          "gzip_bytes": 306,
+          "uncompressed_bytes": 528
+        },
+        "snapshot": {
+          "file_count": 1,
+          "gzip_bytes": 1024793,
+          "uncompressed_bytes": 2440682
+        }
+      },
+      "rsync": {
+        "bytes": 1768736,
+        "file_count": 1008,
+        "object_type_counts": {
+          "cer": 2,
+          "crl": 3,
+          "mft": 3,
+          "roa": 1000
+        }
+      }
+    }
+  },
+  "validation": {
+    "expected_vrp_count": 1000,
+    "original_success": true,
+    "phases": {
+      "composite": {
+        "routinator_default": {
+          "returncode": 0,
+          "status": "rejected",
+          "vrp_count": 0
+        },
+        "routinator_experimental": {
+          "returncode": 0,
+          "status": "accepted",
+          "vrp_count": 1000
+        },
+        "rpki_client_default": {
+          "returncode": 0,
+          "status": "rejected",
+          "vrp_count": 0
+        },
+        "rpki_client_experimental": {
+          "returncode": 0,
+          "status": "accepted",
+          "vrp_count": 1000
+        }
+      },
+      "rollback": {
+        "routinator_default": {
+          "returncode": 0,
+          "status": "accepted",
+          "vrp_count": 1000
+        },
+        "routinator_experimental": {
+          "returncode": 0,
+          "status": "accepted",
+          "vrp_count": 1000
+        },
+        "rpki_client_default": {
+          "returncode": 0,
+          "status": "accepted",
+          "vrp_count": 1000
+        },
+        "rpki_client_experimental": {
+          "returncode": 0,
+          "status": "accepted",
+          "vrp_count": 1000
+        }
+      }
+    },
+    "process_time": {
+      "exit_status": 0,
+      "max_rss_kib": 23232,
+      "system_seconds": 1.39,
+      "user_seconds": 6.41,
+      "wall_seconds": 9.44
+    }
+  },
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

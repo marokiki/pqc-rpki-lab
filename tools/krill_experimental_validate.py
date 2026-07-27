@@ -12,14 +12,28 @@ import shutil
 import socket
 import subprocess
 import time
+import ipaddress
 from pathlib import Path
 
 from pqc_rpki_lab.workspace import reset_generated_directory
 
 ROOT = Path(__file__).resolve().parents[1]
-EXPECTED_VRPS = [
-    {"asn": "AS64496", "prefix": "192.0.2.0/24", "max_length": 24}
-]
+
+
+def expected_vrps(count: int) -> list[dict[str, object]]:
+    result: list[dict[str, object]] = [
+        {"asn": "AS64496", "prefix": "192.0.2.0/24", "max_length": 24}
+    ]
+    for offset in range(1, count):
+        address = ipaddress.IPv6Address((0x20010DB8 << 96) | (offset << 64))
+        result.append(
+            {
+                "asn": f"AS{64496 + offset}",
+                "prefix": f"{address.compressed}/64",
+                "max_length": 64,
+            }
+        )
+    return sorted(result, key=lambda item: (str(item["prefix"]), str(item["asn"])))
 
 
 def walk(value: object):
@@ -79,6 +93,7 @@ def run_rpki_client(
     fixture: Path,
     work: Path,
     experimental: bool,
+    expected: list[dict[str, object]],
 ) -> dict[str, object]:
     cache = work / "cache"
     output = work / "output"
@@ -115,7 +130,7 @@ def run_rpki_client(
     vrps, metadata = extract_rpki_client_vrps(output)
     return {
         "returncode": process.returncode,
-        "status": "accepted" if vrps == EXPECTED_VRPS else "rejected",
+        "status": "accepted" if vrps == expected else "rejected",
         "vrp_count": len(vrps),
         "vrps": vrps,
         "invalid_certificates": metadata["invalidcertificates"],
@@ -157,6 +172,7 @@ def run_routinator(
     work: Path,
     experimental: bool,
     port: int,
+    expected: list[dict[str, object]],
 ) -> dict[str, object]:
     tal_dir = work / "tals"
     cache = work / "cache"
@@ -239,7 +255,7 @@ def run_routinator(
     vrps = extract_routinator_vrps(parsed)
     return {
         "returncode": process.returncode,
-        "status": "accepted" if vrps == EXPECTED_VRPS else "rejected",
+        "status": "accepted" if vrps == expected else "rejected",
         "vrp_count": len(vrps),
         "vrps": vrps,
     }
@@ -259,7 +275,11 @@ def main() -> int:
         default=ROOT / "results/composite-e2e/krill-rollover.json",
     )
     parser.add_argument("--port", type=int, default=19873)
+    parser.add_argument("--expected-vrp-count", type=int, default=1)
     args = parser.parse_args()
+    if args.expected_vrp_count < 1:
+        raise SystemExit("--expected-vrp-count must be positive")
+    expected = expected_vrps(args.expected_vrp_count)
     work = args.work.resolve()
     reset_generated_directory(work, allowed_root=ROOT / "local")
     phases: dict[str, object] = {}
@@ -272,12 +292,14 @@ def main() -> int:
                 fixture,
                 work / name / "rpki-client-default",
                 False,
+                expected,
             ),
             "rpki_client_experimental": run_rpki_client(
                 args.rpki_client.resolve(),
                 fixture,
                 work / name / "rpki-client-experimental",
                 True,
+                expected,
             ),
             "routinator_default": run_routinator(
                 args.routinator.resolve(),
@@ -285,6 +307,7 @@ def main() -> int:
                 work / name / "routinator-default",
                 False,
                 args.port + offset,
+                expected,
             ),
             "routinator_experimental": run_routinator(
                 args.routinator.resolve(),
@@ -292,6 +315,7 @@ def main() -> int:
                 work / name / "routinator-experimental",
                 True,
                 args.port + offset,
+                expected,
             ),
         }
     success = all(
@@ -305,7 +329,7 @@ def main() -> int:
             "Krill CA issuance, publication, and rollback validated through "
             "isolated local rsync; not a production deployment"
         ),
-        "expected_vrps": EXPECTED_VRPS,
+        "expected_vrps": expected,
         "phases": phases,
         "success": success,
     }

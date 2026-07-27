@@ -15,3 +15,19 @@ The exact-count benchmark is a separate manual phase. It generates one key pair 
 The composite-component benchmark signs the same message with both named components sequentially and accepts a verification only when both component signatures verify. OpenSSL EVP provides RSA, P-256, and ML-DSA; pinned liboqs provides Falcon-512. The measurement excludes composite OIDs, ASN.1 encoding, domain separation, CMS/X.509 processing, and HSM behavior, so it MUST NOT be described as LAMPS composite interoperability.
 
 Current repository-impact data is `estimated`, not proof of global deployability. Before increasing normative language in the Internet-Draft, calibrate the estimator with a local RPKI cache supplied through `PQC_RPKI_CACHE` and produce real-cache projections.
+
+The 2026-07-27 calibration adds an aggregate profile of one Routinator
+RRDP-only cache: 550,210 current objects, 54,960 publication points, and
+980,019 validated VRPs. The ARIN trust anchor was unavailable. The profile
+retains object counts and byte distributions, but not source objects or local
+paths. It is a single snapshot and therefore does not measure churn, warm
+validation, or incremental RRDP behavior.
+
+A separate Krill experiment scales one child publication point to 1,000 ROAs.
+It measures object generation, captured rsync/RRDP bytes, and one full
+validation attempt. Generation and RSA rollback succeeded; scaled Composite
+validation also produced the expected 1,000 VRPs in both experimental RPs.
+This is a correctness result, not a throughput benchmark. The existing 1,000
+repeated small-fixture RP runs remain the E2E
+timing evidence, while 100,000 repetitions remain limited to short
+cryptographic primitives.

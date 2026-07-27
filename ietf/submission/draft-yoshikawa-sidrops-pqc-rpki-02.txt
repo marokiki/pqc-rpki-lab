@@ -104,8 +104,8 @@ Table of Contents
    Appendix A.  Measurement Details  . . . . . . . . . . . . . . . .  27
      A.1.  Reproducibility Metadata  . . . . . . . . . . . . . . . .  27
      A.2.  Small-Scale E2E Measurement . . . . . . . . . . . . . . .  27
-     A.3.  Measured Certificate and CRL Sizes  . . . . . . . . . . .  30
-     A.4.  Synthetic Repository Size Model . . . . . . . . . . . . .  31
+     A.3.  Public-Cache Profile and Scaled-Issuance Boundary . . . .  30
+     A.4.  Measured Certificate and CRL Sizes  . . . . . . . . . . .  31
 
 
 
@@ -114,13 +114,14 @@ Yoshikawa                Expires 25 January 2027                [Page 2]
 Internet-Draft                PQC for RPKI                     July 2026
 
 
-     A.5.  Repeated Primitive Timing . . . . . . . . . . . . . . . .  31
-     A.6.  Single-Run 100,000-Operation Measurements . . . . . . . .  32
-     A.7.  Draft-19 Composite ML-DSA Measurements  . . . . . . . . .  34
-     A.8.  Open Measurement Tasks  . . . . . . . . . . . . . . . . .  34
-   Appendix B.  Changes from -01 . . . . . . . . . . . . . . . . . .  35
-   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  35
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  35
+     A.5.  Synthetic Repository Size Model . . . . . . . . . . . . .  32
+     A.6.  Repeated Primitive Timing . . . . . . . . . . . . . . . .  33
+     A.7.  Single-Run 100,000-Operation Measurements . . . . . . . .  33
+     A.8.  Draft-19 Composite ML-DSA Measurements  . . . . . . . . .  35
+     A.9.  Open Measurement Tasks  . . . . . . . . . . . . . . . . .  35
+   Appendix B.  Changes from -01 . . . . . . . . . . . . . . . . . .  36
+   Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  36
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  37
 
 1.  Introduction
 
@@ -160,7 +161,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    Current Suite: The algorithm suite currently accepted by an RPKI
    implementation for production validation.  At the time of writing
    this is RSA-2048/SHA-256 as profiled by RFC 7935.
-
 
 
 
@@ -1635,7 +1635,68 @@ Internet-Draft                PQC for RPKI                     July 2026
    These results complement, but do not replace, the open full-
    repository measurements below.
 
-A.3.  Measured Certificate and CRL Sizes
+A.3.  Public-Cache Profile and Scaled-Issuance Boundary
+
+   One Routinator 0.15.2 RRDP-only cache snapshot was reduced to
+   aggregate counts and byte distributions.  It contained 550,210
+   public-cache objects across 54,960 publication points and the
+   validation run produced 980,019 VRPs.  The ARIN trust anchor was
+   unavailable during collection.  No source objects, keys, repository
+   URIs, or local paths are included in the public result.  This is one
+   incomplete snapshot rather than a measurement of the entire global
+   RPKI, update churn, or incremental validation.
+
+   A separate 1,000-ROA Krill experiment used one RSA parent and one
+   child publication point.  Krill generated and published all objects
+   in 141.59 seconds of wall time.  Experimental rpki-client and
+   Routinator each produced the expected 1,000 VRPs from the Composite
+   state.  After rollback, the default and experimental modes of both
+   RPs produced the same 1,000 VRPs.  Validation of all eight phase/mode
+   combinations took 9.44 seconds in one sequential harness invocation.
+   Generation used 135.06 user seconds, 4.08 system seconds, and 121164
+   KiB maximum RSS; validation used 6.41 user seconds, 1.39 system
+   seconds, and 23232 KiB maximum RSS.
+
+   The captured Composite state contained 1008 rsync files occupying
+   9797552 bytes.  Its RRDP snapshot was 13145725 bytes uncompressed and
+   9189879 bytes with deterministic gzip; its delta was 13133009 and
+   9183568 bytes, respectively.  The RSA rollback also contained 1008
+   files, occupying 1768736 bytes; its snapshot was 2440682 bytes
+   uncompressed and 1024793 bytes with gzip, and its delta was 2506346
+   and 1073040 bytes.  These values compare two states of one generated
+   fixture and are not measurements of network transfer or repository
+   update frequency.
+
+
+
+
+
+
+
+
+
+
+
+Yoshikawa                Expires 25 January 2027               [Page 30]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
+   An earlier filesystem-only capture observed invalid Composite objects
+   because it copied Krill's asynchronous publication tree before the
+   state was quiescent.  The final harness waits for the published
+   object count to converge, waits another two seconds, and overlays the
+   publication API's current objects at canonical rsync-module paths.
+   This distinction is important: the earlier rejection was a test-
+   fixture consistency problem, not evidence that Composite verification
+   becomes invalid with object count.
+
+   The public cache profile supplies topology and object-size inputs for
+   a future re-signed synthetic corpus.  Full RSA, pure ML-DSA-65,
+   Composite, and mixed-tree cold/warm/incremental measurements remain
+   future work.
+
+A.4.  Measured Certificate and CRL Sizes
 
    RFC 6487-profiled certificates (including RFC 3779 resource
    extensions) and CRLs generated with the OpenSSL 3.6.2 default
@@ -1669,20 +1730,19 @@ A.3.  Measured Certificate and CRL Sizes
    resource extensions as the other rows, but are classical comparison
    algorithms rather than RFC 7935 suites.  The FN-DSA-512 row uses the
    experimental Falcon-512 OID and encoding from oqs-provider 0.11.0-rc1
-   with liboqs 0.15.0; it is a measured experimental encoding, not a
-   final FN-DSA PKIX profile.  Falcon signatures are variable length, so
-   its certificate and CRL sizes can vary between runs.
 
 
 
-
-
-Yoshikawa                Expires 25 January 2027               [Page 30]
+Yoshikawa                Expires 25 January 2027               [Page 31]
 
 Internet-Draft                PQC for RPKI                     July 2026
 
 
-A.4.  Synthetic Repository Size Model
+   with liboqs 0.15.0; it is a measured experimental encoding, not a
+   final FN-DSA PKIX profile.  Falcon signatures are variable length, so
+   its certificate and CRL sizes can vary between runs.
+
+A.5.  Synthetic Repository Size Model
 
    First-order repository size ratios relative to the RSA-2048 baseline,
    computed by applying the key and signature inputs above to an
@@ -1724,19 +1784,22 @@ A.4.  Synthetic Repository Size Model
 
                                   Table 6
 
-A.5.  Repeated Primitive Timing
+
+
+
+
+
+Yoshikawa                Expires 25 January 2027               [Page 32]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
+A.6.  Repeated Primitive Timing
 
    The primary timing summary below reports the median and sample
    standard deviation across ten repetitions of 1000 operations on a
    fixed 32-byte message.  Values are wall-clock seconds per 1000
    operations.
-
-
-
-Yoshikawa                Expires 25 January 2027               [Page 31]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
 
     +===========+=============+============+===============+==========+
     | Algorithm | Sign median | Sign stdev | Verify median | Verify   |
@@ -1764,7 +1827,7 @@ Internet-Draft                PQC for RPKI                     July 2026
    results remain in the evidence snapshot rather than being duplicated
    here.
 
-A.6.  Single-Run 100,000-Operation Measurements
+A.7.  Single-Run 100,000-Operation Measurements
 
    Wall-clock seconds for 100,000 signing operations and 100,000
    verification operations:
@@ -1779,6 +1842,14 @@ A.6.  Single-Run 100,000-Operation Measurements
    | Ed25519                         | 1.7           | 4.0             |
    +---------------------------------+---------------+-----------------+
    | ML-DSA-44                       | 25.1          | 5.0             |
+
+
+
+Yoshikawa                Expires 25 January 2027               [Page 33]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
    +---------------------------------+---------------+-----------------+
    | ML-DSA-65                       | 40.5          | 7.7             |
    +---------------------------------+---------------+-----------------+
@@ -1786,14 +1857,6 @@ A.6.  Single-Run 100,000-Operation Measurements
    +---------------------------------+---------------+-----------------+
    | FN-DSA-512                      | 10.5          | 1.6             |
    +---------------------------------+---------------+-----------------+
-
-
-
-Yoshikawa                Expires 25 January 2027               [Page 32]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
    | RSA-2048 + P-256 (components)   | 35.3          | 4.5             |
    +---------------------------------+---------------+-----------------+
    | RSA-2048 + Ed25519              | 35.6          | 5.1             |
@@ -1838,19 +1901,12 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-
-
-
-
-
-
-
-Yoshikawa                Expires 25 January 2027               [Page 33]
+Yoshikawa                Expires 25 January 2027               [Page 34]
 
 Internet-Draft                PQC for RPKI                     July 2026
 
 
-A.7.  Draft-19 Composite ML-DSA Measurements
+A.8.  Draft-19 Composite ML-DSA Measurements
 
    The following measurements implement the message representative, ML-
    DSA context binding, both component operations, raw key and signature
@@ -1881,13 +1937,15 @@ A.7.  Draft-19 Composite ML-DSA Measurements
    and mean signature sizes; they are not complete-repository
    measurements.
 
-A.8.  Open Measurement Tasks
+A.9.  Open Measurement Tasks
 
    The following dimensions are not yet backed by confirmed measurements
    and are deliberately recorded as open tasks rather than numbers:
 
-   *  Repository-scale CA key rollover, publication cycle, and full
-      validation impact; RRDP snapshot/delta and rsync transfer impact.
+   *  Four-suite repository-scale CA key rollover, publication cycle,
+      and full validation impact.  The single public-cache profile and
+      1,000-ROA boundary run do not yet provide cold/warm/incremental
+      comparisons.
 
    *  Full-validator memory footprint.  The repeated primitive sweep
       records process peak RSS, but this is not a repository-validation
@@ -1899,9 +1957,7 @@ A.8.  Open Measurement Tasks
 
 
 
-
-
-Yoshikawa                Expires 25 January 2027               [Page 34]
+Yoshikawa                Expires 25 January 2027               [Page 35]
 
 Internet-Draft                PQC for RPKI                     July 2026
 
@@ -1941,6 +1997,10 @@ Appendix B.  Changes from -01
    *  Added experimental Krill Composite-child issuance, publication,
       and rollback evidence validated by both experimental RPs.
 
+   *  Added a public-cache aggregate profile and documented the
+      unresolved scaled Composite validation boundary found by the
+      1,000-ROA Krill run.
+
    *  Kept a future production algorithm profile and transition
       procedure as separate standards work informed by these results.
 
@@ -1951,16 +2011,14 @@ Acknowledgements
    thanks the SIDROPS and LAMPS communities for the specifications and
    implementation work that make this experiment possible.
 
-Author's Address
 
 
-
-
-
-Yoshikawa                Expires 25 January 2027               [Page 35]
+Yoshikawa                Expires 25 January 2027               [Page 36]
 
 Internet-Draft                PQC for RPKI                     July 2026
 
+
+Author's Address
 
    Tomoki Yoshikawa
    Graduate School of Informatics, Kyoto University
@@ -2011,6 +2069,4 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-
-
-Yoshikawa                Expires 25 January 2027               [Page 36]
+Yoshikawa                Expires 25 January 2027               [Page 37]

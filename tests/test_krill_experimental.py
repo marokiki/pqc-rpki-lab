@@ -40,6 +40,17 @@ class KrillExperimentalEvidenceTests(unittest.TestCase):
         self.assertIn("sign_oneshot_to_vec", patch)
         self.assertIn("functional_pqc_rollover", patch)
         self.assertIn("MlDsa65EcdsaP256Sha512", patch)
+        self.assertIn("PQC_RPKI_KRILL_ROA_COUNT", patch)
+        self.assertIn("publisher_details", patch)
+
+    def test_scaled_runner_repeats_and_summarizes(self) -> None:
+        runner = (
+            ROOT / "tools/run_krill_scaled_experimental.sh"
+        ).read_text()
+        self.assertIn("PQC_RPKI_KRILL_RELIABILITY_REPETITIONS", runner)
+        self.assertIn("PQC_RPKI_KRILL_ROA_COUNT", runner)
+        self.assertIn("/usr/bin/time", runner)
+        self.assertIn("summarize_scaled_krill.py", runner)
 
 
 if __name__ == "__main__":

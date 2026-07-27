@@ -22,6 +22,8 @@ def find_inconsistencies() -> list[str]:
         "results/composite-e2e/routinator-negative-summary.json"
     )
     krill = load("results/composite-e2e/krill-rollover.json")
+    cache_profile = load("results/scaled-corpus/public-cache-profile.json")
+    scaled_krill = load("results/scaled-corpus/krill-scaled-summary.json")
     benchmark = load("results/composite-e2e/benchmark-summary.json")
     summary = load("results/composite-e2e/summary.json")
     pins = load("experiments/composite-dependencies.json")
@@ -52,6 +54,16 @@ def find_inconsistencies() -> list[str]:
         failures.append("Routinator negative evidence does not match primary RP")
     if not krill["success"]:
         failures.append("Krill issuance and rollback evidence is not successful")
+    if cache_profile["synthetic_corpus"]["contains_source_objects"]:
+        failures.append("public cache profile contains source objects")
+    if cache_profile["object_count"] != sum(
+        cache_profile["object_type_counts"].values()
+    ):
+        failures.append("public cache object counts are inconsistent")
+    if not scaled_krill["scaled_composite_success"]:
+        failures.append("scaled Krill Composite validation did not succeed")
+    if not scaled_krill["rollback_success"]:
+        failures.append("scaled Krill RSA rollback did not succeed")
     expected_krill = {
         "composite": {
             "rpki_client_default": "rejected",
@@ -109,6 +121,16 @@ def find_inconsistencies() -> list[str]:
         commit = dependency["commit"]
         if commit not in combined_docs:
             failures.append(f"pinned dependency commit is undocumented: {commit}")
+
+    required_scaled_phrases = (
+        "550,210 public-cache objects",
+        "54,960 publication points",
+        "980,019 VRPs",
+        "1,000-ROA",
+    )
+    for phrase in required_scaled_phrases:
+        if phrase not in normalized_draft:
+            failures.append(f"draft does not contain scaled evidence: {phrase}")
 
     return failures
 

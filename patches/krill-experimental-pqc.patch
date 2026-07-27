@@ -127,7 +127,7 @@ index 08eb70f..961c82f 100644
              }
          }
 diff --git a/src/commons/crypto/signing/signers/softsigner.rs b/src/commons/crypto/signing/signers/softsigner.rs
-index 3a7a5d6..44d3225 100644
+index 3a7a5d6..abbd103 100644
 --- a/src/commons/crypto/signing/signers/softsigner.rs
 +++ b/src/commons/crypto/signing/signers/softsigner.rs
 @@ -1,6 +1,7 @@
@@ -138,7 +138,15 @@ index 3a7a5d6..44d3225 100644
      str::FromStr,
      sync::{Arc, RwLock},
  };
-@@ -111,7 +112,7 @@ impl OpenSslSigner {
+@@ -60,6 +61,7 @@ pub struct OpenSslSigner {
+     info: Option<String>,
+ 
+     mapper: Option<Arc<SignerMapper>>,
++
+ }
+ 
+ impl OpenSslSigner {
+@@ -111,7 +113,7 @@ impl OpenSslSigner {
      ) -> Result<(PublicKey, String), SignerError> {
          // For the OpenSslSigner we use the KeyIdentifier as the internal key
          // id so the two are the same.
@@ -147,7 +155,7 @@ index 3a7a5d6..44d3225 100644
          let internal_key_id = key_id.to_string();
          let key_pair = self.load_key(&key_id)?;
          let public_key = key_pair.subject_public_key_info()?;
-@@ -144,8 +145,11 @@ impl OpenSslSigner {
+@@ -144,8 +146,11 @@ impl OpenSslSigner {
          Ok(store)
      }
  
@@ -161,7 +169,7 @@ index 3a7a5d6..44d3225 100644
          self.store_key(kp)
      }
  
-@@ -173,18 +177,26 @@ impl OpenSslSigner {
+@@ -173,18 +178,26 @@ impl OpenSslSigner {
          data: &D,
      ) -> Result<Signature<Alg>, SignerError> {
          let signing_algorithm = algorithm.signing_algorithm();
@@ -200,7 +208,7 @@ index 3a7a5d6..44d3225 100644
  
          Ok(signature)
      }
-@@ -237,9 +249,9 @@ impl OpenSslSigner {
+@@ -237,9 +250,9 @@ impl OpenSslSigner {
  impl OpenSslSigner {
      pub fn create_key(
          &self,
@@ -212,7 +220,7 @@ index 3a7a5d6..44d3225 100644
          self.remember_key_id(&key_id)?;
  
          Ok(key_id)
-@@ -292,7 +304,7 @@ impl OpenSslSigner {
+@@ -292,7 +305,7 @@ impl OpenSslSigner {
          algorithm: Alg,
          data: &D,
      ) -> Result<(Signature<Alg>, PublicKey), SignerError> {
@@ -221,7 +229,7 @@ index 3a7a5d6..44d3225 100644
          let signature =
              Self::sign_with_key(kp.pkey.as_ref(), algorithm, data)?;
          let key = kp.subject_public_key_info()?;
-@@ -316,7 +328,7 @@ impl Serialize for OpenSslKeyPair {
+@@ -316,7 +329,7 @@ impl Serialize for OpenSslKeyPair {
          let bytes: Vec<u8> = self
              .pkey
              .as_ref()
@@ -230,7 +238,7 @@ index 3a7a5d6..44d3225 100644
              .map_err(ser::Error::custom)?;
  
          BASE64_ENGINE.encode(bytes).serialize(s)
-@@ -338,18 +350,52 @@ impl<'de> Deserialize<'de> for OpenSslKeyPair {
+@@ -338,18 +351,52 @@ impl<'de> Deserialize<'de> for OpenSslKeyPair {
  }
  
  impl OpenSslKeyPair {
@@ -291,7 +299,7 @@ index 3a7a5d6..44d3225 100644
  
          PublicKey::decode(bytes).map_err(SignerError::other)
      }
-@@ -369,7 +415,8 @@ impl OpenSslKeyPair {
+@@ -369,7 +416,8 @@ impl OpenSslKeyPair {
              SignerError::other("Cannot parse private key base64")
          })?;
  
@@ -301,7 +309,7 @@ index 3a7a5d6..44d3225 100644
              .map(|pkey| OpenSslKeyPair { pkey })
              .map_err(|e| {
                  SignerError::Other(format!("Invalid private key: {e}"))
-@@ -397,7 +444,7 @@ pub mod tests {
+@@ -397,7 +445,7 @@ pub mod tests {
  
      #[test]
      fn should_serialize_and_deserialize_key() {
@@ -310,7 +318,7 @@ index 3a7a5d6..44d3225 100644
          let json = serde_json::to_string(&key).unwrap();
          let key_des: OpenSslKeyPair =
              serde_json::from_str(json.as_str()).unwrap();
-@@ -408,6 +455,32 @@ pub mod tests {
+@@ -408,6 +456,32 @@ pub mod tests {
          assert_eq!(json, json_from_des);
      }
  
@@ -374,69 +382,126 @@ index 79ad6d3..fad7ae3 100644
              revision.next_update,
 diff --git a/tests/functional_pqc_rollover.rs b/tests/functional_pqc_rollover.rs
 new file mode 100644
-index 0000000..9140407
+index 0000000..0811ca2
 --- /dev/null
 +++ b/tests/functional_pqc_rollover.rs
-@@ -0,0 +1,112 @@
+@@ -0,0 +1,204 @@
 +//! Experimental RSA-parent to Composite-child issuance and rollback test.
 +
 +use std::{fs, io, path::Path};
 +
 +use krill::api::roa::RoaConfigurationUpdates;
-+use rpki::{
-+    crypto::PublicKeyFormat,
-+    repository::resources::ResourceSet,
-+};
++use rpki::{crypto::PublicKeyFormat, repository::resources::ResourceSet};
 +
 +mod common;
 +
-+
 +#[tokio::test]
 +async fn functional_pqc_rollover() {
-+    let Some(suite_file) = std::env::var_os("PQC_RPKI_KRILL_SUITE_FILE") else {
++    let Some(suite_file) = std::env::var_os("PQC_RPKI_KRILL_SUITE_FILE")
++    else {
 +        return;
 +    };
 +    fs::write(&suite_file, "rsa\n").unwrap();
 +
-+    let (server, tempdir)
-+        = common::KrillServer::start_with_file_storage_and_testbed().await;
++    let (server, tempdir) =
++        common::KrillServer::start_with_file_storage_and_testbed().await;
 +    let parent = common::ca_handle("testbed");
 +    let child = common::ca_handle("PQC-CA");
-+    let resources = common::resources("AS64496", "192.0.2.0/24", "2001:db8::/32");
++    let roa_count = std::env::var("PQC_RPKI_KRILL_ROA_COUNT")
++        .ok()
++        .map(|value| value.parse::<u32>().unwrap())
++        .unwrap_or(1);
++    assert!(roa_count > 0);
++    let as_resources = if roa_count == 1 {
++        "AS64496".to_string()
++    } else {
++        format!("AS64496-AS{}", 64495 + roa_count)
++    };
++    let resources =
++        common::resources(&as_resources, "192.0.2.0/24", "2001:db8::/32");
 +    let rcn = common::rcn(0);
 +
-+    assert!(server.wait_for_ca_resources(&parent, &ResourceSet::all()).await);
++    assert!(
++        server
++            .wait_for_ca_resources(&parent, &ResourceSet::all())
++            .await
++    );
 +    let parent_key = server.ca_key_for_rcn(&parent, &rcn).await;
 +    assert_eq!(
-+        parent_key.incoming_cert.to_cert().unwrap()
-+            .subject_public_key_info().algorithm(),
++        parent_key
++            .incoming_cert
++            .to_cert()
++            .unwrap()
++            .subject_public_key_info()
++            .algorithm(),
 +        PublicKeyFormat::Rsa,
 +    );
 +
 +    fs::write(&suite_file, "composite\n").unwrap();
 +    server.create_ca_with_repo(&child).await;
-+    server.register_ca_with_parent(&child, &parent, &resources).await;
++    server
++        .register_ca_with_parent(&child, &parent, &resources)
++        .await;
 +
 +    let composite_key = server.ca_key_for_rcn(&child, &rcn).await;
 +    assert_eq!(
-+        composite_key.incoming_cert.to_cert().unwrap()
-+            .subject_public_key_info().algorithm(),
++        composite_key
++            .incoming_cert
++            .to_cert()
++            .unwrap()
++            .subject_public_key_info()
++            .algorithm(),
 +        PublicKeyFormat::MlDsa65EcdsaP256Sha512,
 +    );
 +
-+    let roa = common::roa_conf("192.0.2.0/24-24 => 64496");
-+    server.client().roas_update(
-+        &child,
-+        RoaConfigurationUpdates {
-+            added: vec![roa.clone()],
-+            removed: vec![],
-+        },
-+    ).await.unwrap();
++    let mut roas = vec![common::roa_conf("192.0.2.0/24-24 => 64496")];
++    for offset in 1..roa_count {
++        let prefix = format!(
++            "2001:db8:{:x}:{:x}::/64-64 => {}",
++            offset >> 16,
++            offset & 0xffff,
++            64496 + offset,
++        );
++        roas.push(common::roa_conf(&prefix));
++    }
++    server
++        .client()
++        .roas_update(
++            &child,
++            RoaConfigurationUpdates {
++                added: roas.clone(),
++                removed: vec![],
++            },
++        )
++        .await
++        .unwrap();
 +    let mut expected = server.expected_objects(&child);
 +    expected.push_mft_and_crl(&rcn).await;
-+    expected.push_roas([&roa]);
-+    assert!(expected.wait_for_published().await);
-+    copy_repository(tempdir.path(), "composite");
++    expected.push_roas(roas.iter());
++    if roa_count == 1 {
++        assert!(expected.wait_for_published().await);
++    } else {
++        let publisher = child.convert();
++        let mut published = false;
++        for _ in 0..1200 {
++            common::sleep_millis(100).await;
++            let details =
++                server.client().publisher_details(&publisher).await.unwrap();
++            if details.current_files.len() == roa_count as usize + 2 {
++                published = true;
++                break;
++            }
++        }
++        assert!(published);
++    }
++    common::sleep_millis(2000).await;
++    capture_repository(
++        tempdir.path(),
++        &server,
++        [&parent, &child],
++        "composite",
++    )
++    .await;
 +    write_tal("composite", &server.client().testbed_tal().await.unwrap());
 +
 +    fs::write(&suite_file, "rsa\n").unwrap();
@@ -444,16 +509,25 @@ index 0000000..9140407
 +    assert!(server.wait_for_state_new_key(&child).await);
 +    let rollback_key = server.ca_new_key_for_rcn(&child, &rcn).await;
 +    assert_eq!(
-+        rollback_key.incoming_cert.to_cert().unwrap()
-+            .subject_public_key_info().algorithm(),
++        rollback_key
++            .incoming_cert
++            .to_cert()
++            .unwrap()
++            .subject_public_key_info()
++            .algorithm(),
 +        PublicKeyFormat::Rsa,
 +    );
 +    server.client().ca_activate_keyroll(&child).await.unwrap();
 +    assert!(server.wait_for_state_active(&child).await);
-+    copy_repository(tempdir.path(), "rollback");
++    capture_repository(
++        tempdir.path(),
++        &server,
++        [&parent, &child],
++        "rollback",
++    )
++    .await;
 +    write_tal("rollback", &server.client().testbed_tal().await.unwrap());
 +}
-+
 +
 +fn copy_repository(source: &Path, phase: &str) {
 +    let Some(root) = std::env::var_os("PQC_RPKI_KRILL_OUTPUT") else {
@@ -467,6 +541,33 @@ index 0000000..9140407
 +    copy_tree(source, &target).unwrap();
 +}
 +
++async fn capture_repository<'a>(
++    source: &Path,
++    server: &common::KrillServer,
++    cas: impl IntoIterator<Item = &'a rpki::ca::idexchange::CaHandle>,
++    phase: &str,
++) {
++    copy_repository(source, phase);
++    let Some(root) = std::env::var_os("PQC_RPKI_KRILL_OUTPUT") else {
++        return;
++    };
++    let current = Path::new(&root)
++        .join(phase)
++        .join("state/repo/rsync/current");
++    for ca in cas {
++        let publisher = ca.convert();
++        let details =
++            server.client().publisher_details(&publisher).await.unwrap();
++        for file in details.current_files {
++            let uri = file.uri.to_string();
++            let relative =
++                uri.strip_prefix("rsync://localhost/repo/").unwrap();
++            let target = current.join(relative);
++            fs::create_dir_all(target.parent().unwrap()).unwrap();
++            fs::write(target, file.base64.to_bytes()).unwrap();
++        }
++    }
++}
 +
 +fn write_tal(phase: &str, tal: &str) {
 +    let Some(root) = std::env::var_os("PQC_RPKI_KRILL_OUTPUT") else {
@@ -475,7 +576,6 @@ index 0000000..9140407
 +    let target = Path::new(&root).join(phase).join("testbed.tal");
 +    fs::write(target, tal).unwrap();
 +}
-+
 +
 +fn copy_tree(source: &Path, target: &Path) -> io::Result<()> {
 +    for entry in fs::read_dir(source)? {

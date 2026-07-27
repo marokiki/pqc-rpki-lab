@@ -8,7 +8,8 @@ The current repository impact numbers are synthetic estimates. The next phase mu
 
 ## Current result
 
-No cache path was supplied in the default run. The result is explicitly
+One operator-supplied Routinator snapshot has now been reduced to a public-safe
+aggregate profile. The result is explicitly
 `skipped` in `results/real-repository-summary.csv/json/md`. The adapter records
 count, total, min, median, p95, max, object age, and objects changed within 24
 hours when `PQC_RPKI_CACHE` is supplied.
@@ -52,7 +53,16 @@ Use at least three snapshots if available:
 2. cache after normal refresh interval,
 3. cache after a manifest/CRL-heavy update if available.
 
-If only one cache is available, mark results as `single_snapshot`.
+The current result is marked `single_snapshot`: 550,210 objects across 54,960
+publication points, producing 980,019 VRPs while ARIN was unavailable. If only
+one cache is available, retain that classification.
+
+The profile is an input distribution, not yet a complete re-signed synthetic
+corpus. A 1,000-ROA single-child Krill run established that object generation
+and RSA rollback scale to that count; both experimental RPs also produced the
+expected 1,000 VRPs from the Composite state. Full RSA, pure ML-DSA-65,
+Composite, and mixed-tree measurements over a topology-shaped corpus remain
+open.
 
 ## Output
 

@@ -1,4 +1,4 @@
-.PHONY: all certificate-sizes ccr-comparison cms-api-probe composite-100k composite-bootstrap composite-bootstrap-check composite-e2e composite-e2e-rp-matrix composite-e2e-negative composite-e2e-benchmark composite-keygen-benchmark draft-composite-100k exact-100k key-roll krill-experimental-bootstrap krill-experimental-bootstrap-check krill-experimental-build krill-experimental-e2e local-validation message-sweep mixed-tree object-benchmarks pre-publication regenerate-reports review-evidence routinator-experimental-bootstrap routinator-experimental-bootstrap-check routinator-experimental-build routinator-experimental-matrix routinator-experimental-negative routinator-krill-interop routinator-krill-scan rpki-objects test validator-container-probe verify-artifacts install-optional-pqc clean
+.PHONY: all certificate-sizes ccr-comparison cms-api-probe composite-100k composite-bootstrap composite-bootstrap-check composite-e2e composite-e2e-rp-matrix composite-e2e-negative composite-e2e-benchmark composite-keygen-benchmark draft-composite-100k exact-100k key-roll krill-experimental-bootstrap krill-experimental-bootstrap-check krill-experimental-build krill-experimental-e2e krill-scaled-e2e krill-scaled-summary local-validation message-sweep mixed-tree object-benchmarks pre-publication public-cache-profile regenerate-reports review-evidence routinator-experimental-bootstrap routinator-experimental-bootstrap-check routinator-experimental-build routinator-experimental-matrix routinator-experimental-negative routinator-krill-interop routinator-krill-scan rpki-objects test validator-container-probe verify-artifacts install-optional-pqc clean
 
 COMPOSITE_OPENSSL ?= $(CURDIR)/local/build/openssl-3.6.2-install/bin/openssl
 COMPOSITE_OPENSSL_LIBDIR ?= $(CURDIR)/local/build/openssl-3.6.2-install/lib64
@@ -10,6 +10,9 @@ CARGO_HOME ?= $(CURDIR)/local/build/cargo-home
 ROUTINATOR_SOURCE ?= $(CURDIR)/local/upstream/routinator
 ROUTINATOR_BIN ?= $(ROUTINATOR_SOURCE)/target/debug/routinator
 KRILL_SOURCE ?= $(CURDIR)/local/upstream/krill
+KRILL_SCALED_ROOT ?= $(CURDIR)/local/krill-scaled/verified-1000
+PQC_RPKI_CACHE ?=
+PUBLIC_CACHE_LABEL ?= operator-supplied Routinator cache snapshot
 RUST_ENV = RUSTUP_HOME="$(RUSTUP_HOME)" CARGO_HOME="$(CARGO_HOME)" OPENSSL_DIR="$(CURDIR)/local/build/openssl-3.6.2-install" LD_LIBRARY_PATH="$(COMPOSITE_OPENSSL_LIBDIR):$${LD_LIBRARY_PATH}"
 
 all:
@@ -129,6 +132,21 @@ krill-experimental-bootstrap-check:
 
 krill-experimental-e2e: krill-experimental-build
 	./tools/run_krill_experimental.sh
+
+krill-scaled-e2e: krill-experimental-build
+	./tools/run_krill_scaled_experimental.sh
+
+public-cache-profile:
+	test -n "$(PQC_RPKI_CACHE)"
+	PYTHONPATH=src python3 tools/profile_public_cache.py \
+		--cache "$(PQC_RPKI_CACHE)" \
+		--source-label "$(PUBLIC_CACHE_LABEL)"
+
+krill-scaled-summary:
+	PYTHONPATH=src python3 tools/summarize_scaled_krill.py \
+		--scaled-root "$(KRILL_SCALED_ROOT)" \
+		--reliability local/krill-reliability/results.tsv \
+		--roa-count 1000
 
 cms-api-probe:
 	PYTHONPATH=src python3 tools/cms_api_probe.py
