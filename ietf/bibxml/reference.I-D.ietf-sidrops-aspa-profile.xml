@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<reference anchor="I-D.ietf-sidrops-aspa-profile" target="https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-aspa-profile-27">
+<reference anchor="I-D.ietf-sidrops-aspa-profile" target="https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-aspa-profile-28">
    <front>
       <title>A Profile for Autonomous System Provider Authorization</title>
       <author initials="J." surname="Snijders" fullname="Job Snijders">
@@ -20,7 +20,7 @@
       <author initials="B." surname="Maddison" fullname="Ben Maddison">
          <organization>Workonline</organization>
       </author>
-      <date month="June" day="19" year="2026" />
+      <date month="July" day="19" year="2026" />
       <abstract>
 	 <t>   This document defines a Cryptographic Message Syntax (CMS) protected
    content type for Autonomous System Provider Authorization (ASPA)
@@ -35,6 +35,6 @@
 	 </t>
       </abstract>
    </front>
-   <seriesInfo name="Internet-Draft" value="draft-ietf-sidrops-aspa-profile-27" />
+   <seriesInfo name="Internet-Draft" value="draft-ietf-sidrops-aspa-profile-28" />
    
 </reference>

@@ -12,6 +12,51 @@ class DraftSubmissionTest(unittest.TestCase):
         self.root_01 = ET.parse(
             root_dir / "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-01.xml"
         ).getroot()
+        self.root_02 = ET.parse(
+            root_dir / "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-02.xml"
+        ).getroot()
+
+    def test_draft_02_is_informational_experiment_report(self):
+        self.assertEqual(
+            self.root_02.get("docName"),
+            "draft-yoshikawa-sidrops-pqc-rpki-02",
+        )
+        self.assertEqual(self.root_02.get("category"), "info")
+        self.assertEqual(self.root_02.get("consensus"), "false")
+        self.assertIsNone(self.root_02.find('.//xref[@target="BCP14"]'))
+        aspa = self.root_02.find(
+            './/reference[@anchor="I-D.ietf-sidrops-aspa-profile"]'
+        )
+        self.assertEqual(
+            aspa.find("./seriesInfo").get("value"),
+            "draft-ietf-sidrops-aspa-profile-28",
+        )
+        text = " ".join(self.root_02.itertext())
+        self.assertIn("This document is informational.", text)
+        self.assertIn("It does not update RFC 7935 or RFC 6916", text)
+        self.assertIn("Draft-19 Composite ML-DSA Measurements", text)
+        self.assertNotIn("MUST", text)
+        self.assertNotIn("SHOULD", text)
+
+    def test_draft_02_references_immutable_evidence_snapshot(self):
+        self.assertEqual(
+            self.root_02.find('.//reference[@anchor="pqc-rpki-lab"]').get("target"),
+            "https://github.com/marokiki/pqc-rpki-lab/tree/"
+            "0d572a851c29411bda4460e5c76394e6f4ec23c9",
+        )
+
+    def test_draft_02_records_review_boundaries(self):
+        text = " ".join(self.root_02.itertext())
+        self.assertIn(
+            "deliberately evaluates the X.509 construction excluded by RFC 6916",
+            text,
+        )
+        self.assertIn("TrustAnchorState is compared separately", text)
+        self.assertIn("ROAPayloadState does not preserve per-VRP", text)
+        self.assertIn("Composite Configuration Evaluated in This Revision", text)
+        self.assertIn("Questions for Further Work", text)
+        self.assertIn("EUF-CMA", text)
+        self.assertNotIn("unknown algorithm", text)
 
     def test_draft_01_submission_is_rendered(self):
         self.assertEqual(

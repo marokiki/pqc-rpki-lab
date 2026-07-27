@@ -58,7 +58,7 @@ class MeasurementEvidenceTest(unittest.TestCase):
 
     def test_draft_contains_measured_values_without_tbd(self):
         draft = (
-            self.root / "ietf/draft-yoshikawa-sidrops-pqc-rpki-01.md"
+            self.root / "ietf/draft-yoshikawa-sidrops-pqc-rpki-02.md"
         ).read_text()
         for row in (
             "| P-256/SHA-256 | 641 | 587 | 187 |",
@@ -67,9 +67,12 @@ class MeasurementEvidenceTest(unittest.TestCase):
             "| FN-DSA-512 (Falcon-512) | 2048 | 1991 | 764 |",
             "| FN-DSA-512 | 10.5 | 1.6 |",
             "| RSA-2048 + FN-DSA-512 (components) | 44.6 | 2.6 |",
+            "| ML-DSA-44 + P-256 | 26.0 | 8.3 | 1377 | 2491 | 3.16 |",
+            "| ML-DSA-65 + P-256 | 45.6 | 11.9 | 2017 | 3380 | 4.09 |",
+            "| ML-DSA-87 + P-384 | 59.4 | 32.8 | 2689 | 4730 | 5.40 |",
         ):
             self.assertIn(row, draft)
-        measurement_appendix = draft.split("# Preliminary Measurement Results", 1)[1]
+        measurement_appendix = draft.split("# Measurement Details", 1)[1]
         self.assertNotIn("remain TBD", measurement_appendix)
 
 

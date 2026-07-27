@@ -309,15 +309,18 @@ def add_bibxml(parent: ET.Element, filename: str) -> None:
 
 
 def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) -> ET.Element:
+    category = str(meta.get("category", "std"))
     rfc = ET.Element(
         "rfc",
         {
             "version": "3",
-            "category": str(meta.get("category", "std")),
+            "category": category,
             "ipr": str(meta.get("ipr", "trust200902")),
             "docName": DOCNAME,
             "submissionType": str(meta.get("submissiontype", "IETF")),
-            "consensus": "true",
+            "consensus": str(
+                meta.get("consensus", "true" if category == "std" else "false")
+            ).lower(),
         },
     )
     front = ET.SubElement(rfc, "front")
@@ -358,27 +361,31 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
     back_el = ET.SubElement(rfc, "back")
     # Keep references compact.  xml2rfc/datatracker can replace these with
     # complete bibxml references if desired.
-    normative = ET.SubElement(back_el, "references")
-    ET.SubElement(normative, "name").text = "Normative References"
-    bcp14 = ET.SubElement(
-        normative,
-        "referencegroup",
-        {"anchor": "BCP14", "target": "https://www.rfc-editor.org/info/bcp14"},
-    )
-    for number in ("2119", "8174"):
-        add_bibxml(bcp14, f"reference.RFC.{number}.xml")
+    if category == "std":
+        specification_refs = ET.SubElement(back_el, "references")
+        ET.SubElement(specification_refs, "name").text = "Normative References"
+        bcp14 = ET.SubElement(
+            specification_refs,
+            "referencegroup",
+            {"anchor": "BCP14", "target": "https://www.rfc-editor.org/info/bcp14"},
+        )
+        for number in ("2119", "8174"):
+            add_bibxml(bcp14, f"reference.RFC.{number}.xml")
+    else:
+        specification_refs = ET.SubElement(back_el, "references")
+        ET.SubElement(specification_refs, "name").text = "Informative References"
     for number in (
         "6480", "6487", "6488", "6916", "7935", "8182", "8209",
         "9286", "9582", "9589", "9691", "9881", "9882",
     ):
-        add_bibxml(normative, f"reference.RFC.{number}.xml")
+        add_bibxml(specification_refs, f"reference.RFC.{number}.xml")
     for name in (
         "ietf-lamps-pq-composite-sigs",
         "ietf-lamps-cms-composite-sigs",
     ):
-        add_bibxml(normative, f"reference.I-D.{name}.xml")
+        add_bibxml(specification_refs, f"reference.I-D.{name}.xml")
     reference(
-        normative,
+        specification_refs,
         "FIPS204",
         "Module-Lattice-Based Digital Signature Standard",
         "FIPS",
@@ -388,8 +395,13 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
         month="August",
         year="2024",
     )
-    informative = ET.SubElement(back_el, "references")
-    ET.SubElement(informative, "name").text = "Informative References"
+    informative = (
+        specification_refs
+        if category != "std"
+        else ET.SubElement(back_el, "references")
+    )
+    if category == "std":
+        ET.SubElement(informative, "name").text = "Informative References"
     for number in (
         "7942", "8032", "8183", "8608", "9323", "9814", "9909",
     ):
@@ -442,9 +454,16 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
     reference(
         informative,
         "pqc-rpki-lab",
-        "pqc-rpki-lab experimental harness",
+        (
+            "pqc-rpki-lab experimental evidence snapshot"
+            if DOCNAME.endswith("-02")
+            else "pqc-rpki-lab experimental harness"
+        ),
         target=(
-            "https://github.com/marokiki/pqc-rpki-lab/releases/tag/"
+            "https://github.com/marokiki/pqc-rpki-lab/tree/"
+            "0d572a851c29411bda4460e5c76394e6f4ec23c9"
+            if DOCNAME.endswith("-02")
+            else "https://github.com/marokiki/pqc-rpki-lab/releases/tag/"
             f"{DOCNAME}"
         ),
         author_fullname="Tomoki Yoshikawa",
@@ -461,7 +480,7 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--revision", choices=("00", "01"), default="01")
+    parser.add_argument("--revision", choices=("00", "01", "02"), default="02")
     args = parser.parse_args()
     global SOURCE, DOCNAME
     DOCNAME = f"draft-yoshikawa-sidrops-pqc-rpki-{args.revision}"
