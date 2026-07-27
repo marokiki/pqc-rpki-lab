@@ -1,0 +1,50 @@
+{
+  "cases": {
+    "patched_default": {
+      "crl_count": 1,
+      "invalid_certificates": 1,
+      "manifest_count": 1,
+      "rejection": "example.invalid/repository/child.cer: RFC 7935, 3.1 SPKI not RSAPublicKey",
+      "returncode": 0,
+      "vrp_count": 0,
+      "vrps": []
+    },
+    "patched_experimental": {
+      "crl_count": 2,
+      "invalid_certificates": 0,
+      "manifest_count": 2,
+      "rejection": "",
+      "returncode": 0,
+      "vrp_count": 2,
+      "vrps": [
+        {
+          "asn": "AS64496",
+          "max_length": 24,
+          "prefix": "192.0.2.0/24"
+        },
+        {
+          "asn": "AS64496",
+          "max_length": 48,
+          "prefix": "2001:db8::/32"
+        }
+      ]
+    },
+    "unmodified": {
+      "crl_count": 1,
+      "invalid_certificates": 1,
+      "manifest_count": 1,
+      "rejection": "example.invalid/repository/child.cer: RFC 7935, 3.1 SPKI not RSAPublicKey",
+      "returncode": 0,
+      "vrp_count": 0,
+      "vrps": []
+    }
+  },
+  "classification": "small-scale local mixed-tree RP comparison",
+  "policy": {
+    "patched_default": "Current Suite only",
+    "patched_experimental": "Current Suite plus id-MLDSA65-ECDSA-P256-SHA512",
+    "unmodified": "Current Suite only"
+  },
+  "success": true,
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

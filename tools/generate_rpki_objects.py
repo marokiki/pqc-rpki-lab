@@ -7,6 +7,7 @@ import tempfile
 import json
 import base64
 import platform
+import argparse
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -21,8 +22,10 @@ from pqc_rpki_lab.result_io import markdown_table, write_csv, write_json
 from pqc_rpki_lab.rpki_asn1 import OID_CT_MFT, OID_CT_ROA, manifest_econtent, roa_econtent
 
 ROOT = Path(__file__).resolve().parents[1]
+OUTPUT_ROOT = ROOT
 RESULTS = ROOT / "results" / "rpki-objects"
 TESTDATA = ROOT / "testdata"
+CMS_RESULTS = ROOT / "results" / "cms-generation"
 CMS_API_SOURCE = ROOT / "tools" / "cms_api_probe.c"
 BASE_URI = "rsync://example.invalid:8873/repository/"
 
@@ -31,6 +34,12 @@ ALGORITHMS = (
     ("ML-DSA-44", "ml-dsa-44", "ML-DSA-44", []),
     ("ML-DSA-65", "ml-dsa-65", "ML-DSA-65", []),
     ("ML-DSA-87", "ml-dsa-87", "ML-DSA-87", []),
+    (
+        "ML-DSA-65 + ECDSA P-256",
+        "composite-mldsa65-p256",
+        "MLDSA65-ECDSA-P256-SHA512",
+        [],
+    ),
 )
 
 
@@ -126,7 +135,8 @@ def copy_public(path: Path, destination: Path) -> int:
 def openssl_asn1parse(openssl: str, path: Path, out: Path) -> None:
     result = run([openssl, "asn1parse", "-inform", "DER", "-in", str(path)])
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text(result.stdout + result.stderr)
+    text = result.stdout + result.stderr
+    out.write_text("\n".join(line.rstrip() for line in text.splitlines()) + "\n")
 
 
 def extract_ski(openssl: str, certificate: Path) -> bytes:
@@ -234,9 +244,14 @@ def issue_ee(
     der_path = directory / f"{prefix}.cer"
     key_result = run([openssl, "genpkey", "-algorithm", provider_name, *options, "-out", str(key)])
     csr_result = run([openssl, "req", "-new", "-key", str(key), "-subj", f"/CN={common_name}", "-out", str(csr)]) if key_result.returncode == 0 else key_result
+    ca_options = (
+        ["-md", "sha512"]
+        if provider_name == "MLDSA65-ECDSA-P256-SHA512"
+        else []
+    )
     result = run([
         openssl, "ca", "-batch", "-config", str(config), "-extensions", extension,
-        "-in", str(csr), "-out", str(pem),
+        *ca_options, "-in", str(csr), "-out", str(pem),
     ]) if csr_result.returncode == 0 else csr_result
     if result.returncode == 0:
         run([openssl, "x509", "-in", str(pem), "-outform", "DER", "-out", str(der_path)])
@@ -286,10 +301,12 @@ def sign_cms(
     key: Path,
     output: Path,
     econtent_type: str,
+    digest: str,
 ) -> subprocess.CompletedProcess[str]:
     return run([
         openssl, "cms", "-sign", "-binary", "-in", str(content),
         "-signer", str(signer), "-inkey", str(key),
+        "-md", digest,
         "-outform", "DER", "-out", str(output), "-nosmimecap", "-nodetach",
         "-keyid", "-econtent_type", econtent_type,
     ])
@@ -366,7 +383,15 @@ def generate_algorithm(openssl: str, display: str, slug: str, provider_name: str
                 "public_path": "", "reason": reason_for(ee_result, "EE generation failed"),
             })
             return rows
-        crl_result = run([openssl, "ca", "-gencrl", "-config", str(config), "-out", str(crl_pem)])
+        crl_options = (
+            ["-md", "sha512"]
+            if provider_name == "MLDSA65-ECDSA-P256-SHA512"
+            else []
+        )
+        crl_result = run([
+            openssl, "ca", "-gencrl", "-config", str(config),
+            *crl_options, "-out", str(crl_pem),
+        ])
         if crl_result.returncode == 0:
             run([openssl, "crl", "-in", str(crl_pem), "-outform", "DER", "-out", str(crl_der)])
 
@@ -383,7 +408,7 @@ def generate_algorithm(openssl: str, display: str, slug: str, provider_name: str
             rows.append({
                 "algorithm": display, "artifact": artifact, "status": "confirmed",
                 "classification": "public-der-fixture", "bytes": size,
-                "public_path": str(destination.relative_to(ROOT)), "reason": "",
+                "public_path": str(destination.relative_to(OUTPUT_ROOT)), "reason": "",
             })
 
         this_update, next_update = certificate_manifest_times(openssl, mft_pem)
@@ -398,7 +423,7 @@ def generate_algorithm(openssl: str, display: str, slug: str, provider_name: str
             rows.append({
                 "algorithm": display, "artifact": artifact, "status": "confirmed",
                 "classification": "rpki-econtent-der", "bytes": size,
-                "public_path": str(destination.relative_to(ROOT)), "reason": "",
+                "public_path": str(destination.relative_to(OUTPUT_ROOT)), "reason": "",
             })
 
         cms_targets = (
@@ -413,7 +438,10 @@ def generate_algorithm(openssl: str, display: str, slug: str, provider_name: str
                 ], this_update=this_update, next_update=next_update))
                 copy_public(mft_content, artifact_root / mft_content.name)
                 openssl_asn1parse(openssl, artifact_root / mft_content.name, result_root / f"{mft_content.name}.asn1.txt")
-            cms_result = sign_cms(openssl, content, signer_pem, signer_key, cms, oid)
+            cms_digest = "sha256" if slug == "rsa" else "sha512"
+            cms_result = sign_cms(
+                openssl, content, signer_pem, signer_key, cms, oid, cms_digest,
+            )
             if cms_result.returncode == 0:
                 verify_result = verify_cms(openssl, cms, ca_pem, verified)
                 destination = artifact_root / cms.name
@@ -424,7 +452,7 @@ def generate_algorithm(openssl: str, display: str, slug: str, provider_name: str
                     "status": "confirmed" if verify_result.returncode == 0 else "blocked",
                     "classification": "rfc6488-cms-generated",
                     "bytes": size,
-                    "public_path": str(destination.relative_to(ROOT)),
+                    "public_path": str(destination.relative_to(OUTPUT_ROOT)),
                     "reason": "" if verify_result.returncode == 0 else reason_for(verify_result, "CMS verify failed"),
                 })
             else:
@@ -458,14 +486,14 @@ def generate_algorithm(openssl: str, display: str, slug: str, provider_name: str
                         "status": "confirmed" if api_valid or manual_valid else "blocked",
                         "classification": "rfc6488-openssl-api-cms-generated" if api_valid else "rfc6488-manual-cms-generated",
                         "bytes": size,
-                        "public_path": str(destination.relative_to(ROOT)),
+                        "public_path": str(destination.relative_to(OUTPUT_ROOT)),
                         "reason": "" if api_valid or manual_valid else f"API: {api_reason}; manual: {manual_reason}",
                     })
                 else:
                     rows.append({
                         "algorithm": display, "artifact": artifact, "status": "blocked",
                         "classification": "cms-signing-unavailable",
-                        "bytes": "", "public_path": str(log_path.relative_to(ROOT)),
+                        "bytes": "", "public_path": str(log_path.relative_to(OUTPUT_ROOT)),
                         "reason": reason_for(cms_result, "CMS signing failed"),
                     })
         write_validator_repository(openssl, slug, ca_pem, artifact_root)
@@ -473,7 +501,32 @@ def generate_algorithm(openssl: str, display: str, slug: str, provider_name: str
 
 
 def main() -> None:
-    openssl = shutil.which("openssl")
+    global OUTPUT_ROOT, RESULTS, TESTDATA, CMS_RESULTS
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--algorithm",
+        choices=[item[1] for item in ALGORITHMS],
+        help="generate only one algorithm fixture",
+    )
+    parser.add_argument(
+        "--output-root",
+        type=Path,
+        help=(
+            "write results/ and testdata/ below this directory instead of "
+            "modifying the repository fixture set"
+        ),
+    )
+    parser.add_argument(
+        "--openssl",
+        help="OpenSSL executable; defaults to the first openssl on PATH",
+    )
+    args = parser.parse_args()
+    if args.output_root:
+        OUTPUT_ROOT = args.output_root.resolve()
+        RESULTS = OUTPUT_ROOT / "results" / "rpki-objects"
+        TESTDATA = OUTPUT_ROOT / "testdata"
+        CMS_RESULTS = OUTPUT_ROOT / "results" / "cms-generation"
+    openssl = args.openssl or shutil.which("openssl")
     rows: list[dict[str, object]] = []
     if not openssl:
         rows.append({
@@ -482,7 +535,11 @@ def main() -> None:
             "reason": "OpenSSL executable not found",
         })
     else:
-        for display, slug, provider_name, options in ALGORITHMS:
+        selected = (
+            item for item in ALGORITHMS
+            if args.algorithm is None or item[1] == args.algorithm
+        )
+        for display, slug, provider_name, options in selected:
             rows.extend(generate_algorithm(openssl, display, slug, provider_name, options))
     write_csv(RESULTS / "rpki-objects.csv", rows)
     write_json(RESULTS / "rpki-objects.json", {
@@ -492,7 +549,7 @@ def main() -> None:
         "results": rows,
     })
     cms_rows = [row for row in rows if row["algorithm"] == "ML-DSA-65" and row["artifact"] in ("ROA CMS", "Manifest CMS")]
-    write_json(ROOT / "results" / "cms-generation" / "cms-generation.json", {
+    write_json(CMS_RESULTS / "cms-generation.json", {
         "warning": "EXPERIMENTAL / NOT FOR PRODUCTION",
         "timestamp_utc": datetime.now(timezone.utc).isoformat(),
         "platform": platform.platform(),
@@ -502,7 +559,8 @@ def main() -> None:
         "private_keys_persisted": False,
         "results": cms_rows,
     })
-    (ROOT / "results" / "cms-generation" / "cms-generation.md").write_text(
+    CMS_RESULTS.mkdir(parents=True, exist_ok=True)
+    (CMS_RESULTS / "cms-generation.md").write_text(
         "# ML-DSA-65 CMS Generation\n\n> EXPERIMENTAL / NOT FOR PRODUCTION\n\n"
         "OpenSSL 3.6.2 succeeds through `CMS_add1_signer` when SHA-512 is supplied explicitly. "
         "The generated objects pass the internal profile, raw-signature, OpenSSL parser, and OpenSSL CMS verification checks.\n\n"

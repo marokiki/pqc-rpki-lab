@@ -1,0 +1,213 @@
+diff --git a/src/usr.sbin/rpki-client/cert.c b/src/usr.sbin/rpki-client/cert.c
+index a807c022..aa236ab8 100644
+--- a/src/usr.sbin/rpki-client/cert.c
++++ b/src/usr.sbin/rpki-client/cert.c
+@@ -34,6 +34,18 @@ int certid = TALSZ_MAX;
+ 
+ static pthread_rwlock_t	cert_lk = PTHREAD_RWLOCK_INITIALIZER;
+ 
++#define COMPOSITE_MLDSA65_P256_OID "1.3.6.1.5.5.7.6.45"
++
++static int
++cert_is_composite_mldsa65_p256(const ASN1_OBJECT *obj)
++{
++	char oid[64];
++
++	if (OBJ_obj2txt(oid, sizeof(oid), obj, 1) <= 0)
++		return 0;
++	return strcmp(oid, COMPOSITE_MLDSA65_P256_OID) == 0;
++}
++
+ /* Helper to sort a STACK_OF(X509_EXTENSION) by OID. */
+ static int
+ cert_extension_oid_cmp(const X509_EXTENSION *const *a,
+@@ -409,6 +421,23 @@ cert_compliant_ec_key(const char *fn, struct cert *cert)
+ 	return 1;
+ }
+ 
++static int
++cert_compliant_composite_key(const char *fn, struct cert *cert)
++{
++	EVP_PKEY *pkey;
++
++	if ((pkey = X509_get0_pubkey(cert->x509)) == NULL) {
++		warnx("%s: cert without public key", fn);
++		return 0;
++	}
++	if (!EVP_PKEY_is_a(pkey, "MLDSA65-ECDSA-P256-SHA512")) {
++		warnx("%s: Composite SPKI did not decode as the expected suite",
++		    fn);
++		return 0;
++	}
++	return 1;
++}
++
+ static int
+ cert_check_spki(const char *fn, struct cert *cert)
+ {
+@@ -458,6 +487,19 @@ cert_check_spki(const char *fn, struct cert *cert)
+ 			warnx("%s: RFC 7935, 3.1 SPKI not RSAPublicKey", fn);
+ 			goto out;
+ 		}
++		if (cert_is_composite_mldsa65_p256(aobj)) {
++			if (ptype != V_ASN1_UNDEF) {
++				warnx("%s: Composite SPKI parameters MUST be absent",
++				    fn);
++				goto out;
++			}
++			if (!cert_compliant_composite_key(fn, cert))
++				goto out;
++			if (verbose)
++				warnx("%s: Composite ML-DSA-65 + ECDSA P-256 "
++				    "support is experimental", fn);
++			break;
++		}
+ 		/* FALLTHROUGH */
+ 	case CERT_PURPOSE_BGPSEC_ROUTER:
+ 		if (OBJ_obj2nid(aobj) == NID_X9_62_id_ecPublicKey) {
+diff --git a/src/usr.sbin/rpki-client/cms.c b/src/usr.sbin/rpki-client/cms.c
+index 2ff314d1..e76d2fa3 100644
+--- a/src/usr.sbin/rpki-client/cms.c
++++ b/src/usr.sbin/rpki-client/cms.c
+@@ -26,6 +26,18 @@
+ 
+ #include "extern.h"
+ 
++#define COMPOSITE_MLDSA65_P256_OID "1.3.6.1.5.5.7.6.45"
++
++static int
++cms_is_composite_mldsa65_p256(const ASN1_OBJECT *obj)
++{
++	char oid[64];
++
++	if (OBJ_obj2txt(oid, sizeof(oid), obj, 1) <= 0)
++		return 0;
++	return strcmp(oid, COMPOSITE_MLDSA65_P256_OID) == 0;
++}
++
+ static int
+ cms_extract_econtent(const char *fn, CMS_ContentInfo *cms, unsigned char **res,
+     size_t *rsz)
+@@ -186,7 +198,7 @@ cms_parse_validate_internal(struct cert **out_cert, const char *fn, int talid,
+ 	STACK_OF(CMS_SignerInfo)	*sinfos;
+ 	CMS_SignerInfo			*si;
+ 	X509_ALGOR			*pdig, *psig;
+-	int				 nid;
++	int				 digest_nid, nid, ptype;
+ 	int				 rc = 0;
+ 
+ 	assert(*out_cert == NULL);
+@@ -261,17 +273,37 @@ cms_parse_validate_internal(struct cert **out_cert, const char *fn, int talid,
+ 	/* Check digest and signature algorithms (RFC 7935) */
+ 	CMS_SignerInfo_get0_algs(si, NULL, NULL, &pdig, &psig);
+ 
+-	X509_ALGOR_get0(&obj, NULL, NULL, pdig);
+-	nid = OBJ_obj2nid(obj);
+-	if (nid != NID_sha256) {
++	X509_ALGOR_get0(&obj, &ptype, NULL, pdig);
++	digest_nid = OBJ_obj2nid(obj);
++	if (experimental && digest_nid == NID_sha512) {
++		if (ptype != V_ASN1_UNDEF) {
++			warnx("%s: Composite CMS SHA-512 parameters MUST be "
++			    "absent", fn);
++			goto out;
++		}
++	} else if (digest_nid != NID_sha256) {
+ 		warnx("%s: RFC 6488: wrong digest %s, want %s", fn,
+-		    nid2str(nid), LN_sha256);
++		    nid2str(digest_nid), LN_sha256);
+ 		goto out;
+ 	}
+-	X509_ALGOR_get0(&obj, NULL, NULL, psig);
++	X509_ALGOR_get0(&obj, &ptype, NULL, psig);
+ 	nid = OBJ_obj2nid(obj);
+ 	/* RFC7935 last paragraph of section 2 specifies the allowed psig */
+-	if (experimental && nid == NID_ecdsa_with_SHA256) {
++	if (experimental && cms_is_composite_mldsa65_p256(obj)) {
++		if (digest_nid != NID_sha512) {
++			warnx("%s: Composite CMS digest is %s, want %s", fn,
++			    nid2str(digest_nid), LN_sha512);
++			goto out;
++		}
++		if (ptype != V_ASN1_UNDEF) {
++			warnx("%s: Composite CMS signature parameters MUST be "
++			    "absent", fn);
++			goto out;
++		}
++		if (verbose)
++			warnx("%s: Composite ML-DSA-65 + ECDSA P-256 "
++			    "support is experimental", fn);
++	} else if (experimental && nid == NID_ecdsa_with_SHA256) {
+ 		if (verbose)
+ 			warnx("%s: P-256 support is experimental", fn);
+ 	} else if (nid != NID_rsaEncryption &&
+@@ -280,6 +312,12 @@ cms_parse_validate_internal(struct cert **out_cert, const char *fn, int talid,
+ 		    fn, nid2str(nid), LN_rsaEncryption);
+ 		goto out;
+ 	}
++	if (!cms_is_composite_mldsa65_p256(obj) &&
++	    digest_nid != NID_sha256) {
++		warnx("%s: SHA-512 is only accepted with the experimental "
++		    "Composite signature suite", fn);
++		goto out;
++	}
+ 
+ 	/* RFC 6488 section 2.1.3.1: check the object's eContentType. */
+ 
+diff --git a/src/usr.sbin/rpki-client/x509.c b/src/usr.sbin/rpki-client/x509.c
+index 9c024930..2690648d 100644
+--- a/src/usr.sbin/rpki-client/x509.c
++++ b/src/usr.sbin/rpki-client/x509.c
+@@ -29,6 +29,17 @@
+ #include "extern.h"
+ 
+ #define GENTIME_LENGTH 15
++#define COMPOSITE_MLDSA65_P256_OID "1.3.6.1.5.5.7.6.45"
++
++static int
++x509_is_composite_mldsa65_p256(const ASN1_OBJECT *obj)
++{
++	char oid[64];
++
++	if (OBJ_obj2txt(oid, sizeof(oid), obj, 1) <= 0)
++		return 0;
++	return strcmp(oid, COMPOSITE_MLDSA65_P256_OID) == 0;
++}
+ 
+ ASN1_OBJECT	*certpol_oid;	/* id-cp-ipAddr-asNumber cert policy */
+ ASN1_OBJECT	*caissuers_oid;	/* 1.3.6.1.5.5.7.48.2 (caIssuers) */
+@@ -187,6 +198,16 @@ x509_pubkey_get_ski(X509_PUBKEY *pubkey, const char *fn)
+ 
+ 		goto done;
+ 	}
++	if (x509_is_composite_mldsa65_p256(aobj)) {
++		if (ptype != V_ASN1_UNDEF) {
++			warnx("%s: Composite SPKI parameters MUST be absent", fn);
++			return NULL;
++		}
++		if (verbose)
++			warnx("%s: Composite ML-DSA-65 + ECDSA P-256 "
++			    "support is experimental", fn);
++		goto done;
++	}
+ 
+ 	OBJ_obj2txt(buf, sizeof(buf), aobj, 0);
+ 	warnx("%s: unsupported public key type %s", fn, buf);
+@@ -605,6 +626,17 @@ x509_check_tbs_sigalg(const char *fn, const X509_ALGOR *tbsalg)
+ 			warnx("%s: P-256 support is experimental", fn);
+ 		return 1;
+ 	}
++	if (experimental && x509_is_composite_mldsa65_p256(aobj)) {
++		if (ptype != V_ASN1_UNDEF) {
++			warnx("%s: Composite signature parameters MUST be absent",
++			    fn);
++			return 0;
++		}
++		if (verbose)
++			warnx("%s: Composite ML-DSA-65 + ECDSA P-256 "
++			    "support is experimental", fn);
++		return 1;
++	}
+ 
+ 	warnx("%s: RFC 7935: wrong signature algorithm %s, want %s",
+ 	    fn, nid2str(nid), LN_sha256WithRSAEncryption);

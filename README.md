@@ -24,9 +24,11 @@ The comparison covers:
 - ML-DSA-44, ML-DSA-65, and ML-DSA-87
 - SLH-DSA-SHAKE-128s and SLH-DSA-SHAKE-192s
 
-Small-PQ composite suites are size-model candidates, not confirmed
-interoperable algorithms. Falcon, MAYO, SNOVA, and HAWK remain research
-candidates.
+Small-PQ composite suites remain experimental. The repository contains
+raw-construction and size-model results, complete Composite X.509/CMS fixture
+generation, and a patch for one experimentally extended RP. This is a public
+reference experiment, not independent interoperability evidence.
+Falcon, MAYO, SNOVA, and HAWK remain research candidates.
 
 ## Run
 
@@ -133,6 +135,49 @@ and signature concatenation, and all-component verification from
 `draft-ietf-lamps-pq-composite-sigs-19`. It does not implement an RPKI-specific
 X.509/CMS profile or validator interoperability.
 
+The Composite E2E workflow requires the pinned OpenSSL, Composite provider,
+and rpki-client builds below ignored `local/`. Generator, validation, negative
+test, and measurement code is public. Private keys, external checkouts, build
+trees, raw measurements, generated negative fixtures, host configuration, and
+AI working notes stay below `local/`:
+
+`Makefile` defaults to the documented `local/build/` layout and uses the
+public, relocatable `experiments/openssl-composite.cnf`. Override
+`COMPOSITE_OPENSSL`, `COMPOSITE_OPENSSL_LIBDIR`, and
+`COMPOSITE_PROVIDER_MODULE` when using another build layout.
+
+```sh
+make composite-e2e
+make composite-e2e-rp-matrix
+make composite-e2e-negative
+make composite-e2e-benchmark
+```
+
+The E2E benchmark performs 100 complete generation repetitions and 1,000 RP
+validation repetitions per scenario. The separate primitive Composite
+benchmarks use 100,000 sign and verify operations; those counts describe
+different workloads and are not compared as if they were interchangeable.
+
+The E2E target uses id-MLDSA65-ECDSA-P256-SHA512. The mixed-tree transition
+certificate has an RSA signature and Composite SPKI. The child publication
+point contains a Composite CRL, manifest, and ROA. The rpki-client development
+patch remains Current Suite-only by default and enables the Composite suite
+only with its existing experimental option.
+
+The experiment pins OpenSSL 3.6.2 at
+`fe686e15b8d1d907c8801da26330bcf189f63413`, the Composite provider at
+`2263161f998715860df433ad820d7c0f0880c43d`, rpki-client-portable at
+`b7d6e2fc289d69a77cbb2ebd646b3453c7e5e2b7`, and its OpenBSD source at
+`577166e30b2a454faed6b9ac8a9788844174fc43`. Apply the provider integration
+fix and public RP reference patch before building:
+
+```sh
+git -C local/upstream/composite-provider apply \
+  ../../../patches/composite-provider-private-key-decoder.patch
+git -C local/upstream/rpki-client-portable/openbsd apply \
+  ../../../../patches/rpki-client-composite-experimental.patch
+```
+
 Generate the certificate and CRL size evidence, including experimental
 Falcon-512 X.509 encodings, with:
 
@@ -168,23 +213,27 @@ under ignored `local/upstream/`.
 ## Draft
 
 The current published revision is
-`ietf/draft-yoshikawa-sidrops-pqc-rpki-01.md`.  Submission artifacts are:
+`ietf/draft-yoshikawa-sidrops-pqc-rpki-01.md`.  The working revision is
+the Informational experiment report
+`ietf/draft-yoshikawa-sidrops-pqc-rpki-02.md`.  Its generated artifacts are:
 
-- `ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-01.xml`
-- `ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-01.txt`
+- `ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-02.xml`
+- `ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-02.txt`
 
 Generate the standalone XML with:
 
 ```sh
 python3 tools/render_draft_submission.py
-xml2rfc --text ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-01.xml
+xml2rfc --text ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-02.xml
 ```
 
 ## Safety
 
-Do not commit private keys, credentials, production TALs, or operational RPKI
-objects. Object-generation tests use temporary directories and delete their
-keys and generated objects after measurement.
+Do not commit private keys, credentials, production TALs, external checkouts,
+raw E2E measurements, generated negative fixtures, AI working notes, or
+operational RPKI objects. Public reference patches, generators, tests,
+non-secret fixtures, and summarized results are intended to be reviewable.
+Object-generation tests use temporary directories or ignored `local/`.
 
 Before publishing or committing:
 

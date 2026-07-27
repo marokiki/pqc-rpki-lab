@@ -1,0 +1,12 @@
+    0:d=0  hl=3 l= 143 cons: SEQUENCE
+    3:d=1  hl=2 l=   1 prim: INTEGER           :01
+    6:d=1  hl=2 l=  15 prim: GENERALIZEDTIME   :20260727052052Z
+   23:d=1  hl=2 l=  15 prim: GENERALIZEDTIME   :20260728052052Z
+   40:d=1  hl=2 l=   9 prim: OBJECT            :sha256
+   51:d=1  hl=2 l=  93 cons: SEQUENCE
+   53:d=2  hl=2 l=  43 cons: SEQUENCE
+   55:d=3  hl=2 l=   6 prim: IA5STRING         :ca.crl
+   63:d=3  hl=2 l=  33 prim: BIT STRING
+   98:d=2  hl=2 l=  46 cons: SEQUENCE
+  100:d=3  hl=2 l=   9 prim: IA5STRING         :route.roa
+  111:d=3  hl=2 l=  33 prim: BIT STRING

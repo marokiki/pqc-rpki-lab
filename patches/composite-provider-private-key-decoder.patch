@@ -1,0 +1,50 @@
+diff --git a/src/composite_sig_encoding.c b/src/composite_sig_encoding.c
+index 7aa3082..a2408f0 100644
+--- a/src/composite_sig_encoding.c
++++ b/src/composite_sig_encoding.c
+@@ -209,7 +209,7 @@ int composite_sig_privkey_decode(COMPOSITE_KEY *key,
+     if (!mpk) return 0;
+ 
+     EVP_PKEY *tpk = classic_privkey_from_bytes(
+-            key->provctx->libctx, alg->classic_alg,
++            key->provctx->libctx, alg->classic_alg, alg->classic_param,
+             data + mldsa_seed_len, trad_len);
+     if (!tpk) { EVP_PKEY_free(mpk); return 0; }
+ 
+@@ -368,6 +368,7 @@ EVP_PKEY *classic_pubkey_from_bytes(OSSL_LIB_CTX *libctx,
+ 
+ EVP_PKEY *classic_privkey_from_bytes(OSSL_LIB_CTX *libctx,
+                                      const char   *alg_name,
++                                     int           classic_param,
+                                      const unsigned char *data,
+                                      size_t        data_len)
+ {
+@@ -378,9 +379,13 @@ EVP_PKEY *classic_privkey_from_bytes(OSSL_LIB_CTX *libctx,
+     if (strcmp(alg_name, DEFAULT_ED448_NAME) == 0)
+         return EVP_PKEY_new_raw_private_key_ex(libctx, "ED448", NULL,
+                                                 data, data_len);
++    const char *keytype = alg_name;
++    if (classic_param != 0 && classic_param != 2048
++        && classic_param != 3072 && classic_param != 4096)
++        keytype = "EC";
+     OSSL_DECODER_CTX *dctx = OSSL_DECODER_CTX_new_for_pkey(
+-            &pkey, "DER", NULL, NULL,
+-            OSSL_KEYMGMT_SELECT_PRIVATE_KEY, libctx, NULL);
++            &pkey, "DER", "type-specific", keytype,
++            OSSL_KEYMGMT_SELECT_KEYPAIR, libctx, NULL);
+     if (!dctx) return NULL;
+     OSSL_DECODER_from_data(dctx, &data, &data_len);
+     OSSL_DECODER_CTX_free(dctx);
+diff --git a/src/composite_sig_encoding.h b/src/composite_sig_encoding.h
+index 5c002ec..50af19b 100644
+--- a/src/composite_sig_encoding.h
++++ b/src/composite_sig_encoding.h
+@@ -53,7 +53,7 @@ EVP_PKEY *classic_pubkey_from_bytes(OSSL_LIB_CTX *libctx,
+                                     const char *alg_name, int classic_param,
+                                     const unsigned char *data, size_t data_len);
+ EVP_PKEY *classic_privkey_from_bytes(OSSL_LIB_CTX *libctx,
+-                                     const char *alg_name,
++                                     const char *alg_name, int classic_param,
+                                      const unsigned char *data, size_t data_len);
+ 
+ /* Export a COMPOSITE_KEY to OSSL_PARAMs via composite_sig_pubkey/privkey_encode. */

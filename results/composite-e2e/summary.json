@@ -1,0 +1,48 @@
+{
+  "algorithms": {
+    "child.cer": [
+      "Signature Algorithm: sha256WithRSAEncryption",
+      "Public Key Algorithm: MLDSA65-ECDSA-P256-SHA512",
+      "Signature Algorithm: sha256WithRSAEncryption"
+    ],
+    "child.crl": [
+      "Signature Algorithm: MLDSA65-ECDSA-P256-SHA512",
+      "Signature Algorithm: MLDSA65-ECDSA-P256-SHA512"
+    ],
+    "ta.cer": [
+      "Signature Algorithm: sha256WithRSAEncryption",
+      "Public Key Algorithm: rsaEncryption",
+      "Signature Algorithm: sha256WithRSAEncryption"
+    ],
+    "ta.crl": [
+      "Signature Algorithm: sha256WithRSAEncryption",
+      "Signature Algorithm: sha256WithRSAEncryption"
+    ]
+  },
+  "artifacts": {
+    "child.cer": 2926,
+    "child/child.crl": 3543,
+    "child/child.mft": 9787,
+    "child/route.roa": 9665,
+    "ta.cer": 1039,
+    "ta.crl": 411,
+    "ta.mft": 1722
+  },
+  "classification": "small-scale E2E fixture; not a real repository benchmark",
+  "composite_algorithm": "MLDSA65-ECDSA-P256-SHA512",
+  "composite_oid": "1.3.6.1.5.5.7.6.45",
+  "generated_at": "2026-07-27T06:40:41.216040+00:00",
+  "generation_wall_seconds": 0.5766073439990578,
+  "output": "local/e2e/current",
+  "verification": {
+    "child": "OK",
+    "child-mft-ee": "OK",
+    "child.mft": "CMS Verification successful",
+    "roa-ee": "OK",
+    "route.roa": "CMS Verification successful",
+    "ta": "OK",
+    "ta-mft-ee": "OK",
+    "ta.mft": "CMS Verification successful"
+  },
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

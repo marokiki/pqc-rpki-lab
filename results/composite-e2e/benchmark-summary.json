@@ -1,0 +1,260 @@
+{
+  "artifact_sizes_bytes": {
+    "composite-standalone": {
+      "ca.cer": 5926,
+      "ca.crl": 3532,
+      "manifest.ee.cer": 5962,
+      "manifest.mft": 9758,
+      "manifest.mft.econtent": 146,
+      "route.ee.cer": 5945,
+      "route.roa": 9638,
+      "route.roa.econtent": 45
+    },
+    "pure-mldsa65": {
+      "ca.cer": 5793,
+      "ca.crl": 3464,
+      "manifest.ee.cer": 5829,
+      "manifest.mft": 9556,
+      "manifest.mft.econtent": 146,
+      "route.ee.cer": 5811,
+      "route.roa": 9434,
+      "route.roa.econtent": 45
+    },
+    "rsa-baseline": {
+      "ca.cer": 1064,
+      "ca.crl": 415,
+      "manifest.ee.cer": 1100,
+      "manifest.mft": 1743,
+      "manifest.mft.econtent": 146,
+      "route.ee.cer": 1082,
+      "route.roa": 1621,
+      "route.roa.econtent": 45
+    },
+    "rsa-to-composite-mixed": {
+      "child.cer": 2926,
+      "child/child.crl": 3543,
+      "child/child.mft": 9788,
+      "child/route.roa": 9664,
+      "ta.cer": 1039,
+      "ta.crl": 411,
+      "ta.mft": 1722
+    }
+  },
+  "artifact_total_scope": {
+    "rsa-to-composite-mixed": "all seven products across the parent and child publication points",
+    "standalone": "CA certificate, CRL, ROA, and manifest"
+  },
+  "classification": "repeated small-scale E2E measurement; not real-repository, RRDP, or rsync performance",
+  "fixture_lifetime": "Standalone fixtures are generated inside the same benchmark run; the mixed-tree fixture is generated immediately before this target.",
+  "generation": {
+    "composite-standalone": {
+      "artifact_total_bytes": {
+        "max": 28861,
+        "median": 28855.0,
+        "min": 28851,
+        "stdev": 1.6556911340322902
+      },
+      "cpu_seconds": {
+        "max": 0.3851770000000059,
+        "median": 0.35544049999999316,
+        "min": 0.34073899999999924,
+        "stdev": 0.010914744050840553
+      },
+      "max_rss_kib": {
+        "max": 22400,
+        "median": 22272.0,
+        "min": 22272,
+        "stdev": 62.140928135126444
+      },
+      "wall_seconds": {
+        "max": 0.381587969,
+        "median": 0.352252536,
+        "min": 0.33758518,
+        "stdev": 0.010764140408227896
+      }
+    },
+    "pure-mldsa65": {
+      "artifact_total_bytes": {
+        "max": 28247,
+        "median": 28247.0,
+        "min": 28247,
+        "stdev": 0.0
+      },
+      "cpu_seconds": {
+        "max": 0.36572900000000175,
+        "median": 0.33491250000000417,
+        "min": 0.31746099999999977,
+        "stdev": 0.009699650946937791
+      },
+      "max_rss_kib": {
+        "max": 22528,
+        "median": 22400.0,
+        "min": 22268,
+        "stdev": 35.657155344653155
+      },
+      "wall_seconds": {
+        "max": 0.361585918,
+        "median": 0.33095395699999997,
+        "min": 0.314245631,
+        "stdev": 0.009544455296955596
+      }
+    },
+    "rsa-baseline": {
+      "artifact_total_bytes": {
+        "max": 4843,
+        "median": 4843.0,
+        "min": 4843,
+        "stdev": 0.0
+      },
+      "cpu_seconds": {
+        "max": 0.9028880000000001,
+        "median": 0.6190639999999994,
+        "min": 0.4605540000000006,
+        "stdev": 0.09602145844270327
+      },
+      "max_rss_kib": {
+        "max": 22656,
+        "median": 22400.0,
+        "min": 22144,
+        "stdev": 84.17135960513991
+      },
+      "wall_seconds": {
+        "max": 0.851162448,
+        "median": 0.5896292985,
+        "min": 0.441670551,
+        "stdev": 0.08877215158168149
+      }
+    },
+    "rsa-to-composite-mixed": {
+      "artifact_total_bytes": {
+        "max": 29099,
+        "median": 29095.0,
+        "min": 29090,
+        "stdev": 1.542135473355638
+      },
+      "cpu_seconds": {
+        "max": 0.8558510000000012,
+        "median": 0.6436310000000063,
+        "min": 0.49719500000000494,
+        "stdev": 0.07963068957131732
+      },
+      "max_rss_kib": {
+        "max": 21504,
+        "median": 21248.0,
+        "min": 21120,
+        "stdev": 89.1277598493173
+      },
+      "wall_seconds": {
+        "max": 0.82353281,
+        "median": 0.6256520915,
+        "min": 0.486535765,
+        "stdev": 0.07446085573599945
+      }
+    }
+  },
+  "generation_repetitions": 100,
+  "pure_mldsa65_note": "Generated and measured, but rejected by the RP because this experimental patch intentionally enables only the Composite suite.",
+  "timing_method": {
+    "cpu": "RUSAGE_CHILDREN user plus system delta",
+    "max_rss": "GNU time %M for each child process",
+    "wall": "Python time.perf_counter_ns around each child process"
+  },
+  "validation": {
+    "composite-standalone": {
+      "cpu_seconds": {
+        "max": 0.026270999999987055,
+        "median": 0.018816499999982028,
+        "min": 0.016217999999987853,
+        "stdev": 0.0010944961191825767
+      },
+      "max_rss_kib": {
+        "max": 7456,
+        "median": 7424.0,
+        "min": 7296,
+        "stdev": 26.086441659192204
+      },
+      "wall_seconds": {
+        "max": 0.025776544,
+        "median": 0.0186404835,
+        "min": 0.015961386,
+        "stdev": 0.0011176979270358842
+      }
+    },
+    "pure-mldsa65": {
+      "cpu_seconds": {
+        "max": 0.017291999999983432,
+        "median": 0.011959000000004494,
+        "min": 0.009824999999992201,
+        "stdev": 0.0008809079756049135
+      },
+      "max_rss_kib": {
+        "max": 7296,
+        "median": 7296.0,
+        "min": 7040,
+        "stdev": 30.29871964972138
+      },
+      "wall_seconds": {
+        "max": 0.01720468,
+        "median": 0.0116716535,
+        "min": 0.009617276,
+        "stdev": 0.000879979464702756
+      }
+    },
+    "rsa-baseline": {
+      "cpu_seconds": {
+        "max": 0.01858800000000116,
+        "median": 0.013764999999995808,
+        "min": 0.011577000000002613,
+        "stdev": 0.000922402612660854
+      },
+      "max_rss_kib": {
+        "max": 7424,
+        "median": 7424.0,
+        "min": 7168,
+        "stdev": 26.08202845271449
+      },
+      "wall_seconds": {
+        "max": 0.018409856,
+        "median": 0.013513627,
+        "min": 0.011434513,
+        "stdev": 0.0009250805545400138
+      }
+    },
+    "rsa-to-composite-mixed": {
+      "cpu_seconds": {
+        "max": 0.024760999999998035,
+        "median": 0.01949849999999742,
+        "min": 0.016942000000000235,
+        "stdev": 0.001248811409133399
+      },
+      "max_rss_kib": {
+        "max": 7584,
+        "median": 7424.0,
+        "min": 7296,
+        "stdev": 31.52830502925931
+      },
+      "wall_seconds": {
+        "max": 0.025209924,
+        "median": 0.01945324,
+        "min": 0.016770324,
+        "stdev": 0.0012803345160540807
+      }
+    }
+  },
+  "validation_repetitions": 1000,
+  "vrp_counts": {
+    "composite-standalone": [
+      2
+    ],
+    "pure-mldsa65": [
+      0
+    ],
+    "rsa-baseline": [
+      2
+    ],
+    "rsa-to-composite-mixed": [
+      2
+    ]
+  },
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}
