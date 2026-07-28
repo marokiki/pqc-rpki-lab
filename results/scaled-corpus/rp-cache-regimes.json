@@ -1,0 +1,217 @@
+{
+  "all_expected_vrps_observed": true,
+  "classification": "single-parent, single-child local-rsync cache-regime measurement; OS page cache is uncontrolled and rpki-client does not retain a parsed validation cache between processes",
+  "contains_absolute_paths": false,
+  "contains_private_keys": false,
+  "contains_raw_objects": false,
+  "environment": {
+    "cpu_model": "QEMU Virtual CPU version 2.5+",
+    "kernel": "6.8.0-136-generic",
+    "krill_commit": "b2a26cd9f44a385d8a62a0199b082f44e5062039",
+    "logical_cpu_count": 12,
+    "machine": "x86_64",
+    "memory_total_kib": 20478296,
+    "openssl": "OpenSSL 3.6.2 7 Apr 2026 (Library: OpenSSL 3.6.2 7 Apr 2026)",
+    "routinator": "Routinator 0.15.2",
+    "routinator_commit": "0cf9104efa730ebc2de6bbd880e9bcee50de10d9",
+    "rpki_client": "rpki-client-portable 9.8",
+    "system": "Linux"
+  },
+  "regimes": {
+    "fresh_validator_cache": "new RP repository/cache directory for every validation",
+    "one_roa_update": "initial Composite state validated once, then one ROA replaced and the updated state validated",
+    "unchanged_repository_cache": "same repository/cache directory after one unmeasured run"
+  },
+  "repetitions_per_regime": 30,
+  "roa_count": 1000,
+  "routinator": {
+    "fresh_validator_cache": {
+      "max_rss_kib": {
+        "max": 23040,
+        "median": 22704.0,
+        "min": 22324,
+        "samples": 30,
+        "stdev": 150.0504742664488
+      },
+      "system_seconds": {
+        "max": 0.24,
+        "median": 0.20500000000000002,
+        "min": 0.18,
+        "samples": 30,
+        "stdev": 0.01595971941100973
+      },
+      "user_seconds": {
+        "max": 1.9,
+        "median": 1.74,
+        "min": 1.63,
+        "samples": 30,
+        "stdev": 0.0648685673842329
+      },
+      "wall_seconds": {
+        "max": 2.47,
+        "median": 2.26,
+        "min": 2.18,
+        "samples": 30,
+        "stdev": 0.0749873552559087
+      }
+    },
+    "one_roa_update": {
+      "max_rss_kib": {
+        "max": 23032,
+        "median": 22710.0,
+        "min": 22516,
+        "samples": 30,
+        "stdev": 129.52432869595555
+      },
+      "system_seconds": {
+        "max": 0.26,
+        "median": 0.235,
+        "min": 0.21,
+        "samples": 30,
+        "stdev": 0.014307782626184986
+      },
+      "user_seconds": {
+        "max": 1.92,
+        "median": 1.77,
+        "min": 1.68,
+        "samples": 30,
+        "stdev": 0.05076993408402806
+      },
+      "wall_seconds": {
+        "max": 2.47,
+        "median": 2.3,
+        "min": 2.21,
+        "samples": 30,
+        "stdev": 0.05452511811768158
+      }
+    },
+    "unchanged_repository_cache": {
+      "max_rss_kib": {
+        "max": 22512,
+        "median": 22330.0,
+        "min": 21984,
+        "samples": 30,
+        "stdev": 128.25183559440129
+      },
+      "system_seconds": {
+        "max": 0.08,
+        "median": 0.07,
+        "min": 0.06,
+        "samples": 30,
+        "stdev": 0.007396799556440674
+      },
+      "user_seconds": {
+        "max": 1.73,
+        "median": 1.62,
+        "min": 1.57,
+        "samples": 30,
+        "stdev": 0.04924837356553584
+      },
+      "wall_seconds": {
+        "max": 2.11,
+        "median": 1.99,
+        "min": 1.93,
+        "samples": 30,
+        "stdev": 0.05150159019975449
+      }
+    }
+  },
+  "rpki_client": {
+    "fresh_validator_cache": {
+      "max_rss_kib": {
+        "max": 8224,
+        "median": 8192.0,
+        "min": 8064,
+        "samples": 30,
+        "stdev": 33.280141467427
+      },
+      "system_seconds": {
+        "max": 0.06,
+        "median": 0.05,
+        "min": 0.04,
+        "samples": 30,
+        "stdev": 0.0069149180728352065
+      },
+      "user_seconds": {
+        "max": 1.78,
+        "median": 1.5950000000000002,
+        "min": 1.53,
+        "samples": 30,
+        "stdev": 0.06234498016459813
+      },
+      "wall_seconds": {
+        "max": 0.95,
+        "median": 0.86,
+        "min": 0.83,
+        "samples": 30,
+        "stdev": 0.03144782213828773
+      }
+    },
+    "one_roa_update": {
+      "max_rss_kib": {
+        "max": 8192,
+        "median": 8192.0,
+        "min": 8064,
+        "samples": 30,
+        "stdev": 23.369495786887086
+      },
+      "system_seconds": {
+        "max": 0.06,
+        "median": 0.05,
+        "min": 0.04,
+        "samples": 30,
+        "stdev": 0.00739679955644067
+      },
+      "user_seconds": {
+        "max": 1.73,
+        "median": 1.5750000000000002,
+        "min": 1.53,
+        "samples": 30,
+        "stdev": 0.04910228592192646
+      },
+      "wall_seconds": {
+        "max": 0.93,
+        "median": 0.85,
+        "min": 0.83,
+        "samples": 30,
+        "stdev": 0.025063138660994376
+      }
+    },
+    "unchanged_repository_cache": {
+      "max_rss_kib": {
+        "max": 8192,
+        "median": 8192.0,
+        "min": 8064,
+        "samples": 30,
+        "stdev": 23.369495786887086
+      },
+      "system_seconds": {
+        "max": 0.07,
+        "median": 0.05,
+        "min": 0.04,
+        "samples": 30,
+        "stdev": 0.008172001541568767
+      },
+      "user_seconds": {
+        "max": 1.75,
+        "median": 1.585,
+        "min": 1.53,
+        "samples": 30,
+        "stdev": 0.05291068162370481
+      },
+      "wall_seconds": {
+        "max": 0.95,
+        "median": 0.86,
+        "min": 0.82,
+        "samples": 30,
+        "stdev": 0.027934652809480334
+      }
+    }
+  },
+  "update": {
+    "changed_file_count": 3,
+    "initial_changed_bytes": 73160,
+    "updated_changed_bytes": 73204
+  },
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

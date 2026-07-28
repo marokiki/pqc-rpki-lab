@@ -28,6 +28,22 @@ class KrillExperimentalEvidenceTests(unittest.TestCase):
         self.assertEqual(phase["rpki_client_experimental"]["vrps"], expected)
         self.assertEqual(phase["routinator_experimental"]["vrps"], expected)
 
+    def test_one_roa_update_is_validated_before_rollback(self) -> None:
+        phase = self.result["phases"]["composite-updated"]
+        expected = self.result["updated_expected_vrps"]
+        self.assertEqual(expected[0]["prefix"], "192.0.2.0/25")
+        for mode, row in phase.items():
+            status = (
+                "accepted" if mode.endswith("experimental") else "rejected"
+            )
+            self.assertEqual(row["status"], status)
+        self.assertEqual(
+            phase["rpki_client_experimental"]["vrps"], expected
+        )
+        self.assertEqual(
+            phase["routinator_experimental"]["vrps"], expected
+        )
+
     def test_public_evidence_has_no_local_path(self) -> None:
         text = json.dumps(self.result)
         self.assertNotIn("/" + "home" + "/", text)
@@ -42,6 +58,7 @@ class KrillExperimentalEvidenceTests(unittest.TestCase):
         self.assertIn("MlDsa65EcdsaP256Sha512", patch)
         self.assertIn("PQC_RPKI_KRILL_ROA_COUNT", patch)
         self.assertIn("publisher_details", patch)
+        self.assertIn("composite-updated", patch)
 
     def test_scaled_runner_repeats_and_summarizes(self) -> None:
         runner = (

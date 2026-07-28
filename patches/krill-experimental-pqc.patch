@@ -382,10 +382,10 @@ index 79ad6d3..fad7ae3 100644
              revision.next_update,
 diff --git a/tests/functional_pqc_rollover.rs b/tests/functional_pqc_rollover.rs
 new file mode 100644
-index 0000000..0811ca2
+index 0000000..9d091df
 --- /dev/null
 +++ b/tests/functional_pqc_rollover.rs
-@@ -0,0 +1,204 @@
+@@ -0,0 +1,293 @@
 +//! Experimental RSA-parent to Composite-child issuance and rollback test.
 +
 +use std::{fs, io, path::Path};
@@ -503,6 +503,95 @@ index 0000000..0811ca2
 +    )
 +    .await;
 +    write_tal("composite", &server.client().testbed_tal().await.unwrap());
++
++    let publisher = child.convert();
++    let mut composite_files = server
++        .client()
++        .publisher_details(&publisher)
++        .await
++        .unwrap()
++        .current_files
++        .into_iter()
++        .map(|file| (file.uri.to_string(), file.base64.to_bytes()))
++        .collect::<Vec<_>>();
++    composite_files.sort_by(|left, right| left.0.cmp(&right.0));
++    let replacement = common::roa_conf("192.0.2.0/25-25 => 64496");
++    server
++        .client()
++        .roas_update(
++            &child,
++            RoaConfigurationUpdates {
++                added: vec![replacement.clone()],
++                removed: vec![roas[0].payload.clone()],
++            },
++        )
++        .await
++        .unwrap();
++    let mut updated_files = vec![];
++    for _ in 0..1200 {
++        common::sleep_millis(100).await;
++        updated_files = server
++            .client()
++            .publisher_details(&publisher)
++            .await
++            .unwrap()
++            .current_files
++            .into_iter()
++            .map(|file| (file.uri.to_string(), file.base64.to_bytes()))
++            .collect();
++        updated_files.sort_by(|left, right| left.0.cmp(&right.0));
++        if updated_files.len() == roa_count as usize + 2
++            && updated_files != composite_files
++        {
++            break;
++        }
++    }
++    assert_ne!(updated_files, composite_files);
++    common::sleep_millis(2000).await;
++    capture_repository(
++        tempdir.path(),
++        &server,
++        [&parent, &child],
++        "composite-updated",
++    )
++    .await;
++    write_tal(
++        "composite-updated",
++        &server.client().testbed_tal().await.unwrap(),
++    );
++
++    server
++        .client()
++        .roas_update(
++            &child,
++            RoaConfigurationUpdates {
++                added: vec![roas[0].clone()],
++                removed: vec![replacement.payload],
++            },
++        )
++        .await
++        .unwrap();
++    let mut restored_files = vec![];
++    for _ in 0..1200 {
++        common::sleep_millis(100).await;
++        restored_files = server
++            .client()
++            .publisher_details(&publisher)
++            .await
++            .unwrap()
++            .current_files
++            .into_iter()
++            .map(|file| (file.uri.to_string(), file.base64.to_bytes()))
++            .collect();
++        restored_files.sort_by(|left, right| left.0.cmp(&right.0));
++        if restored_files.len() == roa_count as usize + 2
++            && restored_files != updated_files
++        {
++            break;
++        }
++    }
++    assert_ne!(restored_files, updated_files);
++    common::sleep_millis(2000).await;
 +
 +    fs::write(&suite_file, "rsa\n").unwrap();
 +    server.client().ca_init_keyroll(&child).await.unwrap();

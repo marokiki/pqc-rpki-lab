@@ -48,6 +48,46 @@
         ]
       }
     },
+    "composite-updated": {
+      "routinator_default": {
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0,
+        "vrps": []
+      },
+      "routinator_experimental": {
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 1,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 25,
+            "prefix": "192.0.2.0/25"
+          }
+        ]
+      },
+      "rpki_client_default": {
+        "invalid_certificates": 1,
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0,
+        "vrps": []
+      },
+      "rpki_client_experimental": {
+        "invalid_certificates": 0,
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 1,
+        "vrps": [
+          {
+            "asn": "AS64496",
+            "max_length": 25,
+            "prefix": "192.0.2.0/25"
+          }
+        ]
+      }
+    },
     "rollback": {
       "routinator_default": {
         "returncode": 0,
@@ -102,5 +142,12 @@
     }
   },
   "success": true,
+  "updated_expected_vrps": [
+    {
+      "asn": "AS64496",
+      "max_length": 25,
+      "prefix": "192.0.2.0/25"
+    }
+  ],
   "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
 }

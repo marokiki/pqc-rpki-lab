@@ -20,9 +20,15 @@ from pqc_rpki_lab.workspace import reset_generated_directory
 ROOT = Path(__file__).resolve().parents[1]
 
 
-def expected_vrps(count: int) -> list[dict[str, object]]:
+def expected_vrps(
+    count: int, *, first_prefix: str = "192.0.2.0/24"
+) -> list[dict[str, object]]:
     result: list[dict[str, object]] = [
-        {"asn": "AS64496", "prefix": "192.0.2.0/24", "max_length": 24}
+        {
+            "asn": "AS64496",
+            "prefix": first_prefix,
+            "max_length": int(first_prefix.rsplit("/", 1)[1]),
+        }
     ]
     for offset in range(1, count):
         address = ipaddress.IPv6Address((0x20010DB8 << 96) | (offset << 64))
@@ -280,10 +286,20 @@ def main() -> int:
     if args.expected_vrp_count < 1:
         raise SystemExit("--expected-vrp-count must be positive")
     expected = expected_vrps(args.expected_vrp_count)
+    updated_expected = expected_vrps(
+        args.expected_vrp_count, first_prefix="192.0.2.0/25"
+    )
     work = args.work.resolve()
     reset_generated_directory(work, allowed_root=ROOT / "local")
     phases: dict[str, object] = {}
-    for offset, name in enumerate(("composite", "rollback")):
+    phase_names = ["composite"]
+    if (args.krill_output.resolve() / "composite-updated").is_dir():
+        phase_names.append("composite-updated")
+    phase_names.append("rollback")
+    for offset, name in enumerate(phase_names):
+        phase_expected = (
+            updated_expected if name == "composite-updated" else expected
+        )
         fixture = work / name / "fixture"
         prepare_fixture(args.krill_output.resolve() / name, fixture)
         phases[name] = {
@@ -292,14 +308,14 @@ def main() -> int:
                 fixture,
                 work / name / "rpki-client-default",
                 False,
-                expected,
+                phase_expected,
             ),
             "rpki_client_experimental": run_rpki_client(
                 args.rpki_client.resolve(),
                 fixture,
                 work / name / "rpki-client-experimental",
                 True,
-                expected,
+                phase_expected,
             ),
             "routinator_default": run_routinator(
                 args.routinator.resolve(),
@@ -307,7 +323,7 @@ def main() -> int:
                 work / name / "routinator-default",
                 False,
                 args.port + offset,
-                expected,
+                phase_expected,
             ),
             "routinator_experimental": run_routinator(
                 args.routinator.resolve(),
@@ -315,11 +331,16 @@ def main() -> int:
                 work / name / "routinator-experimental",
                 True,
                 args.port + offset,
-                expected,
+                phase_expected,
             ),
         }
     success = all(
-        result["status"] == ("rejected" if name == "composite" and mode.endswith("default") else "accepted")
+        result["status"]
+        == (
+            "rejected"
+            if name.startswith("composite") and mode.endswith("default")
+            else "accepted"
+        )
         for name, phase in phases.items()
         for mode, result in phase.items()
     )
@@ -330,6 +351,7 @@ def main() -> int:
             "isolated local rsync; not a production deployment"
         ),
         "expected_vrps": expected,
+        "updated_expected_vrps": updated_expected,
         "phases": phases,
         "success": success,
     }
