@@ -16,16 +16,11 @@
 | SNOVA-(24,5,4) | optional | 1 | 1016 | 248 | NIST Additional Signatures Round 3 (2026) |
 | HAWK-512 | optional | 1 | 1024 | 555 | NIST Additional Signatures Round 3 (2026) |
 | RSA-2048+ML-DSA-44 | composite-candidate | hybrid | 1582 | 2676 | draft-ietf-lamps-pq-composite-sigs |
-| P-256+ML-DSA-44 | composite-candidate | hybrid | 1377 | 2492 | draft-ietf-lamps-pq-composite-sigs |
+| P-256+ML-DSA-44 | composite-candidate | hybrid | 1377 | 2492 | draft-ietf-lamps-pq-composite-sigs-19 |
+| RSA-2048+ML-DSA-65 | composite-candidate | hybrid | 2222 | 3565 | draft-ietf-lamps-pq-composite-sigs |
+| P-256+ML-DSA-65 | composite-candidate | hybrid | 2017 | 3381 | draft-ietf-lamps-pq-composite-sigs-19 |
+| RSA-2048+ML-DSA-87 | composite-candidate | hybrid | 2862 | 4883 | draft-ietf-lamps-pq-composite-sigs |
+| P-384+ML-DSA-87 | composite-candidate | hybrid | 2689 | 4731 | draft-ietf-lamps-pq-composite-sigs-19 |
 | P-256+Falcon-512 | composite-candidate | hybrid | 962 | 738 | draft-ietf-lamps-pq-composite-sigs; FN-DSA pending |
 
-P-256 and Ed25519 are compact classical counterfactuals, not current RFC 6488
-profile algorithms. ML-DSA-65 is the current primary experiment. ML-DSA-44
-remains measured while its profile role is reconsidered alongside small-PQ
-composite suites. ML-DSA-87 is the high-assurance comparison. SLH-DSA remains
-a crypto-diversity candidate with significant size and signing-cost concerns.
-Draft-19 raw Composite variants are measured, and
-id-MLDSA65-ECDSA-P256-SHA512 has complete experimental X.509/CMS/RPKI objects
-accepted by one patched RP. Repository-scale ratios remain estimates and
-independent interoperability remains open. Falcon, MAYO, SNOVA, and HAWK
-remain research candidates.
+P-256 and Ed25519 are compact classical counterfactuals, not current RFC 6488 profile algorithms. ML-DSA-65 is the current primary experiment. ML-DSA-44 remains measured while its profile role is reconsidered alongside small-PQ composite suites. ML-DSA-87 is the high-assurance comparison. SLH-DSA remains a crypto-diversity candidate with significant size and signing-cost concerns. The selected ML-DSA-65 + P-256 Composite suite has measured X.509/CMS and experimental two-RP evidence; other Composite combinations remain estimates. Falcon, MAYO, SNOVA, and HAWK remain research candidates.

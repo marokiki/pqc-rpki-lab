@@ -27,8 +27,9 @@ The comparison covers:
 
 Small-PQ composite suites remain experimental. The repository contains
 raw-construction and size-model results, complete Composite X.509/CMS fixture
-generation, and a patch for one experimentally extended RP. This is a public
-reference experiment, not independent interoperability evidence.
+generation, experimental patches for rpki-client, Routinator/rpki-rs, and
+Krill, and sanitized CA/RP lifecycle measurements. This is a public reference
+experiment, not independent cryptographic interoperability evidence.
 Falcon, MAYO, SNOVA, and HAWK remain research candidates.
 
 ## Run
@@ -89,8 +90,13 @@ in the same directory are generated views. The principal outputs are:
 - `results/validator-probe/container-matrix.json`
 - `results/mixed-tree/mixed-tree.json`
 - `results/ccr-comparison/ccr-comparison.json`
+- `results/ccr-comparison/rp-produced-state-hashes.json`
 - `results/routinator-krill/extension-map.json`
 - `results/routinator-krill/interop-matrix.json`
+- `results/composite-e2e/operational-negative-summary.json`
+- `results/scaled-corpus/krill-repeated-summary.json`
+- `results/scaled-corpus/topology-pilot-summary.json`
+- `results/scaled-corpus/rp-cache-regimes.json`
 - `results/report.json`
 
 Core primitive timings are end-to-end OpenSSL CLI wall-clock measurements.
@@ -161,6 +167,14 @@ benchmarks use 100,000 sign and verify operations; those counts describe
 different workloads and are not compared as if they were interchangeable.
 The key-generation target uses 1,000 fresh `openssl genpkey` subprocesses per
 algorithm and records raw samples only below `local/`.
+
+The Krill scale campaign is separate from that fixed fixture benchmark. It
+uses 30 generation repetitions at 1, 10, and 100 ROAs, 10 generation
+repetitions at 1,000 ROAs, and 100 fresh-cache validation-matrix repetitions
+per size. A separate 1,000-ROA cache-regime run measures fresh state,
+unchanged repository state, and a one-ROA update 30 times for each RP. These
+are single-parent, single-child local-rsync measurements; OS page cache is
+uncontrolled and they are not global-repository or network benchmarks.
 
 The E2E targets use pure ML-DSA-65 and
 id-MLDSA65-ECDSA-P256-SHA512, OID `1.3.6.1.5.5.7.6.45`. The
@@ -282,8 +296,11 @@ the complete pure ML-DSA-65 repository only in experimental mode.
 `results/object-benchmarks/` is an object-payload benchmark. It measures
 deterministic synthetic Manifest file-list construction and hashing, not
 complete RFC 6488 CMS generation. `results/mixed-tree/` is a public synthetic
-model for CA-boundary algorithm transition. `results/ccr-comparison/` is a
-local canonical-hash interim workflow and is not CCR `ROAPayloadState.hash`.
+model for CA-boundary algorithm transition. The older
+`results/ccr-comparison/ccr-comparison.json` is a local canonical-hash interim
+workflow. `results/ccr-comparison/rp-produced-state-hashes.json` parses real
+rpki-client CCR DER, recomputes the embedded collection hashes, and compares
+`ROAPayloadState`, `ManifestState`, and `TrustAnchorState` separately.
 `results/rpki-objects/` records public DER fixtures: RSA and ML-DSA-65 `.mft`
 and `.roa` CMS objects, ML-DSA-44/65/87 certificates and CRLs, and ML-DSA
 eContent. `results/local-validation/` records OpenSSL DER/CMS round trips, EE
@@ -293,12 +310,20 @@ synthetic configurable key-roll model.
 `results/composite-e2e/routinator-matrix.json` and
 `routinator-negative-summary.json` record the second-RP E2E result.
 `results/composite-e2e/krill-rollover.json` records the Krill-issued
-Composite publication and RSA rollback result. This is a small, isolated
-local-rsync CA experiment, not a production deployment or repository-scale
-measurement. `results/scaled-corpus/public-cache-profile.json` records the
-aggregate-only public-cache profile, and
+Composite publication, one-ROA update, and RSA rollback result.
+`results/composite-e2e/operational-negative-summary.json` records seven
+expired, revoked, stale, and missing-publication failures in both RPs.
+`results/scaled-corpus/public-cache-profile.json` records the
+aggregate-only public-cache profile,
 `results/scaled-corpus/krill-scaled-summary.json` records the 1,000-ROA
-Composite issuance/validation and RSA rollback result.
+Composite issuance/validation and RSA rollback result, and
+`results/scaled-corpus/krill-repeated-summary.json` records the repeated scale
+campaign. `results/scaled-corpus/topology-pilot-summary.json` records 100
+Composite child CAs and publication points plus branch-isolation validation.
+`results/scaled-corpus/rp-cache-regimes.json` records fresh, unchanged, and
+one-ROA-update validation timings. These remain isolated local-rsync
+experiments, not production deployments or full public-repository
+benchmarks.
 `results/routinator-krill/` retains the earlier extension map
 and source scan. Configure external inputs with
 `PQC_RPKI_ROUTINATOR_SRC`, `PQC_RPKI_KRILL_SRC`,

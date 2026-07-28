@@ -44,6 +44,10 @@ def main() -> None:
         for row in objects
     ) else "unsupported"
     real_status = real_repository[0].get("status", "skipped") if real_repository else "skipped"
+    composite_result = RESULTS / "composite-e2e" / "rp-validation-matrix.json"
+    routinator_result = RESULTS / "composite-e2e" / "routinator-matrix.json"
+    krill_result = RESULTS / "composite-e2e" / "krill-rollover.json"
+    ccr_result = RESULTS / "ccr-comparison" / "rp-produced-state-hashes.json"
 
     capability = [
         {"component": "Static algorithm metadata", "status": "confirmed", "backend": "Python standard library", "notes": "Profile role and comparison scope are recorded separately"},
@@ -54,7 +58,8 @@ def main() -> None:
         {"component": "Validator wrappers", "status": "confirmed", "backend": "existing executables", "notes": "Version-only, no network"},
         {"component": "RFC-profiled PQC X.509/CRL generation", "status": object_status, "backend": "OpenSSL 3", "notes": "Temporary keys only; RFC 3779 extensions included"},
         {"component": "PQC CMS SignedData generation", "status": cms_status, "backend": "OpenSSL 3 CMS CLI", "notes": "Failure reason recorded in object-generation results"},
-        {"component": "PQC RPKI interoperability", "status": "future work", "backend": "existing validators", "notes": "No complete RFC 6488 PQC object tested"},
+        {"component": "Experimental PQC RPKI E2E", "status": "confirmed" if composite_result.exists() else "future work", "backend": "rpki-client and Routinator with OpenSSL provider", "notes": "Pure ML-DSA-65, Composite, and mixed-tree fixtures; shared cryptographic backend"},
+        {"component": "Experimental CA lifecycle", "status": "confirmed" if krill_result.exists() else "future work", "backend": "Krill with OpenSSL provider", "notes": "Composite issuance, one-ROA update, and RSA rollback in an isolated testbed"},
     ]
     write("results/capability-matrix.md", "# Capability Matrix\n\n> EXPERIMENTAL / NOT FOR PRODUCTION\n\n" +
           markdown_table(capability, [("component", "Component"), ("status", "Status"), ("backend", "Backend"), ("notes", "Notes")]))
@@ -68,19 +73,30 @@ def main() -> None:
           "\n\nP-256 and Ed25519 are compact classical counterfactuals, not current RFC 6488 profile algorithms. "
           "ML-DSA-65 is the current primary experiment. ML-DSA-44 remains measured while its profile role is reconsidered alongside small-PQ composite suites. ML-DSA-87 is the high-assurance comparison. "
           "SLH-DSA remains a crypto-diversity candidate with significant size and signing-cost concerns. "
-          "Composite sizes are estimates until RPKI-specific X.509/CMS and validator evidence exists. Falcon, MAYO, SNOVA, and HAWK remain research candidates.")
+          "The selected ML-DSA-65 + P-256 Composite suite has measured X.509/CMS and experimental two-RP evidence; other Composite combinations remain estimates. Falcon, MAYO, SNOVA, and HAWK remain research candidates.")
 
     write("docs/existing-implementations.md", """# Existing Implementations
 
 | Layer | Preferred implementation | Current use |
 |---|---|---|
 | PQC primitives | liboqs / oqs-python | Conditional benchmark |
-| Provider/PKIX/CMS | OpenSSL 3 / oqs-provider | Future object experiments |
-| CA/publication | Krill | Future isolated repository |
-| Validation | Routinator, rpki-client, FORT | Version/capability probes |
+| Provider/PKIX/CMS | OpenSSL 3 default and Composite providers | ML-DSA and Composite certificates, CRLs, CMS signing, and local verification |
+| CA/publication | Experimental Krill 0.16.0 patch | Isolated RSA-parent to Composite-child issuance, publication, one-ROA update, and RSA rollback |
+| Validation | Routinator, rpki-client, FORT | Unmodified rejection probes plus experimental rpki-client and Routinator E2E paths |
 | Router consumers | BIRD/OpenBGPD | VRP consumers only |
 
-The default run performs no network access and never uses production TALs or credentials. Do not reimplement ML-DSA, SLH-DSA, ASN.1 DER, X.509 path validation, CMS SignedData, RRDP, rsync, or RTR from scratch.""")
+The default run performs no network access and never uses production TALs or
+credentials. Cryptographic primitives and X.509 generation/verification stay
+in OpenSSL. The small CMS DER assembler is an encoding reference and
+cross-check, not a replacement cryptographic or path-validation implementation.
+RRDP, rsync, and RTR are not reimplemented. The experimental RP patches change
+algorithm policy and delegate cryptography to OpenSSL; they are not new
+validator implementations.
+
+Routinator and Krill experiments are opt-in. Suggested local upstream
+checkouts live under ignored `local/upstream/`; upstream source, keys, raw
+measurements, and CA state stay local while reproducible public-safe patches
+and sanitized results are stored in tracked paths.""")
 
     write("docs/measurement-methodology.md", """# Measurement Methodology
 
@@ -90,7 +106,7 @@ Optional algorithms use oqs-python/liboqs when available. Those measurements are
 
 Repository impact applies standardized or candidate parameter sizes to a documented synthetic corpus. Composite rows add component sizes and exclude composite ASN.1 overhead. They are estimates, not measured objects.
 
-VRP-set equality excludes trust-anchor and source attribution. When CCR output is available, compare `ROAPayloadState.hash` and decode `rps` only when hashes differ. The current helper hashes canonical JSON and is explicitly not a CCR DER implementation. Trust-anchor and source attribution are reported separately.
+VRP-set equality excludes trust-anchor and source attribution. The original helper hashes canonical JSON and is explicitly not a CCR DER implementation. A separate rpki-client CCR workflow parses real DER, recomputes `ROAPayloadState`, `ManifestState`, and `TrustAnchorState`, and reports them separately. It does not provide a second independent CCR-producing RP.
 
 Bulk signing uses `openssl speed`, which keeps provider and process startup outside the timed loop. Its 100,000-manifest and key-roll values are signing-only lower bounds, not complete object-generation measurements. CSV/JSON contain backend, timing scope, comparability group, and status fields and are the primary evidence.
 
@@ -98,7 +114,19 @@ The exact-count benchmark is a separate manual phase. It generates one key pair 
 
 The composite-component benchmark signs the same message with both named components sequentially and accepts a verification only when both component signatures verify. OpenSSL EVP provides RSA, P-256, and ML-DSA; pinned liboqs provides Falcon-512. The measurement excludes composite OIDs, ASN.1 encoding, domain separation, CMS/X.509 processing, and HSM behavior, so it MUST NOT be described as LAMPS composite interoperability.
 
-Current repository-impact data is `estimated`, not proof of global deployability. Before increasing normative language in the Internet-Draft, calibrate the estimator with a local RPKI cache supplied through `PQC_RPKI_CACHE` and produce real-cache projections.""")
+Current repository-impact data is `estimated`, not proof of global
+deployability. A 2026-07-27 aggregate profile covers one Routinator RRDP-only
+cache: 550,210 current objects, 54,960 publication points, and 980,019
+validated VRPs. ARIN was unavailable. No source objects or local paths are
+published, and the single snapshot does not measure churn.
+
+The controlled Krill campaign measures one child publication point at 1, 10,
+100, and 1,000 ROAs. Generation is repeated 30 times through 100 ROAs and 10
+times at 1,000; the eight-mode fresh-cache validation matrix is repeated 100
+times per size. A separate 1,000-ROA run measures fresh, unchanged, and
+one-ROA-update states 30 times per RP. A synthetic topology pilot validates
+100 child CAs and publication points. These are local-rsync experiments with
+uncontrolled OS page cache, not global-repository or network benchmarks.""")
 
     write("docs/research-questions.md", """# Research Questions
 
@@ -148,27 +176,58 @@ This note is maintained in the style of an RFC 7942 implementation-status sectio
 | Synthetic repository estimator | implemented | `results/repository-impact.*` |
 | Migration scenario scaffold | implemented | `results/migration-scenarios.*` |
 | VRP equivalence fixture checker | implemented | `tools/vrp_equivalence.py`, tests |
-| Validator probing | partial | installed validators: {", ".join(installed) or "none"}; unavailable: {", ".join(unsupported) or "none"} |
-| Real cache measurement | input-dependent | requires `PQC_RPKI_CACHE` |
+| Validator probing | implemented baseline | `results/validator-probe/` |
+| Real cache profile | one aggregate snapshot | 550,210 objects across 54,960 publication points; ARIN unavailable; no source objects published |
 | RFC-profiled PQC CA/EE certificates and CRLs | {object_status} | `results/object-generation-feasibility.*` |
-| PQC CMS SignedData, MFT, and ROA | {cms_status} | OpenSSL CMS failure and dependency classification recorded |
-| Multi-validator PQC object validation | not implemented | depends on generated objects |
+| Pure ML-DSA-65 CMS SignedData, MFT, and ROA | implemented | `testdata/ml-dsa-65/`, `results/rpki-objects/` |
+| Composite CMS SignedData, MFT, and ROA | implemented | `testdata/composite-mldsa65-p256/`, `results/composite-e2e/` |
+| Experimental rpki-client validation | {"implemented" if composite_result.exists() else "not implemented"} | pure ML-DSA-65, Composite standalone, and mixed-tree fixtures |
+| Experimental Routinator validation | {"implemented" if routinator_result.exists() else "not implemented"} | second RP processing path; all four scenarios and 15 negative cases |
+| Operational negative validation | implemented | seven expired, revoked, stale, and missing-publication cases in both RPs |
+| Experimental Krill lifecycle | {"implemented" if krill_result.exists() else "not implemented"} | Composite issuance, publication, one-ROA update, and RSA rollback |
+| Repeated scaled Krill validation | implemented through 1,000 ROAs | `results/scaled-corpus/krill-repeated-summary.json` |
+| Multi-publication-point topology | implemented at 100 child CAs | `results/scaled-corpus/topology-pilot-summary.json` |
+| RP cache regimes | implemented at 1,000 ROAs | 30 fresh, unchanged, and one-ROA-update repetitions per RP |
+| RP-produced CCR state comparison | {"implemented" if ccr_result.exists() else "not implemented"} | actual DER hashes from rpki-client CCR output |
+| Independent cryptographic implementation | not implemented | generator, both RPs, and Krill share one OpenSSL/Composite provider |
 
-Current repository-size results are synthetic or literature-calibrated estimates. ML-DSA certificates and CRLs were generated with OpenSSL, but MFT/ROA generation remains blocked at the CMS/payload-generator layer. No independent validator has accepted a PQC RPKI object in this repository.""")
+Public-cache topology is aggregate-only, and controlled scale runs do not
+represent production repository or network performance. Complete pure
+ML-DSA-65 and selected Composite objects are accepted by experimental
+rpki-client and Routinator paths. Krill exercises issuance, update,
+publication, and rollback. Both RPs and Krill share the same OpenSSL/provider
+backend, so the result is not independent cryptographic interoperability
+evidence.""")
 
     write("ietf/interoperability-report.md", """# Interoperability Report
 
 > EXPERIMENTAL / NOT FOR PRODUCTION
 
-OpenSSL generated ML-DSA resource-profile CA certificates, EE certificates, and CRLs. OpenSSL CMS rejected ML-DSA signing with `CMS_add1_signer:no default digest`; therefore MFT and ROA generation did not proceed. Existing validator executables are probed without network access.
+OpenSSL 3.6.2 generated ML-DSA resource-profile CA certificates, EE
+certificates, and CRLs. The generic CMS CLI still reports
+`CMS_add1_signer:no default digest`, while the CMS API succeeds when SHA-512
+is supplied explicitly. Complete pure ML-DSA-65 Manifests and ROAs are
+generated through that explicit API path and cross-checked against a small DER
+encoding reference. The selected ML-DSA-65 + P-256 Composite suite also
+produces complete CA/EE certificates, CRLs, Manifests, and ROAs.
 
-Required next phases:
+Pinned unmodified Routinator, rpki-client, and FORT accept RSA and reject the
+experimental suites. Experimental rpki-client and Routinator paths accept
+RSA, pure ML-DSA-65, Composite standalone, and RSA-to-Composite mixed trees
+with equal VRP sets. The RP processing paths are distinct, but their
+cryptographic operations share the same OpenSSL/provider backend.
 
-1. RSA baseline fixture accepted by Routinator, rpki-client, and FORT.
-2. ML-DSA-65 fixture generated with RFC 9881/RFC 9882 encodings.
-3. Validator behavior recorded for unknown/unsupported PQC algorithms.
-4. VRP equivalence checked between RSA and PQC-equivalent branches.
-5. Negative tests for inconsistent ROA, stale manifest, expired EE certificate, missing CRL, and invalid signedAttrs.""")
+Both RPs reject 15 cryptographic/profile negative cases and seven operational
+repository failures. The latter cover expired or revoked objects, stale
+CRL/Manifest state, and missing publication objects. A 100-child topology
+pilot retains 99 VRPs after one publication branch is removed.
+
+Experimental Krill issues a Composite child, publishes its CRL, Manifest, and
+ROAs, replaces one ROA, and rolls the child back to RSA. Repeated controlled
+measurements extend through 1,000 ROAs and compare fresh, unchanged, and
+one-ROA-update RP states. These local-rsync results do not establish
+independent cryptographic interoperability, production protocol operation,
+or global-repository performance.""")
 
 
 if __name__ == "__main__":

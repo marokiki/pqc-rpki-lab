@@ -6,7 +6,7 @@ Optional algorithms use oqs-python/liboqs when available. Those measurements are
 
 Repository impact applies standardized or candidate parameter sizes to a documented synthetic corpus. Composite rows add component sizes and exclude composite ASN.1 overhead. They are estimates, not measured objects.
 
-VRP-set equality excludes trust-anchor and source attribution. When CCR output is available, compare `ROAPayloadState.hash` and decode `rps` only when hashes differ. The current helper hashes canonical JSON and is explicitly not a CCR DER implementation. Trust-anchor and source attribution are reported separately.
+VRP-set equality excludes trust-anchor and source attribution. The original helper hashes canonical JSON and is explicitly not a CCR DER implementation. A separate rpki-client CCR workflow parses real DER, recomputes `ROAPayloadState`, `ManifestState`, and `TrustAnchorState`, and reports them separately. It does not provide a second independent CCR-producing RP.
 
 Bulk signing uses `openssl speed`, which keeps provider and process startup outside the timed loop. Its 100,000-manifest and key-roll values are signing-only lower bounds, not complete object-generation measurements. CSV/JSON contain backend, timing scope, comparability group, and status fields and are the primary evidence.
 
@@ -14,20 +14,16 @@ The exact-count benchmark is a separate manual phase. It generates one key pair 
 
 The composite-component benchmark signs the same message with both named components sequentially and accepts a verification only when both component signatures verify. OpenSSL EVP provides RSA, P-256, and ML-DSA; pinned liboqs provides Falcon-512. The measurement excludes composite OIDs, ASN.1 encoding, domain separation, CMS/X.509 processing, and HSM behavior, so it MUST NOT be described as LAMPS composite interoperability.
 
-Current repository-impact data is `estimated`, not proof of global deployability. Before increasing normative language in the Internet-Draft, calibrate the estimator with a local RPKI cache supplied through `PQC_RPKI_CACHE` and produce real-cache projections.
+Current repository-impact data is `estimated`, not proof of global
+deployability. A 2026-07-27 aggregate profile covers one Routinator RRDP-only
+cache: 550,210 current objects, 54,960 publication points, and 980,019
+validated VRPs. ARIN was unavailable. No source objects or local paths are
+published, and the single snapshot does not measure churn.
 
-The 2026-07-27 calibration adds an aggregate profile of one Routinator
-RRDP-only cache: 550,210 current objects, 54,960 publication points, and
-980,019 validated VRPs. The ARIN trust anchor was unavailable. The profile
-retains object counts and byte distributions, but not source objects or local
-paths. It is a single snapshot and therefore does not measure churn, warm
-validation, or incremental RRDP behavior.
-
-A separate Krill experiment scales one child publication point to 1,000 ROAs.
-It measures object generation, captured rsync/RRDP bytes, and one full
-validation attempt. Generation and RSA rollback succeeded; scaled Composite
-validation also produced the expected 1,000 VRPs in both experimental RPs.
-This is a correctness result, not a throughput benchmark. The existing 1,000
-repeated small-fixture RP runs remain the E2E
-timing evidence, while 100,000 repetitions remain limited to short
-cryptographic primitives.
+The controlled Krill campaign measures one child publication point at 1, 10,
+100, and 1,000 ROAs. Generation is repeated 30 times through 100 ROAs and 10
+times at 1,000; the eight-mode fresh-cache validation matrix is repeated 100
+times per size. A separate 1,000-ROA run measures fresh, unchanged, and
+one-ROA-update states 30 times per RP. A synthetic topology pilot validates
+100 child CAs and publication points. These are local-rsync experiments with
+uncontrolled OS page cache, not global-repository or network benchmarks.

@@ -35,18 +35,18 @@
     },
     {
       "expected_vrp_relation": "equivalent",
-      "observation": "Legacy validators reject or ignore branch",
+      "observation": "Both experimental RPs validate pure ML-DSA-65; legacy RPs reject it",
       "scenario": "PQC only",
       "scenario_id": "pqc-only",
-      "status": "future work",
+      "status": "confirmed experimentally",
       "validator_population": "PQC-capable only"
     },
     {
-      "expected_vrp_relation": "blocked",
-      "observation": "Algorithm suite mismatch can break path validation",
-      "scenario": "Partial parent/child migration",
+      "expected_vrp_relation": "equivalent",
+      "observation": "Both experimental RPs validate the mixed tree; default modes reject the child",
+      "scenario": "RSA parent to Composite child",
       "scenario_id": "partial-hierarchy",
-      "status": "estimated",
+      "status": "confirmed experimentally",
       "validator_population": "policy-dependent"
     },
     {

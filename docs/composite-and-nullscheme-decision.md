@@ -43,8 +43,11 @@ questions:
 
 Raw measurements are in `results/draft-composite-2026-07/`; complete object,
 RP, negative-test, and E2E results are in `results/composite-e2e/`. Decision
-status remains `experimental`; independent cryptographic implementation and
-repository-scale operational evidence remain future work.
+status remains `experimental`. Controlled evidence now includes repeated
+1,000-ROA issuance/validation, a 100-publication-point topology pilot, and a
+one-ROA update. Independent cryptographic implementation, public-topology
+re-signing, production RRDP/rsync behavior, and longitudinal repository-scale
+operation remain future work.
 
 ## Null Scheme track
 
