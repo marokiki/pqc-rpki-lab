@@ -6,10 +6,13 @@ BUILD="$ROOT/local/build"
 KRILL="$ROOT/local/upstream/krill"
 COUNT="${PQC_RPKI_KRILL_ROA_COUNT:-1000}"
 REPETITIONS="${PQC_RPKI_KRILL_RELIABILITY_REPETITIONS:-10}"
-BASE="$ROOT/local/krill-scaled/verified-${COUNT}"
+RUN_ID="${PQC_RPKI_KRILL_RUN_ID:-verified-${COUNT}}"
+RUN_RELIABILITY="${PQC_RPKI_KRILL_RUN_RELIABILITY:-1}"
+BASE="$ROOT/local/krill-scaled/$RUN_ID"
 OUTPUT="$BASE/repository"
 SUITE_FILE="$BASE/suite"
 RELIABILITY="$ROOT/local/krill-reliability"
+SUMMARY_OUTPUT="${PQC_RPKI_KRILL_SUMMARY_OUTPUT:-$ROOT/results/scaled-corpus/krill-scaled-summary.json}"
 CARGO="$BUILD/cargo-home/bin/cargo"
 OPENSSL="$BUILD/openssl-3.6.2-install/bin/openssl"
 RPKI_CLIENT="$BUILD/rpki-client-composite/src/rpki-client"
@@ -21,6 +24,19 @@ case "$COUNT:$REPETITIONS" in
     exit 2
     ;;
 esac
+case "$RUN_RELIABILITY" in
+  0|1) ;;
+  *)
+    echo "PQC_RPKI_KRILL_RUN_RELIABILITY must be 0 or 1" >&2
+    exit 2
+    ;;
+esac
+case "$RUN_ID" in
+  ""|*[!A-Za-z0-9._-]*)
+    echo "PQC_RPKI_KRILL_RUN_ID contains unsafe characters" >&2
+    exit 2
+    ;;
+esac
 
 for path in "$CARGO" "$OPENSSL" "$RPKI_CLIENT" "$ROUTINATOR"; do
   test -x "$path" || {
@@ -29,7 +45,7 @@ for path in "$CARGO" "$OPENSSL" "$RPKI_CLIENT" "$ROUTINATOR"; do
   }
 done
 
-python3 - "$BASE" "$RELIABILITY" <<'PY'
+python3 - "$BASE" <<'PY'
 import shutil
 import sys
 from pathlib import Path
@@ -41,16 +57,33 @@ for raw in sys.argv[1:]:
     target.mkdir(parents=True)
 PY
 
-for iteration in $(seq 1 "$REPETITIONS"); do
-  if env -u PQC_RPKI_KRILL_ROA_COUNT \
-      "$ROOT/tools/run_krill_experimental.sh" \
-      >"$RELIABILITY/run-${iteration}.log" 2>&1; then
-    printf '%s\tpass\n' "$iteration" >>"$RELIABILITY/results.tsv"
-  else
-    printf '%s\tfail\n' "$iteration" >>"$RELIABILITY/results.tsv"
+if test "$RUN_RELIABILITY" = 1; then
+  python3 - "$RELIABILITY" <<'PY'
+import shutil
+import sys
+from pathlib import Path
+
+target = Path(sys.argv[1])
+if target.exists():
+    shutil.rmtree(target)
+target.mkdir(parents=True)
+PY
+  for iteration in $(seq 1 "$REPETITIONS"); do
+    if env -u PQC_RPKI_KRILL_ROA_COUNT \
+        "$ROOT/tools/run_krill_experimental.sh" \
+        >"$RELIABILITY/run-${iteration}.log" 2>&1; then
+      printf '%s\tpass\n' "$iteration" >>"$RELIABILITY/results.tsv"
+    else
+      printf '%s\tfail\n' "$iteration" >>"$RELIABILITY/results.tsv"
+      exit 1
+    fi
+  done
+else
+  test -s "$RELIABILITY/results.tsv" || {
+    echo "reliability evidence missing: $RELIABILITY/results.tsv" >&2
     exit 1
-  fi
-done
+  }
+fi
 
 printf 'rsa\n' >"$SUITE_FILE"
 (
@@ -87,4 +120,5 @@ PYTHONPATH="$ROOT/src" \
 PYTHONPATH="$ROOT/src" python3 "$ROOT/tools/summarize_scaled_krill.py" \
   --scaled-root "$BASE" \
   --reliability "$RELIABILITY/results.tsv" \
-  --roa-count "$COUNT"
+  --roa-count "$COUNT" \
+  --output "$SUMMARY_OUTPUT"
