@@ -1,0 +1,191 @@
+{
+  "all_embedded_hashes_verified": true,
+  "classification": "state hashes extracted from actual rpki-client CCR DER output; input CCR files remain below local/",
+  "comparisons": {
+    "aspa_payload_state": {
+      "equal": true,
+      "hashes": {
+        "composite": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95",
+        "mixed": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95",
+        "pure_mldsa65": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95",
+        "rsa": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95"
+      }
+    },
+    "manifest_state": {
+      "equal": false,
+      "hashes": {
+        "composite": "690458a8fa41348ee6e81658a86782244b975217801c2648759196290c6e0625",
+        "mixed": "35eec4c836f3159dc0bb2a51024e068c5269599f3c074e738c676defae14f89f",
+        "pure_mldsa65": "2f3f84e7988474e14553a499772e5a9f4c4b2a86f4c5614de032d8de889d0402",
+        "rsa": "2e5d3281be4037e2345a6215cc96ac5f7583163e1958d84470c16ed4a5fa5d74"
+      }
+    },
+    "roa_payload_state": {
+      "equal": true,
+      "hashes": {
+        "composite": "4288aebbac9b375c3ea9ac4794a89f0616514aaf50e14886d205a5c1b1a20d86",
+        "mixed": "4288aebbac9b375c3ea9ac4794a89f0616514aaf50e14886d205a5c1b1a20d86",
+        "pure_mldsa65": "4288aebbac9b375c3ea9ac4794a89f0616514aaf50e14886d205a5c1b1a20d86",
+        "rsa": "4288aebbac9b375c3ea9ac4794a89f0616514aaf50e14886d205a5c1b1a20d86"
+      }
+    },
+    "router_key_state": {
+      "equal": true,
+      "hashes": {
+        "composite": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95",
+        "mixed": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95",
+        "pure_mldsa65": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95",
+        "rsa": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95"
+      }
+    },
+    "trust_anchor_state": {
+      "equal": false,
+      "hashes": {
+        "composite": "4bf0fbc635e1bc866ac86f93994c97d423f5515409abeb9d0948fea7e89d5d4c",
+        "mixed": "7b927243cb8548fa15a8ca24deabd384546b4ff90fd4297320eff5f6ec424055",
+        "pure_mldsa65": "48d277df4c32abcb115ec349d527a61b6158556a74668f3e7563ea3d07aad44f",
+        "rsa": "78a05ab33acfa3c6f8ff40fdc0771ae786974c88e1f74247f9a3e6a7a85294fc"
+      }
+    }
+  },
+  "contains_absolute_paths": false,
+  "contains_raw_ccr": false,
+  "draft_profile": "draft-ietf-sidrops-rpki-ccr-11",
+  "inputs": {
+    "composite": {
+      "content_type": "1.2.840.113549.1.9.16.1.54",
+      "file_sha256": "e2aaaa8caea65a6609d772ea28365962ed7b0db9c35c3b2cc9aaacfb44cf9fd4",
+      "hash_algorithm": "2.16.840.1.101.3.4.2.1",
+      "produced_at": "20260727094030Z",
+      "states": {
+        "aspa_payload_state": {
+          "hash_hex": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95",
+          "hash_verified": true,
+          "item_count": 0
+        },
+        "manifest_state": {
+          "hash_hex": "690458a8fa41348ee6e81658a86782244b975217801c2648759196290c6e0625",
+          "hash_verified": true,
+          "item_count": 1
+        },
+        "roa_payload_state": {
+          "hash_hex": "4288aebbac9b375c3ea9ac4794a89f0616514aaf50e14886d205a5c1b1a20d86",
+          "hash_verified": true,
+          "item_count": 1
+        },
+        "router_key_state": {
+          "hash_hex": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95",
+          "hash_verified": true,
+          "item_count": 0
+        },
+        "trust_anchor_state": {
+          "hash_hex": "4bf0fbc635e1bc866ac86f93994c97d423f5515409abeb9d0948fea7e89d5d4c",
+          "hash_verified": true,
+          "item_count": 1
+        }
+      }
+    },
+    "mixed": {
+      "content_type": "1.2.840.113549.1.9.16.1.54",
+      "file_sha256": "f294065810d8f174fbbfb9a8cde756ba07ff3e13062d288ba2ecafb1cafc1ad1",
+      "hash_algorithm": "2.16.840.1.101.3.4.2.1",
+      "produced_at": "20260727094030Z",
+      "states": {
+        "aspa_payload_state": {
+          "hash_hex": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95",
+          "hash_verified": true,
+          "item_count": 0
+        },
+        "manifest_state": {
+          "hash_hex": "35eec4c836f3159dc0bb2a51024e068c5269599f3c074e738c676defae14f89f",
+          "hash_verified": true,
+          "item_count": 2
+        },
+        "roa_payload_state": {
+          "hash_hex": "4288aebbac9b375c3ea9ac4794a89f0616514aaf50e14886d205a5c1b1a20d86",
+          "hash_verified": true,
+          "item_count": 1
+        },
+        "router_key_state": {
+          "hash_hex": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95",
+          "hash_verified": true,
+          "item_count": 0
+        },
+        "trust_anchor_state": {
+          "hash_hex": "7b927243cb8548fa15a8ca24deabd384546b4ff90fd4297320eff5f6ec424055",
+          "hash_verified": true,
+          "item_count": 1
+        }
+      }
+    },
+    "pure_mldsa65": {
+      "content_type": "1.2.840.113549.1.9.16.1.54",
+      "file_sha256": "a35f3f2c45bd3912a51cf25ef4f3f3c77743337af86295c45cb94e32d9cf350e",
+      "hash_algorithm": "2.16.840.1.101.3.4.2.1",
+      "produced_at": "20260727094030Z",
+      "states": {
+        "aspa_payload_state": {
+          "hash_hex": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95",
+          "hash_verified": true,
+          "item_count": 0
+        },
+        "manifest_state": {
+          "hash_hex": "2f3f84e7988474e14553a499772e5a9f4c4b2a86f4c5614de032d8de889d0402",
+          "hash_verified": true,
+          "item_count": 1
+        },
+        "roa_payload_state": {
+          "hash_hex": "4288aebbac9b375c3ea9ac4794a89f0616514aaf50e14886d205a5c1b1a20d86",
+          "hash_verified": true,
+          "item_count": 1
+        },
+        "router_key_state": {
+          "hash_hex": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95",
+          "hash_verified": true,
+          "item_count": 0
+        },
+        "trust_anchor_state": {
+          "hash_hex": "48d277df4c32abcb115ec349d527a61b6158556a74668f3e7563ea3d07aad44f",
+          "hash_verified": true,
+          "item_count": 1
+        }
+      }
+    },
+    "rsa": {
+      "content_type": "1.2.840.113549.1.9.16.1.54",
+      "file_sha256": "8e79b796c31a9f4560370841c98fca6bc57405d1d00a6770c65e9426aec10fb9",
+      "hash_algorithm": "2.16.840.1.101.3.4.2.1",
+      "produced_at": "20260727094030Z",
+      "states": {
+        "aspa_payload_state": {
+          "hash_hex": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95",
+          "hash_verified": true,
+          "item_count": 0
+        },
+        "manifest_state": {
+          "hash_hex": "2e5d3281be4037e2345a6215cc96ac5f7583163e1958d84470c16ed4a5fa5d74",
+          "hash_verified": true,
+          "item_count": 1
+        },
+        "roa_payload_state": {
+          "hash_hex": "4288aebbac9b375c3ea9ac4794a89f0616514aaf50e14886d205a5c1b1a20d86",
+          "hash_verified": true,
+          "item_count": 1
+        },
+        "router_key_state": {
+          "hash_hex": "e4f60d0aa6d7f3d3b6a6494b1c861b99f649c6f9ec51abaf201b20f297327c95",
+          "hash_verified": true,
+          "item_count": 0
+        },
+        "trust_anchor_state": {
+          "hash_hex": "78a05ab33acfa3c6f8ff40fdc0771ae786974c88e1f74247f9a3e6a7a85294fc",
+          "hash_verified": true,
+          "item_count": 1
+        }
+      }
+    }
+  },
+  "provenance_field_kept_separate": "trust_anchor_state",
+  "semantic_equivalence_field": "roa_payload_state",
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}
