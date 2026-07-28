@@ -544,7 +544,7 @@ For the experiment, a certificate, CRL, or signed object is rejected when
 its SPKI or signature algorithm is outside the configured policy.  A
 useful implementation reports unsupported algorithms separately from
 syntax errors, path validation failures, manifest failures, and
-object-specific semantic failures.  The unmodified RPs tested so far
+object-specific semantic failures.  The evaluated unmodified RPs
 accept the RSA baseline and reject the ML-DSA-65 repository before
 processing all of its objects.
 
@@ -693,7 +693,7 @@ Implemented:
 * Synthetic repository impact estimator.
 * Local cache size collector.
 * VRP semantic equivalence checker for CSV/JSON fixtures; on the
-  current fixtures, the classical-side and PQC-side normalized VRP
+  evaluated fixtures, the classical-side and PQC-side normalized VRP
   hashes match.  Its interim hash is computed over canonical JSON and
   is not a CCR hash; results from it are not labeled as CCR output.
 * A separate CCR parser for actual rpki-client DER output.  It
@@ -953,8 +953,8 @@ OpenSSL 3.6.2 and a C harness compiled with
 `cc -O2 -Wall -Wextra -Werror`.  The recorded environment also identifies
 Python 3.14.4 and liboqs 0.15.0.  The Draft-19 composite benchmark used
 `cc -O3 -Wall -Wextra -Werror` with OpenSSL 3.6.2.  The small-scale E2E
-and fresh-key measurements below were run separately on the stated
-12-vCPU x86-64 host.
+and E2E measurements below were run separately on the stated 12-vCPU
+x86-64 host.
 
 The evidence reference is fixed to that commit rather than to a mutable
 development branch.  A final posted revision also needs a fixed commit
@@ -966,10 +966,11 @@ A 12-vCPU x86-64 host used OpenSSL 3.6.2, the evaluated Composite
 provider, and rpki-client 9.8.  Each scenario was generated 100 times
 and locally validated 1000 times.  Standalone validation fixtures were
 generated in the same benchmark run, and the mixed-tree fixture was
-generated immediately before it.  The figures below are median plus or
-minus sample standard deviation, with minimum and maximum in brackets.
-Wall time uses a monotonic nanosecond clock, CPU time uses child-resource
-usage deltas, and maximum RSS is in KiB.
+generated immediately before it.  Each standalone generation sample
+creates one CA key and two one-time-use EE keys.  The figures below are
+median plus or minus sample standard deviation, with minimum and maximum
+in brackets.  Wall time uses a monotonic nanosecond clock, CPU time uses
+child-resource usage deltas, and maximum RSS is in KiB.
 
 | Scenario | Generation wall (s) | Generation CPU (s) | Generation RSS (KiB) |
 |---|---:|---:|---:|
@@ -994,24 +995,12 @@ Composite standalone had a median of 28855 bytes and range of
 [28851, 28859].  The seven products across both mixed-tree publication
 points had a median of 29095 bytes and range of [29092, 29098].
 
-Each standalone generation invokes a new process and generates three
-fresh key pairs: one CA key and two one-time-use EE keys.  RSA-2048 key
-generation dominates this small fixture and is probabilistic.  In a
-separate 1000-repetition measurement using one `openssl genpkey`
-subprocess per sample, median fresh-key generation was 0.0877 seconds
-for RSA-2048, 0.00719 seconds for ML-DSA-65, and 0.00880 seconds for the
-Composite suite.  Consequently, the shorter ML-DSA-65 and Composite
-generation totals do not mean that PQC signing or complete repository
-processing is faster.  The separate 100,000-operation measurements show
-higher ML-DSA-65 and Composite verification costs than RSA.
-
 These very small validation runs measure complete local RP processes,
 but must not be extrapolated to global RPKI validation.  They exclude
 network transfer and do not measure a real repository, RRDP, rsync,
 cold-cache behavior, or incremental validation.  The 100,000-operation
 measurements elsewhere in this document are primitive sign/verify
-loops, not 100,000 complete E2E validations.  These results complement,
-but do not replace, the open full-repository measurements below.
+loops, not 100,000 complete E2E validations.
 
 ## Public-Cache Profile and Controlled Scale Measurements
 
@@ -1062,13 +1051,10 @@ removed, each produced the 99 sibling VRPs.  The default modes rejected
 the experimental suite.  This test exercises branch isolation, but it
 does not use Krill or reproduce public-RPKI topology.
 
-An earlier filesystem-only capture observed invalid Composite objects because
-it copied Krill's asynchronous publication tree before the state was
-quiescent.  The final harness waits for the published object count to
-converge, waits another two seconds, and overlays the publication API's
-current objects at canonical rsync-module paths.  This distinction is
-important: the earlier rejection was a test-fixture consistency problem, not
-evidence that Composite verification becomes invalid with object count.
+For each captured Krill state, the harness waits for the published
+object count to converge, adds a two-second quiescence interval, and
+overlays the publication API's current objects at canonical
+rsync-module paths before validation.
 
 The public cache profile supplies topology and object-size inputs for a future
 re-signed synthetic corpus.  The controlled campaign adds repeated
