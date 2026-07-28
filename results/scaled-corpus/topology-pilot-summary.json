@@ -1,0 +1,100 @@
+{
+  "artifacts": {
+    "by_type": {
+      "cer": {
+        "bytes": 293219,
+        "files": 101
+      },
+      "crl": {
+        "bytes": 354402,
+        "files": 101
+      },
+      "mft": {
+        "bytes": 986566,
+        "files": 101
+      },
+      "roa": {
+        "bytes": 964295,
+        "files": 100
+      }
+    },
+    "bytes": 2598482,
+    "file_count": 403
+  },
+  "branch_isolation": {
+    "expected_surviving_vrps": 99,
+    "mutation": "child-00000 publication point missing",
+    "validation": {
+      "modes": {
+        "routinator_default": {
+          "expected_policy": "reject-experimental-suite",
+          "returncode": 0,
+          "status": "rejected",
+          "vrp_count": 0
+        },
+        "routinator_experimental": {
+          "expected_policy": "accept",
+          "returncode": 0,
+          "status": "accepted",
+          "vrp_count": 99
+        },
+        "rpki_client_default": {
+          "expected_policy": "reject-experimental-suite",
+          "returncode": 0,
+          "status": "rejected",
+          "vrp_count": 0
+        },
+        "rpki_client_experimental": {
+          "expected_policy": "accept",
+          "returncode": 0,
+          "status": "accepted",
+          "vrp_count": 99
+        }
+      },
+      "success": true
+    }
+  },
+  "classification": "synthetic multi-publication-point topology pilot; not a real-repository, Krill, RRDP, rsync-throughput, or incremental validation benchmark",
+  "contains_absolute_paths": false,
+  "contains_private_keys": false,
+  "contains_raw_objects": false,
+  "generation_wall_seconds": 18.728218484000536,
+  "topology": {
+    "child_publication_point_count": 100,
+    "composite_child_ca_count": 100,
+    "parent_ca_count": 1,
+    "roa_count": 100,
+    "roas_per_child": 1,
+    "vrp_count": 100
+  },
+  "validation": {
+    "modes": {
+      "routinator_default": {
+        "expected_policy": "reject-experimental-suite",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      },
+      "routinator_experimental": {
+        "expected_policy": "accept",
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 100
+      },
+      "rpki_client_default": {
+        "expected_policy": "reject-experimental-suite",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      },
+      "rpki_client_experimental": {
+        "expected_policy": "accept",
+        "returncode": 0,
+        "status": "accepted",
+        "vrp_count": 100
+      }
+    },
+    "success": true
+  },
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}
