@@ -1,0 +1,130 @@
+{
+  "all_rejected": true,
+  "classification": "sanitized operational-state negative tests against one Composite child; generated repositories, private keys, CA databases, and complete logs stay below local/",
+  "contains_absolute_paths": false,
+  "contains_private_keys": false,
+  "contains_raw_objects": false,
+  "expected_baseline_vrp_count": 2,
+  "results": [
+    {
+      "expected": "reject",
+      "name": "expired-child-manifest",
+      "reason_code": "manifest-expired",
+      "routinator": {
+        "diagnostic": "[INFO] rsync://example.invalid/repository/child/: rejecting stale manifest rsync://example.invalid/repository/child/child.mft",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      },
+      "rpki_client": {
+        "diagnostic": "rpki-client: example.invalid/repository/child/child.mft: dating issue: CMS signing-time after MFT nextUpdate",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      }
+    },
+    {
+      "expected": "reject",
+      "name": "expired-child-crl",
+      "reason_code": "crl-expired",
+      "routinator": {
+        "diagnostic": "[INFO] rsync://example.invalid/repository/child/: rejecting stale CRL rsync://example.invalid/repository/child/child.crl.",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      },
+      "rpki_client": {
+        "diagnostic": "rpki-client: example.invalid/repository/child/child.mft: CRL has expired",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      }
+    },
+    {
+      "expected": "reject",
+      "name": "expired-roa-ee",
+      "reason_code": "ee-certificate-expired",
+      "routinator": {
+        "diagnostic": "[INFO] rsync://example.invalid/repository/child/: ROA rsync://example.invalid/repository/child/route.roa: certificate has expired.",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      },
+      "rpki_client": {
+        "diagnostic": "rpki-client: example.invalid/repository/child/route.roa: certificate has expired",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      }
+    },
+    {
+      "expected": "reject",
+      "name": "revoked-roa-ee",
+      "reason_code": "ee-certificate-revoked",
+      "routinator": {
+        "diagnostic": "[INFO] rsync://example.invalid/repository/child/: ROA rsync://example.invalid/repository/child/route.roa: certificate has been revoked.",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      },
+      "rpki_client": {
+        "diagnostic": "rpki-client: example.invalid/repository/child/route.roa: certificate revoked",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      }
+    },
+    {
+      "expected": "reject",
+      "name": "missing-roa",
+      "reason_code": "manifest-object-missing",
+      "routinator": {
+        "diagnostic": "[INFO] rsync://example.invalid/repository/child/: no valid manifest rsync://example.invalid/repository/child/child.mft found.",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      },
+      "rpki_client": {
+        "diagnostic": "rpki-client: example.invalid/repository/child/child.mft: no valid manifest available",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      }
+    },
+    {
+      "expected": "reject",
+      "name": "missing-child-manifest",
+      "reason_code": "manifest-missing",
+      "routinator": {
+        "diagnostic": "[INFO] rsync://example.invalid/repository/child/: no valid manifest rsync://example.invalid/repository/child/child.mft found.",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      },
+      "rpki_client": {
+        "diagnostic": "rpki-client: example.invalid/repository/child/child.mft: no valid manifest available",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      }
+    },
+    {
+      "expected": "reject",
+      "name": "missing-child-crl",
+      "reason_code": "crl-missing",
+      "routinator": {
+        "diagnostic": "[INFO] rsync://example.invalid/repository/child/: no valid manifest rsync://example.invalid/repository/child/child.mft found.",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      },
+      "rpki_client": {
+        "diagnostic": "rpki-client: example.invalid/repository/child/child.mft: unable to get certificate CRL",
+        "returncode": 0,
+        "status": "rejected",
+        "vrp_count": 0
+      }
+    }
+  ],
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}
