@@ -157,9 +157,10 @@ def build_summary(
         "scaled_composite_success": scaled_composite_success,
         "rollback_success": rollback_success,
         "conclusion": (
-            "Krill generated and published 1000 ROAs. Both experimental RPs "
+            f"Krill generated and published {roa_count} ROAs. "
+            "Both experimental RPs "
             "validated the Composite state and all modes validated RSA rollback, "
-            "each producing the expected 1000 VRPs."
+            f"each producing the expected {roa_count} VRPs."
         ),
         "contains_private_keys": False,
         "contains_raw_objects": False,

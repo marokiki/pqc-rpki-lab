@@ -7,6 +7,7 @@ import argparse
 import gzip
 import json
 import os
+import platform
 import re
 import statistics
 import subprocess
@@ -171,6 +172,72 @@ def transport(repo: Path) -> dict[str, object]:
     }
 
 
+def command_text(command: list[str], env: dict[str, str]) -> str:
+    process = subprocess.run(
+        command, env=env, capture_output=True, text=True, check=True
+    )
+    return (process.stdout or process.stderr).strip().splitlines()[0]
+
+
+def environment_summary(
+    env: dict[str, str],
+    build: Path,
+    rpki_client: Path,
+    routinator: Path,
+) -> dict[str, object]:
+    cpu_model = "unknown"
+    cpuinfo = Path("/proc/cpuinfo")
+    if cpuinfo.is_file():
+        for line in cpuinfo.read_text().splitlines():
+            if line.startswith("model name"):
+                cpu_model = line.split(":", 1)[1].strip()
+                break
+    memory_total_kib = 0
+    meminfo = Path("/proc/meminfo")
+    if meminfo.is_file():
+        for line in meminfo.read_text().splitlines():
+            if line.startswith("MemTotal:"):
+                memory_total_kib = int(line.split()[1])
+                break
+    return {
+        "system": platform.system(),
+        "kernel": platform.release(),
+        "machine": platform.machine(),
+        "cpu_model": cpu_model,
+        "logical_cpu_count": os.cpu_count(),
+        "memory_total_kib": memory_total_kib,
+        "openssl": command_text(
+            [
+                str(build / "openssl-3.6.2-install" / "bin" / "openssl"),
+                "version",
+            ],
+            env,
+        ),
+        "rpki_client": command_text([str(rpki_client), "-V"], env),
+        "routinator": command_text([str(routinator), "--version"], env),
+        "krill_commit": command_text(
+            [
+                "git",
+                "-C",
+                str(ROOT / "local" / "upstream" / "krill"),
+                "rev-parse",
+                "HEAD",
+            ],
+            env,
+        ),
+        "routinator_commit": command_text(
+            [
+                "git",
+                "-C",
+                str(ROOT / "local" / "upstream" / "routinator"),
+                "rev-parse",
+                "HEAD",
+            ],
+            env,
+        ),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--counts", type=parse_counts, default=parse_counts(DEFAULT_COUNTS))
@@ -268,6 +335,9 @@ def main() -> int:
                 "operation campaign and are not mixed into these E2E results"
             ),
         },
+        "environment": environment_summary(
+            env, build, rpki_client, routinator
+        ),
         "results": rows,
         "contains_private_keys": False,
         "contains_raw_objects": False,
