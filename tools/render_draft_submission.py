@@ -464,7 +464,7 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
         ),
         target=(
             "https://github.com/marokiki/pqc-rpki-lab/tree/"
-            "75b745a9c69a7ca0bbe473a786b173c20fde1fd1"
+            "bbbc401336b0c917b7bb89a9e8f5b783c81012db"
             if DOCNAME.endswith("-02")
             else "https://github.com/marokiki/pqc-rpki-lab/releases/tag/"
             f"{DOCNAME}"
@@ -472,7 +472,7 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
         author_fullname="Tomoki Yoshikawa",
         author_initials="T.",
         author_surname="Yoshikawa",
-        day="27",
+        day="28",
         month="July",
         year="2026",
     )

@@ -9,7 +9,7 @@
         <email>yoshikawa.tomoki.67i@st.kyoto-u.ac.jp</email>
       </address>
     </author>
-    <date year="2026" month="July" day="24" />
+    <date year="2026" month="July" day="28" />
     <area>Routing</area>
     <workgroup>SIDROPS</workgroup>
     <keyword>RPKI</keyword>
@@ -95,7 +95,7 @@
       <section anchor="composite-configuration-evaluated-in-this-revision">
         <name>Composite Configuration Evaluated in This Revision</name>
         <t>The composite configuration evaluated in this revision is id-MLDSA65-ECDSA-P256-SHA512 (OID 1.3.6.1.5.5.7.6.45), as specified by <xref target="I-D.ietf-lamps-pq-composite-sigs" /> and <xref target="I-D.ietf-lamps-cms-composite-sigs" />.  It combines ML-DSA-65 with ECDSA P-256 and requires both component signatures to validate.  This revision uses the composite construction and a Mixed Certification Chain as a concrete design for measurement.  This choice is an experimental input, not a recommendation for production deployment.</t>
-        <t>The object experiment applies <xref target="I-D.ietf-lamps-pq-composite-sigs" /> to composite public keys and certificate signatures, and <xref target="I-D.ietf-lamps-cms-composite-sigs" /> to composite CMS SignedData.  A non-public development implementation has generated complete composite X.509 certificates, CRLs, ROAs, and manifests and has validated an RSA-to-composite mixed tree with an experimentally extended rpki-client.  This is single-implementation laboratory evidence, not independent interoperability evidence.</t>
+        <t>The object experiment applies <xref target="I-D.ietf-lamps-pq-composite-sigs" /> to composite public keys and certificate signatures, and <xref target="I-D.ietf-lamps-cms-composite-sigs" /> to composite CMS SignedData.  The public reference implementation has generated complete composite X.509 certificates, CRLs, ROAs, and manifests and has validated an RSA-to-composite mixed tree with experimental rpki-client and Routinator extensions.  The two RP processing paths share one OpenSSL and Composite provider backend, so this is not independent cryptographic interoperability evidence.</t>
         <t>Experiments with the composite suite belong in isolated repositories under test TALs.  Experimental objects, production repositories, production keys, and production TALs are deliberately kept separate.</t>
       </section>
       <section anchor="additional-candidate-suites">
@@ -245,7 +245,7 @@
     </section>
     <section anchor="experimental-results-summary">
       <name>Experimental Results Summary</name>
-      <t>The public experiment has generated complete RFC 6488 ML-DSA-65 CMS SignedData, including ROA and manifest fixtures, together with ML-DSA-65 certificates and CRLs.  It has also measured the raw Draft-19 Composite ML-DSA construction.  OpenSSL 3.6.2 and a Composite provider generated complete Composite X.509 certificates, CRLs, ROAs, and manifests.  An experimental rpki-client extension accepted complete pure ML-DSA-65 and Composite standalone repositories and a small RSA-to-composite mixed-tree repository.  Each produced the same two VRPs as the RSA baseline.  The unmodified client and the patched client's default mode rejected the unsupported Next Suite.  These results establish one E2E implementation path, not independent interoperability or production readiness.</t>
+      <t>The public experiment has generated complete RFC 6488 ML-DSA-65 CMS SignedData, including ROA and manifest fixtures, together with ML-DSA-65 certificates and CRLs.  It has also measured the raw Draft-19 Composite ML-DSA construction.  OpenSSL 3.6.2 and a Composite provider generated complete Composite X.509 certificates, CRLs, ROAs, and manifests.  Experimental rpki-client and Routinator extensions accepted complete pure ML-DSA-65 and Composite standalone repositories and a small RSA-to-composite mixed-tree repository.  Each produced the same two VRPs as the RSA baseline.  Their default modes rejected the unsupported Next Suite.  An experimental Krill extension issued and published a Composite child below an RSA parent, replaced one ROA, and rolled the child back to RSA.  The two RP processing paths share the same OpenSSL and Composite provider cryptographic backend.  These results therefore do not establish independent cryptographic interoperability or production readiness.</t>
       <t>Unmodified Routinator, rpki-client, and FORT versions accepted the RSA baseline and rejected the ML-DSA-65 trust anchor or certificate before processing its complete repository.  This is an unsupported-algorithm baseline, not evidence that a mixed chain provides compatibility with legacy RPs.</t>
       <t>Repeated primitive measurements report the median and sample standard deviation across ten runs.  The repository ratios are instead synthetic estimates obtained from explicit object counts, payload assumptions, and key and signature model inputs.  They are not measurements of a complete RPKI repository.  The detailed methods, inputs, and limitations are recorded in Appendix A.</t>
     </section>
@@ -267,9 +267,9 @@
         </li>
       </ul>
       <t>For the experiment, a certificate, CRL, or signed object is rejected when its SPKI or signature algorithm is outside the configured policy.  A useful implementation reports unsupported algorithms separately from syntax errors, path validation failures, manifest failures, and object-specific semantic failures.  The unmodified RPs tested so far accept the RSA baseline and reject the ML-DSA-65 repository before processing all of its objects.</t>
-      <t>The experimental rpki-client extension delegates pure ML-DSA-65 and Composite cryptographic operations to OpenSSL providers.  Its default mode retains the Current Suite policy.  Its explicit experimental mode also accepts id-ml-dsa-65 and id-MLDSA65-ECDSA-P256-SHA512 SPKIs and certificate, CRL, and CMS signatures, together with SHA-512 in the corresponding CMS SignedData.  Unsupported OIDs, non-absent parameters, digest mismatches, pure and component signature failures, certificate path failures, and manifest hash failures were exercised as separate negative cases.</t>
+      <t>The experimental rpki-client and Routinator extensions delegate pure ML-DSA-65 and Composite cryptographic operations to OpenSSL providers. Their default modes retain the Current Suite policy.  Their explicit experimental modes also accept id-ml-dsa-65 and id-MLDSA65-ECDSA-P256-SHA512 SPKIs and certificate, CRL, and CMS signatures, together with SHA-512 in the corresponding CMS SignedData. Fifteen cryptographic and profile negative cases separately exercised unsupported OIDs, non-absent parameters, digest mismatches, pure and component signature failures, component order and truncation, certificate and CRL failures, certificate path failures, and manifest hash failures.  Seven additional repository-operation cases exercised expired, revoked, stale, and missing objects.  Both experimental RPs rejected every case.</t>
       <t>Mixed Certification Chain processing treats certificate and CRL signatureAlgorithm fields independently from the subject SPKI algorithm. The issuer's public key verifies the issuer signature; the two algorithm fields need not identify the same algorithm.</t>
-      <t>When an experiment validates both Current Suite and Next Suite products, it separately compares their semantic outputs.  For ROAs, semantic equivalence means equality of the canonical VRP sets by prefix, maxLength, and origin AS.  When both runs use the same CCR version and hash algorithm, equal ROAPayloadState hashes establish equality of those canonical VRP sets <xref target="I-D.ietf-sidrops-rpki-ccr" />.  TrustAnchorState is compared separately.  ROAPayloadState does not preserve per-VRP certificate-chain or publication provenance, so provenance equivalence requires additional experiment records.  Divergent outputs are recorded as an experimental result rather than silently merged.</t>
+      <t>When an experiment validates both Current Suite and Next Suite products, it separately compares their semantic outputs.  For ROAs, semantic equivalence means equality of the canonical VRP sets by prefix, maxLength, and origin AS.  When both runs use the same CCR version and hash algorithm, equal ROAPayloadState hashes establish equality of those canonical VRP sets <xref target="I-D.ietf-sidrops-rpki-ccr" />.  The experiment parsed actual rpki-client CCR DER for the RSA, pure ML-DSA-65, Composite, and mixed-tree repositories and recomputed every embedded collection hash.  All four ROAPayloadState hashes were equal, while ManifestState differed as expected.  TrustAnchorState is compared separately and also differed.  This result uses one CCR-producing RP. ROAPayloadState does not preserve per-VRP certificate-chain or publication provenance, so provenance equivalence requires additional experiment records.  Divergent outputs are recorded as an experimental result rather than silently merged.</t>
       <t>This document does not require routers to support PQC.  Routers receive validated payloads through RTR or local export formats, and the semantic content of that output is intended to be unchanged by the algorithm migration.</t>
     </section>
     <section anchor="migration-considerations">
@@ -345,6 +345,9 @@
           <t>VRP semantic equivalence checker for CSV/JSON fixtures; on the current fixtures, the classical-side and PQC-side normalized VRP hashes match.  Its interim hash is computed over canonical JSON and is not a CCR hash; results from it are not labeled as CCR output.</t>
         </li>
         <li>
+          <t>A separate CCR parser for actual rpki-client DER output.  It recomputed and verified the embedded collection hashes for all four suites.  Their ROAPayloadState hashes were equal; ManifestState and TrustAnchorState were compared separately and differed.</t>
+        </li>
+        <li>
           <t>Mixed-tree test structure generation (RSA trust anchor, ML-DSA-65 child CA SPKI, child products keyed consistently); structural consistency checks pass.</t>
         </li>
         <li>
@@ -372,13 +375,25 @@
           <t>An experimental Routinator 0.15.2/rpki-rs 0.19.3 extension that independently processes the repository, resource certificate path, CRL, CMS, manifest, ROA, and VRP output.  It produced the same two VRPs for the RSA, pure ML-DSA-65, Composite standalone, and mixed-tree repositories in experimental mode and retained rejection of the experimental suites in default mode.  It shares the experiment's OpenSSL and Composite provider cryptographic backend.</t>
         </li>
         <li>
-          <t>An experimental Krill 0.16.0 extension that created a Composite child below an RSA testbed parent, published its CRL, manifest, and ROA, and then rolled the child key back to RSA.  Experimental rpki-client and Routinator derived the expected VRP during the Composite phase; after rollback, their default and experimental modes all derived it.  The test used an isolated local publication service and does not establish production readiness.</t>
+          <t>An experimental Krill 0.16.0 extension that created a Composite child below an RSA testbed parent, published its CRL, manifest, and ROAs, replaced one ROA, and then rolled the child key back to RSA. Experimental rpki-client and Routinator derived the expected VRP set during both Composite states; after rollback, their default and experimental modes all derived the RSA set.  The test used an isolated local publication service and does not establish production readiness.</t>
         </li>
         <li>
           <t>15 negative cases covering component and pure signature corruption, component order, truncation, unsupported OID, non-absent parameters, certificate signatureAlgorithm mismatch, CRL and CMS signature corruption, SHA-256 substitution, certificate path failure, and manifest hash mismatch.</t>
         </li>
         <li>
+          <t>Seven operational negative cases covering expired manifest and CRL state, expired and revoked ROA EE certificates, and missing ROA, manifest, or CRL publication.  Both experimental RPs reached the Composite subtree and produced no VRPs for each case.</t>
+        </li>
+        <li>
           <t>X86-64 small-scale E2E measurements using 100 complete generation repetitions and 1000 local RP-validation repetitions per scenario. These are not measurements of a real repository, RRDP, or rsync.</t>
+        </li>
+        <li>
+          <t>A repeated Krill scale campaign through 1,000 ROAs.  Generation was repeated 30 times at 1, 10, and 100 ROAs and 10 times at 1,000 ROAs. The eight-mode fresh-cache validation matrix was repeated 100 times at each size.</t>
+        </li>
+        <li>
+          <t>A synthetic topology pilot with one RSA parent, 100 Composite child CAs, 100 publication points, and 100 ROAs.  Both experimental RPs produced 100 VRPs; after one publication point was removed, each retained the 99 sibling VRPs.</t>
+        </li>
+        <li>
+          <t>A 1,000-ROA RP cache-regime experiment with 30 repetitions each for a fresh validator cache, an unchanged repository, and a one-ROA update.</t>
         </li>
       </ul>
       <t>Not yet implemented or incomplete:</t>
@@ -390,10 +405,10 @@
           <t>Acceptance using a cryptographic implementation independent of the pinned OpenSSL and Composite provider used by both experimental RPs.</t>
         </li>
         <li>
-          <t>RRDP and rsync impact measurement with real object corpora.</t>
+          <t>Production-scale RRDP and rsync transfer and update measurements over a public-like, re-signable object corpus.</t>
         </li>
         <li>
-          <t>CCR-based semantic equivalence testing across suites, using real RP output rather than fixtures.</t>
+          <t>CCR output from a second independent RP implementation.</t>
         </li>
         <li>
           <t>FN-DSA measurement through the same OpenSSL EVP path used for the other algorithms (current FN-DSA numbers come from liboqs components).</t>
@@ -402,7 +417,7 @@
           <t>HSM performance and support investigation.</t>
         </li>
       </ul>
-      <t>The highest-priority remaining implementation gap is repository-scale publication and validation measurement, followed by an independent cryptographic implementation.  The public reference implementation establishes two RP processing paths and a small Krill CA lifecycle path, but does not establish cryptographic implementation independence or production readiness.</t>
+      <t>The highest-priority remaining implementation gap is publication and validation over a public-like, re-signable multi-CA corpus, followed by an independent cryptographic implementation.  The public reference implementation establishes two RP processing paths, a controlled Krill CA lifecycle, repeated single-child scale results, and a synthetic multi-publication-point result.  It does not establish cryptographic implementation independence, production network behavior, or global repository performance.</t>
     </section>
     <section anchor="security-considerations">
       <name>Security Considerations</name>
@@ -922,11 +937,11 @@
           <date month="March" year="2026" />
         </front>
       </reference>
-      <reference anchor="pqc-rpki-lab" target="https://github.com/marokiki/pqc-rpki-lab/tree/75b745a9c69a7ca0bbe473a786b173c20fde1fd1">
+      <reference anchor="pqc-rpki-lab" target="https://github.com/marokiki/pqc-rpki-lab/tree/bbbc401336b0c917b7bb89a9e8f5b783c81012db">
         <front>
           <title>pqc-rpki-lab experimental evidence snapshot</title>
           <author fullname="Tomoki Yoshikawa" initials="T." surname="Yoshikawa" />
-          <date day="27" month="July" year="2026" />
+          <date day="28" month="July" year="2026" />
         </front>
       </reference>
     </references>
@@ -935,7 +950,7 @@
       <t>This appendix records measurements referenced by the Size Model Inputs, Experimental Results Summary, and Implementation Status sections.  All values were produced by the experimental harness <xref target="pqc-rpki-lab" />, which contains the corresponding scripts, raw outputs, and environment metadata.  This appendix is to be removed before publication as an RFC; the harness remains the durable record.</t>
       <section anchor="reproducibility-metadata">
         <name>Reproducibility Metadata</name>
-        <t>The evidence snapshot cited by this revision is Git commit 75b745a9c69a7ca0bbe473a786b173c20fde1fd1.  The repeated primitive measurements were run on macOS 26.5.2 arm64 on an Apple M4 using OpenSSL 3.6.2 and a C harness compiled with <tt>cc -O2 -Wall -Wextra -Werror</tt>.  The recorded environment also identifies Python 3.14.4 and liboqs 0.15.0.  The Draft-19 composite benchmark used <tt>cc -O3 -Wall -Wextra -Werror</tt> with OpenSSL 3.6.2.  The small-scale E2E and fresh-key measurements below were run separately on the stated 12-vCPU x86-64 host.</t>
+        <t>The evidence snapshot cited by this revision is Git commit bbbc401336b0c917b7bb89a9e8f5b783c81012db.  The repeated primitive measurements were run on macOS 26.5.2 arm64 on an Apple M4 using OpenSSL 3.6.2 and a C harness compiled with <tt>cc -O2 -Wall -Wextra -Werror</tt>.  The recorded environment also identifies Python 3.14.4 and liboqs 0.15.0.  The Draft-19 composite benchmark used <tt>cc -O3 -Wall -Wextra -Werror</tt> with OpenSSL 3.6.2.  The small-scale E2E and fresh-key measurements below were run separately on the stated 12-vCPU x86-64 host.</t>
         <t>The evidence reference is fixed to that commit rather than to a mutable development branch.  A final posted revision also needs a fixed commit or tag containing the corresponding submission artifacts.</t>
       </section>
       <section anchor="small-scale-e2e-measurement">
@@ -1017,13 +1032,56 @@
         <t>Each standalone generation invokes a new process and generates three fresh key pairs: one CA key and two one-time-use EE keys.  RSA-2048 key generation dominates this small fixture and is probabilistic.  In a separate 1000-repetition measurement using one <tt>openssl genpkey</tt> subprocess per sample, median fresh-key generation was 0.0877 seconds for RSA-2048, 0.00719 seconds for ML-DSA-65, and 0.00880 seconds for the Composite suite.  Consequently, the shorter ML-DSA-65 and Composite generation totals do not mean that PQC signing or complete repository processing is faster.  The separate 100,000-operation measurements show higher ML-DSA-65 and Composite verification costs than RSA.</t>
         <t>These very small validation runs measure complete local RP processes, but must not be extrapolated to global RPKI validation.  They exclude network transfer and do not measure a real repository, RRDP, rsync, cold-cache behavior, or incremental validation.  The 100,000-operation measurements elsewhere in this document are primitive sign/verify loops, not 100,000 complete E2E validations.  These results complement, but do not replace, the open full-repository measurements below.</t>
       </section>
-      <section anchor="public-cache-profile-and-scaled-issuance-boundary">
-        <name>Public-Cache Profile and Scaled-Issuance Boundary</name>
+      <section anchor="public-cache-profile-and-controlled-scale-measurements">
+        <name>Public-Cache Profile and Controlled Scale Measurements</name>
         <t>One Routinator 0.15.2 RRDP-only cache snapshot was reduced to aggregate counts and byte distributions.  It contained 550,210 public-cache objects across 54,960 publication points and the validation run produced 980,019 VRPs.  The ARIN trust anchor was unavailable during collection.  No source objects, keys, repository URIs, or local paths are included in the public result.  This is one incomplete snapshot rather than a measurement of the entire global RPKI, update churn, or incremental validation.</t>
-        <t>A separate 1,000-ROA Krill experiment used one RSA parent and one child publication point.  Krill generated and published all objects in 141.59 seconds of wall time.  Experimental rpki-client and Routinator each produced the expected 1,000 VRPs from the Composite state.  After rollback, the default and experimental modes of both RPs produced the same 1,000 VRPs.  Validation of all eight phase/mode combinations took 9.44 seconds in one sequential harness invocation.  Generation used 135.06 user seconds, 4.08 system seconds, and 121164 KiB maximum RSS; validation used 6.41 user seconds, 1.39 system seconds, and 23232 KiB maximum RSS.</t>
-        <t>The captured Composite state contained 1008 rsync files occupying 9797552 bytes.  Its RRDP snapshot was 13145725 bytes uncompressed and 9189879 bytes with deterministic gzip; its delta was 13133009 and 9183568 bytes, respectively.  The RSA rollback also contained 1008 files, occupying 1768736 bytes; its snapshot was 2440682 bytes uncompressed and 1024793 bytes with gzip, and its delta was 2506346 and 1073040 bytes.  These values compare two states of one generated fixture and are not measurements of network transfer or repository update frequency.</t>
+        <t>A separate Krill campaign used one RSA parent and one child publication point.  For 1, 10, and 100 ROAs, complete generation was repeated 30 times; the 1,000-ROA case was repeated 10 times.  At every size, a fresh-validator-cache matrix was repeated 100 times.  Each matrix contained Composite and RSA-rollback validation with rpki-client and Routinator in default and experimental modes.  Every expected acceptance and rejection result was observed.</t>
+        <table>
+          <thead>
+            <tr>
+              <th>ROAs</th>
+              <th>Generation samples</th>
+              <th>Generation wall median +/- stdev (s)</th>
+              <th>Validation-matrix samples</th>
+              <th>Eight-mode wall median +/- stdev (s)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>30</td>
+              <td>6.990 +/- 0.244</td>
+              <td>100</td>
+              <td>3.630 +/- 0.014</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>30</td>
+              <td>7.675 +/- 0.348</td>
+              <td>100</td>
+              <td>3.760 +/- 0.020</td>
+            </tr>
+            <tr>
+              <td>100</td>
+              <td>30</td>
+              <td>19.360 +/- 0.519</td>
+              <td>100</td>
+              <td>4.330 +/- 0.038</td>
+            </tr>
+            <tr>
+              <td>1000</td>
+              <td>10</td>
+              <td>141.530 +/- 2.436</td>
+              <td>100</td>
+              <td>9.435 +/- 0.121</td>
+            </tr>
+          </tbody>
+        </table>
+        <t>The captured 1,000-ROA Composite state contained 1008 rsync files occupying 9,797,596 bytes.  Its RRDP snapshot was 13,145,809 bytes uncompressed and 9,190,012 bytes with deterministic gzip; its delta was 13,133,093 and 9,182,046 bytes, respectively.  These are generated-state sizes, not network-throughput measurements.</t>
+        <t>The same 1,000-ROA repository was used to compare three validation cache regimes, with 30 repetitions per RP and regime.  One ROA was replaced; the ROA, manifest, and CRL were the three changed files.  rpki-client does not retain a parsed validation cache between these processes, and its wall medians were 0.86 seconds for a fresh cache, 0.86 seconds for an unchanged repository, and 0.85 seconds after the one-ROA update. Routinator's corresponding medians were 2.26, 1.99, and 2.30 seconds. The OS page cache was uncontrolled.  These values therefore characterize this harness, not a general incremental-validation speedup.</t>
+        <t>A separate synthetic topology pilot generated one RSA parent and 100 Composite child CAs, each with one publication point and one ROA.  Its 403 objects occupied 2,598,482 bytes.  Both experimental RPs produced 100 VRPs.  After the complete publication point for one child was removed, each produced the 99 sibling VRPs.  The default modes rejected the experimental suite.  This test exercises branch isolation, but it does not use Krill or reproduce public-RPKI topology.</t>
         <t>An earlier filesystem-only capture observed invalid Composite objects because it copied Krill's asynchronous publication tree before the state was quiescent.  The final harness waits for the published object count to converge, waits another two seconds, and overlays the publication API's current objects at canonical rsync-module paths.  This distinction is important: the earlier rejection was a test-fixture consistency problem, not evidence that Composite verification becomes invalid with object count.</t>
-        <t>The public cache profile supplies topology and object-size inputs for a future re-signed synthetic corpus.  Full RSA, pure ML-DSA-65, Composite, and mixed-tree cold/warm/incremental measurements remain future work.</t>
+        <t>The public cache profile supplies topology and object-size inputs for a future re-signed synthetic corpus.  The controlled campaign adds repeated single-child scale, cache-regime, and multi-publication-point evidence, but full four-suite re-signing of a public-like topology and production RRDP or rsync measurements remain future work.</t>
       </section>
       <section anchor="measured-certificate-and-crl-sizes">
         <name>Measured Certificate and CRL Sizes</name>
@@ -1356,10 +1414,13 @@
         <t>The following dimensions are not yet backed by confirmed measurements and are deliberately recorded as open tasks rather than numbers:</t>
         <ul>
           <li>
-            <t>Four-suite repository-scale CA key rollover, publication cycle, and full validation impact.  The single public-cache profile and 1,000-ROA boundary run do not yet provide cold/warm/incremental comparisons.</t>
+            <t>Four-suite CA key rollover, publication cycle, and full validation over a public-like, re-signable multi-CA topology.  The controlled single-child and synthetic 100-child results do not reproduce public RPKI topology.</t>
           </li>
           <li>
-            <t>Full-validator memory footprint.  The repeated primitive sweep records process peak RSS, but this is not a repository-validation measurement.</t>
+            <t>Production RRDP and rsync transfer, churn, and cache behavior.  The generated snapshot/delta sizes and local-rsync validation do not measure network behavior.</t>
+          </li>
+          <li>
+            <t>Long-running validator memory and cache growth.  The current results record process peak RSS for bounded executions only.</t>
           </li>
           <li>
             <t>HSM performance and support.</t>
@@ -1396,10 +1457,16 @@
           <t>Added Draft-19 Composite ML-DSA measurements for ML-DSA-44 with P-256, ML-DSA-65 with P-256, and ML-DSA-87 with P-384.</t>
         </li>
         <li>
-          <t>Added experimental Krill Composite-child issuance, publication, and rollback evidence validated by both experimental RPs.</t>
+          <t>Added experimental Krill Composite-child issuance, publication, one-ROA update, and rollback evidence validated by both experimental RPs.</t>
         </li>
         <li>
-          <t>Added a public-cache aggregate profile and documented the unresolved scaled Composite validation boundary found by the 1,000-ROA Krill run.</t>
+          <t>Added 15 cryptographic/profile and seven operational negative cases.</t>
+        </li>
+        <li>
+          <t>Added a public-cache aggregate profile, repeated Krill measurements through 1,000 ROAs, a 1,000-ROA cache-regime comparison, and a 100-publication-point branch-isolation pilot.</t>
+        </li>
+        <li>
+          <t>Added actual rpki-client CCR DER parsing and verified equal ROAPayloadState hashes while keeping ManifestState, TrustAnchorState, and provenance separate.</t>
         </li>
         <li>
           <t>Kept a future production algorithm profile and transition procedure as separate standards work informed by these results.</t>

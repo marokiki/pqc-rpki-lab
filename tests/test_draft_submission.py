@@ -42,7 +42,7 @@ class DraftSubmissionTest(unittest.TestCase):
         self.assertEqual(
             self.root_02.find('.//reference[@anchor="pqc-rpki-lab"]').get("target"),
             "https://github.com/marokiki/pqc-rpki-lab/tree/"
-            "75b745a9c69a7ca0bbe473a786b173c20fde1fd1",
+            "bbbc401336b0c917b7bb89a9e8f5b783c81012db",
         )
 
     def test_draft_02_records_review_boundaries(self):
@@ -56,6 +56,9 @@ class DraftSubmissionTest(unittest.TestCase):
         self.assertIn("Composite Configuration Evaluated in This Revision", text)
         self.assertIn("Questions for Further Work", text)
         self.assertIn("EUF-CMA", text)
+        self.assertIn("Seven additional repository-operation cases", text)
+        self.assertIn("actual rpki-client CCR DER", text)
+        self.assertIn("100 Composite child CAs", text)
         self.assertNotIn("unknown algorithm", text)
 
     def test_draft_01_submission_is_rendered(self):
