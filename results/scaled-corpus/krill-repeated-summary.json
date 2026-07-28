@@ -1,0 +1,429 @@
+{
+  "campaign": {
+    "generation_schedule": [
+      {
+        "repetitions": 30,
+        "roa_count": 1
+      },
+      {
+        "repetitions": 30,
+        "roa_count": 10
+      },
+      {
+        "repetitions": 30,
+        "roa_count": 100
+      },
+      {
+        "repetitions": 10,
+        "roa_count": 1000
+      }
+    ],
+    "primitive_measurements_are_separate": "short cryptographic primitives use the existing 100000-operation campaign and are not mixed into these E2E results",
+    "validation_matrix_per_repetition": "Composite and RSA rollback, rpki-client and Routinator, default and experimental modes",
+    "validation_repetitions_per_size": 100
+  },
+  "classification": "single-parent, single-child, single-publication-point repeated Krill generation and fresh-validator-cache validation; not a real-repository, warm-cache, incremental, or network benchmark",
+  "contains_absolute_paths": false,
+  "contains_private_keys": false,
+  "contains_raw_objects": false,
+  "environment": {
+    "cpu_model": "QEMU Virtual CPU version 2.5+",
+    "kernel": "6.8.0-136-generic",
+    "krill_commit": "b2a26cd9f44a385d8a62a0199b082f44e5062039",
+    "logical_cpu_count": 12,
+    "machine": "x86_64",
+    "memory_total_kib": 20478296,
+    "openssl": "OpenSSL 3.6.2 7 Apr 2026 (Library: OpenSSL 3.6.2 7 Apr 2026)",
+    "routinator": "Routinator 0.15.2",
+    "routinator_commit": "0cf9104efa730ebc2de6bbd880e9bcee50de10d9",
+    "rpki_client": "rpki-client-portable 9.8",
+    "system": "Linux"
+  },
+  "results": [
+    {
+      "all_validations_succeeded": true,
+      "generation": {
+        "max_rss_kib": {
+          "max": 86400,
+          "median": 85696.0,
+          "min": 85504,
+          "samples": 30,
+          "stdev": 272.4291408451181
+        },
+        "system_seconds": {
+          "max": 0.21,
+          "median": 0.185,
+          "min": 0.16,
+          "samples": 30,
+          "stdev": 0.01224275530553741
+        },
+        "user_seconds": {
+          "max": 4.04,
+          "median": 3.375,
+          "min": 2.87,
+          "samples": 30,
+          "stdev": 0.2745018476582919
+        },
+        "wall_seconds": {
+          "max": 7.69,
+          "median": 6.99,
+          "min": 6.59,
+          "samples": 30,
+          "stdev": 0.2439954776290911
+        }
+      },
+      "generation_repetitions": 30,
+      "roa_count": 1,
+      "transport": {
+        "rrdp": {
+          "delta": {
+            "file_count": 1,
+            "gzip_bytes": 23161,
+            "uncompressed_bytes": 31670
+          },
+          "notification": {
+            "file_count": 1,
+            "gzip_bytes": 304,
+            "uncompressed_bytes": 524
+          },
+          "snapshot": {
+            "file_count": 1,
+            "gzip_bytes": 29997,
+            "uncompressed_bytes": 44378
+          }
+        },
+        "rsync": {
+          "bytes": 32424,
+          "file_count": 9,
+          "object_type_counts": {
+            "cer": 2,
+            "crl": 3,
+            "mft": 3,
+            "roa": 1
+          }
+        }
+      },
+      "validation_matrix": {
+        "max_rss_kib": {
+          "max": 22400,
+          "median": 22144.0,
+          "min": 21760,
+          "samples": 100,
+          "stdev": 127.14799140046105
+        },
+        "system_seconds": {
+          "max": 0.28,
+          "median": 0.25,
+          "min": 0.22,
+          "samples": 100,
+          "stdev": 0.014634951936436907
+        },
+        "user_seconds": {
+          "max": 0.5,
+          "median": 0.45,
+          "min": 0.4,
+          "samples": 100,
+          "stdev": 0.015538807723070182
+        },
+        "wall_seconds": {
+          "max": 3.66,
+          "median": 3.63,
+          "min": 3.57,
+          "samples": 100,
+          "stdev": 0.01426268706886058
+        }
+      },
+      "validation_repetitions": 100,
+      "vrp_count": 1
+    },
+    {
+      "all_validations_succeeded": true,
+      "generation": {
+        "max_rss_kib": {
+          "max": 86400,
+          "median": 85888.0,
+          "min": 85504,
+          "samples": 30,
+          "stdev": 327.77676732099593
+        },
+        "system_seconds": {
+          "max": 0.27,
+          "median": 0.23,
+          "min": 0.2,
+          "samples": 30,
+          "stdev": 0.017250687142735845
+        },
+        "user_seconds": {
+          "max": 5.27,
+          "median": 4.48,
+          "min": 3.83,
+          "samples": 30,
+          "stdev": 0.3679199063264508
+        },
+        "wall_seconds": {
+          "max": 8.36,
+          "median": 7.675,
+          "min": 7.03,
+          "samples": 30,
+          "stdev": 0.34839880042550514
+        }
+      },
+      "generation_repetitions": 30,
+      "roa_count": 10,
+      "transport": {
+        "rrdp": {
+          "delta": {
+            "file_count": 1,
+            "gzip_bytes": 105751,
+            "uncompressed_bytes": 149557
+          },
+          "notification": {
+            "file_count": 1,
+            "gzip_bytes": 303,
+            "uncompressed_bytes": 524
+          },
+          "snapshot": {
+            "file_count": 1,
+            "gzip_bytes": 112729,
+            "uncompressed_bytes": 162273
+          }
+        },
+        "rsync": {
+          "bytes": 120328,
+          "file_count": 18,
+          "object_type_counts": {
+            "cer": 2,
+            "crl": 3,
+            "mft": 3,
+            "roa": 10
+          }
+        }
+      },
+      "validation_matrix": {
+        "max_rss_kib": {
+          "max": 22400,
+          "median": 22144.0,
+          "min": 21856,
+          "samples": 100,
+          "stdev": 117.7912826257795
+        },
+        "system_seconds": {
+          "max": 0.29,
+          "median": 0.26,
+          "min": 0.22,
+          "samples": 100,
+          "stdev": 0.013562798197624822
+        },
+        "user_seconds": {
+          "max": 0.53,
+          "median": 0.5,
+          "min": 0.46,
+          "samples": 100,
+          "stdev": 0.01488542097408595
+        },
+        "wall_seconds": {
+          "max": 3.81,
+          "median": 3.76,
+          "min": 3.71,
+          "samples": 100,
+          "stdev": 0.020293552740421786
+        }
+      },
+      "validation_repetitions": 100,
+      "vrp_count": 10
+    },
+    {
+      "all_validations_succeeded": true,
+      "generation": {
+        "max_rss_kib": {
+          "max": 86400,
+          "median": 85760.0,
+          "min": 85504,
+          "samples": 30,
+          "stdev": 314.7635930984234
+        },
+        "system_seconds": {
+          "max": 0.64,
+          "median": 0.565,
+          "min": 0.52,
+          "samples": 30,
+          "stdev": 0.03215622783390095
+        },
+        "user_seconds": {
+          "max": 17.26,
+          "median": 16.259999999999998,
+          "min": 15.09,
+          "samples": 30,
+          "stdev": 0.502376993579683
+        },
+        "wall_seconds": {
+          "max": 20.31,
+          "median": 19.36,
+          "min": 18.1,
+          "samples": 30,
+          "stdev": 0.5187491587030982
+        }
+      },
+      "generation_repetitions": 30,
+      "roa_count": 100,
+      "transport": {
+        "rrdp": {
+          "delta": {
+            "file_count": 1,
+            "gzip_bytes": 930598,
+            "uncompressed_bytes": 1329869
+          },
+          "notification": {
+            "file_count": 1,
+            "gzip_bytes": 306,
+            "uncompressed_bytes": 524
+          },
+          "snapshot": {
+            "file_count": 1,
+            "gzip_bytes": 937700,
+            "uncompressed_bytes": 1342585
+          }
+        },
+        "rsync": {
+          "bytes": 1000074,
+          "file_count": 108,
+          "object_type_counts": {
+            "cer": 2,
+            "crl": 3,
+            "mft": 3,
+            "roa": 100
+          }
+        }
+      },
+      "validation_matrix": {
+        "max_rss_kib": {
+          "max": 22348,
+          "median": 22096.0,
+          "min": 21832,
+          "samples": 100,
+          "stdev": 112.24990157697424
+        },
+        "system_seconds": {
+          "max": 0.43,
+          "median": 0.37,
+          "min": 0.32,
+          "samples": 100,
+          "stdev": 0.02456469504032652
+        },
+        "user_seconds": {
+          "max": 1.11,
+          "median": 1.04,
+          "min": 1.0,
+          "samples": 100,
+          "stdev": 0.02212795663061697
+        },
+        "wall_seconds": {
+          "max": 4.4,
+          "median": 4.33,
+          "min": 4.2,
+          "samples": 100,
+          "stdev": 0.03775037627747451
+        }
+      },
+      "validation_repetitions": 100,
+      "vrp_count": 100
+    },
+    {
+      "all_validations_succeeded": true,
+      "generation": {
+        "max_rss_kib": {
+          "max": 121136,
+          "median": 121020.0,
+          "min": 120824,
+          "samples": 10,
+          "stdev": 110.46568094510923
+        },
+        "system_seconds": {
+          "max": 4.75,
+          "median": 4.4350000000000005,
+          "min": 4.22,
+          "samples": 10,
+          "stdev": 0.14459137825841029
+        },
+        "user_seconds": {
+          "max": 140.08,
+          "median": 134.60000000000002,
+          "min": 132.41,
+          "samples": 10,
+          "stdev": 2.470277537264007
+        },
+        "wall_seconds": {
+          "max": 146.94,
+          "median": 141.53,
+          "min": 139.55,
+          "samples": 10,
+          "stdev": 2.435916665241241
+        }
+      },
+      "generation_repetitions": 10,
+      "roa_count": 1000,
+      "transport": {
+        "rrdp": {
+          "delta": {
+            "file_count": 1,
+            "gzip_bytes": 9182046,
+            "uncompressed_bytes": 13133093
+          },
+          "notification": {
+            "file_count": 1,
+            "gzip_bytes": 303,
+            "uncompressed_bytes": 524
+          },
+          "snapshot": {
+            "file_count": 1,
+            "gzip_bytes": 9190012,
+            "uncompressed_bytes": 13145809
+          }
+        },
+        "rsync": {
+          "bytes": 9797596,
+          "file_count": 1008,
+          "object_type_counts": {
+            "cer": 2,
+            "crl": 3,
+            "mft": 3,
+            "roa": 1000
+          }
+        }
+      },
+      "validation_matrix": {
+        "max_rss_kib": {
+          "max": 23572,
+          "median": 23134.0,
+          "min": 22720,
+          "samples": 100,
+          "stdev": 152.62113916889797
+        },
+        "system_seconds": {
+          "max": 1.56,
+          "median": 1.41,
+          "min": 1.3,
+          "samples": 100,
+          "stdev": 0.05612207113682519
+        },
+        "user_seconds": {
+          "max": 6.74,
+          "median": 6.47,
+          "min": 6.18,
+          "samples": 100,
+          "stdev": 0.11556116924981262
+        },
+        "wall_seconds": {
+          "max": 9.9,
+          "median": 9.434999999999999,
+          "min": 9.16,
+          "samples": 100,
+          "stdev": 0.1206602626795542
+        }
+      },
+      "validation_repetitions": 100,
+      "vrp_count": 1000
+    }
+  ],
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}
