@@ -274,6 +274,7 @@ def reference(
     author_initials: str | None = None,
     author_surname: str | None = None,
     organization: str | None = None,
+    authors: tuple[tuple[str, str, str], ...] | None = None,
     day: str | None = None,
     month: str | None = None,
     year: str | None = None,
@@ -284,16 +285,28 @@ def reference(
     ref = ET.SubElement(parent, "reference", attrs)
     front = ET.SubElement(ref, "front")
     ET.SubElement(front, "title").text = title
-    author_attrs: dict[str, str] = {}
-    if author_fullname:
-        author_attrs["fullname"] = author_fullname
-    if author_initials:
-        author_attrs["initials"] = author_initials
-    if author_surname:
-        author_attrs["surname"] = author_surname
-    author = ET.SubElement(front, "author", author_attrs)
-    if organization:
-        ET.SubElement(author, "organization").text = organization
+    if authors:
+        for fullname, initials, surname in authors:
+            ET.SubElement(
+                front,
+                "author",
+                {
+                    "fullname": fullname,
+                    "initials": initials,
+                    "surname": surname,
+                },
+            )
+    else:
+        author_attrs: dict[str, str] = {}
+        if author_fullname:
+            author_attrs["fullname"] = author_fullname
+        if author_initials:
+            author_attrs["initials"] = author_initials
+        if author_surname:
+            author_attrs["surname"] = author_surname
+        author = ET.SubElement(front, "author", author_attrs)
+        if organization:
+            ET.SubElement(author, "organization").text = organization
     date_attrs: dict[str, str] = {}
     if day:
         date_attrs["day"] = day
@@ -454,7 +467,13 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
         "pqRPKI",
         "pqRPKI: A Practical RPKI Architecture for the Post-Quantum Era",
         target="https://arxiv.org/abs/2603.06968",
-        author_fullname="W. Li et al.",
+        authors=(
+            ("Weitong Li", "W.", "Li"),
+            ("Yuze Li", "Y.", "Li"),
+            ("Taejoong Chung", "T.", "Chung"),
+        ),
+        series_name="arXiv",
+        series_value="2603.06968",
         month="March",
         year="2026",
     )

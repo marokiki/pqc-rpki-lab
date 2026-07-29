@@ -79,6 +79,18 @@ class DraftSubmissionTest(unittest.TestCase):
         self.assertIn("Model prediction (B)", text)
         self.assertIn("Sample stdev", text)
         self.assertNotIn("median plus or minus sample standard deviation", text)
+        measurement = self.root_02.find(
+            './/section[@anchor="measurement-details"]'
+        )
+        measurement_text = " ".join(measurement.itertext())
+        self.assertNotIn("removed before publication", measurement_text)
+        self.assertIn("controlled-scale measurements", measurement_text)
+        pqrpki = self.root_02.find('.//reference[@anchor="pqRPKI"]')
+        self.assertEqual(
+            [author.get("fullname") for author in pqrpki.findall("./front/author")],
+            ["Weitong Li", "Yuze Li", "Taejoong Chung"],
+        )
+        self.assertEqual(pqrpki.find("./seriesInfo").get("value"), "2603.06968")
         self.assertIsNotNone(
             self.root_02.find(
                 './/reference[@anchor="I-D.doesburg-sidrops-nullscheme"]'

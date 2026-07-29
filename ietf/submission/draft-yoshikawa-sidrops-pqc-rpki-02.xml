@@ -182,7 +182,7 @@
         <t>"Cat." is the NIST security category; "n/a" marks classical reference algorithms.  The RSA-2048 key value is a representative DER RSA public-key value used by the model.  The P-256 value is an uncompressed point, and the Ed25519, ML-DSA, FN-DSA, and SLH-DSA values are raw public keys.  The ECDSA value is a representative DER signature size, while FN-DSA records a maximum.  These choices are documented so that later models can replace them with consistently measured RPKI object encodings.</t>
         <t>Beyond static sizes, this document evaluates candidates along the following dimensions: certificate and CRL size under the RPKI profile; CMS signed object size; signing and verification cost under the RP workload; repository size and distribution (RRDP and rsync) impact; CA key rollover and publication cycle impact; HSM support; and standardization and implementation maturity.</t>
         <t>Three qualitative observations from the preliminary evidence inform the rationale in the next section.  First, RP workload is verification dominated: an RP verifies repository objects but signs nothing as part of validation, and the deployed RSA profile is exceptionally cheap at verification, so the cost of a lattice migration falls disproportionately on RPs rather than on CAs.  Second, first-order size models place ML-DSA-65 near a fourfold repository size increase over the RSA baseline, ML-DSA-44 near threefold, and FN-DSA-512 well below twofold.  Third, FN-DSA verification was fast in the recorded liboqs measurement, although that result is not directly comparable to the OpenSSL EVP measurements.  Its verification cost remains relevant to the RP workload, so FN-DSA remains in the comparison set despite the maturity concerns discussed below.</t>
-        <t>Measurements supporting these observations, together with their conditions, caveats, and the list of dimensions not yet backed by confirmed measurements, are collected in Appendix A of this revision (to be removed before publication) and are maintained in reproducible form by the experimental harness <xref target="pqc-rpki-lab" />.  Measured values are implementation and environment dependent and are not protocol requirements.</t>
+        <t>Measurements supporting these observations, together with their conditions, caveats, and the list of dimensions not yet backed by confirmed measurements, are collected in Appendix A and are maintained in reproducible form by the experimental harness <xref target="pqc-rpki-lab" />. Measured values are implementation and environment dependent and are not protocol requirements.</t>
       </section>
       <section anchor="rationale-for-the-experimental-configurations">
         <name>Rationale for the Experimental Configurations</name>
@@ -968,9 +968,12 @@
       <reference anchor="pqRPKI" target="https://arxiv.org/abs/2603.06968">
         <front>
           <title>pqRPKI: A Practical RPKI Architecture for the Post-Quantum Era</title>
-          <author fullname="W. Li et al." />
+          <author fullname="Weitong Li" initials="W." surname="Li" />
+          <author fullname="Yuze Li" initials="Y." surname="Li" />
+          <author fullname="Taejoong Chung" initials="T." surname="Chung" />
           <date month="March" year="2026" />
         </front>
+        <seriesInfo name="arXiv" value="2603.06968" />
       </reference>
       <reference anchor="pqc-rpki-lab" target="https://github.com/marokiki/pqc-rpki-lab/tree/bbbc401336b0c917b7bb89a9e8f5b783c81012db">
         <front>
@@ -982,10 +985,10 @@
     </references>
     <section anchor="measurement-details">
       <name>Measurement Details</name>
-      <t>This appendix records measurements referenced by the Size Model Inputs, Experimental Results Summary, and Implementation Status sections.  All values were produced by the experimental harness <xref target="pqc-rpki-lab" />, which contains the corresponding scripts, raw outputs, and environment metadata.  This appendix is to be removed before publication as an RFC; the harness remains the durable record.</t>
+      <t>This appendix records measurements referenced by the Size Model Inputs, Experimental Results Summary, and Implementation Status sections.  All values were produced by the experimental harness <xref target="pqc-rpki-lab" />, which contains the corresponding scripts, raw outputs, and environment metadata.  The harness remains the durable record.</t>
       <section anchor="reproducibility-metadata">
         <name>Reproducibility Metadata</name>
-        <t>The evidence snapshot cited by this revision is Git commit bbbc401336b0c917b7bb89a9e8f5b783c81012db.  The repeated primitive measurements were run on macOS 26.5.2 arm64 on an Apple M4 using OpenSSL 3.6.2 and a C harness compiled with <tt>cc -O2 -Wall -Wextra -Werror</tt>.  The recorded environment also identifies Python 3.14.4 and liboqs 0.15.0.  The Draft-19 composite benchmark used <tt>cc -O3 -Wall -Wextra -Werror</tt> with OpenSSL 3.6.2.  The small-scale E2E and E2E measurements below were run separately on the stated 12-vCPU x86-64 host.</t>
+        <t>The evidence snapshot cited by this revision is Git commit bbbc401336b0c917b7bb89a9e8f5b783c81012db.  The repeated primitive measurements were run on macOS 26.5.2 arm64 on an Apple M4 using OpenSSL 3.6.2 and a C harness compiled with <tt>cc -O2 -Wall -Wextra -Werror</tt>.  The recorded environment also identifies Python 3.14.4 and liboqs 0.15.0.  The Draft-19 composite benchmark used <tt>cc -O3 -Wall -Wextra -Werror</tt> with OpenSSL 3.6.2.  The small-scale E2E and controlled-scale measurements below were run separately on the stated 12-vCPU x86-64 host.</t>
         <t>The evidence reference is fixed to that commit rather than to a mutable development branch.  A final posted revision also needs a fixed commit or tag containing the corresponding submission artifacts.</t>
       </section>
       <section anchor="small-scale-e2e-measurement">

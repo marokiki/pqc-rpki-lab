@@ -303,18 +303,18 @@ disproportionately on RPs rather than on CAs.  Second, first-order size
 models place ML-DSA-65 near a fourfold repository size increase over
 the RSA baseline, ML-DSA-44 near threefold, and FN-DSA-512 well below
 twofold.  Third, FN-DSA verification was fast in the recorded liboqs
-measurement, although that result is not directly comparable to the OpenSSL EVP
-measurements.  Its verification cost remains relevant to the RP workload,
+measurement, although that result is not directly comparable to the OpenSSL
+EVP measurements.  Its verification cost remains relevant to the RP
+workload,
 so FN-DSA remains in the comparison set despite the maturity concerns
 discussed below.
 
 Measurements supporting these observations, together with
 their conditions, caveats, and the list of dimensions not yet backed by
-confirmed measurements, are collected in Appendix A of this revision
-(to be removed before publication) and are maintained in reproducible
-form by the experimental harness [pqc-rpki-lab].  Measured values are
-implementation and environment dependent and are not protocol
-requirements.
+confirmed measurements, are collected in Appendix A and are maintained
+in reproducible form by the experimental harness [pqc-rpki-lab].
+Measured values are implementation and environment dependent and are not
+protocol requirements.
 
 ## Rationale for the Experimental Configurations
 
@@ -460,8 +460,9 @@ Changing only the CMS signature algorithm does not change an object's
 eContentType or object-specific payload syntax.  Some objects, notably
 TAK objects, may nevertheless carry public keys whose algorithms change
 as part of a wider trust-anchor migration and therefore require separate
-object-specific interoperability testing.  A future standards-track profile that selects a new mandatory RPKI algorithm
-suite would update [RFC7935].  An object-specific RFC needs an update
+object-specific interoperability testing.  A future standards-track
+profile that selects a new mandatory RPKI algorithm suite would update
+[RFC7935].  An object-specific RFC needs an update
 only if that object's payload or validation semantics also change; this
 document makes no such change.
 
@@ -1013,8 +1014,7 @@ This appendix records measurements referenced by the Size Model Inputs,
 Experimental Results Summary, and Implementation Status sections.  All values
 were produced by the experimental harness [pqc-rpki-lab], which
 contains the corresponding scripts, raw outputs, and environment
-metadata.  This appendix is to be removed before publication as an
-RFC; the harness remains the durable record.
+metadata.  The harness remains the durable record.
 
 ## Reproducibility Metadata
 
@@ -1025,8 +1025,7 @@ OpenSSL 3.6.2 and a C harness compiled with
 `cc -O2 -Wall -Wextra -Werror`.  The recorded environment also identifies
 Python 3.14.4 and liboqs 0.15.0.  The Draft-19 composite benchmark used
 `cc -O3 -Wall -Wextra -Werror` with OpenSSL 3.6.2.  The small-scale E2E
-and E2E measurements below were run separately on the stated 12-vCPU
-x86-64 host.
+and controlled-scale measurements below were run separately on the stated 12-vCPU x86-64 host.
 
 The evidence reference is fixed to that commit rather than to a mutable
 development branch.  A final posted revision also needs a fixed commit
@@ -1040,9 +1039,9 @@ and locally validated 1000 times.  Standalone validation fixtures were
 generated in the same benchmark run, and the mixed-tree fixture was
 generated immediately before it.  Each standalone generation sample
 creates one CA key and two one-time-use EE keys.  The table reports the
-median and sample standard deviation in separate fields, together with the
-minimum and maximum.  Wall time uses a monotonic nanosecond clock, CPU time uses child-resource usage deltas, and
-maximum RSS is in KiB.
+median and sample standard deviation in separate fields, together with
+the minimum and maximum.  Wall time uses a monotonic nanosecond clock, CPU
+time uses child-resource usage deltas, and maximum RSS is in KiB.
 
 | Phase | Scenario | Metric | Median | Sample stdev | Min | Max |
 |---|---|---|---:|---:|---:|---:|
@@ -1482,8 +1481,8 @@ Work in Progress, 19 July 2026.
 Master's thesis, Radboud University, 27 June 2025,
 https://www.sidnlabs.nl/en/news-and-blogs/thesis-pqc-for-the-rpki.
 
-[pqRPKI] Li, W., et al., "pqRPKI: A Practical RPKI Architecture for the
-Post-Quantum Era", arXiv:2603.06968, March 2026,
+[pqRPKI] Li, W., Li, Y., and T. Chung, "pqRPKI: A Practical RPKI
+Architecture for the Post-Quantum Era", arXiv:2603.06968, March 2026,
 https://arxiv.org/abs/2603.06968.
 
 [pqc-rpki-lab] Yoshikawa, T., "pqc-rpki-lab experimental evidence

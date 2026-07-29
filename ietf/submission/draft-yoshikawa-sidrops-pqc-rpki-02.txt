@@ -82,7 +82,7 @@ Table of Contents
      6.5.  Size Model Inputs . . . . . . . . . . . . . . . . . . . .   8
      6.6.  Rationale for the Experimental Configurations . . . . . .   9
    7.  Experimental Certificate and CRL Encoding . . . . . . . . . .  11
-   8.  Experimental CMS Signed Object Encoding . . . . . . . . . . .  12
+   8.  Experimental CMS Signed Object Encoding . . . . . . . . . . .  11
    9.  Signed Object Coverage  . . . . . . . . . . . . . . . . . . .  12
    10. Related Experimental Designs  . . . . . . . . . . . . . . . .  13
    11. Manifests and Repository Processing . . . . . . . . . . . . .  13
@@ -474,11 +474,10 @@ Internet-Draft                PQC for RPKI                     July 2026
 
    Measurements supporting these observations, together with their
    conditions, caveats, and the list of dimensions not yet backed by
-   confirmed measurements, are collected in Appendix A of this revision
-   (to be removed before publication) and are maintained in reproducible
-   form by the experimental harness [pqc-rpki-lab].  Measured values are
-   implementation and environment dependent and are not protocol
-   requirements.
+   confirmed measurements, are collected in Appendix A and are
+   maintained in reproducible form by the experimental harness
+   [pqc-rpki-lab].  Measured values are implementation and environment
+   dependent and are not protocol requirements.
 
 6.6.  Rationale for the Experimental Configurations
 
@@ -490,22 +489,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    retained when at least one component remains EUF-CMA secure and the
    prehash remains collision resistant.
 
-
-
-
-
-
-
-
-
-
-
-
-Yoshikawa                Expires 30 January 2027                [Page 9]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
    This hedge has a limit.  A CRQC defeats the ECDSA component, so
    security against a quantum adversary still depends on ML-DSA-65
    remaining secure.  The composite suite also does not protect against
@@ -515,6 +498,13 @@ Internet-Draft                PQC for RPKI                     July 2026
    property.  An implementation defect in one component can be tolerated
    only when the other component, the combiner, encodings, key handling,
    and the all-component validation path remain unaffected.
+
+
+
+Yoshikawa                Expires 30 January 2027                [Page 9]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
 
    ML-DSA-65 is used as the PQC component of the composite configuration
    evaluated in this revision because it has a final FIPS signature
@@ -554,14 +544,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    an additional configuration for future evaluation rather than one
    measured in the composite experiment, for the following reasons:
 
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 10]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
    *  This document does not profile FN-DSA because it does not
       reference a final FN-DSA standard together with stable PKIX and
       CMS profiles.
@@ -570,6 +552,15 @@ Internet-Draft                PQC for RPKI                     July 2026
       is difficult to implement in constant time; side-channel-resistant
       implementations are an active research and engineering concern.
       This is particularly relevant for CA signing keys held in HSMs.
+
+
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 10]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
 
    *  Availability of FN-DSA in the platforms that RPKI CAs, RIRs, HSM
       vendors, and validator implementations actually use is a separate
@@ -611,13 +602,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    extension semantics, the certificate policy OID, certificate path
    validation, manifest processing, or CRL processing.
 
-
-
-Yoshikawa                Expires 30 January 2027               [Page 11]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
 8.  Experimental CMS Signed Object Encoding
 
    The composite CMS experiment combines
@@ -626,6 +610,14 @@ Internet-Draft                PQC for RPKI                     July 2026
    SignerInfo signatureAlgorithm is id-MLDSA65-ECDSA-P256-SHA512 with
    absent parameters.  The SignedData digestAlgorithms set includes id-
    sha512, and the SignerInfo digestAlgorithm is id-sha512.  The
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 11]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
    parameters are absent in both AlgorithmIdentifiers, and the message-
    digest signed attribute contains the SHA-512 digest of the eContent.
 
@@ -667,17 +659,20 @@ Internet-Draft                PQC for RPKI                     July 2026
    an update only if that object's payload or validation semantics also
    change; this document makes no such change.
 
+   BGPsec UPDATE signatures are not RFC 6488 signed objects and are
+   outside this experiment.  BGPsec Router Certificates and their
+   covering CRLs and manifests are repository products and remain part
+   of the evaluation scope.
+
+
+
+
 
 
 Yoshikawa                Expires 30 January 2027               [Page 12]
 
 Internet-Draft                PQC for RPKI                     July 2026
 
-
-   BGPsec UPDATE signatures are not RFC 6488 signed objects and are
-   outside this experiment.  BGPsec Router Certificates and their
-   covering CRLs and manifests are repository products and remain part
-   of the evaluation scope.
 
 10.  Related Experimental Designs
 
@@ -722,6 +717,11 @@ Internet-Draft                PQC for RPKI                     July 2026
    requirement for the manifest EE key to equal a key used by a listed
    product, and it does not weaken the existing RP checks that bind
    every listed product to the manifest's CA scope.
+
+
+
+
+
 
 
 
@@ -1608,9 +1608,9 @@ Internet-Draft                PQC for RPKI                     July 2026
               June 2025, <https://www.sidnlabs.nl/en/news-and-blogs/
               thesis-pqc-for-the-rpki>.
 
-   [pqRPKI]   al., W. L. E., "pqRPKI: A Practical RPKI Architecture for
-              the Post-Quantum Era", March 2026,
-              <https://arxiv.org/abs/2603.06968>.
+   [pqRPKI]   Li, W., Li, Y., and T. Chung, "pqRPKI: A Practical RPKI
+              Architecture for the Post-Quantum Era", arXiv 2603.06968,
+              March 2026, <https://arxiv.org/abs/2603.06968>.
 
    [pqc-rpki-lab]
               Yoshikawa, T., "pqc-rpki-lab experimental evidence
@@ -1632,8 +1632,8 @@ Appendix A.  Measurement Details
    Inputs, Experimental Results Summary, and Implementation Status
    sections.  All values were produced by the experimental harness
    [pqc-rpki-lab], which contains the corresponding scripts, raw
-   outputs, and environment metadata.  This appendix is to be removed
-   before publication as an RFC; the harness remains the durable record.
+   outputs, and environment metadata.  The harness remains the durable
+   record.
 
 A.1.  Reproducibility Metadata
 
@@ -1643,9 +1643,9 @@ A.1.  Reproducibility Metadata
    OpenSSL 3.6.2 and a C harness compiled with cc -O2 -Wall -Wextra
    -Werror.  The recorded environment also identifies Python 3.14.4 and
    liboqs 0.15.0.  The Draft-19 composite benchmark used cc -O3 -Wall
-   -Wextra -Werror with OpenSSL 3.6.2.  The small-scale E2E and E2E
-   measurements below were run separately on the stated 12-vCPU x86-64
-   host.
+   -Wextra -Werror with OpenSSL 3.6.2.  The small-scale E2E and
+   controlled-scale measurements below were run separately on the stated
+   12-vCPU x86-64 host.
 
    The evidence reference is fixed to that commit rather than to a
    mutable development branch.  A final posted revision also needs a
