@@ -4,11 +4,11 @@ abbrev: "PQC for RPKI"
 docname: draft-yoshikawa-sidrops-pqc-rpki-02
 category: info
 ipr: trust200902
-area: Routing
+area: Operations and Management
 wg: SIDROPS
 submissiontype: IETF
 consensus: false
-date: 2026-07-28
+date: 2026-07-29
 keyword:
   - RPKI
   - PQC
@@ -26,11 +26,12 @@ This document reports experiments with post-quantum signature algorithms
 and analyzes migration approaches for the Resource Public Key
 Infrastructure (RPKI).  The experiments compare classical,
 post-quantum, and composite candidates; generate RPKI-profiled
-certificate, CRL, manifest, and ROA fixtures where implementation support
-permits; and examine composite signatures and Mixed Certification Chains
-as a possible migration design.  The results identify implementation,
-interoperability, repository-size, and operational questions that need
-to be resolved before a production algorithm profile can be specified.
+certificate, CRL, manifest, and ROA fixtures using the implementations
+available to the experiment; and evaluate composite signatures, Mixed
+Certification Chains, and parallel publication as separate design axes.
+The results identify implementation, interoperability, repository-size,
+and operational questions that need to be resolved before a production
+algorithm profile can be specified.
 This document is informational.  It does not update RFC 7935 or RFC
 6916, define a new RPKI algorithm profile, or authorize the use of the
 evaluated algorithms or Mixed Certification Chains in the production
@@ -44,10 +45,11 @@ The RPKI relies on digital signatures in resource certificates, CRLs,
 certification requests, and CMS signed objects such as manifests and
 Route Origin Authorizations (ROAs).  The deployed RPKI algorithm profile
 is based on RSA with SHA-256.  A Cryptographically Relevant Quantum
-Computer (CRQC) would invalidate the long-term security assumptions of
-the classical signature algorithms used today.  Preparing for that risk
-requires measurements and interoperable implementations before a
-production transition procedure can be selected.
+Computer (CRQC) capable of executing the required quantum algorithms
+would undermine the unforgeability of the RSA signatures used by the
+deployed RPKI profile.  Preparing for that risk requires measurements
+and interoperable implementations before a production transition
+procedure can be selected.
 
 This document records that preparatory work.  The experiments preserve
 existing RPKI payload formats, repository distribution protocols, and
@@ -71,9 +73,9 @@ the resource certificate profile [RFC6487], the RPKI signed object
 template [RFC6488], the RPKI algorithm agility procedure [RFC6916], and
 the RPKI algorithm profile [RFC7935].
 
-Current Suite:  The algorithm suite currently accepted by an RPKI
-implementation for production validation.  At the time of writing this is
-RSA-2048/SHA-256 as profiled by RFC 7935.
+Current Suite:  The algorithm suite specified by the currently
+applicable production RPKI algorithm profile.  At the time of writing,
+this is RSA-2048/SHA-256 as profiled by RFC 7935.
 
 Next Suite:  A candidate algorithm suite that is implemented and tested
 before it becomes the Current Suite.
@@ -108,10 +110,10 @@ Parallel Publication:  A migration technique in which a CA publishes
 corresponding products under both the Current Suite and the Next Suite
 for an extended interval.
 
-Composite Signature:  A single signature algorithm construction that
-combines a PQC algorithm and a traditional algorithm at the cryptographic
-or encoding layer.  Verification succeeds only when every component
-signature validates.
+Composite Signature:  A signature construction that combines multiple
+component algorithms into one algorithm identifier and signature value.
+In the LAMPS construction evaluated by this document, verification
+succeeds only when every component signature validates.
 
 # Scope
 
@@ -126,6 +128,10 @@ algorithm profile; see the Signed Object Coverage section.
 This document covers the RPKI signatures on BGPsec Router Certificates,
 but does not define or change the BGPsec UPDATE signature algorithm
 specified by [RFC8608].
+For a BGPsec Router Certificate, the experiment applies only to the
+certificate signature made by the issuing RPKI CA.  The subject public
+key algorithm remains governed by the BGPsec UPDATE algorithm profile
+and is not required to match the RPKI certificate-signature suite.
 
 This document does not specify changes to RTR, TAL formats, RRDP
 [RFC8182], rsync, the RPKI Certificate Policy, or the BPKI used to
@@ -245,8 +251,8 @@ To relativize the cost of PQC candidates, this document uses two compact
 classical algorithms as non-normative reference points: ECDSA P-256 with
 SHA-256 [FIPS186-5], which is already used for BGPsec UPDATE signatures
 [RFC8608], and Ed25519 [RFC8032].  Neither is a CRQC-resistant
-algorithm, and neither is proposed here as an RPKI suite.  They
-represent the realistic lower bound for signature and key sizes in the
+algorithm, and neither is proposed here as an RPKI suite.  They provide
+compact classical reference points for signature and key sizes in the
 non-PQ universe: the deployed RSA-2048 profile is itself several times
 larger than these curves, and PQC candidates should be compared against
 both baselines rather than against RSA alone.
@@ -296,9 +302,11 @@ verification, so the cost of a lattice migration falls
 disproportionately on RPs rather than on CAs.  Second, first-order size
 models place ML-DSA-65 near a fourfold repository size increase over
 the RSA baseline, ML-DSA-44 near threefold, and FN-DSA-512 well below
-twofold.  Third, FN-DSA verification is fast, which is directly
-relevant to the RP workload and supports keeping FN-DSA in the
-comparison set despite the maturity concerns discussed below.
+twofold.  Third, FN-DSA verification was fast in the recorded liboqs
+measurement, although that result is not directly comparable to the OpenSSL EVP
+measurements.  Its verification cost remains relevant to the RP workload,
+so FN-DSA remains in the comparison set despite the maturity concerns
+discussed below.
 
 Measurements supporting these observations, together with
 their conditions, caveats, and the list of dimensions not yet backed by
@@ -329,11 +337,10 @@ other component, the combiner, encodings, key handling, and the
 all-component validation path remain unaffected.
 
 ML-DSA-65 is used as the PQC component of the composite configuration
-evaluated in this revision
-because it has an existing FIPS signature specification [FIPS204] and
-corresponding PKIX [RFC9881] and CMS [RFC9882] algorithm identifier
-specifications,
-because implementations are becoming widely available.  This revision
+evaluated in this revision because it has a final FIPS signature
+specification [FIPS204], corresponding PKIX [RFC9881] and CMS [RFC9882]
+algorithm identifier specifications, and implementations available in
+the software environment used by this experiment.  This revision
 also chooses Category 3 as an experimental point for examining the cost
 of a larger security margin in a system whose re-migration could be a
 global, multi-year operation.  This is not an RPKI requirement.  It is not
@@ -417,9 +424,10 @@ The composite CMS experiment combines
 [I-D.ietf-lamps-cms-composite-sigs] with the RPKI signed object template
 in [RFC6488], as updated by [RFC9589].  The assumed SignerInfo
 signatureAlgorithm is id-MLDSA65-ECDSA-P256-SHA512 with absent
-parameters.  The assumed digestAlgorithms and digestAlgorithm value is
-id-sha512 with absent parameters, and the message-digest signed
-attribute contains the SHA-512 digest of the eContent.
+parameters.  The SignedData digestAlgorithms set includes id-sha512,
+and the SignerInfo digestAlgorithm is id-sha512.  The parameters are absent in
+both AlgorithmIdentifiers, and the message-digest signed attribute
+contains the SHA-512 digest of the eContent.
 
 The experiment retains the signedAttrs restrictions from the existing
 RPKI signed object profile: one content-type attribute, one
@@ -432,7 +440,8 @@ using these encodings.  The public evidence snapshot has generated and
 validated complete pure ML-DSA-65 manifests and ROAs.  The public
 reference implementation also includes Composite certificates, CRLs,
 manifests, ROAs, an experimental RP extension, and sanitized result
-summaries.  Independent RP interoperability remains open work.
+summaries.  Interoperability with a cryptographic implementation independent
+of the shared OpenSSL and Composite provider remains open work.
 
 # Signed Object Coverage
 
@@ -447,9 +456,11 @@ considerable complexity: the objects are protected by the same
 certification chain, distributed through the same repository, and broken
 by the same CRQC.
 
-Changing the signature algorithm does not change an object's
-eContentType, payload, or object-specific validation rules.  A future
-standards-track profile that selects a new mandatory RPKI algorithm
+Changing only the CMS signature algorithm does not change an object's
+eContentType or object-specific payload syntax.  Some objects, notably
+TAK objects, may nevertheless carry public keys whose algorithms change
+as part of a wider trust-anchor migration and therefore require separate
+object-specific interoperability testing.  A future standards-track profile that selects a new mandatory RPKI algorithm
 suite would update [RFC7935].  An object-specific RFC needs an update
 only if that object's payload or validation semantics also change; this
 document makes no such change.
@@ -458,6 +469,21 @@ BGPsec UPDATE signatures are not RFC 6488 signed objects and are outside
 this experiment.  BGPsec Router Certificates and their covering CRLs and
 manifests are repository products and remain part of the evaluation
 scope.
+
+# Related Experimental Designs
+
+This experiment preserves the existing X.509 resource-certificate, CMS
+signed-object, and repository-distribution model while changing signature
+algorithms and, in the mixed-tree case, the certification path.  The Null
+Scheme [I-D.doesburg-sidrops-nullscheme] preserves the signed-object
+structure but replaces the one-time-use EE public key and CMS signature
+with a message-bound construction to reduce redundant cryptographic cost.
+
+pqRPKI [pqRPKI] instead introduces a Merkle Tree Ladder and restructures
+manifest, delegation, and bulk-verification processing.  It is an
+alternative repository architecture rather than a direct algorithm
+substitution.  Comparing these designs requires separate measurements;
+the results in this document cover only the structure-preserving approach.
 
 # Manifests and Repository Processing
 
@@ -518,8 +544,13 @@ interoperability or production readiness.
 
 Unmodified Routinator, rpki-client, and FORT versions accepted the RSA
 baseline and rejected the ML-DSA-65 trust anchor or certificate before
-processing its complete repository.  This is an unsupported-algorithm
-baseline, not evidence that a mixed chain provides compatibility with
+processing its complete repository.  In the one-child mixed-tree fixture,
+unmodified rpki-client accepted the RSA parent products and rejected the
+Composite child as a non-RSA SPKI; default Routinator reached the child
+publication point and failed to decode the child certificate.  Both lost
+the only child subtree.  FORT mixed-tree behavior and sibling retention by
+unmodified RPs have not been measured.  These are unsupported-algorithm
+baselines, not evidence that a mixed chain provides compatibility with
 legacy RPs.
 
 Repeated primitive measurements report the median and sample standard
@@ -532,16 +563,19 @@ are recorded in Appendix A.
 # Relying Party Evaluation
 
 The RP experiment assumes an accepted-algorithm policy covering
-certificate SPKI algorithms and signature algorithms.  The evaluated
-policy states are:
+resource-certificate and signed-object EE SPKI algorithms and signature
+algorithms.  The evaluated policy states are:
 
 * Current Suite only;
 * Current Suite plus Next Suite;
 * Next Suite preferred with Current Suite fallback;
 * Next Suite only.
 
-For the experiment, a certificate, CRL, or signed object is rejected when
-its SPKI or signature algorithm is outside the configured policy.  A
+For the implemented resource-certificate and signed-object fixtures, a
+certificate, CRL, or signed object is rejected when its SPKI or signature
+algorithm is outside the configured policy.  A BGPsec Router Certificate
+requires a separate SPKI policy governed by the BGPsec UPDATE profile; no
+Router Certificate fixture is implemented in this revision.  A
 useful implementation reports unsupported algorithms separately from
 syntax errors, path validation failures, manifest failures, and
 object-specific semantic failures.  The evaluated unmodified RPs
@@ -588,7 +622,12 @@ validated payloads through RTR or local export formats, and the semantic
 content of that output is intended to be unchanged by the algorithm
 migration.
 
-# Migration Considerations
+# Experimental Migration Observations
+
+This section records observations from the mixed-tree experiment.  It
+does not specify the semantics, deployment procedure, or readiness
+thresholds of a production Mixed Certification Chain migration.  Such
+requirements belong in separate Standards Track work.
 
 The experiment keeps three design axes separate: the signature suite
 used for one object, the algorithms used above and below a certification
@@ -656,6 +695,18 @@ certificate or CRL signatureAlgorithm with the issuer's public key.
 
 This construction is not permitted by the RFC 6916 transition procedure.
 It is evaluated only as an experimental alternative under test TALs.
+A Mixed Certification Chain rooted in a Current Suite trust anchor is not
+quantum resistant as a complete certification path.  If an adversary can
+forge a Current Suite certificate signature above the transition boundary,
+the adversary can substitute a different Next Suite child key and construct
+a forged subtree.
+
+Mixed-tree migration is therefore a pre-compromise deployment mechanism,
+not a post-compromise recovery mechanism or a complete way to establish a
+quantum-resistant trust anchor.  A production transition would need to
+authenticate and deploy the Next Suite trust-anchor path before the Current
+Suite becomes forgeable.
+
 It requires no new RPKI payload format, but it does require RPs to
 support both the transition certificate and the suite used below it.  A
 subtree switched before RP support is sufficiently deployed is rejected
@@ -770,6 +821,14 @@ Implemented:
 
 Not yet implemented or incomplete:
 
+* Composite certification-request and proof-of-possession fixtures.
+* BGPsec Router Certificate fixtures combining an RSA or Composite CA
+  signature with the BGPsec-controlled subject public-key algorithm,
+  BGPsec Router EKU, AS resources, revocation, and manifest coverage.
+* Composite ASPA, RSC, and TAK object fixtures and object-specific
+  validation tests.  TAK testing must separately exercise its current,
+  predecessor, and successor trust-anchor public keys during algorithm
+  migration.
 * Complete ML-DSA-44, ML-DSA-87, and SLH-DSA CMS signed-object fixtures.
 * Acceptance using a cryptographic implementation independent of the
   pinned OpenSSL and Composite provider used by both experimental RPs.
@@ -780,6 +839,11 @@ Not yet implemented or incomplete:
   other algorithms (current FN-DSA numbers come from liboqs
   components).
 * HSM performance and support investigation.
+* Transition-certificate revocation, Composite child CA key rollover,
+  overlapping RSA and Composite children, manifest and CRL publication
+  ordering, and partial rollback failure scenarios.
+* TA and TAK algorithm-migration semantics, including predecessor and
+  successor key processing.
 
 The highest-priority remaining implementation gap is publication and
 validation over a public-like, re-signable multi-CA corpus, followed by
@@ -797,6 +861,11 @@ CRQC.  Existing considerations for CA compromise, repository compromise,
 operational misissuance, BGP policy mistakes, and route leaks are
 unchanged.
 
+A rollback to the Current Suite is a recovery mechanism only while that
+suite remains trustworthy and policy permits its use.  After the Current
+Suite becomes forgeable, or after a deployment adopts a Next-Suite-only
+policy, such a rollback is a downgrade rather than recovery.
+
 Divergent algorithm policies and downgrade behavior are primary concerns
 during a long transition.  The experiment therefore records the RP's
 algorithm acceptance policy and does not treat a Current Suite product as
@@ -811,7 +880,7 @@ Parallel publication introduces the possibility of semantic divergence.
 For example, the RSA branch and the PQC branch might contain different
 ROA payloads, stale manifests, or different CRL state.  The experiment
 detects and reports these cases rather than silently selecting one branch;
-see the Migration Considerations section.
+see the Experimental Migration Observations section.
 
 Mixed Certification Chains introduce the risk of confusing the
 Certificate Signature Algorithm with the Subject Public Key Algorithm.
@@ -842,7 +911,7 @@ measurement before large-scale deployment.
 HSM implementations of PQC algorithms are newer than their software
 counterparts and may lag in side-channel hardening, fault-attack
 resistance, and certification.  A CA key that is protected against
-extraction but signs with a leaky implementation is not protected.
+extraction but signs with a leaky implementation does not receive the intended level of protection.
 Side-channel risk is algorithm dependent: FN-DSA's floating-point
 Gaussian sampling is a known hard case for constant-time implementation,
 which is one reason this document sequences FN-DSA after ML-DSA.
@@ -907,7 +976,10 @@ production suite or transition procedure.
   production design.
 * How RP-side readiness should be measured before any production CA
   switches suites under a mixed-tree migration, given that a switched
-  subtree is invisible to non-upgraded RPs.
+  subtree is invisible to non-upgraded RPs.  Candidate measurements include
+  an Algorithm-B beacon ROA correlated with BGP and data-plane observations,
+  and a child publication point reachable only through an Algorithm-B CA
+  certificate whose server logs reveal whether RPs fetch the child.
 * How to handle validators that do not support the Next Suite in mixed
   deployments (fail-open versus fail-closed, and reporting).
 * How to define a transition timetable and readiness metrics, and
@@ -967,24 +1039,37 @@ provider, and rpki-client 9.8.  Each scenario was generated 100 times
 and locally validated 1000 times.  Standalone validation fixtures were
 generated in the same benchmark run, and the mixed-tree fixture was
 generated immediately before it.  Each standalone generation sample
-creates one CA key and two one-time-use EE keys.  The figures below are
-median plus or minus sample standard deviation, with minimum and maximum
-in brackets.  Wall time uses a monotonic nanosecond clock, CPU time uses
-child-resource usage deltas, and maximum RSS is in KiB.
+creates one CA key and two one-time-use EE keys.  The table reports the
+median and sample standard deviation in separate fields, together with the
+minimum and maximum.  Wall time uses a monotonic nanosecond clock, CPU time uses child-resource usage deltas, and
+maximum RSS is in KiB.
 
-| Scenario | Generation wall (s) | Generation CPU (s) | Generation RSS (KiB) |
-|---|---:|---:|---:|
-| RSA baseline | 0.606 +/- 0.094 [0.427, 0.893] | 0.635 +/- 0.102 [0.444, 0.947] | 22400 +/- 58 [22268, 22528] |
-| Pure ML-DSA-65 | 0.335 +/- 0.010 [0.314, 0.361] | 0.339 +/- 0.010 [0.318, 0.365] | 22396 +/- 25 [22268, 22400] |
-| Composite standalone | 0.355 +/- 0.011 [0.339, 0.388] | 0.359 +/- 0.011 [0.342, 0.392] | 22396 +/- 37 [22268, 22400] |
-| RSA-to-Composite mixed tree | 0.619 +/- 0.072 [0.514, 0.839] | 0.638 +/- 0.078 [0.526, 0.874] | 21248 +/- 80 [21120, 21504] |
-
-| Scenario | Validation wall (s) | Validation CPU (s) | Validation RSS (KiB) |
-|---|---:|---:|---:|
-| RSA baseline | 0.0136 +/- 0.0010 [0.0116, 0.0190] | 0.0138 +/- 0.0010 [0.0118, 0.0191] | 7424 +/- 25 [7168, 7424] |
-| Pure ML-DSA-65 | 0.0158 +/- 0.0011 [0.0134, 0.0220] | 0.0160 +/- 0.0011 [0.0135, 0.0223] | 7424 +/- 17 [7296, 7424] |
-| Composite standalone | 0.0189 +/- 0.0013 [0.0162, 0.0285] | 0.0190 +/- 0.0013 [0.0164, 0.0288] | 7424 +/- 22 [7296, 7516] |
-| RSA-to-Composite mixed tree | 0.0200 +/- 0.0014 [0.0167, 0.0269] | 0.0200 +/- 0.0014 [0.0168, 0.0269] | 7424 +/- 29 [7296, 7584] |
+| Phase | Scenario | Metric | Median | Sample stdev | Min | Max |
+|---|---|---|---:|---:|---:|---:|
+| Generation | RSA baseline | Wall (s) | 0.606 | 0.094 | 0.427 | 0.893 |
+| Generation | RSA baseline | CPU (s) | 0.635 | 0.102 | 0.444 | 0.947 |
+| Generation | RSA baseline | RSS (KiB) | 22400 | 58 | 22268 | 22528 |
+| Generation | Pure ML-DSA-65 | Wall (s) | 0.335 | 0.010 | 0.314 | 0.361 |
+| Generation | Pure ML-DSA-65 | CPU (s) | 0.339 | 0.010 | 0.318 | 0.365 |
+| Generation | Pure ML-DSA-65 | RSS (KiB) | 22396 | 25 | 22268 | 22400 |
+| Generation | Composite standalone | Wall (s) | 0.355 | 0.011 | 0.339 | 0.388 |
+| Generation | Composite standalone | CPU (s) | 0.359 | 0.011 | 0.342 | 0.392 |
+| Generation | Composite standalone | RSS (KiB) | 22396 | 37 | 22268 | 22400 |
+| Generation | RSA-to-Composite mixed tree | Wall (s) | 0.619 | 0.072 | 0.514 | 0.839 |
+| Generation | RSA-to-Composite mixed tree | CPU (s) | 0.638 | 0.078 | 0.526 | 0.874 |
+| Generation | RSA-to-Composite mixed tree | RSS (KiB) | 21248 | 80 | 21120 | 21504 |
+| Validation | RSA baseline | Wall (s) | 0.0136 | 0.0010 | 0.0116 | 0.0190 |
+| Validation | RSA baseline | CPU (s) | 0.0138 | 0.0010 | 0.0118 | 0.0191 |
+| Validation | RSA baseline | RSS (KiB) | 7424 | 25 | 7168 | 7424 |
+| Validation | Pure ML-DSA-65 | Wall (s) | 0.0158 | 0.0011 | 0.0134 | 0.0220 |
+| Validation | Pure ML-DSA-65 | CPU (s) | 0.0160 | 0.0011 | 0.0135 | 0.0223 |
+| Validation | Pure ML-DSA-65 | RSS (KiB) | 7424 | 17 | 7296 | 7424 |
+| Validation | Composite standalone | Wall (s) | 0.0189 | 0.0013 | 0.0162 | 0.0285 |
+| Validation | Composite standalone | CPU (s) | 0.0190 | 0.0013 | 0.0164 | 0.0288 |
+| Validation | Composite standalone | RSS (KiB) | 7424 | 22 | 7296 | 7516 |
+| Validation | RSA-to-Composite mixed tree | Wall (s) | 0.0200 | 0.0014 | 0.0167 | 0.0269 |
+| Validation | RSA-to-Composite mixed tree | CPU (s) | 0.0200 | 0.0014 | 0.0168 | 0.0269 |
+| Validation | RSA-to-Composite mixed tree | RSS (KiB) | 7424 | 29 | 7296 | 7584 |
 
 All four validation scenarios produced the expected two VRPs in the
 experimental policy mode.  The unmodified client and the patched
@@ -1020,23 +1105,27 @@ contained Composite and RSA-rollback validation with rpki-client and
 Routinator in default and experimental modes.  Every expected acceptance
 and rejection result was observed.
 
-| ROAs | Generation samples | Generation wall median +/- stdev (s) | Validation-matrix samples | Eight-mode wall median +/- stdev (s) |
-|---:|---:|---:|---:|---:|
-| 1 | 30 | 6.990 +/- 0.244 | 100 | 3.630 +/- 0.014 |
-| 10 | 30 | 7.675 +/- 0.348 | 100 | 3.760 +/- 0.020 |
-| 100 | 30 | 19.360 +/- 0.519 | 100 | 4.330 +/- 0.038 |
-| 1000 | 10 | 141.530 +/- 2.436 | 100 | 9.435 +/- 0.121 |
+| ROAs | Generation samples | Generation wall median (s) | Generation wall sample stdev (s) | Validation-matrix samples | Eight-mode wall median (s) | Eight-mode wall sample stdev (s) |
+|---:|---:|---:|---:|---:|---:|---:|
+| 1 | 30 | 6.990 | 0.244 | 100 | 3.630 | 0.014 |
+| 10 | 30 | 7.675 | 0.348 | 100 | 3.760 | 0.020 |
+| 100 | 30 | 19.360 | 0.519 | 100 | 4.330 | 0.038 |
+| 1000 | 10 | 141.530 | 2.436 | 100 | 9.435 | 0.121 |
 
 The captured 1,000-ROA Composite state contained 1008 rsync files
 occupying 9,797,596 bytes.  Its RRDP snapshot was 13,145,809 bytes
-uncompressed and 9,190,012 bytes with deterministic gzip; its delta was
-13,133,093 and 9,182,046 bytes, respectively.  These are generated-state
-sizes, not network-throughput measurements.
+uncompressed and 9,190,012 bytes with deterministic gzip.  The captured
+delta for the bulk Composite publication state was 13,133,093 bytes
+uncompressed and 9,182,046 bytes with deterministic gzip.  It is not the
+delta produced by the later one-ROA cache-regime update.  These are
+generated-state sizes, not network-throughput measurements.
 
 The same 1,000-ROA repository was used to compare three validation cache
 regimes, with 30 repetitions per RP and regime.  One ROA was replaced;
-the ROA, manifest, and CRL were the three changed files.  rpki-client
-does not retain a parsed validation cache between these processes, and
+the ROA, manifest, and CRL were the three changed files.  Their combined
+size was 73,160 bytes before the update and 73,204 bytes afterward.  This
+cache-regime harness did not capture the corresponding RRDP delta.
+rpki-client does not retain a parsed validation cache between these processes, and
 its wall medians were 0.86 seconds for a fresh cache, 0.86 seconds for
 an unchanged repository, and 0.85 seconds after the one-ROA update.
 Routinator's corresponding medians were 2.26, 1.99, and 2.30 seconds.
@@ -1114,9 +1203,27 @@ measurements:
 | FN-DSA-512 | 1.55 |
 | ML-DSA-44 | 3.08 |
 | ML-DSA-65 | 4.01 |
+| ML-DSA-65 + P-256 Composite | 4.09 |
 | ML-DSA-87 | 5.28 |
 | SLH-DSA-SHAKE-128s | 6.85 |
 | SLH-DSA-SHAKE-192s | 13.38 |
+
+As a check on the model, the same formula was applied to the standalone
+fixture counts: one CA certificate, two EE certificates, one CRL, one
+manifest, and one ROA.  The error below is (predicted - measured) divided
+by measured.
+
+| Suite | Model prediction (B) | Measured median (B) | Model error |
+|---|---:|---:|---:|
+| RSA-2048 | 9146 | 4843 | +88.8% |
+| ML-DSA-65 + P-256 Composite | 33131 | 28855 | +14.8% |
+
+For these counts, the model predicts a Composite-to-RSA ratio of 3.62,
+whereas the measured ratio is 5.96.  The difference results primarily
+from fixed base-payload assumptions that overestimate the small RSA
+fixture.  The 4.09 ratio above is therefore specific to the stated
+synthetic corpus and must not be treated as a measured repository-wide
+ratio.
 
 ## Repeated Primitive Timing
 

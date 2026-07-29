@@ -61,6 +61,30 @@ class DraftSubmissionTest(unittest.TestCase):
         self.assertIn("100 Composite child CAs", text)
         self.assertNotIn("unknown algorithm", text)
 
+    def test_draft_02_records_final_review_corrections(self):
+        text = " ".join(self.root_02.itertext())
+        self.assertIn(
+            "not quantum resistant as a complete certification path",
+            text,
+        )
+        self.assertIn(
+            "subject public key algorithm remains governed by the BGPsec UPDATE",
+            text,
+        )
+        self.assertIn(
+            "Composite certification-request and proof-of-possession fixtures",
+            text,
+        )
+        self.assertIn("bulk Composite publication state", text)
+        self.assertIn("Model prediction (B)", text)
+        self.assertIn("Sample stdev", text)
+        self.assertNotIn("median plus or minus sample standard deviation", text)
+        self.assertIsNotNone(
+            self.root_02.find(
+                './/reference[@anchor="I-D.doesburg-sidrops-nullscheme"]'
+            )
+        )
+
     def test_draft_01_submission_is_rendered(self):
         self.assertEqual(
             self.root_01.get("docName"),

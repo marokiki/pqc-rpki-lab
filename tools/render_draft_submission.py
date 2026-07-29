@@ -409,7 +409,11 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
         "7942", "8032", "8183", "8608", "9323", "9814", "9909",
     ):
         add_bibxml(informative, f"reference.RFC.{number}.xml")
-    for name in ("ietf-sidrops-rpki-ccr", "ietf-sidrops-aspa-profile"):
+    for name in (
+        "ietf-sidrops-rpki-ccr",
+        "ietf-sidrops-aspa-profile",
+        "doesburg-sidrops-nullscheme",
+    ):
         add_bibxml(informative, f"reference.I-D.{name}.xml")
     reference(
         informative,
