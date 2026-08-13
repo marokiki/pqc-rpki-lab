@@ -230,7 +230,7 @@ are not proposed as the initial suite because their signature sizes and
 signing costs are substantially higher than ML-DSA in the available
 measurements.
 
-FN-DSA (Falcon), MAYO, SNOVA, and HAWK are additional candidates for
+FN-DSA (Falcon), MAYO and SNOVA are additional candidates for
 future evaluation.  They are outside this profile until stable PKIX and
 CMS profiles are available and referenced by a future revision or
 separate document.
