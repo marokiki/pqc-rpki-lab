@@ -103,7 +103,7 @@
         <t>ML-DSA-44 is an additional experimental configuration.  It produces smaller public keys and signatures and may sign and verify faster, which matters in a system where every RP repeatedly fetches and validates the entire global repository.  This revision uses ML-DSA-65 in the composite configuration as an explicit experimental choice, not because the RPKI requires NIST security Category 3.  The Rationale for the Experimental Configurations section discusses this choice and its counterarguments.</t>
         <t>ML-DSA-87 is included as a higher-security comparison candidate.  It is more conservative than ML-DSA-65 but carries correspondingly larger size and performance costs.</t>
         <t>SLH-DSA-SHAKE-128s and SLH-DSA-SHAKE-192s are included for cryptographic-diversity comparison.  Their primitive, PKIX, and CMS specifications are defined by <xref target="FIPS205" />, <xref target="RFC9909" />, and <xref target="RFC9814" />.  They are not proposed as the initial suite because their signature sizes and signing costs are substantially higher than ML-DSA in the available measurements.</t>
-        <t>FN-DSA (Falcon), MAYO, SNOVA, and HAWK are additional candidates for future evaluation.  They are outside this profile until stable PKIX and CMS profiles are available and referenced by a future revision or separate document. FN-DSA in particular is discussed further in the Rationale for the Experimental Configurations, because its compact signatures make it an attractive candidate for the RPKI's bulk validation model.</t>
+        <t>FN-DSA (Falcon), MAYO and SNOVA are additional candidates for future evaluation.  They are outside this profile until stable PKIX and CMS profiles are available and referenced by a future revision or separate document. FN-DSA in particular is discussed further in the Rationale for the Experimental Configurations, because its compact signatures make it an attractive candidate for the RPKI's bulk validation model.</t>
         <t>Other Composite ML-DSA combinations specified by LAMPS remain candidates for comparison.  Changing the component pair would not change the composite plus mixed-tree migration model evaluated by this revision.  A composite signature is a new algorithm from the point of view of an RP: a validator that only supports the RSA Current Suite cannot validate a composite object.</t>
       </section>
       <section anchor="classical-reference-points">
@@ -935,6 +935,7 @@
           </abstract>
         </front>
         <seriesInfo name="Internet-Draft" value="draft-doesburg-sidrops-nullscheme-00" />
+        <refcontent>Expired and archived</refcontent>
       </reference>
       <reference anchor="FIPS186-5" target="https://doi.org/10.6028/NIST.FIPS.186-5">
         <front>

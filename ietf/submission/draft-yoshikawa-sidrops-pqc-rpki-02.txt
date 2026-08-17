@@ -360,9 +360,9 @@ Internet-Draft                PQC for RPKI                     July 2026
    sizes and signing costs are substantially higher than ML-DSA in the
    available measurements.
 
-   FN-DSA (Falcon), MAYO, SNOVA, and HAWK are additional candidates for
-   future evaluation.  They are outside this profile until stable PKIX
-   and CMS profiles are available and referenced by a future revision or
+   FN-DSA (Falcon), MAYO and SNOVA are additional candidates for future
+   evaluation.  They are outside this profile until stable PKIX and CMS
+   profiles are available and referenced by a future revision or
    separate document.  FN-DSA in particular is discussed further in the
    Rationale for the Experimental Configurations, because its compact
    signatures make it an attractive candidate for the RPKI's bulk
@@ -1588,9 +1588,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
    [I-D.doesburg-sidrops-nullscheme]
               Doesburg, D., "Null Scheme for Signed Objects in the
-              Resource Public Key Infrastructure (RPKI)", Work in
-              Progress, Internet-Draft, draft-doesburg-sidrops-
-              nullscheme-00, 5 October 2025,
+              Resource Public Key Infrastructure (RPKI)", Expired and
+              archived, Work in Progress, Internet-Draft, draft-
+              doesburg-sidrops-nullscheme-00, 5 October 2025,
               <https://datatracker.ietf.org/doc/html/draft-doesburg-
               sidrops-nullscheme-00>.
 

@@ -6,6 +6,9 @@ from pathlib import Path
 class DraftSubmissionTest(unittest.TestCase):
     def setUp(self):
         root_dir = Path(__file__).resolve().parents[1]
+        self.source_02 = (
+            root_dir / "ietf/draft-yoshikawa-sidrops-pqc-rpki-02.md"
+        ).read_text()
         self.root = ET.parse(
             root_dir / "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-00.xml"
         ).getroot()
@@ -91,11 +94,14 @@ class DraftSubmissionTest(unittest.TestCase):
             ["Weitong Li", "Yuze Li", "Taejoong Chung"],
         )
         self.assertEqual(pqrpki.find("./seriesInfo").get("value"), "2603.06968")
-        self.assertIsNotNone(
-            self.root_02.find(
-                './/reference[@anchor="I-D.doesburg-sidrops-nullscheme"]'
-            )
+        nullscheme = self.root_02.find(
+            './/reference[@anchor="I-D.doesburg-sidrops-nullscheme"]'
         )
+        self.assertIsNotNone(nullscheme)
+        self.assertEqual(nullscheme.findtext("./refcontent"), "Expired and archived")
+        source_references = self.source_02.split("# References", 1)[1]
+        self.assertIn("[I-D.doesburg-sidrops-nullscheme] Doesburg, D.", source_references)
+        self.assertIn("expired and archived", source_references)
 
     def test_draft_01_submission_is_rendered(self):
         self.assertEqual(

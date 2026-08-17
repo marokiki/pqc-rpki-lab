@@ -1474,8 +1474,13 @@ Work in Progress, 1 July 2026.
 
 [I-D.ietf-sidrops-aspa-profile] Azimov, A., Uskov, E., Bush, R., Snijders,
 J., Housley, R., and B. Maddison, "A Profile for Autonomous System
-Provider Authorization", draft-ietf-sidrops-aspa-profile-28,
-Work in Progress, 19 July 2026.
+Provider Authorization", draft-ietf-sidrops-aspa-profile-29,
+Work in Progress, 29 July 2026.
+
+[I-D.doesburg-sidrops-nullscheme] Doesburg, D., "Null Scheme for Signed
+Objects in the Resource Public Key Infrastructure (RPKI)",
+draft-doesburg-sidrops-nullscheme-00, expired and archived,
+5 October 2025.
 
 [Doesburg2025] Doesburg, D., "Post-Quantum Cryptography for the RPKI",
 Master's thesis, Radboud University, 27 June 2025,
