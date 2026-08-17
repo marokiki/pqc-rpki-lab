@@ -616,12 +616,6 @@ parent's public key verifies the signature on the transition certificate,
 while the Next Suite public key carried in the transition certificate's
 SPKI is used to validate signatures issued by the child.
 
-Fifteen negative cases for cryptographic and profile processing exercised algorithm
-identifiers and parameters, digest and signature corruption, component
-order and truncation, certificate-path failure, and manifest hash failure.
-Seven repository-operation cases exercised expired, revoked, stale, and
-missing objects.  Both experimental RPs rejected every negative case.
-
 When an experiment validates both Current Suite and Next Suite products,
 it separately compares their semantic outputs.  For ROAs, semantic
 equivalence means equality of the canonical VRP sets by prefix,
@@ -893,19 +887,12 @@ production suite or transition procedure.
   repository sizes, topology, polling intervals, and churn rates, or whether
   deployment requires a more selective mechanism such as Erik
   Synchronization.
-* How RRDP journal replay, rsync file-list exchange, Erik tree traversal,
-  snapshot and segment prefetch, HTTP multiplexing, gzip, and compression
-  dictionaries should be accounted for under the same network conditions.
 
 ## Operational Readiness
 
 * Which PQC signature algorithms RIR CA teams and their HSM vendors plan
   to support, on what firmware, API, certification, and deployment
   timelines.
-* Whether claimed HSM support uses a general-purpose CPU implementation
-  within the HSM boundary or native hardware or FPGA acceleration, and
-  how those implementation choices affect key generation, signing
-  latency, throughput, side-channel properties, and operational capacity.
 
 --- back
 
