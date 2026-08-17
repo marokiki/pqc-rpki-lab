@@ -72,40 +72,40 @@ Table of Contents
    1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   3
    2.  Terminology . . . . . . . . . . . . . . . . . . . . . . . . .   4
    3.  Scope . . . . . . . . . . . . . . . . . . . . . . . . . . . .   4
-   4.  Relationship to RFC 6916  . . . . . . . . . . . . . . . . . .   5
-   5.  Evaluation Goals  . . . . . . . . . . . . . . . . . . . . . .   5
-   6.  Evaluated Algorithm Suites  . . . . . . . . . . . . . . . . .   6
-     6.1.  Current Suite . . . . . . . . . . . . . . . . . . . . . .   6
-     6.2.  Composite Configuration Evaluated in This Revision  . . .   6
-     6.3.  Additional Candidate Suites . . . . . . . . . . . . . . .   7
-     6.4.  Classical Reference Points  . . . . . . . . . . . . . . .   7
-     6.5.  Size Model Inputs . . . . . . . . . . . . . . . . . . . .   8
-     6.6.  Rationale for the Experimental Configurations . . . . . .   9
-   7.  Experimental Certificate and CRL Encoding . . . . . . . . . .  11
-   8.  Experimental CMS Signed Object Encoding . . . . . . . . . . .  12
-   9.  Signed Object Coverage  . . . . . . . . . . . . . . . . . . .  12
-   10. Related Experimental Designs  . . . . . . . . . . . . . . . .  13
-   11. Repository Distribution Considerations  . . . . . . . . . . .  13
-     11.1.  Impact of Larger Objects . . . . . . . . . . . . . . . .  13
-     11.2.  RRDP, rsync, and Erik Synchronization  . . . . . . . . .  13
-     11.3.  Transport Experiment Boundary  . . . . . . . . . . . . .  14
-   12. Manifests and Repository Processing . . . . . . . . . . . . .  14
-     12.1.  Manifest Scope During Migration  . . . . . . . . . . . .  14
-     12.2.  Parallel Publication Mechanics . . . . . . . . . . . . .  15
-   13. Experimental Results Summary  . . . . . . . . . . . . . . . .  15
-   14. Relying Party Evaluation  . . . . . . . . . . . . . . . . . .  15
-   15. Experimental Migration Observations . . . . . . . . . . . . .  16
-     15.1.  Parallel Publication and Differences in Validation
-            Results  . . . . . . . . . . . . . . . . . . . . . . . .  17
-     15.2.  Mixed Tree Migration . . . . . . . . . . . . . . . . . .  17
-   16. Implementation Status . . . . . . . . . . . . . . . . . . . .  18
-   17. Security Considerations . . . . . . . . . . . . . . . . . . .  20
-   18. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  21
-   19. Questions for Further Work  . . . . . . . . . . . . . . . . .  22
-     19.1.  Algorithm Configurations . . . . . . . . . . . . . . . .  22
-     19.2.  Migration Design . . . . . . . . . . . . . . . . . . . .  22
-     19.3.  Repository Distribution  . . . . . . . . . . . . . . . .  22
-     19.4.  Operational Readiness  . . . . . . . . . . . . . . . . .  23
+   4.  Signed Object Coverage  . . . . . . . . . . . . . . . . . . .   5
+   5.  Relationship to RFC 6916  . . . . . . . . . . . . . . . . . .   5
+   6.  Evaluation Goals  . . . . . . . . . . . . . . . . . . . . . .   6
+   7.  Experimental Migration Approaches . . . . . . . . . . . . . .   6
+     7.1.  Parallel Publication  . . . . . . . . . . . . . . . . . .   7
+     7.2.  Mixed Tree  . . . . . . . . . . . . . . . . . . . . . . .   7
+   8.  Evaluated Algorithm Suites  . . . . . . . . . . . . . . . . .   8
+     8.1.  Current Suite . . . . . . . . . . . . . . . . . . . . . .   8
+     8.2.  Composite Configuration Evaluated in This Revision  . . .   9
+     8.3.  Additional Candidate Suites . . . . . . . . . . . . . . .   9
+     8.4.  Classical Reference Points  . . . . . . . . . . . . . . .  10
+     8.5.  Size Model Inputs . . . . . . . . . . . . . . . . . . . .  10
+     8.6.  Rationale for the Experimental Configurations . . . . . .  12
+   9.  Experimental Object Encoding  . . . . . . . . . . . . . . . .  14
+     9.1.  Certificate and CRL Encoding  . . . . . . . . . . . . . .  14
+     9.2.  CMS Signed Object Encoding  . . . . . . . . . . . . . . .  14
+     9.3.  Manifest Processing During Migration  . . . . . . . . . .  15
+   10. Related Experimental Designs  . . . . . . . . . . . . . . . .  15
+   11. Repository Distribution Considerations  . . . . . . . . . . .  16
+     11.1.  Impact of Larger Objects . . . . . . . . . . . . . . . .  16
+     11.2.  RRDP, rsync, and Erik Synchronization  . . . . . . . . .  16
+     11.3.  Transport Experiment Boundary  . . . . . . . . . . . . .  17
+   12. Experimental Results  . . . . . . . . . . . . . . . . . . . .  17
+     12.1.  Results Summary  . . . . . . . . . . . . . . . . . . . .  17
+     12.2.  Relying Party Evaluation . . . . . . . . . . . . . . . .  18
+   13. Implementation Status . . . . . . . . . . . . . . . . . . . .  18
+   14. Security Considerations . . . . . . . . . . . . . . . . . . .  20
+   15. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  22
+   16. Questions for Further Work  . . . . . . . . . . . . . . . . .  22
+     16.1.  Algorithm Configurations . . . . . . . . . . . . . . . .  22
+     16.2.  Migration Design . . . . . . . . . . . . . . . . . . . .  22
+     16.3.  Repository Distribution  . . . . . . . . . . . . . . . .  23
+     16.4.  Operational Readiness  . . . . . . . . . . . . . . . . .  23
+   17. Informative References  . . . . . . . . . . . . . . . . . . .  23
 
 
 
@@ -114,7 +114,6 @@ Yoshikawa                Expires 30 January 2027                [Page 2]
 Internet-Draft                PQC for RPKI                     July 2026
 
 
-   20. Informative References  . . . . . . . . . . . . . . . . . . .  23
    Appendix A.  Measurement Details  . . . . . . . . . . . . . . . .  27
      A.1.  Reproducibility Metadata  . . . . . . . . . . . . . . . .  27
      A.2.  Small-Scale End-to-End Measurement  . . . . . . . . . . .  28
@@ -158,6 +157,7 @@ Internet-Draft                PQC for RPKI                     July 2026
    migration steps in this document are experimental assumptions and
    observations.  They are not interoperability requirements for
    production RPKI implementations.
+
 
 
 
@@ -211,8 +211,8 @@ Internet-Draft                PQC for RPKI                     July 2026
    [RFC9691].  The generated signed objects in this revision cover
    manifests and ROAs; additional object types are listed in the
    Implementation Status section.  The CMS signed objects are treated as
-   a single signed-object algorithm profile; see the Signed Object
-   Coverage section.
+   a single signed-object algorithm profile, as described in the
+   following section.
 
    This document covers the RPKI signatures on BGPsec Router
    Certificates, but does not define or change the BGPsec UPDATE
@@ -240,12 +240,47 @@ Internet-Draft                PQC for RPKI                     July 2026
    their transport costs, together with Erik Synchronization, under the
    larger object sizes used by the experiment.
 
-4.  Relationship to RFC 6916
+4.  Signed Object Coverage
+
+   Manifests [RFC9286], ROAs [RFC9582], Signed Checklists [RFC9323],
+   ASPA objects [I-D.ietf-sidrops-aspa-profile], TAK objects [RFC9691],
+   and any future object types built on the RFC 6488 template share one
+   CMS structure, one EE certificate model, one certification
+   infrastructure, and one repository.  The evaluation model therefore
+   treats them as one signed-object algorithm profile.  Migrating, for
+   example, ROAs to a PQC suite while leaving ASPA objects on RSA would
+   introduce per-object-type algorithm diversity, leaving part of the
+   RPKI signed-object set dependent on the Current Suite.
+
+   Changing only the CMS signature algorithm does not change an object's
+   eContentType or object-specific payload syntax.  Some objects,
+   notably TAK objects, may nevertheless carry public keys whose
+   algorithms change as part of a wider trust-anchor migration and
+   therefore require separate object-specific interoperability testing.
+   A future standards-track profile that selects a new mandatory RPKI
+   algorithm suite would update [RFC7935].  An object-specific RFC needs
+   an update only if that object's payload or validation semantics also
+   change; this document makes no such change.
+
+   BGPsec UPDATE signatures are not RFC 6488 signed objects and are
+   outside this experiment.  BGPsec Router Certificates and their
+   covering CRLs and manifests are repository products and remain part
+   of the evaluation scope.
+
+5.  Relationship to RFC 6916
 
    RFC 6916 specifies a top-down algorithm transition using parallel
    certification hierarchies.  It also states that an RPKI CA does not
    sign a CA certificate whose subject key corresponds to an algorithm
    suite different from the suite used to sign that certificate.
+
+
+
+
+Yoshikawa                Expires 30 January 2027                [Page 5]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
 
    The Mixed Tree experiment described in this document deliberately
    evaluates the X.509 construction excluded by RFC 6916.  Objects
@@ -254,7 +289,7 @@ Internet-Draft                PQC for RPKI                     July 2026
    separate Standards Track work updating or replacing the applicable
    algorithm profile and migration procedure.
 
-5.  Evaluation Goals
+6.  Evaluation Goals
 
    The experiments use the following evaluation goals.
 
@@ -273,15 +308,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    *  Apply one signature algorithm suite uniformly to all RFC 6488
       signed objects rather than per-object-type algorithm choices.
 
-
-
-
-
-Yoshikawa                Expires 30 January 2027                [Page 5]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
    *  Evaluate the conditional EUF-CMA guarantee provided by a composite
       construction when one component remains secure, subject to the
       assumptions of the referenced LAMPS construction.
@@ -295,15 +321,136 @@ Internet-Draft                PQC for RPKI                     July 2026
    *  Keep measurement and interoperability evidence reproducible
       outside the protocol specification.
 
-6.  Evaluated Algorithm Suites
+7.  Experimental Migration Approaches
 
-6.1.  Current Suite
+   This section describes the two migration approaches evaluated in this
+   document.  The choice of signature suite is independent of this
+   comparison.
+
+
+
+
+
+
+
+Yoshikawa                Expires 30 January 2027                [Page 6]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
+7.1.  Parallel Publication
+
+   RFC 6916 specifies a top-down transition in which a parent CA adopts
+   support for the Next Suite before its children.  During phases 2 and
+   3, corresponding Current Suite and Next Suite product sets are
+   maintained in parallel.  RFC 6916 deliberately avoids mixed-suite CA
+   certificates: a CA certificate signed using one suite does not carry
+   a subject key associated with another suite.
+
+   The Parallel Publication experiment publishes Current Suite and Next
+   Suite products in separate, internally consistent branches.  It does
+   not define new payload encodings for manifests, ROAs, or CRLs.
+   Parallel Publication is useful in test repositories for comparing a
+   Current Suite branch with a candidate branch.  Its use as a
+   production transition would need to account for differences caused by
+   publication failures, timing skew, software defects, or configuration
+   drift.  The experiment compares the resulting VRP sets.  CCR
+   [I-D.ietf-sidrops-rpki-ccr] is a candidate common representation for
+   that comparison.
+
+   The experimental harness needs a mapping between corresponding
+   products for measurement and debugging.  Such a mapping can be
+   derived from the publication point structure, object names, CA
+   hierarchy, or an implementation-specific record.  It is not proposed
+   as a new on-wire RPKI object.
+
+7.2.  Mixed Tree
+
+   A parent using the Current Suite signs a child CA certificate whose
+   subject public key belongs to the Next Suite.  The child then issues
+   its certificates, CRLs, and CMS signed objects using the Next Suite
+   without first requiring the parent to migrate its own CA key and
+   product set.  Production issuance would still require the parent to
+   process the child's Next Suite certificate request and proof of
+   possession.  This experiment constructs the child CA certificate
+   directly; it has not implemented that provisioning exchange.
+
+   The Mixed Tree migration approach is independent of the selected
+   signature suite.  The evaluated repository instantiates the Next
+   Suite with the Composite ML-DSA configuration evaluated in this
+   revision.  This construction is not permitted by the RFC 6916
+   transition procedure and is evaluated only as an experimental
+   alternative under test TALs.
+
+   Unlike the RFC 6916 procedure, a switched subtree does not maintain
+   corresponding Current Suite and Next Suite products.  This avoids
+   duplicate repository content and the publication, configuration, and
+   rollover work needed to keep two product sets aligned.  It also
+
+
+
+Yoshikawa                Expires 30 January 2027                [Page 7]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
+   permits subtrees to move independently after the necessary parent and
+   RP support is available, rather than waiting for every ancestor to
+   migrate its own CA key and product set.
+
+   The trade-off is compatibility.  Once a subtree switches, an RP that
+   does not support the Next Suite cannot validate it through the
+   certification path.  Mixed Tree deployment therefore replaces the
+   parallel legacy hierarchy with a requirement for sufficient RP
+   support before each subtree is migrated.  The complete certification
+   path remains dependent on Current Suite certificate signatures above
+   the migration boundary.
+
+   +===========+============+===============+============+=============+
+   | Migration | Migration  | Legacy RP     | Parallel   | Principal   |
+   | model     | ordering   | compatibility | products   | limitation  |
+   +===========+============+===============+============+=============+
+   | RFC 6916  | Top-down   | Current Suite | Required   | Repository  |
+   | parallel  |            | hierarchy     | during     | and         |
+   | hierarchy |            | remains       | transition | operational |
+   |           |            | available     |            | duplication |
+   +-----------+------------+---------------+------------+-------------+
+   | Mixed     | Per        | Unsupported   | Not        | The path    |
+   | Tree      | subtree    | RPs lose the  | required   | still       |
+   |           | after      | switched      | within the | depends on  |
+   |           | required   | subtree       | switched   | Current     |
+   |           | support    |               | subtree    | Suite       |
+   |           | is         |               |            | ancestors   |
+   |           | available  |               |            |             |
+   +-----------+------------+---------------+------------+-------------+
+
+                                  Table 1
+
+   The experiment uses test repositories and test TALs.  It does not
+   define or authorize a production transition procedure.
+
+8.  Evaluated Algorithm Suites
+
+8.1.  Current Suite
 
    The Current Suite baseline used by this experiment is RSA PKCS #1
    v1.5 with SHA-256 as specified by RFC 7935.  This document does not
    set a production transition timetable.
 
-6.2.  Composite Configuration Evaluated in This Revision
+
+
+
+
+
+
+
+
+Yoshikawa                Expires 30 January 2027                [Page 8]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
+8.2.  Composite Configuration Evaluated in This Revision
 
    The composite signature construction used by this experiment is
    defined in revision 19 of [I-D.ietf-lamps-pq-composite-sigs].  The
@@ -320,25 +467,18 @@ Internet-Draft                PQC for RPKI                     July 2026
    composite public keys and certificate signatures, and
    [I-D.ietf-lamps-cms-composite-sigs] to composite CMS SignedData.  The
    public reference implementation has generated complete composite
-   X.509 certificates, CRLs, ROAs, and manifests and has validated an
-   RSA-to-Composite Mixed Tree with experimental rpki-client and
-   Routinator extensions.  The two RP processing paths share one OpenSSL
-   and Composite provider backend, so this is not independent
-   cryptographic interoperability evidence.
+   X.509 certificates, CRLs, ROAs, and manifests and has validated a
+   Mixed Tree with an RSA parent and a Composite child using
+   experimental rpki-client and Routinator extensions.  The two RP
+   processing paths share one OpenSSL and Composite provider backend, so
+   this is not independent cryptographic interoperability evidence.
 
    Experiments with the composite suite are confined to isolated
    repositories under test TALs.  Experimental objects, production
    repositories, production keys, and production TALs are deliberately
    kept separate.
 
-
-
-Yoshikawa                Expires 30 January 2027                [Page 6]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
-6.3.  Additional Candidate Suites
+8.3.  Additional Candidate Suites
 
    ML-DSA-44 is an additional experimental configuration.  It produces
    smaller public keys and signatures and may sign and verify faster,
@@ -352,6 +492,19 @@ Internet-Draft                PQC for RPKI                     July 2026
    ML-DSA-87 is included as a higher-security comparison candidate.  It
    is more conservative than ML-DSA-65 but carries correspondingly
    larger size and performance costs.
+
+
+
+
+
+
+
+
+
+Yoshikawa                Expires 30 January 2027                [Page 9]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
 
    SLH-DSA-SHAKE-128s and SLH-DSA-SHAKE-192s are included for
    cryptographic-diversity comparison.  Their signature algorithm, PKIX,
@@ -374,7 +527,7 @@ Internet-Draft                PQC for RPKI                     July 2026
    a deployment uses Parallel Publication or Mixed Tree migration.  RP
    support for a selected suite remains a deployment prerequisite.
 
-6.4.  Classical Reference Points
+8.4.  Classical Reference Points
 
    To relativize the cost of PQC candidates, this document uses two
    compact classical algorithms as non-normative reference points: ECDSA
@@ -387,14 +540,7 @@ Internet-Draft                PQC for RPKI                     July 2026
    should be compared against both baselines rather than against RSA
    alone.
 
-
-
-Yoshikawa                Expires 30 January 2027                [Page 7]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
-6.5.  Size Model Inputs
+8.5.  Size Model Inputs
 
    The table below records the values supplied to the first-order size
    model.  The representations are deliberately mixed: some rows use raw
@@ -402,6 +548,19 @@ Internet-Draft                PQC for RPKI                     July 2026
    representative DER values or a maximum encoded signature size.  They
    are therefore model inputs, not a uniform comparison of
    SubjectPublicKeyInfo or signature encodings.
+
+
+
+
+
+
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 10]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
 
    +====================+======+===================+===================+
    | Algorithm          | Cat. | Key               | Signature         |
@@ -429,7 +588,7 @@ Internet-Draft                PQC for RPKI                     July 2026
    | SLH-DSA-SHAKE-192s | 3    | 48                | 16224             |
    +--------------------+------+-------------------+-------------------+
 
-                                  Table 1
+                                  Table 2
 
    "Cat." is the NIST security category; "n/a" marks classical reference
    algorithms.  The RSA-2048 key value is a representative DER RSA
@@ -440,16 +599,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    documented so that later models can replace them with consistently
    measured RPKI object encodings.
 
-
-
-
-
-
-Yoshikawa                Expires 30 January 2027                [Page 8]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
    Beyond static sizes, the evaluation considers the following
    dimensions: certificate and CRL size under the RPKI profile; CMS
    signed object size; signing and verification cost under the RP
@@ -458,6 +607,16 @@ Internet-Draft                PQC for RPKI                     July 2026
    support; and standardization and implementation maturity.  The
    dimensions backed by measurements in this revision are identified in
    Appendix A.
+
+
+
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 11]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
 
    Two qualitative observations from the preliminary evidence inform the
    rationale in the next section.  First, RP workload is verification
@@ -476,7 +635,7 @@ Internet-Draft                PQC for RPKI                     July 2026
    [pqc-rpki-lab].  Measured values are implementation and environment
    dependent and are not protocol requirements.
 
-6.6.  Rationale for the Experimental Configurations
+8.6.  Rationale for the Experimental Configurations
 
    This experiment evaluates a composite suite because a global RPKI
    migration may benefit from not depending exclusively on a newly
@@ -496,16 +655,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    only when the other component, the combiner, encodings, key handling,
    and the verification of all component signatures remain unaffected.
 
-
-
-
-
-
-Yoshikawa                Expires 30 January 2027                [Page 9]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
    ML-DSA-65 is used as the PQC component of the composite configuration
    evaluated in this revision because it has a final FIPS signature
    specification [FIPS204], corresponding PKIX [RFC9881] and CMS
@@ -516,6 +665,14 @@ Internet-Draft                PQC for RPKI                     July 2026
    another global algorithm migration could take multiple years.  This
    is not an RPKI requirement.  It is not used because it is the
    smallest or fastest possible signature algorithm; it is neither.
+
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 12]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
 
    The choice between ML-DSA-44 and ML-DSA-65 is genuinely open.  The
    argument for ML-DSA-65 is conservatism: the RPKI is a single global
@@ -551,17 +708,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    *  Side-channel-resistant FN-DSA implementations and HSM support
       require separate implementation and deployment evaluation.
 
-
-
-
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 10]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
    *  Availability of FN-DSA in the platforms that RPKI CAs, RIRs, HSM
       vendors, and validator implementations actually use is a separate
       question from the algorithm's intrinsic merits.  This experiment
@@ -577,7 +723,16 @@ Internet-Draft                PQC for RPKI                     July 2026
    deployment prerequisite for CAs that protect their signing keys in
    HSMs.
 
-7.  Experimental Certificate and CRL Encoding
+
+
+Yoshikawa                Expires 30 January 2027               [Page 13]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
+9.  Experimental Object Encoding
+
+9.1.  Certificate and CRL Encoding
 
    The composite certificate and CRL experiment follows the encodings in
    [I-D.ietf-lamps-pq-composite-sigs].  Under that assumption, a
@@ -604,21 +759,7 @@ Internet-Draft                PQC for RPKI                     July 2026
    extension semantics, the certificate policy OID, certificate path
    validation, manifest processing, or CRL processing.
 
-
-
-
-
-
-
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 11]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
-8.  Experimental CMS Signed Object Encoding
+9.2.  CMS Signed Object Encoding
 
    The composite CMS experiment combines
    [I-D.ietf-lamps-cms-composite-sigs] with the RPKI signed object
@@ -635,6 +776,16 @@ Internet-Draft                PQC for RPKI                     July 2026
    signing-time or other signed attributes.  The eContentType, eContent,
    and object-specific validation rules remain unchanged.
 
+
+
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 14]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
    The implementation generated and validated complete Composite ROA and
    manifest SignedData using these encodings, together with the
    certificates and CRLs required for repository validation.
@@ -643,41 +794,30 @@ Internet-Draft                PQC for RPKI                     July 2026
    implementation independent of the shared OpenSSL and Composite
    provider remains open work.
 
-9.  Signed Object Coverage
+9.3.  Manifest Processing During Migration
 
-   Manifests [RFC9286], ROAs [RFC9582], Signed Checklists [RFC9323],
-   ASPA objects [I-D.ietf-sidrops-aspa-profile], TAK objects [RFC9691],
-   and any future object types built on the RFC 6488 template share one
-   CMS structure, one EE certificate model, one certification
-   infrastructure, and one repository.  The evaluation model therefore
-   treats them as one signed-object algorithm profile.  Migrating, for
-   example, ROAs to a PQC suite while leaving ASPA objects on RSA would
-   introduce per-object-type algorithm diversity, leaving part of the
-   RPKI signed-object set dependent on the Current Suite.
+   A manifest covers the products of one CA instance at one publication
+   point, as specified by [RFC9286] and updated by [RFC9981].  The
+   manifest is signed with a one-time-use EE certificate issued by that
+   CA.  Its fileList contains the certificates issued and published by
+   that CA, the CA's current CRL, and signed objects whose embedded EE
+   certificates were issued by that CA.
 
-   Changing only the CMS signature algorithm does not change an object's
-   eContentType or object-specific payload syntax.  Some objects,
-   notably TAK objects, may nevertheless carry public keys whose
-   algorithms change as part of a wider trust-anchor migration and
-   therefore require separate object-specific interoperability testing.
-   A future standards-track profile that selects a new mandatory RPKI
-   algorithm suite would update [RFC7935].  An object-specific RFC needs
-   an update only if that object's payload or validation semantics also
-   change; this document makes no such change.
+   The relevant RP check is therefore issuer and publication-scope
+   consistency, not equality between the manifest signing key and
+   product keys.  An RP validates the manifest EE certificate under the
+   associated CA, verifies each listed certificate, CRL, or signed
+   object under that same CA instance as required by its object profile,
+   and checks the publication point, file name, and file hash according
+   to [RFC9286].  A shared publication point can contain products from
+   multiple CA instances during key rollover, but each manifest covers
+   only its associated CA instance.
 
-
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 12]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
-   BGPsec UPDATE signatures are not RFC 6488 signed objects and are
-   outside this experiment.  BGPsec Router Certificates and their
-   covering CRLs and manifests are repository products and remain part
-   of the evaluation scope.
+   Mixed Tree migration and composite signatures do not change these
+   checks.  This document therefore introduces no additional requirement
+   for the manifest EE key to equal a key used by a listed product, and
+   it does not weaken the existing RP checks that bind every listed
+   product to the manifest's CA scope.
 
 10.  Related Experimental Designs
 
@@ -689,6 +829,18 @@ Internet-Draft                PQC for RPKI                     July 2026
    structure but replaces the one-time-use EE key pair and CMS signature
    with a public key derived from the message digest and an empty
    signature, reducing redundant cryptographic cost.
+
+
+
+
+
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 15]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
 
    pqRPKI [pqRPKI] instead introduces a Merkle Tree Ladder and
    restructures manifest, delegation, and bulk-verification processing.
@@ -722,14 +874,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    transfers changed files; even an unchanged repository therefore has a
    cost that grows with the file list.
 
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 13]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
    Erik Synchronization [I-D.ietf-sidrops-rpki-erik-protocol] is an
    RPKI- specific replication protocol using Merkle trees, content-
    addressable naming, and HTTP.  An RP compares ErikIndex and
@@ -738,6 +882,21 @@ Internet-Draft                PQC for RPKI                     July 2026
    bootstrap and catch-up.  This document does not specify Erik or
    require it for PQC deployment; it evaluates Erik alongside RRDP and
    rsync as a candidate response to repository expansion.
+
+
+
+
+
+
+
+
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 16]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
 
 11.3.  Transport Experiment Boundary
 
@@ -752,62 +911,19 @@ Internet-Draft                PQC for RPKI                     July 2026
    growth, transferred bytes, and request counts, not a production-
    network throughput result.
 
-12.  Manifests and Repository Processing
+12.  Experimental Results
 
-12.1.  Manifest Scope During Migration
-
-   A manifest covers the products of one CA instance at one publication
-   point, as specified by [RFC9286] and updated by [RFC9981].  The
-   manifest is signed with a one-time-use EE certificate issued by that
-   CA.  Its fileList contains the certificates issued and published by
-   that CA, the CA's current CRL, and signed objects whose embedded EE
-   certificates were issued by that CA.
-
-   The relevant RP check is therefore issuer and publication-scope
-   consistency, not equality between the manifest signing key and
-   product keys.  An RP validates the manifest EE certificate under the
-   associated CA, verifies each listed certificate, CRL, or signed
-   object under that same CA instance as required by its object profile,
-   and checks the publication point, file name, and file hash according
-   to [RFC9286].  A shared publication point can contain products from
-   multiple CA instances during key rollover, but each manifest covers
-   only its associated CA instance.
-
-   Mixed Tree migration and composite signatures do not change these
-   checks.  This document therefore introduces no additional requirement
-   for the manifest EE key to equal a key used by a listed product, and
-   it does not weaken the existing RP checks that bind every listed
-   product to the manifest's CA scope.
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 14]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
-12.2.  Parallel Publication Mechanics
-
-   The Parallel Publication experiment does not define new payload
-   encodings for manifests, ROAs, or CRLs.  It publishes Current Suite
-   and Next Suite products in separate, internally consistent branches.
-
-   The experimental harness needs a mapping between corresponding
-   products for measurement and debugging.  Such a mapping can be
-   derived from the publication point structure, object names, CA
-   hierarchy, or an implementation-specific record.  It is not proposed
-   as a new on-wire RPKI object.
-
-13.  Experimental Results Summary
+12.1.  Results Summary
 
    OpenSSL 3.6.2 and the evaluated Composite provider generated complete
    certificate, CRL, manifest, and ROA sets for pure ML-DSA-65,
-   Composite ML-DSA, and an RSA-to-Composite Mixed Tree.  Experimental
-   rpki-client and Routinator extensions validated each repository and
-   produced the same two VRPs as the RSA baseline.  An experimental
-   Krill extension then created a Composite child below an RSA parent,
-   published and replaced ROAs, and rolled the child back to RSA.  Both
-   experimental RPs derived the expected VRPs at each stage.
+   Composite ML-DSA, and a Mixed Tree with an RSA parent and a Composite
+   child.  Experimental rpki-client and Routinator extensions validated
+   each repository and produced the same two VRPs as the RSA baseline.
+   An experimental Krill extension then created a Composite child below
+   an RSA parent, published and replaced ROAs, and rolled the child back
+   to RSA.  Both experimental RPs derived the expected VRPs at each
+   stage.
 
    The primary repeated cryptographic-operation benchmarks measure key
    generation, signing, and verification without X.509, CMS, repository
@@ -824,23 +940,30 @@ Internet-Draft                PQC for RPKI                     July 2026
    paths, but not independent cryptographic interoperability or
    production readiness.
 
-14.  Relying Party Evaluation
+
+
+
+
+
+
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 17]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
+12.2.  Relying Party Evaluation
 
    The experiment extended rpki-client and Routinator to recognize the
    id-ml-dsa-65 and id-MLDSA65-ECDSA-P256-SHA512 identifiers and to
    delegate their cryptographic operations to OpenSSL providers.  Each
    RP processed four complete repositories: the RSA baseline, pure ML-
-   DSA-65, Composite ML-DSA, and an RSA-to-Composite Mixed Tree.  For
-   every repository, the test covered certificate-path and CRL
-   validation, manifest and CMS validation, ROA processing, and VRP
-   production.
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 15]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
+   DSA-65, Composite ML-DSA, and a Mixed Tree with an RSA parent and a
+   Composite child.  For every repository, the test covered certificate-
+   path and CRL validation, manifest and CMS validation, ROA processing,
+   and VRP production.
 
    The Mixed Tree test additionally verified that the issuer signature
    algorithm and subject SPKI algorithm are processed independently.
@@ -873,135 +996,12 @@ Internet-Draft                PQC for RPKI                     July 2026
    the semantic content of that output is intended to be unchanged by
    the algorithm migration.
 
-15.  Experimental Migration Observations
-
-   This section compares two migration structures: the planned, top-down
-   transition specified by RFC 6916 and the Mixed Tree evaluated in this
-   experiment.  The choice of signature suite is orthogonal to this
-   comparison.
-
-   RFC 6916 specifies a top-down transition in which a parent CA adopts
-   support for the Next Suite before its children.  During phases 2 and
-   3, corresponding Current Suite and Next Suite product sets are
-   maintained in parallel.  RFC 6916 deliberately avoids mixed-suite CA
-   certificates: a CA certificate signed using one suite does not carry
-   a subject key associated with another suite.
-
-   The Mixed Tree evaluated here relaxes that restriction.  A parent
-   using the Current Suite signs a child CA certificate whose subject
-   public key belongs to the Next Suite.  The child then issues its
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 16]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
-   certificates, CRLs, and signed objects using the Next Suite without
-   first requiring the parent to migrate its own CA key and product set.
-   Production issuance would still require the parent to process the
-   child's Next Suite certificate request and proof of possession.  This
-   experiment constructs the child CA certificate directly; it has not
-   implemented that provisioning exchange.
-
-   +===========+============+===============+============+=============+
-   | Migration | Migration  | Legacy RP     | Parallel   | Principal   |
-   | model     | ordering   | compatibility | products   | limitation  |
-   +===========+============+===============+============+=============+
-   | RFC 6916  | Top-down   | Current Suite | Required   | Repository  |
-   | parallel  |            | hierarchy     | during     | and         |
-   | hierarchy |            | remains       | transition | operational |
-   |           |            | available     |            | duplication |
-   +-----------+------------+---------------+------------+-------------+
-   | Mixed     | Per        | Unsupported   | Not        | The path    |
-   | Tree      | subtree    | RPs lose the  | required   | still       |
-   |           | after      | switched      | within the | depends on  |
-   |           | required   | subtree       | switched   | Current     |
-   |           | support    |               | subtree    | Suite       |
-   |           | is         |               |            | ancestors   |
-   |           | available  |               |            |             |
-   +-----------+------------+---------------+------------+-------------+
-
-                                  Table 2
-
-   The experiment uses test repositories and test TALs.  It does not
-   define or authorize a production transition procedure.
-
-15.1.  Parallel Publication and Differences in Validation Results
-
-   Parallel Publication is useful in test repositories for comparing a
-   Current Suite branch with a candidate branch.  Its use as a
-   production transition would need to account for divergence caused by
-   publication failures, timing skew, software defects, or configuration
-   drift.  The experiment compares the resulting VRP sets.  CCR
-   [I-D.ietf-sidrops-rpki-ccr] is a candidate common representation for
-   that comparison.
-
-15.2.  Mixed Tree Migration
-
-   The parent signs the child CA certificate using the Current Suite,
-   while the child SPKI carries a Next Suite key.  Below that boundary,
-   the child uses the Next Suite to sign the certificates and CRLs that
-   it issues, as well as the CMS signed objects associated with the
-   child CA.  The evaluated repository instantiates the Next Suite with
-   the Composite ML-DSA configuration described above.  The Mixed Tree
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 17]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
-   migration approach is independent of the selected signature suite.
-   The model processes the two algorithm fields independently and
-   verifies each certificate or CRL signatureAlgorithm with the issuer's
-   public key.
-
-   This construction is not permitted by the RFC 6916 transition
-   procedure.  It is evaluated only as an experimental alternative under
-   test TALs.
-
-   Unlike the RFC 6916 procedure, a switched subtree does not maintain
-   corresponding Current Suite and Next Suite products.  This avoids
-   duplicate repository content and the publication, configuration, and
-   rollover work needed to keep two product sets aligned.  It also
-   permits subtrees to move independently after the necessary parent and
-   RP support is available, rather than waiting for every ancestor to
-   migrate its own CA key and product set.
-
-   The trade-off is compatibility.  Once a subtree switches, an RP that
-   does not support the Next Suite cannot validate it through the mixed
-   certification path.  Mixed Tree deployment therefore replaces the
-   parallel legacy hierarchy with a requirement for sufficient RP
-   support before each subtree is migrated.
-
-   A Mixed Tree rooted in a Current Suite trust anchor is not quantum
-   resistant as a complete certification path.  Validation of the
-   certification path depends on every certificate signature along it,
-   including signatures made under the Current Suite.  If an adversary
-   can forge a Current Suite certificate signature above the transition
-   boundary, the adversary can substitute a different Next Suite child
-   key and construct a forged subtree.
-
-   Mixed Tree migration is therefore suitable only while Current Suite
-   certificate signatures remain trustworthy.  It does not provide a
-   recovery procedure after those signatures become forgeable, nor does
-   it by itself establish a quantum-resistant trust anchor.  Achieving
-   end-to-end post-quantum security ultimately requires removing
-   dependence on the Current Suite from the complete certification path.
-   Trust-anchor migration and establishment of such a path are separate
-   concerns from the Mixed Tree migration evaluated here.
-
-16.  Implementation Status
+13.  Implementation Status
 
    This section records the status of the experiments at the time of
    posting this Internet-Draft, using the reporting pattern described in
    [RFC7942].  It is intended to assist IETF discussion and is to be
    removed before publication as an RFC.
-
-
 
 
 
@@ -1017,8 +1017,8 @@ Internet-Draft                PQC for RPKI                     July 2026
    Implemented:
 
    *  Generation of complete pure ML-DSA-65 and Composite certificates,
-      CRLs, manifests, and ROAs, including an RSA-to-Composite Mixed
-      Tree repository.
+      CRLs, manifests, and ROAs, including a Mixed Tree repository with
+      an RSA parent and a Composite child.
 
    *  Experimental rpki-client and Routinator extensions that validate
       the RSA, pure ML-DSA-65, Composite, and Mixed Tree repositories
@@ -1066,7 +1066,7 @@ Yoshikawa                Expires 30 January 2027               [Page 19]
 Internet-Draft                PQC for RPKI                     July 2026
 
 
-17.  Security Considerations
+14.  Security Considerations
 
    This document addresses forgery of RPKI signatures in the presence of
    a CRQC.  Existing considerations for CA compromise, repository
@@ -1091,7 +1091,7 @@ Internet-Draft                PQC for RPKI                     July 2026
    branch and the PQC branch might contain different ROA payloads, stale
    manifests, or different CRL state.  The experiment detects and
    reports these cases rather than silently selecting one branch; see
-   the Experimental Migration Observations section.
+   the Experimental Migration Approaches section.
 
    Mixed Tree deployment introduces the risk of confusing a
    certificate's signature algorithm with the algorithm of its subject
@@ -1100,6 +1100,31 @@ Internet-Draft                PQC for RPKI                     July 2026
    processes each certificate or CRL signatureAlgorithm independently,
    verifies the signature with the issuer's public key, and processes
    the subject SPKI algorithm as a separate field.
+
+   A Mixed Tree rooted in a Current Suite trust anchor is not quantum
+   resistant as a complete certification path.  Validation of the
+   certification path depends on every certificate signature along it,
+   including signatures made under the Current Suite.  If an adversary
+   can forge a Current Suite certificate signature above the migration
+   boundary, the adversary can substitute a different Next Suite child
+   key and construct a forged subtree.
+
+   Mixed Tree migration is therefore suitable only while Current Suite
+   certificate signatures remain trustworthy.  It does not provide a
+   recovery procedure after those signatures become forgeable, nor does
+   it by itself establish a quantum-resistant trust anchor.  Achieving
+   end-to-end post-quantum security ultimately requires removing
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 20]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
+   dependence on the Current Suite from the complete certification path.
+   Trust-anchor migration and establishment of such a path are separate
+   concerns from the Mixed Tree migration evaluated here.
 
    Larger public keys, signatures, certificates, CRLs, and CMS objects
    increase the network and processing resources required for repository
@@ -1111,16 +1136,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    evaluation.  Production-network measurements of RRDP, rsync, and Erik
    Synchronization under projected repository sizes and churn rates are
    needed before large-scale deployment.
-
-
-
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 20]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
 
    HSM implementations of PQC algorithms are newer than their software
    counterparts and may lag in side-channel hardening, fault-attack
@@ -1155,21 +1170,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    enable stripping and cross-protocol attacks.  A defect in one
    component is tolerated only if the other component and the combiner,
    parser, encoding, key management, and verification of all component
-   signatures are unaffected.  A shared implementation defect or
-   compromise of both component keys is not mitigated by the composite
-   construction.  After a CRQC breaks ECDSA, the composite suite's
-   unforgeability depends on ML-DSA-65.
-
-18.  IANA Considerations
-
-   This document requests no IANA actions.  It reuses algorithm
-   identifiers defined by the referenced LAMPS specifications and
-   defines no new RPKI object type, file extension, or content type.
-
-
-
-
-
 
 
 
@@ -1178,13 +1178,24 @@ Yoshikawa                Expires 30 January 2027               [Page 21]
 Internet-Draft                PQC for RPKI                     July 2026
 
 
-19.  Questions for Further Work
+   signatures are unaffected.  A shared implementation defect or
+   compromise of both component keys is not mitigated by the composite
+   construction.  After a CRQC breaks ECDSA, the composite suite's
+   unforgeability depends on ML-DSA-65.
+
+15.  IANA Considerations
+
+   This document requests no IANA actions.  It reuses algorithm
+   identifiers defined by the referenced LAMPS specifications and
+   defines no new RPKI object type, file extension, or content type.
+
+16.  Questions for Further Work
 
    The following questions require additional SIDROPS discussion and
    implementation evidence.  The results reported here do not select a
    production suite or transition procedure.
 
-19.1.  Algorithm Configurations
+16.1.  Algorithm Configurations
 
    *  Whether ML-DSA-44, ML-DSA-65, or another candidate provides an
       appropriate balance of object size, signing and validation cost,
@@ -1196,7 +1207,7 @@ Internet-Draft                PQC for RPKI                     July 2026
       PKIX/CMS conventions, evidence of side-channel-resistant
       implementations, and HSM availability.
 
-19.2.  Migration Design
+16.2.  Migration Design
 
    *  Under what operational and compatibility conditions Parallel
       Publication or Mixed Tree migration provides an acceptable
@@ -1213,19 +1224,8 @@ Internet-Draft                PQC for RPKI                     July 2026
       under a future Next Suite, including whether a null-signature
       construction should replace the current one-time-use EE model.
 
-   *  How provisioning and publication software will roll the BPKI trust
-      anchors and EE certificates used for existing relationships,
-      including relationships established through [RFC8183], before
-      those protocols depend on a PQC algorithm.  The procedure needs
-      overlap, rollback, and recovery behavior and can be prepared
-      independently of the final RPKI object-signature algorithm choice.
 
-19.3.  Repository Distribution
 
-   *  Whether RRDP and rsync remain operationally sufficient at
-      projected PQC repository sizes, topology, polling intervals, and
-      churn rates, or whether deployment requires a more selective
-      mechanism such as Erik Synchronization.
 
 
 
@@ -1234,13 +1234,27 @@ Yoshikawa                Expires 30 January 2027               [Page 22]
 Internet-Draft                PQC for RPKI                     July 2026
 
 
-19.4.  Operational Readiness
+   *  How provisioning and publication software will roll the BPKI trust
+      anchors and EE certificates used for existing relationships,
+      including relationships established through [RFC8183], before
+      those protocols depend on a PQC algorithm.  The procedure needs
+      overlap, rollback, and recovery behavior and can be prepared
+      independently of the final RPKI object-signature algorithm choice.
+
+16.3.  Repository Distribution
+
+   *  Whether RRDP and rsync remain operationally sufficient at
+      projected PQC repository sizes, topology, polling intervals, and
+      churn rates, or whether deployment requires a more selective
+      mechanism such as Erik Synchronization.
+
+16.4.  Operational Readiness
 
    *  Which PQC signature algorithms RIR CA teams and their HSM vendors
       plan to support, on what firmware, API, certification, and
       deployment timelines.
 
-20.  Informative References
+17.  Informative References
 
    [RFC6480]  Lepinski, M. and S. Kent, "An Infrastructure to Support
               Secure Internet Routing", RFC 6480, DOI 10.17487/RFC6480,
@@ -1266,6 +1280,16 @@ Internet-Draft                PQC for RPKI                     July 2026
               Key Infrastructure", RFC 7935, DOI 10.17487/RFC7935,
               August 2016, <https://www.rfc-editor.org/info/rfc7935>.
 
+
+
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 23]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
    [RFC8182]  Bruijnzeels, T., Muravskiy, O., Weber, B., and R. Austein,
               "The RPKI Repository Delta Protocol (RRDP)", RFC 8182,
               DOI 10.17487/RFC8182, July 2017,
@@ -1281,14 +1305,6 @@ Internet-Draft                PQC for RPKI                     July 2026
               "Manifests for the Resource Public Key Infrastructure
               (RPKI)", RFC 9286, DOI 10.17487/RFC9286, June 2022,
               <https://www.rfc-editor.org/info/rfc9286>.
-
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 23]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
 
    [RFC9582]  Snijders, J., Maddison, B., Lepinski, M., Kong, D., and S.
               Kent, "A Profile for Route Origin Authorizations (ROAs)",
@@ -1319,6 +1335,17 @@ Internet-Draft                PQC for RPKI                     July 2026
               Syntax (CMS)", RFC 9882, DOI 10.17487/RFC9882, October
               2025, <https://www.rfc-editor.org/info/rfc9882>.
 
+
+
+
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 24]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
    [RFC9981]  Harrison, T., Michaelson, G., and J. Snijders, "Resource
               Public Key Infrastructure (RPKI) Manifest Number
               Handling", RFC 9981, DOI 10.17487/RFC9981, May 2026,
@@ -1338,14 +1365,6 @@ Internet-Draft                PQC for RPKI                     July 2026
               "Composite Module-Lattice-Based Digital Signature
               Algorithm (ML-DSA) for use in Cryptographic Message Syntax
               (CMS)", Work in Progress, Internet-Draft, draft-ietf-
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 24]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
               lamps-cms-composite-sigs-05, 22 May 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-lamps-
               cms-composite-sigs-05>.
@@ -1374,6 +1393,15 @@ Internet-Draft                PQC for RPKI                     July 2026
               DOI 10.17487/RFC8608, June 2019,
               <https://www.rfc-editor.org/info/rfc8608>.
 
+
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 25]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
    [RFC9323]  Snijders, J., Harrison, T., and B. Maddison, "A Profile
               for RPKI Signed Checklists (RSCs)", RFC 9323,
               DOI 10.17487/RFC9323, November 2022,
@@ -1388,19 +1416,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    [RFC9842]  Meenan, P., Ed. and Y. Weiss, Ed., "Compression Dictionary
               Transport", RFC 9842, DOI 10.17487/RFC9842, September
               2025, <https://www.rfc-editor.org/info/rfc9842>.
-
-
-
-
-
-
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 25]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
 
    [RFC9909]  Bashiri, K., Fluhrer, S., Gazdag, S., Van Geest, D., and
               S. Kousidis, "Internet X.509 Public Key Infrastructure --
@@ -1434,6 +1449,15 @@ Internet-Draft                PQC for RPKI                     July 2026
               <https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-
               rpki-erik-protocol-07>.
 
+
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 26]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
    [I-D.doesburg-sidrops-nullscheme]
               Doesburg, D., "Null Scheme for Signed Objects in the
               Resource Public Key Infrastructure (RPKI)", Expired and
@@ -1450,13 +1474,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    [FIPS205]  National Institute of Standards and Technology, "Stateless
               Hash-Based Digital Signature Standard", FIPS 205, August
               2024, <https://doi.org/10.6028/NIST.FIPS.205>.
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 26]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
 
    [Doesburg2025]
               Doesburg, D., "Post-Quantum Cryptography for the RPKI",
@@ -1475,11 +1492,10 @@ Internet-Draft                PQC for RPKI                     July 2026
 Appendix A.  Measurement Details
 
    This appendix records measurements referenced by the Size Model
-   Inputs, Experimental Results Summary, and Implementation Status
-   sections.  All values were produced by the experimental harness
-   [pqc-rpki-lab], which contains the corresponding scripts, raw
-   outputs, and environment metadata.  The harness remains the durable
-   record.
+   Inputs, Experimental Results, and Implementation Status sections.
+   All values were produced by the experimental harness [pqc-rpki-lab],
+   which contains the corresponding scripts, raw outputs, and
+   environment metadata.  The harness remains the durable record.
 
 A.1.  Reproducibility Metadata
 
@@ -1490,6 +1506,14 @@ A.1.  Reproducibility Metadata
    run on macOS 26.5.2 arm64 on an Apple M4 using OpenSSL 3.6.2 and a C
    harness compiled with cc -O2 -Wall -Wextra -Werror.  The recorded
    environment also identifies Python 3.14.4 and liboqs 0.15.0.  The
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 27]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
    Composite ML-DSA operation benchmark, implementing revision 19 of the
    LAMPS construction, used cc -O3 -Wall -Wextra -Werror with OpenSSL
    3.6.2.  The small-scale end-to-end and controlled-scale measurements
@@ -1498,21 +1522,6 @@ A.1.  Reproducibility Metadata
    CompositeCrypto/composite-provider commit
    2263161f6b058fe0195a98b6fad088c2d4a2595f, with the repository's
    private-key decoder patch applied.
-
-
-
-
-
-
-
-
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 27]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
 
 A.2.  Small-Scale End-to-End Measurement
 
@@ -1527,41 +1536,32 @@ A.2.  Small-Scale End-to-End Measurement
    minimum and maximum.  Wall time uses a monotonic nanosecond clock,
    CPU time uses child-resource usage deltas, and maximum RSS is in KiB.
 
-   +============+==================+======+======+======+======+======+
-   | Phase      | Scenario         |Metric|Median|Sample|Min   |Max   |
-   |            |                  |      |      |stdev |      |      |
-   +============+==================+======+======+======+======+======+
-   | Generation | RSA baseline     |Wall  |0.606 |0.094 |0.427 |0.893 |
-   |            |                  |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Generation | RSA baseline     |CPU   |0.635 |0.102 |0.444 |0.947 |
-   |            |                  |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Generation | RSA baseline     |RSS   |22400 |58    |22268 |22528 |
-   |            |                  |(KiB) |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Generation | Pure ML-DSA-65   |Wall  |0.335 |0.010 |0.314 |0.361 |
-   |            |                  |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Generation | Pure ML-DSA-65   |CPU   |0.339 |0.010 |0.318 |0.365 |
-   |            |                  |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Generation | Pure ML-DSA-65   |RSS   |22396 |25    |22268 |22400 |
-   |            |                  |(KiB) |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Generation | Composite        |Wall  |0.355 |0.011 |0.339 |0.388 |
-   |            | standalone       |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Generation | Composite        |CPU   |0.359 |0.011 |0.342 |0.392 |
-   |            | standalone       |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Generation | Composite        |RSS   |22396 |37    |22268 |22400 |
-   |            | standalone       |(KiB) |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Generation | RSA-to-Composite |Wall  |0.619 |0.072 |0.514 |0.839 |
-   |            | Mixed Tree       |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Generation | RSA-to-Composite |CPU   |0.638 |0.078 |0.526 |0.874 |
+   +============+============+======+======+========+========+========+
+   | Phase      | Scenario   |Metric|Median| Sample | Min    | Max    |
+   |            |            |      |      | stdev  |        |        |
+   +============+============+======+======+========+========+========+
+   | Generation | RSA        |Wall  |0.606 | 0.094  | 0.427  | 0.893  |
+   |            | baseline   |(s)   |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Generation | RSA        |CPU   |0.635 | 0.102  | 0.444  | 0.947  |
+   |            | baseline   |(s)   |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Generation | RSA        |RSS   |22400 | 58     | 22268  | 22528  |
+   |            | baseline   |(KiB) |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Generation | Pure ML-   |Wall  |0.335 | 0.010  | 0.314  | 0.361  |
+   |            | DSA-65     |(s)   |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Generation | Pure ML-   |CPU   |0.339 | 0.010  | 0.318  | 0.365  |
+   |            | DSA-65     |(s)   |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Generation | Pure ML-   |RSS   |22396 | 25     | 22268  | 22400  |
+   |            | DSA-65     |(KiB) |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Generation | Composite  |Wall  |0.355 | 0.011  | 0.339  | 0.388  |
+   |            | standalone |(s)   |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Generation | Composite  |CPU   |0.359 | 0.011  | 0.342  | 0.392  |
 
 
 
@@ -1570,54 +1570,54 @@ Yoshikawa                Expires 30 January 2027               [Page 28]
 Internet-Draft                PQC for RPKI                     July 2026
 
 
-   |            | Mixed Tree       |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Generation | RSA-to-Composite |RSS   |21248 |80    |21120 |21504 |
-   |            | Mixed Tree       |(KiB) |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Validation | RSA baseline     |Wall  |0.0136|0.0010|0.0116|0.0190|
-   |            |                  |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Validation | RSA baseline     |CPU   |0.0138|0.0010|0.0118|0.0191|
-   |            |                  |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Validation | RSA baseline     |RSS   |7424  |25    |7168  |7424  |
-   |            |                  |(KiB) |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Validation | Pure ML-DSA-65   |Wall  |0.0158|0.0011|0.0134|0.0220|
-   |            |                  |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Validation | Pure ML-DSA-65   |CPU   |0.0160|0.0011|0.0135|0.0223|
-   |            |                  |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Validation | Pure ML-DSA-65   |RSS   |7424  |17    |7296  |7424  |
-   |            |                  |(KiB) |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Validation | Composite        |Wall  |0.0189|0.0013|0.0162|0.0285|
-   |            | standalone       |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Validation | Composite        |CPU   |0.0190|0.0013|0.0164|0.0288|
-   |            | standalone       |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Validation | Composite        |RSS   |7424  |22    |7296  |7516  |
-   |            | standalone       |(KiB) |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Validation | RSA-to-Composite |Wall  |0.0200|0.0014|0.0167|0.0269|
-   |            | Mixed Tree       |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Validation | RSA-to-Composite |CPU   |0.0200|0.0014|0.0168|0.0269|
-   |            | Mixed Tree       |(s)   |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-   | Validation | RSA-to-Composite |RSS   |7424  |29    |7296  |7584  |
-   |            | Mixed Tree       |(KiB) |      |      |      |      |
-   +------------+------------------+------+------+------+------+------+
-
-                                 Table 3
-
-   All four validation scenarios produced the expected two VRPs with the
-   experimental rpki-client extension.  The four required repository
-   products had a median of 4843 bytes for RSA and occupied 28247 bytes
-   for pure ML-DSA-65 in every repetition.  Composite standalone had a
+   |            | standalone |(s)   |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Generation | Composite  |RSS   |22396 | 37     | 22268  | 22400  |
+   |            | standalone |(KiB) |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Generation | Mixed Tree |Wall  |0.619 | 0.072  | 0.514  | 0.839  |
+   |            | (RSA       |(s)   |      |        |        |        |
+   |            | parent,    |      |      |        |        |        |
+   |            | Composite  |      |      |        |        |        |
+   |            | child)     |      |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Generation | Mixed Tree |CPU   |0.638 | 0.078  | 0.526  | 0.874  |
+   |            | (RSA       |(s)   |      |        |        |        |
+   |            | parent,    |      |      |        |        |        |
+   |            | Composite  |      |      |        |        |        |
+   |            | child)     |      |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Generation | Mixed Tree |RSS   |21248 | 80     | 21120  | 21504  |
+   |            | (RSA       |(KiB) |      |        |        |        |
+   |            | parent,    |      |      |        |        |        |
+   |            | Composite  |      |      |        |        |        |
+   |            | child)     |      |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Validation | RSA        |Wall  |0.0136| 0.0010 | 0.0116 | 0.0190 |
+   |            | baseline   |(s)   |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Validation | RSA        |CPU   |0.0138| 0.0010 | 0.0118 | 0.0191 |
+   |            | baseline   |(s)   |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Validation | RSA        |RSS   |7424  | 25     | 7168   | 7424   |
+   |            | baseline   |(KiB) |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Validation | Pure ML-   |Wall  |0.0158| 0.0011 | 0.0134 | 0.0220 |
+   |            | DSA-65     |(s)   |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Validation | Pure ML-   |CPU   |0.0160| 0.0011 | 0.0135 | 0.0223 |
+   |            | DSA-65     |(s)   |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Validation | Pure ML-   |RSS   |7424  | 17     | 7296   | 7424   |
+   |            | DSA-65     |(KiB) |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Validation | Composite  |Wall  |0.0189| 0.0013 | 0.0162 | 0.0285 |
+   |            | standalone |(s)   |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Validation | Composite  |CPU   |0.0190| 0.0013 | 0.0164 | 0.0288 |
+   |            | standalone |(s)   |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Validation | Composite  |RSS   |7424  | 22     | 7296   | 7516   |
 
 
 
@@ -1626,6 +1626,33 @@ Yoshikawa                Expires 30 January 2027               [Page 29]
 Internet-Draft                PQC for RPKI                     July 2026
 
 
+   |            | standalone |(KiB) |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Validation | Mixed Tree |Wall  |0.0200| 0.0014 | 0.0167 | 0.0269 |
+   |            | (RSA       |(s)   |      |        |        |        |
+   |            | parent,    |      |      |        |        |        |
+   |            | Composite  |      |      |        |        |        |
+   |            | child)     |      |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Validation | Mixed Tree |CPU   |0.0200| 0.0014 | 0.0168 | 0.0269 |
+   |            | (RSA       |(s)   |      |        |        |        |
+   |            | parent,    |      |      |        |        |        |
+   |            | Composite  |      |      |        |        |        |
+   |            | child)     |      |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+   | Validation | Mixed Tree |RSS   |7424  | 29     | 7296   | 7584   |
+   |            | (RSA       |(KiB) |      |        |        |        |
+   |            | parent,    |      |      |        |        |        |
+   |            | Composite  |      |      |        |        |        |
+   |            | child)     |      |      |        |        |        |
+   +------------+------------+------+------+--------+--------+--------+
+
+                                 Table 3
+
+   All four validation scenarios produced the expected two VRPs with the
+   experimental rpki-client extension.  The four required repository
+   products had a median of 4843 bytes for RSA and occupied 28247 bytes
+   for pure ML-DSA-65 in every repetition.  Composite standalone had a
    median of 28855 bytes and range of [28851, 28859].  The seven
    products across both publication points in the Mixed Tree had a
    median of 29095 bytes and range of [29092, 29098].
@@ -1647,6 +1674,14 @@ A.3.  Public-Cache Profile and Controlled Scale Measurements
    unavailable during collection.  No source objects, keys, repository
    URIs, or local paths are included in the public result.  This is one
    incomplete snapshot rather than a measurement of the entire global
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 30]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
+
    RPKI, update churn, or incremental validation.
 
    A separate Krill campaign used one RSA parent and one child
@@ -1674,14 +1709,6 @@ A.3.  Public-Cache Profile and Controlled Scale Measurements
    The captured 1,000-ROA Composite state contained 1008 rsync files
    occupying 9,797,596 bytes.  Its RRDP snapshot was 13,145,809 bytes
    uncompressed and 9,190,012 bytes with deterministic gzip.  The
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 30]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
    captured delta for the bulk Composite publication state was
    13,133,093 bytes uncompressed and 9,182,046 bytes with deterministic
    gzip.  It is not the delta produced by the later one-ROA update under
@@ -1701,6 +1728,15 @@ Internet-Draft                PQC for RPKI                     July 2026
    The OS page cache was uncontrolled.  These values therefore
    characterize this harness, not a general incremental-validation
    speedup.
+
+
+
+
+
+Yoshikawa                Expires 30 January 2027               [Page 31]
+
+Internet-Draft                PQC for RPKI                     July 2026
+
 
    A separate synthetic topology pilot generated one RSA parent and 100
    Composite child CAs, each with one publication point and one ROA.
@@ -1724,20 +1760,6 @@ Internet-Draft                PQC for RPKI                     July 2026
    the public RPKI remains future work, as do production measurements of
    RRDP, rsync, and Erik.
 
-
-
-
-
-
-
-
-
-
-Yoshikawa                Expires 30 January 2027               [Page 31]
-
-Internet-Draft                PQC for RPKI                     July 2026
-
-
 A.4.  Repository Transport Measurements
 
    The transport campaign reused the measured 1,000-ROA object count and
@@ -1755,28 +1777,6 @@ A.4.  Repository Transport Measurements
    AKI-based partitioning or segment-prefetch behavior.  Request and
    response headers, TLS, HPACK or QPACK, connection setup, and
    Compression Dictionary Transport [RFC9842] are excluded.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

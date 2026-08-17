@@ -119,7 +119,7 @@ class DraftSubmissionTest(unittest.TestCase):
             self.root_02.find('.//reference[@anchor="RFC9981"]')
         )
         self.assertIn(
-            "The choice of signature suite is orthogonal to this comparison",
+            "The choice of signature suite is independent of this comparison",
             text,
         )
         self.assertNotIn("## Composite Signatures", self.source_02)

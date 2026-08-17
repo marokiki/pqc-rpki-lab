@@ -110,7 +110,7 @@ Checklists (RSC) [RFC9323], ASPA objects
 [RFC9691].  The generated signed objects in this revision cover
 manifests and ROAs; additional object types are listed in the Implementation
 Status section.  The CMS signed objects are treated as a single
-signed-object algorithm profile; see the Signed Object Coverage section.
+signed-object algorithm profile, as described in the following section.
 
 This document covers the RPKI signatures on BGPsec Router Certificates,
 but does not define or change the BGPsec UPDATE signature algorithm
@@ -129,6 +129,33 @@ algorithm or transition schedule as RPKI repository objects.
 This document does not modify RRDP or rsync; it separately evaluates their
 transport costs, together with Erik Synchronization, under the larger
 object sizes used by the experiment.
+
+# Signed Object Coverage
+
+Manifests [RFC9286], ROAs [RFC9582], Signed Checklists [RFC9323], ASPA
+objects [I-D.ietf-sidrops-aspa-profile], TAK objects [RFC9691], and any
+future object types built on the RFC 6488 template share one CMS structure,
+one EE certificate model, one certification infrastructure, and one
+repository.  The evaluation model therefore treats them as one
+signed-object algorithm profile.  Migrating, for example, ROAs to a PQC
+suite while leaving ASPA objects on RSA would introduce per-object-type
+algorithm diversity, leaving part of the RPKI signed-object set dependent
+on the Current Suite.
+
+Changing only the CMS signature algorithm does not change an object's
+eContentType or object-specific payload syntax.  Some objects, notably
+TAK objects, may nevertheless carry public keys whose algorithms change
+as part of a wider trust-anchor migration and therefore require separate
+object-specific interoperability testing.  A future standards-track
+profile that selects a new mandatory RPKI algorithm suite would update
+[RFC7935].  An object-specific RFC needs an update
+only if that object's payload or validation semantics also change; this
+document makes no such change.
+
+BGPsec UPDATE signatures are not RFC 6488 signed objects and are outside
+this experiment.  BGPsec Router Certificates and their covering CRLs and
+manifests are repository products and remain part of the evaluation
+scope.
 
 # Relationship to RFC 6916
 
@@ -168,6 +195,74 @@ The experiments use the following evaluation goals.
 * Keep measurement and interoperability evidence reproducible outside the
   protocol specification.
 
+# Experimental Migration Approaches
+
+This section describes the two migration approaches evaluated in this
+document.  The choice of signature suite is independent of this comparison.
+
+## Parallel Publication
+
+RFC 6916 specifies a top-down transition in which a parent CA adopts
+support for the Next Suite before its children.  During phases 2 and 3,
+corresponding Current Suite and Next Suite product sets are maintained in
+parallel.  RFC 6916 deliberately avoids mixed-suite CA certificates: a CA
+certificate signed using one suite does not carry a subject key associated
+with another suite.
+
+The Parallel Publication experiment publishes Current Suite and Next Suite
+products in separate, internally consistent branches.  It does not define
+new payload encodings for manifests, ROAs, or CRLs.  Parallel Publication is
+useful in test repositories for comparing a Current Suite branch with a
+candidate branch.  Its use as a production transition would need to account
+for differences caused by publication failures, timing skew, software
+defects, or configuration drift.  The experiment compares the resulting VRP
+sets.  CCR [I-D.ietf-sidrops-rpki-ccr] is a candidate common representation
+for that comparison.
+
+The experimental harness needs a mapping between corresponding products
+for measurement and debugging.  Such a mapping can be derived from the
+publication point structure, object names, CA hierarchy, or an
+implementation-specific record.  It is not proposed as a new on-wire
+RPKI object.
+
+## Mixed Tree
+
+A parent using the Current Suite signs a child CA certificate whose subject
+public key belongs to the Next Suite.  The child then issues its certificates,
+CRLs, and CMS signed objects using the Next Suite without first requiring the
+parent to migrate its own CA key and product set.  Production issuance would
+still require the parent to process the child's Next Suite certificate
+request and proof of possession.  This experiment constructs the child CA
+certificate directly; it has not implemented that provisioning exchange.
+
+The Mixed Tree migration approach is independent of the selected signature
+suite.  The evaluated repository instantiates the Next Suite with the
+Composite ML-DSA configuration evaluated in this revision.  This construction
+is not permitted by the RFC 6916 transition procedure and is evaluated only
+as an experimental alternative under test TALs.
+
+Unlike the RFC 6916 procedure, a switched subtree does not maintain
+corresponding Current Suite and Next Suite products.  This avoids duplicate
+repository content and the publication, configuration, and rollover work
+needed to keep two product sets aligned.  It also permits subtrees to move
+independently after the necessary parent and RP support is available, rather
+than waiting for every ancestor to migrate its own CA key and product set.
+
+The trade-off is compatibility.  Once a subtree switches, an RP that does
+not support the Next Suite cannot validate it through the certification path.
+Mixed Tree deployment therefore replaces the parallel legacy hierarchy with
+a requirement for sufficient RP support before each subtree is migrated.  The
+complete certification path remains dependent on Current Suite certificate
+signatures above the migration boundary.
+
+| Migration model | Migration ordering | Legacy RP compatibility | Parallel products | Principal limitation |
+|---|---|---|---|---|
+| RFC 6916 parallel hierarchy | Top-down | Current Suite hierarchy remains available | Required during transition | Repository and operational duplication |
+| Mixed Tree | Per subtree after required support is available | Unsupported RPs lose the switched subtree | Not required within the switched subtree | The path still depends on Current Suite ancestors |
+
+The experiment uses test repositories and test TALs.  It does not define or
+authorize a production transition procedure.
+
 # Evaluated Algorithm Suites
 
 ## Current Suite
@@ -193,8 +288,8 @@ The object experiment applies
 certificate signatures, and [I-D.ietf-lamps-cms-composite-sigs] to
 composite CMS SignedData.  The public reference implementation has
 generated complete composite X.509 certificates, CRLs, ROAs, and
-manifests and has validated an RSA-to-Composite Mixed Tree with
-experimental rpki-client and Routinator extensions.  The two RP
+manifests and has validated a Mixed Tree with an RSA parent and a Composite
+child using experimental rpki-client and Routinator extensions.  The two RP
 processing paths share one OpenSSL and Composite provider backend, so
 this is not independent cryptographic interoperability evidence.
 
@@ -382,7 +477,9 @@ Algorithm selection for the RPKI cannot be based on software benchmarks
 alone.  HSM support for a candidate algorithm is also a deployment
 prerequisite for CAs that protect their signing keys in HSMs.
 
-# Experimental Certificate and CRL Encoding
+# Experimental Object Encoding
+
+## Certificate and CRL Encoding
 
 The composite certificate and CRL experiment follows the encodings in
 [I-D.ietf-lamps-pq-composite-sigs].  Under that assumption, a composite
@@ -407,7 +504,7 @@ certificates.  The experiment does not change resource extension
 semantics, the certificate policy OID, certificate path validation,
 manifest processing, or CRL processing.
 
-# Experimental CMS Signed Object Encoding
+## CMS Signed Object Encoding
 
 The composite CMS experiment combines
 [I-D.ietf-lamps-cms-composite-sigs] with the RPKI signed object template
@@ -431,32 +528,30 @@ Routinator extensions processed the resulting repository.  Interoperability
 with a cryptographic implementation independent of the shared OpenSSL and
 Composite provider remains open work.
 
-# Signed Object Coverage
+## Manifest Processing During Migration
 
-Manifests [RFC9286], ROAs [RFC9582], Signed Checklists [RFC9323], ASPA
-objects [I-D.ietf-sidrops-aspa-profile], TAK objects [RFC9691], and any
-future object types built on the RFC 6488 template share one CMS structure,
-one EE certificate model, one certification infrastructure, and one
-repository.  The evaluation model therefore treats them as one
-signed-object algorithm profile.  Migrating, for example, ROAs to a PQC
-suite while leaving ASPA objects on RSA would introduce per-object-type
-algorithm diversity, leaving part of the RPKI signed-object set dependent
-on the Current Suite.
+A manifest covers the products of one CA instance at one publication
+point, as specified by [RFC9286] and updated by [RFC9981].  The manifest is
+signed with a one-time-use EE certificate issued by that CA.  Its fileList contains
+the certificates issued and published by that CA, the CA's current CRL,
+and signed objects whose embedded EE certificates were issued by that
+CA.
 
-Changing only the CMS signature algorithm does not change an object's
-eContentType or object-specific payload syntax.  Some objects, notably
-TAK objects, may nevertheless carry public keys whose algorithms change
-as part of a wider trust-anchor migration and therefore require separate
-object-specific interoperability testing.  A future standards-track
-profile that selects a new mandatory RPKI algorithm suite would update
-[RFC7935].  An object-specific RFC needs an update
-only if that object's payload or validation semantics also change; this
-document makes no such change.
+The relevant RP check is therefore issuer and publication-scope
+consistency, not equality between the manifest signing key and product
+keys.  An RP validates the manifest EE certificate under the associated
+CA, verifies each listed certificate, CRL, or signed object under that
+same CA instance as required by its object profile, and checks the
+publication point, file name, and file hash according to [RFC9286].  A
+shared publication point can contain products from multiple CA instances
+during key rollover, but each manifest covers only its associated CA
+instance.
 
-BGPsec UPDATE signatures are not RFC 6488 signed objects and are outside
-this experiment.  BGPsec Router Certificates and their covering CRLs and
-manifests are repository products and remain part of the evaluation
-scope.
+Mixed Tree migration and composite signatures do not change these
+checks.  This document therefore introduces no additional requirement
+for the manifest EE key to equal a key used by a listed product, and it
+does not weaken the existing RP checks that bind every listed product to
+the manifest's CA scope.
 
 # Related Experimental Designs
 
@@ -518,51 +613,14 @@ measured object counts and repository sizes but is not a cryptographically
 valid RPKI repository.  The comparison is consequently evidence about byte
 growth, transferred bytes, and request counts, not a production-network throughput result.
 
-# Manifests and Repository Processing
+# Experimental Results
 
-## Manifest Scope During Migration
-
-A manifest covers the products of one CA instance at one publication
-point, as specified by [RFC9286] and updated by [RFC9981].  The manifest is
-signed with a one-time-use EE certificate issued by that CA.  Its fileList contains
-the certificates issued and published by that CA, the CA's current CRL,
-and signed objects whose embedded EE certificates were issued by that
-CA.
-
-The relevant RP check is therefore issuer and publication-scope
-consistency, not equality between the manifest signing key and product
-keys.  An RP validates the manifest EE certificate under the associated
-CA, verifies each listed certificate, CRL, or signed object under that
-same CA instance as required by its object profile, and checks the
-publication point, file name, and file hash according to [RFC9286].  A
-shared publication point can contain products from multiple CA instances
-during key rollover, but each manifest covers only its associated CA
-instance.
-
-Mixed Tree migration and composite signatures do not change these
-checks.  This document therefore introduces no additional requirement
-for the manifest EE key to equal a key used by a listed product, and it
-does not weaken the existing RP checks that bind every listed product to
-the manifest's CA scope.
-
-## Parallel Publication Mechanics
-
-The Parallel Publication experiment does not define new payload
-encodings for manifests, ROAs, or CRLs.  It publishes Current Suite and
-Next Suite products in separate, internally consistent branches.
-
-The experimental harness needs a mapping between corresponding products
-for measurement and debugging.  Such a mapping can be derived from the
-publication point structure, object names, CA hierarchy, or an
-implementation-specific record.  It is not proposed as a new on-wire
-RPKI object.
-
-# Experimental Results Summary
+## Results Summary
 
 OpenSSL 3.6.2 and the evaluated Composite provider generated complete
 certificate, CRL, manifest, and ROA sets for pure ML-DSA-65, Composite
-ML-DSA, and an RSA-to-Composite Mixed Tree.  Experimental rpki-client and
-Routinator extensions validated each repository and produced the same two
+ML-DSA, and a Mixed Tree with an RSA parent and a Composite child.
+Experimental rpki-client and Routinator extensions validated each repository and produced the same two
 VRPs as the RSA baseline.  An experimental Krill extension then created a
 Composite child below an RSA parent, published and replaced ROAs, and rolled
 the child back to RSA.  Both experimental RPs derived the expected VRPs at
@@ -581,14 +639,14 @@ The two RP extensions use the same OpenSSL and Composite provider backend.
 The experiment therefore demonstrates two RP processing paths, but not
 independent cryptographic interoperability or production readiness.
 
-# Relying Party Evaluation
+## Relying Party Evaluation
 
 The experiment extended rpki-client and Routinator to recognize the
 id-ml-dsa-65 and id-MLDSA65-ECDSA-P256-SHA512 identifiers and to delegate
 their cryptographic operations to OpenSSL providers.  Each RP processed
 four complete repositories: the RSA baseline, pure ML-DSA-65, Composite
-ML-DSA, and an RSA-to-Composite Mixed Tree.  For every repository, the
-test covered certificate-path and CRL validation, manifest and CMS
+ML-DSA, and a Mixed Tree with an RSA parent and a Composite child.  For every
+repository, the test covered certificate-path and CRL validation, manifest and CMS
 validation, ROA processing, and VRP production.
 
 The Mixed Tree test additionally verified that the issuer signature
@@ -621,94 +679,6 @@ validated payloads through RTR or local export formats, and the semantic
 content of that output is intended to be unchanged by the algorithm
 migration.
 
-# Experimental Migration Observations
-
-This section compares two migration structures: the planned, top-down
-transition specified by RFC 6916 and the Mixed Tree
-evaluated in this experiment.  The choice of signature suite is orthogonal
-to this comparison.
-
-RFC 6916 specifies a top-down transition in which a parent CA adopts
-support for the Next Suite before its children.  During phases 2 and 3,
-corresponding Current Suite and Next Suite product sets are maintained in
-parallel.  RFC 6916 deliberately avoids mixed-suite CA certificates: a CA
-certificate signed using one suite does not carry a subject key associated
-with another suite.
-
-The Mixed Tree evaluated here relaxes that restriction.  A
-parent using the Current Suite signs a child CA certificate whose subject
-public key belongs to the Next Suite.  The child then issues its
-certificates, CRLs, and signed objects using the Next Suite without first
-requiring the parent to migrate its own CA key and product set.  Production
-issuance would still require the parent to process the child's Next Suite
-certificate request and proof of possession.  This experiment constructs
-the child CA certificate directly; it has not implemented that
-provisioning exchange.
-
-| Migration model | Migration ordering | Legacy RP compatibility | Parallel products | Principal limitation |
-|---|---|---|---|---|
-| RFC 6916 parallel hierarchy | Top-down | Current Suite hierarchy remains available | Required during transition | Repository and operational duplication |
-| Mixed Tree | Per subtree after required support is available | Unsupported RPs lose the switched subtree | Not required within the switched subtree | The path still depends on Current Suite ancestors |
-
-The experiment uses test repositories and test TALs.  It does not define or
-authorize a production transition procedure.
-
-## Parallel Publication and Differences in Validation Results
-
-Parallel Publication is useful in test repositories for comparing a
-Current Suite branch with a candidate branch.  Its use as a production
-transition would need to account for divergence caused by
-publication failures, timing skew, software defects, or configuration
-drift.  The experiment compares the resulting VRP sets.  CCR
-[I-D.ietf-sidrops-rpki-ccr] is a candidate common representation for
-that comparison.
-
-## Mixed Tree Migration
-
-The parent signs the child CA certificate using the Current Suite, while
-the child SPKI carries a Next Suite key.  Below that boundary, the child
-uses the Next Suite to sign the certificates and CRLs that it issues, as
-well as the CMS signed objects associated with the child CA.
-The evaluated repository instantiates the Next Suite with the Composite
-ML-DSA configuration described above.  The Mixed Tree migration approach is
-independent of the selected signature suite.  The model processes the two algorithm fields
-independently and verifies each certificate or CRL signatureAlgorithm with
-the issuer's public key.
-
-This construction is not permitted by the RFC 6916 transition procedure.
-It is evaluated only as an experimental alternative under test TALs.
-
-Unlike the RFC 6916 procedure, a switched subtree does not
-maintain corresponding Current Suite and Next Suite products.  This avoids
-duplicate repository content and the publication, configuration, and
-rollover work needed to keep two product sets aligned.  It also permits
-subtrees to move independently after the necessary parent and RP support is
-available, rather than waiting for every ancestor to migrate its own CA key
-and product set.
-
-The trade-off is compatibility.  Once a subtree switches, an RP that does
-not support the Next Suite cannot validate it through the mixed
-certification path.  Mixed Tree deployment therefore replaces the parallel
-legacy hierarchy with a requirement for sufficient RP support before each
-subtree is migrated.
-
-A Mixed Tree rooted in a Current Suite trust anchor is not
-quantum resistant as a complete certification path.  Validation of the
-certification path depends on every certificate signature along it,
-including signatures made under the Current Suite.  If an
-adversary can forge a Current Suite certificate signature above the
-transition boundary, the adversary can substitute a different Next Suite
-child key and construct a forged subtree.
-
-Mixed Tree migration is therefore suitable only while Current Suite
-certificate signatures remain trustworthy.  It does not provide a recovery
-procedure after those signatures become forgeable, nor does it by itself
-establish a quantum-resistant trust anchor.  Achieving end-to-end post-quantum security
-ultimately requires removing dependence on the Current Suite from the
-complete certification path.  Trust-anchor migration and establishment of
-such a path are separate concerns from the Mixed Tree migration evaluated
-here.
-
 # Implementation Status
 
 This section records the status of the experiments at the time of posting
@@ -723,7 +693,8 @@ coverage from remaining work.
 Implemented:
 
 * Generation of complete pure ML-DSA-65 and Composite certificates, CRLs,
-  manifests, and ROAs, including an RSA-to-Composite Mixed Tree repository.
+  manifests, and ROAs, including a Mixed Tree repository with an RSA parent
+  and a Composite child.
 * Experimental rpki-client and Routinator extensions that validate the RSA,
   pure ML-DSA-65, Composite, and Mixed Tree repositories and produce the
   expected VRPs.
@@ -775,7 +746,7 @@ Current Suite and Next Suite branches.
 For example, the RSA branch and the PQC branch might contain different
 ROA payloads, stale manifests, or different CRL state.  The experiment
 detects and reports these cases rather than silently selecting one branch;
-see the Experimental Migration Observations section.
+see the Experimental Migration Approaches section.
 
 Mixed Tree deployment introduces the risk of confusing a certificate's
 signature algorithm with the algorithm of its subject public key.
@@ -784,6 +755,23 @@ chains or reject valid ones.  The experimental model processes each
 certificate or CRL signatureAlgorithm independently, verifies the
 signature with the issuer's public key, and processes the subject SPKI
 algorithm as a separate field.
+
+A Mixed Tree rooted in a Current Suite trust anchor is not
+quantum resistant as a complete certification path.  Validation of the
+certification path depends on every certificate signature along it,
+including signatures made under the Current Suite.  If an
+adversary can forge a Current Suite certificate signature above the
+migration boundary, the adversary can substitute a different Next Suite
+child key and construct a forged subtree.
+
+Mixed Tree migration is therefore suitable only while Current Suite
+certificate signatures remain trustworthy.  It does not provide a recovery
+procedure after those signatures become forgeable, nor does it by itself
+establish a quantum-resistant trust anchor.  Achieving end-to-end post-quantum security
+ultimately requires removing dependence on the Current Suite from the
+complete certification path.  Trust-anchor migration and establishment of
+such a path are separate concerns from the Mixed Tree migration evaluated
+here.
 
 Larger public keys, signatures, certificates, CRLs, and CMS objects
 increase the network and processing resources required for repository
@@ -892,7 +880,7 @@ production suite or transition procedure.
 # Measurement Details
 
 This appendix records measurements referenced by the Size Model Inputs,
-Experimental Results Summary, and Implementation Status sections.  All values
+Experimental Results, and Implementation Status sections.  All values
 were produced by the experimental harness [pqc-rpki-lab], which
 contains the corresponding scripts, raw outputs, and environment
 metadata.  The harness remains the durable record.
@@ -938,9 +926,9 @@ time uses child-resource usage deltas, and maximum RSS is in KiB.
 | Generation | Composite standalone | Wall (s) | 0.355 | 0.011 | 0.339 | 0.388 |
 | Generation | Composite standalone | CPU (s) | 0.359 | 0.011 | 0.342 | 0.392 |
 | Generation | Composite standalone | RSS (KiB) | 22396 | 37 | 22268 | 22400 |
-| Generation | RSA-to-Composite Mixed Tree | Wall (s) | 0.619 | 0.072 | 0.514 | 0.839 |
-| Generation | RSA-to-Composite Mixed Tree | CPU (s) | 0.638 | 0.078 | 0.526 | 0.874 |
-| Generation | RSA-to-Composite Mixed Tree | RSS (KiB) | 21248 | 80 | 21120 | 21504 |
+| Generation | Mixed Tree (RSA parent, Composite child) | Wall (s) | 0.619 | 0.072 | 0.514 | 0.839 |
+| Generation | Mixed Tree (RSA parent, Composite child) | CPU (s) | 0.638 | 0.078 | 0.526 | 0.874 |
+| Generation | Mixed Tree (RSA parent, Composite child) | RSS (KiB) | 21248 | 80 | 21120 | 21504 |
 | Validation | RSA baseline | Wall (s) | 0.0136 | 0.0010 | 0.0116 | 0.0190 |
 | Validation | RSA baseline | CPU (s) | 0.0138 | 0.0010 | 0.0118 | 0.0191 |
 | Validation | RSA baseline | RSS (KiB) | 7424 | 25 | 7168 | 7424 |
@@ -950,9 +938,9 @@ time uses child-resource usage deltas, and maximum RSS is in KiB.
 | Validation | Composite standalone | Wall (s) | 0.0189 | 0.0013 | 0.0162 | 0.0285 |
 | Validation | Composite standalone | CPU (s) | 0.0190 | 0.0013 | 0.0164 | 0.0288 |
 | Validation | Composite standalone | RSS (KiB) | 7424 | 22 | 7296 | 7516 |
-| Validation | RSA-to-Composite Mixed Tree | Wall (s) | 0.0200 | 0.0014 | 0.0167 | 0.0269 |
-| Validation | RSA-to-Composite Mixed Tree | CPU (s) | 0.0200 | 0.0014 | 0.0168 | 0.0269 |
-| Validation | RSA-to-Composite Mixed Tree | RSS (KiB) | 7424 | 29 | 7296 | 7584 |
+| Validation | Mixed Tree (RSA parent, Composite child) | Wall (s) | 0.0200 | 0.0014 | 0.0167 | 0.0269 |
+| Validation | Mixed Tree (RSA parent, Composite child) | CPU (s) | 0.0200 | 0.0014 | 0.0168 | 0.0269 |
+| Validation | Mixed Tree (RSA parent, Composite child) | RSS (KiB) | 7424 | 29 | 7296 | 7584 |
 
 All four validation scenarios produced the expected two VRPs with the
 experimental rpki-client extension.
