@@ -37,7 +37,7 @@ class DraftSubmissionTest(unittest.TestCase):
         text = " ".join(self.root_02.itertext())
         self.assertIn("This document is informational.", text)
         self.assertIn("It does not update RFC 7935 or RFC 6916", text)
-        self.assertIn("Draft-19 Composite ML-DSA Measurements", text)
+        self.assertIn("Composite ML-DSA Operation Measurements", text)
         self.assertNotIn("MUST", text)
         self.assertNotIn("SHOULD", text)
 
@@ -59,7 +59,7 @@ class DraftSubmissionTest(unittest.TestCase):
         self.assertIn("Composite Configuration Evaluated in This Revision", text)
         self.assertIn("Questions for Further Work", text)
         self.assertIn("EUF-CMA", text)
-        self.assertIn("Seven additional repository-operation cases", text)
+        self.assertIn("Seven repository-operation cases exercised", text)
         self.assertIn("actual rpki-client CCR DER", text)
         self.assertIn("100 Composite child CAs", text)
         self.assertNotIn("unknown algorithm", text)
@@ -75,7 +75,7 @@ class DraftSubmissionTest(unittest.TestCase):
             text,
         )
         self.assertIn(
-            "Composite certification-request and proof-of-possession fixtures",
+            "Composite certificate requests and proof of possession",
             text,
         )
         self.assertIn("bulk Composite publication state", text)
@@ -111,6 +111,69 @@ class DraftSubmissionTest(unittest.TestCase):
             "draft-ietf-sidrops-rpki-erik-protocol-07",
         )
         self.assertIn("Repository Transport Measurements", self.source_02)
+        self.assertIn("[RFC9842]", self.source_02)
+        self.assertIsNotNone(
+            self.root_02.find('.//reference[@anchor="RFC9842"]')
+        )
+        self.assertIsNotNone(
+            self.root_02.find('.//reference[@anchor="RFC9981"]')
+        )
+        self.assertIn(
+            "The choice of signature suite is orthogonal to this comparison",
+            text,
+        )
+        self.assertNotIn("## Composite Signatures", self.source_02)
+        self.assertNotIn("## Single-Run 100,000-Operation Measurements", self.source_02)
+        self.assertNotIn("security-critical", self.source_02)
+        self.assertNotIn("APNIC Erik proof of concept", self.source_02)
+        self.assertIn(
+            "Next Suite public key carried in the transition certificate's SPKI",
+            text,
+        )
+        self.assertIn(
+            "RP support for a selected suite remains a deployment prerequisite",
+            text,
+        )
+        self.assertIn(
+            "measured and modeled results explicitly distinguished",
+            text,
+        )
+        self.assertNotIn("while its subject key is used", self.source_02)
+        self.assertNotIn("for its CA certificates", self.source_02)
+        self.assertNotIn("Erik proof-of-concept validation", self.source_02)
+        self.assertIn("outside the present evaluation", text)
+        self.assertIn("per-object-type algorithm diversity", text)
+        self.assertIn("cryptographic-object experiments", text)
+        self.assertIn("EE subject public-key algorithm", text)
+        self.assertNotIn("outside this profile", self.source_02)
+        self.assertNotIn("would create little benefit", self.source_02)
+        self.assertIn("both deterministic and randomized signing", text)
+        self.assertIn("following single-run measurements", text)
+        self.assertIn(
+            "CompositeCrypto/composite-provider commit 2263161f6b058fe0195a98b6fad088c2d4a2595f",
+            text,
+        )
+        self.assertIn("simplified Erik tree-fetch model counts", text)
+        self.assertIn("and updated by [RFC9981]", self.source_02)
+        self.assertIn("a 5.54-fold increase", text)
+        self.assertIn("does not modify RRDP or rsync", text)
+        self.assertIn("component-algorithm combination", text)
+        self.assertIn("are confined to isolated repositories", text)
+        self.assertIn("Fifteen negative cases", text)
+        self.assertIn("separate concerns from the mixed-tree mechanism", text)
+        source_references = self.source_02.split("# References", 1)[1]
+        self.assertLess(
+            source_references.index("[RFC9882]"),
+            source_references.index("[RFC9981]"),
+        )
+        self.assertNotIn("randomized (hedged) signing by default", self.source_02)
+        self.assertNotIn("FN-DSA verification was fast", self.source_02)
+        self.assertNotIn("Matrix wall median", self.source_02)
+        self.assertNotIn("model uses 12% RRDP", self.source_02)
+        self.assertNotIn("repository distribution is evaluated separately below", self.source_02.lower())
+        self.assertNotIn("No production RPKI CA or RP support", self.source_02)
+        self.assertNotIn("public evidence snapshot has generated", self.source_02)
+        self.assertNotIn("The evidence reference is fixed", self.source_02)
 
     def test_draft_01_submission_is_rendered(self):
         self.assertEqual(

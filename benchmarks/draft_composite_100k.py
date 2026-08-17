@@ -106,7 +106,7 @@ def main() -> None:
         "ML-DSA-87 + ECDSA P-384",
     }
     if {row["variant"] for row in rows} != expected:
-        raise RuntimeError("benchmark did not return the three Draft-19 variants")
+        raise RuntimeError("benchmark did not return the three revision-19 variants")
     for row in rows:
         iterations = int(row["iterations"])
         row["sign_microseconds_per_operation"] = f"{float(row['sign_seconds']) * 1_000_000 / iterations:.3f}"
@@ -127,7 +127,7 @@ def main() -> None:
         ("status", "Status"),
     ])
     (RESULTS / "draft-composite-100k.md").write_text(
-        "# Draft-19 Composite ML-DSA Benchmark\n\n"
+        "# Composite ML-DSA Benchmark (draft revision 19)\n\n"
         "> EXPERIMENTAL / NOT FOR PRODUCTION\n\n"
         f"This benchmark implements `{DRAFT}`. It constructs `M'` from the fixed Prefix, "
         "per-variant Label, one-byte application-context length, empty application context, "
@@ -135,13 +135,13 @@ def main() -> None:
         "the Label supplied as its ML-DSA context. The traditional component signs the same "
         "`M'`. Verification succeeds only when both components verify. The signature value is "
         "the raw concatenation `mldsaSig || tradSig`.\n\n"
-        "`ML-DSA-87 + ECDSA P-256` is not defined by Draft-19, so the Category-5 row uses "
+        "`ML-DSA-87 + ECDSA P-256` is not defined by revision 19, so the Category-5 row uses "
         "ECDSA P-384.\n\n" + table +
         "\n\n## Scope and limitations\n\n"
         "The timing includes construction of the message representative, both component "
         "operations, and raw signature concatenation. It excludes key generation, file I/O, "
         "X.509, CMS, validator processing, and HSM latency. Public-key and signature sizes are "
-        "the Draft-19 raw concatenations. ECDSA signatures use variable-length DER encoding, "
+        "the raw concatenations defined by revision 19. ECDSA signatures use variable-length DER encoding, "
         "so the result records minimum, maximum, and mean signature lengths.\n\n"
         "Repository ratios are first-order model outputs using the measured raw key and mean "
         "signature lengths. They are not full-repository measurements and do not include any "

@@ -1,0 +1,10 @@
+<reference anchor="RFC9842" target="https://www.rfc-editor.org/info/rfc9842">
+  <front>
+    <title>Compression Dictionary Transport</title>
+    <author fullname="Patrick Meenan" initials="P." surname="Meenan" role="editor"/>
+    <author fullname="Yoav Weiss" initials="Y." surname="Weiss" role="editor"/>
+    <date month="September" year="2025"/>
+  </front>
+  <seriesInfo name="RFC" value="9842"/>
+  <seriesInfo name="DOI" value="10.17487/RFC9842"/>
+</reference>

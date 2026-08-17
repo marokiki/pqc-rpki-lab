@@ -9,7 +9,7 @@ The repository keeps separate measurement classes:
 | Primitive benchmark | `make` | Key generation, signing, verification, and sizes for configured algorithms | Complete RPKI object processing |
 | Exact 100k benchmark | `make exact-100k` | Exactly 100,000 sign operations and 100,000 verify operations over a 32-byte message | Key roll, CMS, publication, validator work |
 | Composite component benchmark | `make composite-100k` | Sequential component signatures where both components must verify | LAMPS composite encoding or interoperability |
-| Draft-19 Composite benchmark | `make draft-composite-100k` | Draft-19 message representative, context binding, raw signature concatenation, and two-component verification | X.509/CMS/RPKI profile encoding or validator interoperability |
+| Composite ML-DSA benchmark (draft revision 19) | `make draft-composite-100k` | Revision-19 message representative, context binding, raw signature concatenation, and two-component verification | X.509/CMS/RPKI profile encoding or validator interoperability |
 | Object payload benchmark | `make object-benchmarks` | Synthetic Manifest file-list construction, payload hashing, and deterministic payload encoding | CMS SignedData, DER RPKI object serialization, validator work |
 | RPKI object fixtures | `make rpki-objects` | Public DER certificates, CRLs, eContent, and RSA/ML-DSA-65 CMS `.mft`/`.roa` | Independent validator acceptance |
 | Local object validation | `make local-validation` | DER, CMS, EE profile, content, and Manifest hash checks | Full RPKI validation |

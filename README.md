@@ -131,7 +131,7 @@ make composite-100k
 This requires both component signatures to verify, but does not implement
 the LAMPS composite ASN.1/OID format.
 
-Run the Draft-19 raw Composite ML-DSA benchmark separately with:
+Run the raw Composite ML-DSA benchmark based on draft revision 19 separately with:
 
 ```sh
 make draft-composite-100k

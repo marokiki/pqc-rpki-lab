@@ -24,7 +24,7 @@ Operational concerns:
 
 ## Composite signature track
 
-Composite ML-DSA raw signing and verification are implemented against `draft-ietf-lamps-pq-composite-sigs-19`. The implementation covers the Draft-19 message representative, ML-DSA context binding, both component operations, raw public-key and signature concatenation, and all-component verification. The measured variants are ML-DSA-44 with P-256, ML-DSA-65 with P-256, and ML-DSA-87 with P-384. Draft-19 does not define ML-DSA-87 with P-256.
+Composite ML-DSA raw signing and verification are implemented against `draft-ietf-lamps-pq-composite-sigs-19`. The implementation covers the message representative defined by revision 19, ML-DSA context binding, both component operations, raw public-key and signature concatenation, and all-component verification. The measured variants are ML-DSA-44 with P-256, ML-DSA-65 with P-256, and ML-DSA-87 with P-384. Revision 19 does not define ML-DSA-87 with P-256.
 
 The repository now defines an experimental RPKI X.509/CMS profile for
 id-MLDSA65-ECDSA-P256-SHA512 and demonstrates one controlled E2E path through

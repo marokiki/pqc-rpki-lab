@@ -1,10 +1,10 @@
-# Draft-19 Composite ML-DSA Benchmark
+# Composite ML-DSA Benchmark (draft revision 19)
 
 > EXPERIMENTAL / NOT FOR PRODUCTION
 
 This benchmark implements `draft-ietf-lamps-pq-composite-sigs-19`. It constructs `M'` from the fixed Prefix, per-variant Label, one-byte application-context length, empty application context, and the specified message pre-hash. The ML-DSA component signs in pure mode with the Label supplied as its ML-DSA context. The traditional component signs the same `M'`. Verification succeeds only when both components verify. The signature value is the raw concatenation `mldsaSig || tradSig`.
 
-`ML-DSA-87 + ECDSA P-256` is not defined by Draft-19, so the Category-5 row uses ECDSA P-384.
+`ML-DSA-87 + ECDSA P-256` is not defined by revision 19, so the Category-5 row uses ECDSA P-384.
 
 | Composite variant | Operations | Sign total s | Verify total s | Raw public key bytes | Mean signature bytes | Repository/RSA | Status |
 |---|---|---|---|---|---|---|---|
@@ -14,6 +14,6 @@ This benchmark implements `draft-ietf-lamps-pq-composite-sigs-19`. It constructs
 
 ## Scope and limitations
 
-The timing includes construction of the message representative, both component operations, and raw signature concatenation. It excludes key generation, file I/O, X.509, CMS, validator processing, and HSM latency. Public-key and signature sizes are the Draft-19 raw concatenations. ECDSA signatures use variable-length DER encoding, so the result records minimum, maximum, and mean signature lengths.
+The timing includes construction of the message representative, both component operations, and raw signature concatenation. It excludes key generation, file I/O, X.509, CMS, validator processing, and HSM latency. Public-key and signature sizes are the raw concatenations defined by revision 19. ECDSA signatures use variable-length DER encoding, so the result records minimum, maximum, and mean signature lengths.
 
 Repository ratios are first-order model outputs using the measured raw key and mean signature lengths. They are not full-repository measurements and do not include any future RPKI-specific X.509 or CMS profile overhead.

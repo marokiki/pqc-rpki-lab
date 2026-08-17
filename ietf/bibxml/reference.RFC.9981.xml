@@ -1,0 +1,11 @@
+<reference anchor="RFC9981" target="https://www.rfc-editor.org/info/rfc9981">
+  <front>
+    <title>Resource Public Key Infrastructure (RPKI) Manifest Number Handling</title>
+    <author fullname="Tom Harrison" initials="T." surname="Harrison"/>
+    <author fullname="George G. Michaelson" initials="G." surname="Michaelson"/>
+    <author fullname="Job Snijders" initials="J." surname="Snijders"/>
+    <date month="May" year="2026"/>
+  </front>
+  <seriesInfo name="RFC" value="9981"/>
+  <seriesInfo name="DOI" value="10.17487/RFC9981"/>
+</reference>

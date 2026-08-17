@@ -98,7 +98,16 @@ def find_inconsistencies() -> list[str]:
 
     negative_count = len(negative["results"])
     count_phrase = f"{negative_count} negative cases"
-    if count_phrase not in normalized_draft:
+    small_number_words = (
+        "Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven",
+        "Eight", "Nine", "Ten", "Eleven", "Twelve", "Thirteen",
+        "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen",
+        "Nineteen", "Twenty",
+    )
+    count_phrases = {count_phrase}
+    if negative_count < len(small_number_words):
+        count_phrases.add(f"{small_number_words[negative_count]} negative cases")
+    if not any(phrase in normalized_draft for phrase in count_phrases):
         failures.append(f"draft does not contain current count: {count_phrase}")
 
     generation = benchmark["generation_repetitions"]
