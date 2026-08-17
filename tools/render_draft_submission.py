@@ -425,6 +425,7 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
     for name in (
         "ietf-sidrops-rpki-ccr",
         "ietf-sidrops-aspa-profile",
+        "ietf-sidrops-rpki-erik-protocol",
         "doesburg-sidrops-nullscheme",
     ):
         add_bibxml(informative, f"reference.I-D.{name}.xml")

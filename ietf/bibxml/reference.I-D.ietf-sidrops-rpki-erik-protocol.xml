@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<reference anchor="I-D.ietf-sidrops-rpki-erik-protocol" target="https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-rpki-erik-protocol-07">
+  <front>
+    <title>The Erik Synchronization Protocol for use with the Resource Public Key Infrastructure (RPKI)</title>
+    <author initials="J." surname="Snijders" fullname="Job Snijders"><organization>BSD Software Development</organization></author>
+    <author initials="T." surname="Bruijnzeels" fullname="Tim Bruijnzeels"><organization>RIPE NCC</organization></author>
+    <author initials="T." surname="Harrison" fullname="Tom Harrison"><organization>APNIC</organization></author>
+    <author initials="W." surname="Ohgai" fullname="Wataru Ohgai"><organization>JPNIC</organization></author>
+    <date day="16" month="August" year="2026"/>
+  </front>
+  <seriesInfo name="Internet-Draft" value="draft-ietf-sidrops-rpki-erik-protocol-07"/>
+</reference>

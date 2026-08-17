@@ -1,4 +1,4 @@
-.PHONY: all certificate-sizes ccr-comparison cms-api-probe composite-100k composite-bootstrap composite-bootstrap-check composite-e2e composite-e2e-rp-matrix composite-e2e-negative composite-e2e-benchmark composite-keygen-benchmark draft-composite-100k exact-100k key-roll krill-experimental-bootstrap krill-experimental-bootstrap-check krill-experimental-build krill-experimental-e2e krill-scaled-e2e krill-scaled-summary local-validation message-sweep mixed-tree object-benchmarks pre-publication public-cache-profile regenerate-reports review-evidence routinator-experimental-bootstrap routinator-experimental-bootstrap-check routinator-experimental-build routinator-experimental-matrix routinator-experimental-negative routinator-krill-interop routinator-krill-scan rpki-objects test validator-container-probe verify-artifacts install-optional-pqc clean
+.PHONY: all certificate-sizes ccr-comparison cms-api-probe composite-100k composite-bootstrap composite-bootstrap-check composite-e2e composite-e2e-rp-matrix composite-e2e-negative composite-e2e-benchmark composite-keygen-benchmark draft-composite-100k exact-100k key-roll krill-experimental-bootstrap krill-experimental-bootstrap-check krill-experimental-build krill-experimental-e2e krill-scaled-e2e krill-scaled-summary local-validation message-sweep mixed-tree object-benchmarks pre-publication public-cache-profile regenerate-reports repository-transport review-evidence routinator-experimental-bootstrap routinator-experimental-bootstrap-check routinator-experimental-build routinator-experimental-matrix routinator-experimental-negative routinator-krill-interop routinator-krill-scan rpki-objects test validator-container-probe verify-artifacts install-optional-pqc clean
 
 COMPOSITE_OPENSSL ?= $(CURDIR)/local/build/openssl-3.6.2-install/bin/openssl
 COMPOSITE_OPENSSL_LIBDIR ?= $(CURDIR)/local/build/openssl-3.6.2-install/lib64
@@ -156,6 +156,9 @@ key-roll: rpki-objects
 
 local-validation: rpki-objects
 	PYTHONPATH=src python3 tools/local_object_validation.py
+
+repository-transport:
+	PYTHONPATH=src python3 tools/repository_transport_campaign.py
 
 regenerate-reports: object-benchmarks mixed-tree ccr-comparison routinator-krill-scan routinator-krill-interop cms-api-probe rpki-objects key-roll local-validation
 	PYTHONPATH=src python3 tools/generate_report.py

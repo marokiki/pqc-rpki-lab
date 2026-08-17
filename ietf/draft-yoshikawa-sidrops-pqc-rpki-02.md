@@ -486,6 +486,46 @@ alternative repository architecture rather than a direct algorithm
 substitution.  Comparing these designs requires separate measurements;
 the results in this document cover only the structure-preserving approach.
 
+# Repository Distribution Considerations
+
+## Impact of Larger Objects
+
+Changing the signature suite affects more than cryptographic processing.
+Larger certificates, CRLs, manifests, and signed objects enlarge cold
+repository synchronization and every update containing those objects.  The
+captured 1,000-ROA Composite repository in this experiment was 5.54 times
+the size of its RSA rollback state.  Transport scalability is therefore a
+deployment constraint that needs evaluation independently of algorithm
+correctness and RP validation time.
+
+## RRDP, rsync, and Erik Synchronization
+
+RRDP [RFC8182] distributes snapshots and a journal of deltas.  An RP that
+misses enough deltas obtains a complete snapshot, and a polling RP can
+receive intermediate publication states that it does not ultimately use.
+An rsync synchronization first exchanges repository metadata and then
+transfers changed files; even an unchanged repository therefore has a cost
+that grows with the file list.
+
+Erik Synchronization [I-D.ietf-sidrops-rpki-erik-protocol] is an RPKI-
+specific replication protocol using Merkle trees, content-addressable
+naming, and HTTP.  An RP compares ErikIndex and ErikPartition objects and
+fetches selected objects by hash.  Snapshot and segment prefetch buffers
+reduce the request cost of cache bootstrap and catch-up.  This document
+does not specify Erik or require it for PQC deployment; it evaluates Erik
+alongside RRDP and rsync as a candidate response to repository expansion.
+
+## Transport Experiment Boundary
+
+Appendix A compares cold synchronization, an unchanged repository, one ROA
+replacement, and 10% ROA churn for RSA-2048, pure ML-DSA-65, and the
+evaluated Composite suite.  It combines an actual local rsync run with
+RRDP-shaped and Erik-shaped response-body accounting over the same
+deterministic, size-calibrated corpus.  The transformed corpus preserves
+measured object counts and repository sizes but is not a cryptographically
+valid RPKI repository.  The comparison is consequently evidence about byte
+growth and request shape, not a production-network throughput result.
+
 # Manifests and Repository Processing
 
 ## Manifest Scope During Migration
@@ -819,6 +859,12 @@ Implemented:
   retained the 99 sibling VRPs.
 * A 1,000-ROA RP cache-regime experiment with 30 repetitions each for a
   fresh validator cache, an unchanged repository, and a one-ROA update.
+* A deterministic 1,000-ROA repository-transport campaign covering cold,
+  unchanged, one-ROA-update, and 10%-churn states for RSA-2048, pure
+  ML-DSA-65, and Composite.  It runs local rsync and accounts for RRDP and
+  Erik response bodies.  A separate execution of the APNIC Erik proof of
+  concept passed all 81 tests and exercised cold, unchanged, and incremental
+  synchronization on its bundled non-PQC corpus.
 
 Not yet implemented or incomplete:
 
@@ -996,6 +1042,19 @@ production suite or transition procedure.
   recovery behavior and can be prepared independently of the final RPKI
   object-signature algorithm choice.
 
+## Repository Distribution
+
+* Whether RRDP and rsync remain operationally sufficient at projected PQC
+  repository sizes, topology, polling intervals, and churn rates, or whether
+  deployment requires a more selective mechanism such as Erik
+  Synchronization.
+* How RRDP journal replay, rsync file-list exchange, Erik tree traversal,
+  snapshot and segment prefetch, HTTP multiplexing, gzip, and compression
+  dictionaries should be accounted for under the same network conditions.
+* Whether independent Erik implementations produce equivalent synchronized
+  repositories under failed requests, relay switching, and concurrent
+  publication.
+
 ## Operational Readiness
 
 * Which PQC signature algorithms RIR CA teams and their HSM vendors plan
@@ -1149,6 +1208,60 @@ re-signed synthetic corpus.  The controlled campaign adds repeated
 single-child scale, cache-regime, and multi-publication-point evidence,
 but full four-suite re-signing of a public-like topology and production
 RRDP or rsync measurements remain future work.
+
+## Repository Transport Measurements
+
+The transport campaign reused the measured 1,000-ROA object count and the
+captured RSA and Composite repository totals.  The pure ML-DSA-65 total was
+size-calibrated from measured certificate, CRL, manifest, and ROA files.
+Each state contained 1008 files: two certificates, three CRLs, three
+manifests, and 1,000 ROAs.  Five local rsync repetitions with checksum
+comparison per transition started from the same cache state.  RRDP values are the uncompressed
+notification plus snapshot or delta response bodies.  Erik values represent
+one ErikIndex, one ErikPartition, and only the required objects fetched by
+hash.  Request and response headers, TLS, HPACK or QPACK, connection setup,
+and RFC 9842 dictionary transport are excluded.
+
+| Algorithm | State | Local rsync exchanged (B) | RRDP response bodies (B) | Erik tree-fetch bodies (B) |
+|---|---|---:|---:|---:|
+| RSA-2048 | Cold | 1,897,870 | 2,444,873 | 1,769,082 |
+| RSA-2048 | Unchanged | 60,562 | 184 | 113 |
+| RSA-2048 | One ROA update | 203,695 | 191,067 | 143,259 |
+| RSA-2048 | 10% ROA churn | 370,906 | 413,520 | 303,738 |
+| ML-DSA-65 | Cold | 9,752,914 | 12,916,933 | 9,624,126 |
+| ML-DSA-65 | Unchanged | 60,562 | 184 | 113 |
+| ML-DSA-65 | One ROA update | 222,370 | 215,967 | 161,934 |
+| ML-DSA-65 | 10% ROA churn | 1,163,068 | 1,469,604 | 1,095,900 |
+| Composite | Cold | 9,926,678 | 13,147,301 | 9,797,898 |
+| Composite | Unchanged | 60,562 | 184 | 113 |
+| Composite | One ROA update | 169,476 | 145,451 | 109,048 |
+| Composite | 10% ROA churn | 1,133,142 | 1,429,580 | 1,065,982 |
+
+The request shape was one rsync session per state.  RRDP used two response
+bodies for cold or changed states and one notification for the unchanged
+state.  Erik tree fetch used 1,010 requests when cold, one when unchanged,
+five for a one-ROA update, and 104 for 10% churn.  The Erik snapshot-prefetch
+model reduced the cold object body to one bulk response of 1,768,736 bytes
+for RSA, 9,623,780 bytes for ML-DSA-65, and 9,797,552 bytes for Composite;
+a tree comparison still follows the prefetch as specified by the protocol.
+
+These values show that larger signatures directly amplify cold and churn
+traffic, while selective synchronization avoids retransmitting unchanged
+objects.  They do not establish that Erik is a prerequisite for deployment:
+the rsync run was local, RRDP and Erik were response-body models rather than
+production servers, and the deterministic payloads do not reproduce real
+compression ratios.  Polling-interval experiments that retain obsolete
+intermediate states remain open.
+
+Separately, the APNIC Erik proof of concept at commit
+`0fc81bb83db00d7434ea444909b0dc42a63c145b` passed 81 tests.  An actual local
+HTTP trace on its bundled 150-ROA, 14-manifest non-PQC corpus used 194
+requests and 327,395 response-body bytes for a cold synchronization, one
+request and 633 bytes when unchanged, and four requests and 3,283 bytes for
+an incremental publication-point addition.  The implementation required an
+undeclared `zlib1g-dev` build dependency and retains an earlier TTQ path, so
+this trace is proof-of-concept validation rather than interoperability
+evidence for draft -07 segment buffers.
 
 ## Measured Certificate and CRL Sizes
 
@@ -1309,9 +1422,9 @@ and are deliberately recorded as open tasks rather than numbers:
   a public-like, re-signable multi-CA topology.  The controlled
   single-child and synthetic 100-child results do not reproduce public
   RPKI topology.
-* Production RRDP and rsync transfer, churn, and cache behavior.  The
-  generated snapshot/delta sizes and local-rsync validation do not
-  measure network behavior.
+* Production RRDP, rsync, and Erik transfer, churn, polling-interval, and
+  cache behavior.  The generated bodies and local runs do not measure WAN
+  behavior or obsolete intermediate-state transfer.
 * Long-running validator memory and cache growth.  The current results
   record process peak RSS for bounded executions only.
 * HSM performance and support.
@@ -1350,6 +1463,9 @@ This section is to be removed before publication as an RFC.
 * Added actual rpki-client CCR DER parsing and verified equal
   ROAPayloadState hashes while keeping ManifestState, TrustAnchorState,
   and provenance separate.
+* Added an rsync, RRDP, and Erik repository-transport comparison and an
+  Erik proof-of-concept validation, with modeled and measured evidence
+  kept separate.
 * Kept a future production algorithm profile and transition procedure as
   separate standards work informed by these results.
 
@@ -1476,6 +1592,12 @@ Work in Progress, 1 July 2026.
 J., Housley, R., and B. Maddison, "A Profile for Autonomous System
 Provider Authorization", draft-ietf-sidrops-aspa-profile-29,
 Work in Progress, 29 July 2026.
+
+[I-D.ietf-sidrops-rpki-erik-protocol] Snijders, J., Bruijnzeels, T.,
+Harrison, T., and W. Ohgai, "The Erik Synchronization Protocol for use
+with the Resource Public Key Infrastructure (RPKI)",
+draft-ietf-sidrops-rpki-erik-protocol-07, Work in Progress,
+16 August 2026.
 
 [I-D.doesburg-sidrops-nullscheme] Doesburg, D., "Null Scheme for Signed
 Objects in the Resource Public Key Infrastructure (RPKI)",

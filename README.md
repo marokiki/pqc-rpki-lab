@@ -324,6 +324,11 @@ Composite child CAs and publication points plus branch-isolation validation.
 one-ROA-update validation timings. These remain isolated local-rsync
 experiments, not production deployments or full public-repository
 benchmarks.
+`results/repository-transport/` compares cold, unchanged, one-ROA-update,
+and 10%-churn states for RSA-2048, ML-DSA-65, and Composite. It contains an
+actual local rsync run plus RRDP- and Erik-shaped response-body accounting;
+it is a deterministic size-calibrated workload rather than a WAN benchmark.
+Reproduce it with `make repository-transport`.
 `results/routinator-krill/` retains the earlier extension map
 and source scan. Configure external inputs with
 `PQC_RPKI_ROUTINATOR_SRC`, `PQC_RPKI_KRILL_SRC`,

@@ -1,0 +1,417 @@
+{
+  "classification": "deterministic size-calibrated transport workload; not cryptographically valid RPKI objects and not a production-network benchmark",
+  "algorithms": {
+    "rsa-2048": {
+      "label": "RSA-2048",
+      "classification": "captured-total plus measured-file-size workload",
+      "repository_bytes": 1768736,
+      "object_counts": {
+        "cer": 2,
+        "crl": 3,
+        "mft": 3,
+        "roa": 1000
+      },
+      "scenarios": {
+        "cold_sync": {
+          "changed_object_count": 1008,
+          "rsync": {
+            "files_transferred": 1008,
+            "object_bytes": 1768736,
+            "file_list_bytes": 60497,
+            "sent_bytes": 1875668,
+            "received_bytes": 22202,
+            "response_body_bytes": 1897870,
+            "request_count": 1,
+            "local_wall_ms_median": 247.92,
+            "local_wall_ms_samples": 5
+          },
+          "rrdp": {
+            "request_count": 2,
+            "response_body_bytes": 2444873,
+            "gzip_response_body_bytes": 1794554
+          },
+          "erik": {
+            "tree_fetch": {
+              "request_count": 1010,
+              "response_body_bytes": 1769082,
+              "gzip_response_body_bytes": 1792352
+            },
+            "snapshot_prefetch": {
+              "request_count": 1,
+              "response_body_bytes": 1768736,
+              "gzip_response_body_bytes": 1769294
+            }
+          }
+        },
+        "unchanged_repository": {
+          "changed_object_count": 0,
+          "rsync": {
+            "files_transferred": 0,
+            "object_bytes": 0,
+            "file_list_bytes": 60497,
+            "sent_bytes": 60542,
+            "received_bytes": 20,
+            "response_body_bytes": 60562,
+            "request_count": 1,
+            "local_wall_ms_median": 109.136,
+            "local_wall_ms_samples": 5
+          },
+          "rrdp": {
+            "request_count": 1,
+            "response_body_bytes": 184,
+            "gzip_response_body_bytes": 156
+          },
+          "erik": {
+            "tree_fetch": {
+              "request_count": 1,
+              "response_body_bytes": 113,
+              "gzip_response_body_bytes": 136
+            }
+          }
+        },
+        "one_roa_update": {
+          "changed_object_count": 3,
+          "rsync": {
+            "files_transferred": 3,
+            "object_bytes": 142913,
+            "file_list_bytes": 60497,
+            "sent_bytes": 203609,
+            "received_bytes": 86,
+            "response_body_bytes": 203695,
+            "request_count": 1,
+            "local_wall_ms_median": 110.224,
+            "local_wall_ms_samples": 5
+          },
+          "rrdp": {
+            "request_count": 2,
+            "response_body_bytes": 191067,
+            "gzip_response_body_bytes": 144775
+          },
+          "erik": {
+            "tree_fetch": {
+              "request_count": 5,
+              "response_body_bytes": 143259,
+              "gzip_response_body_bytes": 143414
+            }
+          }
+        },
+        "ten_percent_roa_churn": {
+          "changed_object_count": 102,
+          "rsync": {
+            "files_transferred": 102,
+            "object_bytes": 303392,
+            "file_list_bytes": 60497,
+            "sent_bytes": 368642,
+            "received_bytes": 2264,
+            "response_body_bytes": 370906,
+            "request_count": 1,
+            "local_wall_ms_median": 145.214,
+            "local_wall_ms_samples": 5
+          },
+          "rrdp": {
+            "request_count": 2,
+            "response_body_bytes": 413520,
+            "gzip_response_body_bytes": 307617
+          },
+          "erik": {
+            "tree_fetch": {
+              "request_count": 104,
+              "response_body_bytes": 303738,
+              "gzip_response_body_bytes": 306170
+            }
+          }
+        }
+      }
+    },
+    "ml-dsa-65": {
+      "label": "ML-DSA-65",
+      "classification": "measured-file-size workload with calibrated manifest-list overhead",
+      "repository_bytes": 9623780,
+      "object_counts": {
+        "cer": 2,
+        "crl": 3,
+        "mft": 3,
+        "roa": 1000
+      },
+      "scenarios": {
+        "cold_sync": {
+          "changed_object_count": 1008,
+          "rsync": {
+            "files_transferred": 1008,
+            "object_bytes": 9623780,
+            "file_list_bytes": 60497,
+            "sent_bytes": 9730712,
+            "received_bytes": 22202,
+            "response_body_bytes": 9752914,
+            "request_count": 1,
+            "local_wall_ms_median": 321.978,
+            "local_wall_ms_samples": 5
+          },
+          "rrdp": {
+            "request_count": 2,
+            "response_body_bytes": 12916933,
+            "gzip_response_body_bytes": 9731465
+          },
+          "erik": {
+            "tree_fetch": {
+              "request_count": 1010,
+              "response_body_bytes": 9624126,
+              "gzip_response_body_bytes": 9647401
+            },
+            "snapshot_prefetch": {
+              "request_count": 1,
+              "response_body_bytes": 9623780,
+              "gzip_response_body_bytes": 9626738
+            }
+          }
+        },
+        "unchanged_repository": {
+          "changed_object_count": 0,
+          "rsync": {
+            "files_transferred": 0,
+            "object_bytes": 0,
+            "file_list_bytes": 60497,
+            "sent_bytes": 60542,
+            "received_bytes": 20,
+            "response_body_bytes": 60562,
+            "request_count": 1,
+            "local_wall_ms_median": 120.608,
+            "local_wall_ms_samples": 5
+          },
+          "rrdp": {
+            "request_count": 1,
+            "response_body_bytes": 184,
+            "gzip_response_body_bytes": 156
+          },
+          "erik": {
+            "tree_fetch": {
+              "request_count": 1,
+              "response_body_bytes": 113,
+              "gzip_response_body_bytes": 136
+            }
+          }
+        },
+        "one_roa_update": {
+          "changed_object_count": 3,
+          "rsync": {
+            "files_transferred": 3,
+            "object_bytes": 161588,
+            "file_list_bytes": 60497,
+            "sent_bytes": 222284,
+            "received_bytes": 86,
+            "response_body_bytes": 222370,
+            "request_count": 1,
+            "local_wall_ms_median": 123.725,
+            "local_wall_ms_samples": 5
+          },
+          "rrdp": {
+            "request_count": 2,
+            "response_body_bytes": 215967,
+            "gzip_response_body_bytes": 163636
+          },
+          "erik": {
+            "tree_fetch": {
+              "request_count": 5,
+              "response_body_bytes": 161934,
+              "gzip_response_body_bytes": 162094
+            }
+          }
+        },
+        "ten_percent_roa_churn": {
+          "changed_object_count": 102,
+          "rsync": {
+            "files_transferred": 102,
+            "object_bytes": 1095554,
+            "file_list_bytes": 60497,
+            "sent_bytes": 1160804,
+            "received_bytes": 2264,
+            "response_body_bytes": 1163068,
+            "request_count": 1,
+            "local_wall_ms_median": 151.754,
+            "local_wall_ms_samples": 5
+          },
+          "rrdp": {
+            "request_count": 2,
+            "response_body_bytes": 1469604,
+            "gzip_response_body_bytes": 1107999
+          },
+          "erik": {
+            "tree_fetch": {
+              "request_count": 104,
+              "response_body_bytes": 1095900,
+              "gzip_response_body_bytes": 1098337
+            }
+          }
+        }
+      }
+    },
+    "composite-mldsa65-p256": {
+      "label": "ML-DSA-65 + P-256 Composite",
+      "classification": "captured-total plus measured-file-size workload",
+      "repository_bytes": 9797552,
+      "object_counts": {
+        "cer": 2,
+        "crl": 3,
+        "mft": 3,
+        "roa": 1000
+      },
+      "scenarios": {
+        "cold_sync": {
+          "changed_object_count": 1008,
+          "rsync": {
+            "files_transferred": 1008,
+            "object_bytes": 9797552,
+            "file_list_bytes": 60497,
+            "sent_bytes": 9904476,
+            "received_bytes": 22202,
+            "response_body_bytes": 9926678,
+            "request_count": 1,
+            "local_wall_ms_median": 291.848,
+            "local_wall_ms_samples": 5
+          },
+          "rrdp": {
+            "request_count": 2,
+            "response_body_bytes": 13147301,
+            "gzip_response_body_bytes": 9906644
+          },
+          "erik": {
+            "tree_fetch": {
+              "request_count": 1010,
+              "response_body_bytes": 9797898,
+              "gzip_response_body_bytes": 9821153
+            },
+            "snapshot_prefetch": {
+              "request_count": 1,
+              "response_body_bytes": 9797552,
+              "gzip_response_body_bytes": 9800560
+            }
+          }
+        },
+        "unchanged_repository": {
+          "changed_object_count": 0,
+          "rsync": {
+            "files_transferred": 0,
+            "object_bytes": 0,
+            "file_list_bytes": 60497,
+            "sent_bytes": 60542,
+            "received_bytes": 20,
+            "response_body_bytes": 60562,
+            "request_count": 1,
+            "local_wall_ms_median": 126.736,
+            "local_wall_ms_samples": 5
+          },
+          "rrdp": {
+            "request_count": 1,
+            "response_body_bytes": 184,
+            "gzip_response_body_bytes": 156
+          },
+          "erik": {
+            "tree_fetch": {
+              "request_count": 1,
+              "response_body_bytes": 113,
+              "gzip_response_body_bytes": 136
+            }
+          }
+        },
+        "one_roa_update": {
+          "changed_object_count": 3,
+          "rsync": {
+            "files_transferred": 3,
+            "object_bytes": 108702,
+            "file_list_bytes": 60497,
+            "sent_bytes": 169390,
+            "received_bytes": 86,
+            "response_body_bytes": 169476,
+            "request_count": 1,
+            "local_wall_ms_median": 129.267,
+            "local_wall_ms_samples": 5
+          },
+          "rrdp": {
+            "request_count": 2,
+            "response_body_bytes": 145451,
+            "gzip_response_body_bytes": 110228
+          },
+          "erik": {
+            "tree_fetch": {
+              "request_count": 5,
+              "response_body_bytes": 109048,
+              "gzip_response_body_bytes": 109188
+            }
+          }
+        },
+        "ten_percent_roa_churn": {
+          "changed_object_count": 102,
+          "rsync": {
+            "files_transferred": 102,
+            "object_bytes": 1065636,
+            "file_list_bytes": 60497,
+            "sent_bytes": 1130878,
+            "received_bytes": 2264,
+            "response_body_bytes": 1133142,
+            "request_count": 1,
+            "local_wall_ms_median": 157.789,
+            "local_wall_ms_samples": 5
+          },
+          "rrdp": {
+            "request_count": 2,
+            "response_body_bytes": 1429580,
+            "gzip_response_body_bytes": 1077768
+          },
+          "erik": {
+            "tree_fetch": {
+              "request_count": 104,
+              "response_body_bytes": 1065982,
+              "gzip_response_body_bytes": 1068399
+            }
+          }
+        }
+      }
+    }
+  },
+  "method": {
+    "rsync": "openrsync 2.6.9-compatible local protocol run with checksum comparison; sent plus received bytes and local wall time",
+    "rrdp": "RFC 8182-shaped XML with base64 publication payloads; notification plus snapshot or delta response bodies",
+    "erik": "draft-ietf-sidrops-rpki-erik-protocol-07 tree-fetch and snapshot-prefetch response-body accounting; one index and one partition",
+    "compression": "gzip level 9 with deterministic mtime; HTTP headers, TLS, HPACK/QPACK, and RFC 9842 dictionary transport excluded"
+  },
+  "source_evidence": {
+    "rsa_and_composite_totals": "results/scaled-corpus/krill-scaled-summary.json",
+    "rsa_and_ml_dsa_file_sizes": "results/rpki-objects/rpki-objects.json",
+    "composite_file_sizes": "results/composite-e2e/summary.json",
+    "erik_specification": "draft-ietf-sidrops-rpki-erik-protocol-07 (2026-08-16)"
+  },
+  "erik_poc_validation": {
+    "classification": "actual local HTTP execution of the APNIC proof of concept on its bundled non-PQC corpus; separate from the size-calibrated comparison",
+    "repository": "https://github.com/APNIC-net/rpki-erik-demo",
+    "commit": "0fc81bb83db00d7434ea444909b0dc42a63c145b",
+    "test_suite": {
+      "passed": 81,
+      "failed": 0
+    },
+    "corpus": {
+      "roa_objects": 150,
+      "manifest_objects": 14
+    },
+    "response_body_bytes": {
+      "cold_sync": 327395,
+      "unchanged_repository": 633,
+      "incremental_publication_point_addition": 3283
+    },
+    "http_requests": {
+      "cold_sync": 194,
+      "unchanged_repository": 1,
+      "incremental_publication_point_addition": 4
+    },
+    "build_note": "The Docker build required zlib1g-dev for zlib.h; the workaround was applied only to the ignored local checkout."
+  },
+  "limitations": [
+    "The workload preserves counts and measured sizes, not DER/CMS semantics or validation.",
+    "Erik metadata sizes use a one-partition APNIC PoC trace calibration; the PQC rows are size-transformed measurements, not Erik interoperability runs.",
+    "Response-body bytes exclude request headers, response headers, TLS, and connection setup.",
+    "Local wall time is reported only for rsync and is not a WAN latency or throughput result.",
+    "Polling-interval and obsolete-intermediate-state experiments require a time-series publication workload and remain future work."
+  ],
+  "contains_raw_objects": false,
+  "contains_private_keys": false,
+  "warning": "EXPERIMENTAL / NOT FOR PRODUCTION"
+}

@@ -102,6 +102,15 @@ class DraftSubmissionTest(unittest.TestCase):
         source_references = self.source_02.split("# References", 1)[1]
         self.assertIn("[I-D.doesburg-sidrops-nullscheme] Doesburg, D.", source_references)
         self.assertIn("expired and archived", source_references)
+        erik = self.root_02.find(
+            './/reference[@anchor="I-D.ietf-sidrops-rpki-erik-protocol"]'
+        )
+        self.assertIsNotNone(erik)
+        self.assertEqual(
+            erik.find("./seriesInfo").get("value"),
+            "draft-ietf-sidrops-rpki-erik-protocol-07",
+        )
+        self.assertIn("Repository Transport Measurements", self.source_02)
 
     def test_draft_01_submission_is_rendered(self):
         self.assertEqual(

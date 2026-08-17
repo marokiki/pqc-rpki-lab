@@ -1,0 +1,47 @@
+# Repository transport comparison
+
+This is a deterministic, size-calibrated transport workload, not a cryptographically valid RPKI repository or a production-network benchmark.
+
+| Algorithm | Scenario | Protocol | Requests | Response body (B) | Gzip body (B) | Local wall median (ms) |
+| --- | --- | --- | ---: | ---: | ---: | ---: |
+| rsa-2048 | cold_sync | rsync | 1 | 1897870 |  | 247.92 |
+| rsa-2048 | cold_sync | rrdp | 2 | 2444873 | 1794554 |  |
+| rsa-2048 | cold_sync | erik-tree_fetch | 1010 | 1769082 | 1792352 |  |
+| rsa-2048 | cold_sync | erik-snapshot_prefetch | 1 | 1768736 | 1769294 |  |
+| rsa-2048 | unchanged_repository | rsync | 1 | 60562 |  | 109.136 |
+| rsa-2048 | unchanged_repository | rrdp | 1 | 184 | 156 |  |
+| rsa-2048 | unchanged_repository | erik-tree_fetch | 1 | 113 | 136 |  |
+| rsa-2048 | one_roa_update | rsync | 1 | 203695 |  | 110.224 |
+| rsa-2048 | one_roa_update | rrdp | 2 | 191067 | 144775 |  |
+| rsa-2048 | one_roa_update | erik-tree_fetch | 5 | 143259 | 143414 |  |
+| rsa-2048 | ten_percent_roa_churn | rsync | 1 | 370906 |  | 145.214 |
+| rsa-2048 | ten_percent_roa_churn | rrdp | 2 | 413520 | 307617 |  |
+| rsa-2048 | ten_percent_roa_churn | erik-tree_fetch | 104 | 303738 | 306170 |  |
+| ml-dsa-65 | cold_sync | rsync | 1 | 9752914 |  | 321.978 |
+| ml-dsa-65 | cold_sync | rrdp | 2 | 12916933 | 9731465 |  |
+| ml-dsa-65 | cold_sync | erik-tree_fetch | 1010 | 9624126 | 9647401 |  |
+| ml-dsa-65 | cold_sync | erik-snapshot_prefetch | 1 | 9623780 | 9626738 |  |
+| ml-dsa-65 | unchanged_repository | rsync | 1 | 60562 |  | 120.608 |
+| ml-dsa-65 | unchanged_repository | rrdp | 1 | 184 | 156 |  |
+| ml-dsa-65 | unchanged_repository | erik-tree_fetch | 1 | 113 | 136 |  |
+| ml-dsa-65 | one_roa_update | rsync | 1 | 222370 |  | 123.725 |
+| ml-dsa-65 | one_roa_update | rrdp | 2 | 215967 | 163636 |  |
+| ml-dsa-65 | one_roa_update | erik-tree_fetch | 5 | 161934 | 162094 |  |
+| ml-dsa-65 | ten_percent_roa_churn | rsync | 1 | 1163068 |  | 151.754 |
+| ml-dsa-65 | ten_percent_roa_churn | rrdp | 2 | 1469604 | 1107999 |  |
+| ml-dsa-65 | ten_percent_roa_churn | erik-tree_fetch | 104 | 1095900 | 1098337 |  |
+| composite-mldsa65-p256 | cold_sync | rsync | 1 | 9926678 |  | 291.848 |
+| composite-mldsa65-p256 | cold_sync | rrdp | 2 | 13147301 | 9906644 |  |
+| composite-mldsa65-p256 | cold_sync | erik-tree_fetch | 1010 | 9797898 | 9821153 |  |
+| composite-mldsa65-p256 | cold_sync | erik-snapshot_prefetch | 1 | 9797552 | 9800560 |  |
+| composite-mldsa65-p256 | unchanged_repository | rsync | 1 | 60562 |  | 126.736 |
+| composite-mldsa65-p256 | unchanged_repository | rrdp | 1 | 184 | 156 |  |
+| composite-mldsa65-p256 | unchanged_repository | erik-tree_fetch | 1 | 113 | 136 |  |
+| composite-mldsa65-p256 | one_roa_update | rsync | 1 | 169476 |  | 129.267 |
+| composite-mldsa65-p256 | one_roa_update | rrdp | 2 | 145451 | 110228 |  |
+| composite-mldsa65-p256 | one_roa_update | erik-tree_fetch | 5 | 109048 | 109188 |  |
+| composite-mldsa65-p256 | ten_percent_roa_churn | rsync | 1 | 1133142 |  | 157.789 |
+| composite-mldsa65-p256 | ten_percent_roa_churn | rrdp | 2 | 1429580 | 1077768 |  |
+| composite-mldsa65-p256 | ten_percent_roa_churn | erik-tree_fetch | 104 | 1065982 | 1068399 |  |
+
+See the JSON result for provenance, classification, and limitations.
