@@ -59,7 +59,7 @@ class DraftSubmissionTest(unittest.TestCase):
         self.assertIn("Composite Configuration Evaluated in This Revision", text)
         self.assertIn("Questions for Further Work", text)
         self.assertIn("EUF-CMA", text)
-        self.assertIn("Seven repository-operation cases exercised", text)
+        self.assertIn("seven cases for repository-operation failures", text)
         self.assertIn("actual rpki-client CCR DER", text)
         self.assertIn("100 Composite child CAs", text)
         self.assertNotIn("unknown algorithm", text)
@@ -127,7 +127,7 @@ class DraftSubmissionTest(unittest.TestCase):
         self.assertNotIn("security-critical", self.source_02)
         self.assertNotIn("APNIC Erik proof of concept", self.source_02)
         self.assertIn(
-            "Next Suite public key carried in the transition certificate's SPKI",
+            "Next Suite public key carried in that certificate's SPKI",
             text,
         )
         self.assertIn(
@@ -160,7 +160,7 @@ class DraftSubmissionTest(unittest.TestCase):
         self.assertIn("component-algorithm combination", text)
         self.assertIn("are confined to isolated repositories", text)
         self.assertIn("Fifteen negative cases", text)
-        self.assertIn("separate concerns from the mixed-tree mechanism", text)
+        self.assertIn("separate concerns from the Mixed Tree migration", text)
         source_references = self.source_02.split("# References", 1)[1]
         self.assertLess(
             source_references.index("[RFC9882]"),
