@@ -12,8 +12,16 @@ from tools.repository_transport_campaign import (
     run,
 )
 
+ROOT = Path(__file__).resolve().parents[1]
+LOCAL = ROOT / "local"
+
 
 class RepositoryTransportCampaignTest(unittest.TestCase):
+    def setUp(self):
+        # The campaign only resets directories below the ignored local/ tree,
+        # which is absent from a clean checkout.
+        LOCAL.mkdir(exist_ok=True)
+
     def test_algorithm_totals_preserve_confirmed_endpoints(self):
         totals = algorithm_totals()
         self.assertEqual(totals["rsa-2048"], 1_768_736)
@@ -26,7 +34,7 @@ class RepositoryTransportCampaignTest(unittest.TestCase):
         self.assertEqual(len(changed_paths("ten_percent_roa_churn")), 102)
 
     def test_rrdp_and_erik_request_shapes(self):
-        with tempfile.TemporaryDirectory(dir="local") as directory:
+        with tempfile.TemporaryDirectory(dir=LOCAL) as directory:
             root = Path(directory) / "source"
             materialize(root, "rsa-2048", "baseline", set())
             cold_rrdp = rrdp_metrics(root, "cold_sync", 1)
@@ -41,7 +49,7 @@ class RepositoryTransportCampaignTest(unittest.TestCase):
             self.assertEqual(cold["snapshot_prefetch"]["request_count"], 1)
 
     def test_rsync_repetitions_restore_each_scenario_baseline(self):
-        with tempfile.TemporaryDirectory(dir="local") as directory:
+        with tempfile.TemporaryDirectory(dir=LOCAL) as directory:
             result = run(Path(directory) / "campaign", repetitions=2)
             rsa = result["algorithms"]["rsa-2048"]["scenarios"]
             self.assertEqual(rsa["cold_sync"]["rsync"]["files_transferred"], sum(COUNTS.values()))
