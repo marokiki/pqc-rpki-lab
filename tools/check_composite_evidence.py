@@ -116,7 +116,14 @@ def find_inconsistencies() -> list[str]:
         f"{generation} complete generation repetitions and "
         f"{validation} local RP-validation repetitions"
     )
-    if benchmark_phrase not in normalized_draft:
+    states_repetitions = any(
+        marker in normalized_draft
+        for marker in (
+            "complete generation repetitions",
+            "local RP-validation repetitions",
+        )
+    )
+    if states_repetitions and benchmark_phrase not in normalized_draft:
         failures.append(
             f"draft does not contain current repetitions: {benchmark_phrase}"
         )

@@ -352,6 +352,9 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
     )
     ET.SubElement(author_el, "organization").text = author["organization"]
     address = ET.SubElement(author_el, "address")
+    if author.get("country"):
+        postal = ET.SubElement(address, "postal")
+        ET.SubElement(postal, "country").text = author["country"]
     ET.SubElement(address, "email").text = author["email"]
     draft_date = date.fromisoformat(str(meta.get("date", date.today().isoformat())))
     ET.SubElement(
@@ -487,17 +490,14 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
             else "pqc-rpki-lab experimental harness"
         ),
         target=(
-            "https://github.com/marokiki/pqc-rpki-lab/tree/"
-            "bbbc401336b0c917b7bb89a9e8f5b783c81012db"
-            if DOCNAME.endswith("-02")
-            else "https://github.com/marokiki/pqc-rpki-lab/releases/tag/"
+            "https://github.com/marokiki/pqc-rpki-lab/releases/tag/"
             f"{DOCNAME}"
         ),
         author_fullname="Tomoki Yoshikawa",
         author_initials="T.",
         author_surname="Yoshikawa",
-        day="28",
-        month="July",
+        day="18" if DOCNAME.endswith("-02") else "28",
+        month="August" if DOCNAME.endswith("-02") else "July",
         year="2026",
     )
     back_sections_text = back.split("# References", 1)[0].strip()

@@ -4,8 +4,8 @@
 
 SIDROPS                                                     T. Yoshikawa
 Internet-Draft          Graduate School of Informatics, Kyoto University
-Intended status: Informational                              29 July 2026
-Expires: 30 January 2027
+Intended status: Informational                            18 August 2026
+Expires: 19 February 2027
 
 
 Post-Quantum Signature Experiments and Migration Considerations for the
@@ -44,7 +44,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 30 January 2027.
+   This Internet-Draft will expire on 19 February 2027.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Yoshikawa                Expires 30 January 2027                [Page 1]
+Yoshikawa               Expires 19 February 2027                [Page 1]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -109,9 +109,9 @@ Table of Contents
 
 
 
-Yoshikawa                Expires 30 January 2027                [Page 2]
+Yoshikawa               Expires 19 February 2027                [Page 2]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    Appendix A.  Measurement Details  . . . . . . . . . . . . . . . .  27
@@ -165,9 +165,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027                [Page 3]
+Yoshikawa               Expires 19 February 2027                [Page 3]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
 2.  Terminology
@@ -221,9 +221,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027                [Page 4]
+Yoshikawa               Expires 19 February 2027                [Page 4]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    This document covers the RPKI signatures on BGPsec Router
@@ -277,9 +277,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027                [Page 5]
+Yoshikawa               Expires 19 February 2027                [Page 5]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
 5.  Relationship to RFC 6916
@@ -333,9 +333,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027                [Page 6]
+Yoshikawa               Expires 19 February 2027                [Page 6]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
 7.  Experimental Migration Approaches
@@ -389,9 +389,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027                [Page 7]
+Yoshikawa               Expires 19 February 2027                [Page 7]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    Unlike the RFC 6916 procedure, a switched subtree does not maintain
@@ -445,9 +445,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027                [Page 8]
+Yoshikawa               Expires 19 February 2027                [Page 8]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
 8.2.  Composite Configuration Evaluated in This Revision
@@ -501,9 +501,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027                [Page 9]
+Yoshikawa               Expires 19 February 2027                [Page 9]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    SLH-DSA-SHAKE-128s and SLH-DSA-SHAKE-192s are included for
@@ -557,9 +557,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 10]
+Yoshikawa               Expires 19 February 2027               [Page 10]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    +====================+======+===================+===================+
@@ -613,9 +613,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 11]
+Yoshikawa               Expires 19 February 2027               [Page 11]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    Two qualitative observations from the preliminary evidence inform the
@@ -669,9 +669,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 12]
+Yoshikawa               Expires 19 February 2027               [Page 12]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    The choice between ML-DSA-44 and ML-DSA-65 is genuinely open.  The
@@ -725,9 +725,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 13]
+Yoshikawa               Expires 19 February 2027               [Page 13]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
 9.  Experimental Object Encoding
@@ -781,9 +781,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 14]
+Yoshikawa               Expires 19 February 2027               [Page 14]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    The implementation generated and validated complete Composite ROA and
@@ -837,9 +837,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 15]
+Yoshikawa               Expires 19 February 2027               [Page 15]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    pqRPKI [pqRPKI] instead introduces a Merkle Tree Ladder and
@@ -893,9 +893,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 16]
+Yoshikawa               Expires 19 February 2027               [Page 16]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
 11.3.  Transport Experiment Boundary
@@ -949,9 +949,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 17]
+Yoshikawa               Expires 19 February 2027               [Page 17]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
 12.2.  Relying Party Evaluation
@@ -1005,9 +1005,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 18]
+Yoshikawa               Expires 19 February 2027               [Page 18]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    pqc-rpki-lab is a research prototype used for the experiments
@@ -1061,9 +1061,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 19]
+Yoshikawa               Expires 19 February 2027               [Page 19]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
 14.  Security Considerations
@@ -1117,9 +1117,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 20]
+Yoshikawa               Expires 19 February 2027               [Page 20]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    object sizes raise the ceiling of that cost.  Resource limits and
@@ -1173,9 +1173,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 21]
+Yoshikawa               Expires 19 February 2027               [Page 21]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
 15.  IANA Considerations
@@ -1229,9 +1229,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 22]
+Yoshikawa               Expires 19 February 2027               [Page 22]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
 16.3.  Repository Distribution
@@ -1285,9 +1285,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 23]
+Yoshikawa               Expires 19 February 2027               [Page 23]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    [RFC8209]  Reynolds, M., Turner, S., and S. Kent, "A Profile for
@@ -1341,9 +1341,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 24]
+Yoshikawa               Expires 19 February 2027               [Page 24]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
               Algorithm (ML-DSA) for use in X.509 Public Key
@@ -1397,9 +1397,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 25]
+Yoshikawa               Expires 19 February 2027               [Page 25]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    [RFC9814]  Housley, R., Fluhrer, S., Kampanakis, P., and B.
@@ -1453,9 +1453,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 26]
+Yoshikawa               Expires 19 February 2027               [Page 26]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    [I-D.doesburg-sidrops-nullscheme]
@@ -1486,8 +1486,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
    [pqc-rpki-lab]
               Yoshikawa, T., "pqc-rpki-lab experimental evidence
-              snapshot", 28 July 2026, <https://github.com/marokiki/pqc-
-              rpki-lab/tree/bbbc401336b0c917b7bb89a9e8f5b783c81012db>.
+              snapshot", 18 August 2026, <https://github.com/marokiki/
+              pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-
+              rpki-02>.
 
 Appendix A.  Measurement Details
 
@@ -1499,8 +1500,8 @@ Appendix A.  Measurement Details
 
 A.1.  Reproducibility Metadata
 
-   The evidence snapshot cited by this revision is Git commit
-   bbbc401336b0c917b7bb89a9e8f5b783c81012db of [pqc-rpki-lab].  The
+   The evidence snapshot cited by this revision is the GitHub release
+   draft-yoshikawa-sidrops-pqc-rpki-02 of [pqc-rpki-lab].  The
    repository contains the scripts, raw outputs, and additional
    environment metadata used for the measurements in this appendix.
 
@@ -1508,10 +1509,9 @@ A.1.  Reproducibility Metadata
 
 
 
-
-Yoshikawa                Expires 30 January 2027               [Page 27]
+Yoshikawa               Expires 19 February 2027               [Page 27]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    The cryptographic-operation measurements were performed on an Apple
@@ -1520,13 +1520,12 @@ Internet-Draft                PQC for RPKI                     July 2026
    while the Composite ML-DSA benchmark was compiled with -O3.  The
    latter implements revision 19 of [I-D.ietf-lamps-pq-composite-sigs].
 
-   The X.509, CMS, and RP experiments used OpenSSL 3.6.2 and
-   CompositeCrypto/composite-provider commit
-   2263161f6b058fe0195a98b6fad088c2d4a2595f.  End-to-end validation was
-   also exercised on a 12-vCPU x86-64 host using rpki-client 9.8.  Each
-   scenario used 100 complete generation repetitions and 1000 local RP-
-   validation repetitions.  The RSA, pure ML-DSA-65, Composite, and
-   Mixed Tree repositories all produced the expected VRPs.
+   The X.509, CMS, and RP experiments used OpenSSL 3.6.2 and the
+   experimental Composite implementation recorded in the evidence
+   snapshot.  End-to-end validation was also exercised on a 12-vCPU
+   x86-64 host using rpki-client 9.8.  The RSA, pure ML-DSA-65,
+   Composite, and Mixed Tree repositories all produced the expected
+   VRPs.
 
 A.2.  Repeated Cryptographic Operation Timing
 
@@ -1565,9 +1564,10 @@ A.2.  Repeated Cryptographic Operation Timing
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 28]
+
+Yoshikawa               Expires 19 February 2027               [Page 28]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    The measurements show that RSA-2048 is substantially faster at
@@ -1621,9 +1621,9 @@ A.3.  Composite ML-DSA Operation Measurements
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 29]
+Yoshikawa               Expires 19 February 2027               [Page 29]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
     +===========+==========+==========+========+=========+============+
@@ -1677,9 +1677,9 @@ A.4.  Measured Certificate and CRL Sizes
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 30]
+Yoshikawa               Expires 19 February 2027               [Page 30]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
      +=========================+=============+=============+=========+
@@ -1733,9 +1733,9 @@ A.5.  Synthetic Repository Size Model
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 31]
+Yoshikawa               Expires 19 February 2027               [Page 31]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    The synthetic corpus contains 10 CA certificates, 100 EE
@@ -1789,9 +1789,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 32]
+Yoshikawa               Expires 19 February 2027               [Page 32]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
      +=================+======================+============+========+
@@ -1845,9 +1845,9 @@ A.6.  Controlled Repository Scale Measurements
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 33]
+Yoshikawa               Expires 19 February 2027               [Page 33]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    A controlled Krill experiment used one RSA parent and one Composite
@@ -1901,9 +1901,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 34]
+Yoshikawa               Expires 19 February 2027               [Page 34]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    The results show that the prototype continues to produce the expected
@@ -1957,9 +1957,9 @@ A.7.  Repository Transport Measurements
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 35]
+Yoshikawa               Expires 19 February 2027               [Page 35]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
     +===========+===========+===============+============+============+
@@ -2013,9 +2013,9 @@ Internet-Draft                PQC for RPKI                     July 2026
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 36]
+Yoshikawa               Expires 19 February 2027               [Page 36]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    the modeled Erik case.  Selective synchronization also avoids
@@ -2069,9 +2069,9 @@ Appendix B.  Changes from -01
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 37]
+Yoshikawa               Expires 19 February 2027               [Page 37]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
    *  Distinguished RFC 6916 correspondence between products from
@@ -2125,15 +2125,16 @@ Acknowledgements
 
 
 
-Yoshikawa                Expires 30 January 2027               [Page 38]
+Yoshikawa               Expires 19 February 2027               [Page 38]
 
-Internet-Draft                PQC for RPKI                     July 2026
+Internet-Draft                PQC for RPKI                   August 2026
 
 
 Author's Address
 
    Tomoki Yoshikawa
    Graduate School of Informatics, Kyoto University
+   Japan
    Email: yoshikawa.tomoki.67i@st.kyoto-u.ac.jp
 
 
@@ -2180,5 +2181,4 @@ Author's Address
 
 
 
-
-Yoshikawa                Expires 30 January 2027               [Page 39]
+Yoshikawa               Expires 19 February 2027               [Page 39]

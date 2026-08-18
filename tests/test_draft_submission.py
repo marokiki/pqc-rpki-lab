@@ -44,8 +44,21 @@ class DraftSubmissionTest(unittest.TestCase):
     def test_draft_02_references_immutable_evidence_snapshot(self):
         self.assertEqual(
             self.root_02.find('.//reference[@anchor="pqc-rpki-lab"]').get("target"),
-            "https://github.com/marokiki/pqc-rpki-lab/tree/"
-            "bbbc401336b0c917b7bb89a9e8f5b783c81012db",
+            "https://github.com/marokiki/pqc-rpki-lab/releases/tag/"
+            "draft-yoshikawa-sidrops-pqc-rpki-02",
+        )
+        self.assertNotIn(
+            "bbbc401336b0c917b7bb89a9e8f5b783c81012db", self.source_02
+        )
+
+    def test_draft_02_author_records_country_code(self):
+        self.assertEqual(
+            self.root_02.findtext("./front/author/address/postal/country"),
+            "JP",
+        )
+        self.assertEqual(
+            self.root_02.findtext("./front/author/address/email"),
+            "yoshikawa.tomoki.67i@st.kyoto-u.ac.jp",
         )
 
     def test_draft_02_records_review_boundaries(self):
@@ -150,8 +163,11 @@ class DraftSubmissionTest(unittest.TestCase):
         self.assertIn("both deterministic and randomized signing", text)
         self.assertIn("following single-run measurements", text)
         self.assertIn(
-            "CompositeCrypto/composite-provider commit 2263161f6b058fe0195a98b6fad088c2d4a2595f",
+            "experimental Composite implementation recorded in the evidence snapshot",
             text,
+        )
+        self.assertNotIn(
+            "2263161f6b058fe0195a98b6fad088c2d4a2595f", self.source_02
         )
         self.assertIn("simplified Erik model required 1,010 requests", text)
         self.assertIn("and updated by [RFC9981]", self.source_02)

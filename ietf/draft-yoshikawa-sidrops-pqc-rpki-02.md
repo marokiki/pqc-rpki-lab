@@ -8,7 +8,7 @@ area: Operations and Management
 wg: SIDROPS
 submissiontype: IETF
 consensus: false
-date: 2026-07-29
+date: 2026-08-18
 keyword:
   - RPKI
   - PQC
@@ -20,6 +20,7 @@ author:
   - fullname: "Tomoki Yoshikawa"
     organization: "Graduate School of Informatics, Kyoto University"
     email: "yoshikawa.tomoki.67i@st.kyoto-u.ac.jp"
+    country: JP
 --- abstract
 
 This document reports experiments with post-quantum signature algorithms
@@ -874,8 +875,8 @@ metadata.  The harness remains the durable record.
 
 ## Reproducibility Metadata
 
-The evidence snapshot cited by this revision is Git commit
-bbbc401336b0c917b7bb89a9e8f5b783c81012db of [pqc-rpki-lab].  The
+The evidence snapshot cited by this revision is the GitHub release
+`draft-yoshikawa-sidrops-pqc-rpki-02` of [pqc-rpki-lab].  The
 repository contains the scripts, raw outputs, and additional environment
 metadata used for the measurements in this appendix.
 
@@ -885,13 +886,11 @@ algorithm benchmark was compiled with optimization level -O2, while the
 Composite ML-DSA benchmark was compiled with -O3.  The latter implements
 revision 19 of [I-D.ietf-lamps-pq-composite-sigs].
 
-The X.509, CMS, and RP experiments used OpenSSL 3.6.2 and
-CompositeCrypto/composite-provider commit
-2263161f6b058fe0195a98b6fad088c2d4a2595f.  End-to-end validation was
-also exercised on a 12-vCPU x86-64 host using rpki-client 9.8.  Each
-scenario used 100 complete generation repetitions and 1000 local
-RP-validation repetitions.  The RSA, pure ML-DSA-65, Composite, and
-Mixed Tree repositories all produced the expected VRPs.
+The X.509, CMS, and RP experiments used OpenSSL 3.6.2 and the
+experimental Composite implementation recorded in the evidence snapshot.
+End-to-end validation was also exercised on a 12-vCPU x86-64 host using
+rpki-client 9.8.  The RSA, pure ML-DSA-65, Composite, and Mixed Tree
+repositories all produced the expected VRPs.
 
 ## Repeated Cryptographic Operation Timing
 
@@ -1383,6 +1382,6 @@ Architecture for the Post-Quantum Era", arXiv:2603.06968, March 2026,
 https://arxiv.org/abs/2603.06968.
 
 [pqc-rpki-lab] Yoshikawa, T., "pqc-rpki-lab experimental evidence
-snapshot", Git commit bbbc401336b0c917b7bb89a9e8f5b783c81012db,
-28 July 2026,
-https://github.com/marokiki/pqc-rpki-lab/tree/bbbc401336b0c917b7bb89a9e8f5b783c81012db.
+snapshot", release tag draft-yoshikawa-sidrops-pqc-rpki-02,
+18 August 2026,
+https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-02.

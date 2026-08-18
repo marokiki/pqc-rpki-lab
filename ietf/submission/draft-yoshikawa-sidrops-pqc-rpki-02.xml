@@ -6,10 +6,13 @@
     <author fullname="Tomoki Yoshikawa" initials="T." surname="Yoshikawa">
       <organization>Graduate School of Informatics, Kyoto University</organization>
       <address>
+        <postal>
+          <country>JP</country>
+        </postal>
         <email>yoshikawa.tomoki.67i@st.kyoto-u.ac.jp</email>
       </address>
     </author>
-    <date year="2026" month="July" day="29" />
+    <date year="2026" month="August" day="18" />
     <area>Operations and Management</area>
     <workgroup>SIDROPS</workgroup>
     <keyword>RPKI</keyword>
@@ -930,11 +933,11 @@
         </front>
         <seriesInfo name="arXiv" value="2603.06968" />
       </reference>
-      <reference anchor="pqc-rpki-lab" target="https://github.com/marokiki/pqc-rpki-lab/tree/bbbc401336b0c917b7bb89a9e8f5b783c81012db">
+      <reference anchor="pqc-rpki-lab" target="https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-02">
         <front>
           <title>pqc-rpki-lab experimental evidence snapshot</title>
           <author fullname="Tomoki Yoshikawa" initials="T." surname="Yoshikawa" />
-          <date day="28" month="July" year="2026" />
+          <date day="18" month="August" year="2026" />
         </front>
       </reference>
     </references>
@@ -943,9 +946,9 @@
       <t>This appendix records measurements referenced by the Size Model Inputs, Experimental Results, and Implementation Status sections.  All values were produced by the experimental harness <xref target="pqc-rpki-lab" />, which contains the corresponding scripts, raw outputs, and environment metadata.  The harness remains the durable record.</t>
       <section anchor="reproducibility-metadata">
         <name>Reproducibility Metadata</name>
-        <t>The evidence snapshot cited by this revision is Git commit bbbc401336b0c917b7bb89a9e8f5b783c81012db of <xref target="pqc-rpki-lab" />.  The repository contains the scripts, raw outputs, and additional environment metadata used for the measurements in this appendix.</t>
+        <t>The evidence snapshot cited by this revision is the GitHub release <tt>draft-yoshikawa-sidrops-pqc-rpki-02</tt> of <xref target="pqc-rpki-lab" />.  The repository contains the scripts, raw outputs, and additional environment metadata used for the measurements in this appendix.</t>
         <t>The cryptographic-operation measurements were performed on an Apple M4 running macOS 26.5.2 with OpenSSL 3.6.2 and liboqs 0.15.0.  The primary algorithm benchmark was compiled with optimization level -O2, while the Composite ML-DSA benchmark was compiled with -O3.  The latter implements revision 19 of <xref target="I-D.ietf-lamps-pq-composite-sigs" />.</t>
-        <t>The X.509, CMS, and RP experiments used OpenSSL 3.6.2 and CompositeCrypto/composite-provider commit 2263161f6b058fe0195a98b6fad088c2d4a2595f.  End-to-end validation was also exercised on a 12-vCPU x86-64 host using rpki-client 9.8.  Each scenario used 100 complete generation repetitions and 1000 local RP-validation repetitions.  The RSA, pure ML-DSA-65, Composite, and Mixed Tree repositories all produced the expected VRPs.</t>
+        <t>The X.509, CMS, and RP experiments used OpenSSL 3.6.2 and the experimental Composite implementation recorded in the evidence snapshot. End-to-end validation was also exercised on a 12-vCPU x86-64 host using rpki-client 9.8.  The RSA, pure ML-DSA-65, Composite, and Mixed Tree repositories all produced the expected VRPs.</t>
       </section>
       <section anchor="repeated-cryptographic-operation-timing">
         <name>Repeated Cryptographic Operation Timing</name>
