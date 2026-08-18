@@ -130,17 +130,45 @@ def update_changed(root: Path, algorithm: str, version: str, changed: set[Path])
             (root / path).write_bytes(deterministic_bytes(f"{algorithm}:{path}:{version}", size))
 
 
+# openrsync (macOS) and GNU rsync 3.x (Linux) label several stats differently.
 RSYNC_FIELDS = {
     "Number of files transferred": "files_transferred",
+    "Number of regular files transferred": "files_transferred",
     "Total transferred file size": "object_bytes",
     "File list size": "file_list_bytes",
     "Total sent": "sent_bytes",
     "Total received": "received_bytes",
+    "Total bytes sent": "sent_bytes",
+    "Total bytes received": "received_bytes",
 }
+RSYNC_REQUIRED = ("files_transferred", "sent_bytes", "received_bytes")
 
 
 def parse_number(value: str) -> int:
     return int(re.sub(r"[^0-9]", "", value))
+
+
+RSYNC_SUMMARY = re.compile(r"sent ([\d,]+) bytes\s+received ([\d,]+) bytes")
+
+
+def parse_rsync_stats(stdout: str) -> dict[str, int]:
+    parsed: dict[str, int] = {}
+    for line in stdout.splitlines():
+        if ":" not in line:
+            continue
+        name, value = line.split(":", 1)
+        if name in RSYNC_FIELDS:
+            parsed[RSYNC_FIELDS[name]] = parse_number(value)
+    # The labelled byte totals differ between implementations, but both end
+    # with the same summary line; use it whenever a label was not recognized.
+    summary = RSYNC_SUMMARY.search(stdout)
+    if summary:
+        parsed.setdefault("sent_bytes", parse_number(summary.group(1)))
+        parsed.setdefault("received_bytes", parse_number(summary.group(2)))
+    missing = sorted(set(RSYNC_REQUIRED) - parsed.keys())
+    if missing:
+        raise ValueError(f"rsync --stats did not report {missing}")
+    return parsed
 
 
 def run_rsync(source: Path, cache: Path, repetitions: int) -> dict[str, int | float]:
@@ -164,12 +192,7 @@ def run_rsync(source: Path, cache: Path, repetitions: int) -> dict[str, int | fl
         )
         samples.append((time.perf_counter() - started) * 1000)
         if repetition == 0:
-            for line in process.stdout.splitlines():
-                if ":" not in line:
-                    continue
-                name, value = line.split(":", 1)
-                if name in RSYNC_FIELDS:
-                    parsed[RSYNC_FIELDS[name]] = parse_number(value)
+            parsed = parse_rsync_stats(process.stdout)
     parsed["response_body_bytes"] = parsed["sent_bytes"] + parsed["received_bytes"]
     parsed["request_count"] = 1
     parsed["local_wall_ms_median"] = round(statistics.median(samples), 3)

@@ -8,6 +8,7 @@ from tools.repository_transport_campaign import (
     changed_paths,
     erik_metrics,
     materialize,
+    parse_rsync_stats,
     rrdp_metrics,
     run,
 )
@@ -47,6 +48,58 @@ class RepositoryTransportCampaignTest(unittest.TestCase):
             cold = erik_metrics(root, "rsa-2048", "cold_sync", "baseline")
             self.assertEqual(cold["tree_fetch"]["request_count"], 2 + sum(COUNTS.values()))
             self.assertEqual(cold["snapshot_prefetch"]["request_count"], 1)
+
+    def test_rsync_stats_parse_on_both_rsync_implementations(self):
+        openrsync = (
+            "Number of files: 3\n"
+            "Number of files transferred: 2\n"
+            "Total transferred file size: 9 B\n"
+            "File list size: 143 B\n"
+            "Total sent: 264 B\n"
+            "Total received: 64 B\n"
+        )
+        gnu_rsync = (
+            "Number of files: 3 (reg: 2, dir: 1)\n"
+            "Number of created files: 2 (reg: 2)\n"
+            "Number of deleted files: 0\n"
+            "Number of regular files transferred: 2\n"
+            "Total file size: 9 bytes\n"
+            "Total transferred file size: 9 bytes\n"
+            "Literal data: 9 bytes\n"
+            "Matched data: 0 bytes\n"
+            "File list size: 143\n"
+            "File list generation time: 0.001 seconds\n"
+            "File list transfer time: 0.000 seconds\n"
+            "Total bytes sent: 264\n"
+            "Total bytes received: 64\n"
+            "\n"
+            "sent 264 bytes  received 64 bytes  656.00 bytes/sec\n"
+            "total size is 9  speedup is 0.03\n"
+        )
+        expected = {
+            "files_transferred": 2,
+            "object_bytes": 9,
+            "file_list_bytes": 143,
+            "sent_bytes": 264,
+            "received_bytes": 64,
+        }
+        summary_only = (
+            "Number of regular files transferred: 2\n"
+            "Total transferred file size: 9 bytes\n"
+            "File list size: 143\n"
+            "\n"
+            "sent 264 bytes  received 64 bytes  656.00 bytes/sec\n"
+        )
+        self.assertEqual(parse_rsync_stats(openrsync), expected)
+        self.assertEqual(parse_rsync_stats(gnu_rsync), expected)
+        # An unrecognized byte-total label still resolves via the summary line.
+        self.assertEqual(parse_rsync_stats(summary_only), expected)
+        with self.assertRaises(ValueError):
+            parse_rsync_stats("Number of files transferred: 2\n")
+        with self.assertRaises(ValueError):
+            parse_rsync_stats(
+                "Total bytes sent: 264\nTotal bytes received: 64\n"
+            )
 
     def test_rsync_repetitions_restore_each_scenario_baseline(self):
         with tempfile.TemporaryDirectory(dir=LOCAL) as directory:
