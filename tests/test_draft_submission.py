@@ -78,16 +78,16 @@ class DraftSubmissionTest(unittest.TestCase):
             "Composite certificate requests and proof of possession",
             text,
         )
-        self.assertIn("bulk Composite publication state", text)
+        self.assertIn("bytes with deterministic gzip", text)
         self.assertIn("Model prediction (B)", text)
-        self.assertIn("Sample stdev", text)
+        self.assertIn("Generation wall sample stdev (s)", text)
         self.assertNotIn("median plus or minus sample standard deviation", text)
         measurement = self.root_02.find(
             './/section[@anchor="measurement-details"]'
         )
         measurement_text = " ".join(measurement.itertext())
         self.assertNotIn("removed before publication", measurement_text)
-        self.assertIn("controlled-scale measurements", measurement_text)
+        self.assertIn("12-vCPU x86-64 host", measurement_text)
         pqrpki = self.root_02.find('.//reference[@anchor="pqRPKI"]')
         self.assertEqual(
             [author.get("fullname") for author in pqrpki.findall("./front/author")],
@@ -153,7 +153,7 @@ class DraftSubmissionTest(unittest.TestCase):
             "CompositeCrypto/composite-provider commit 2263161f6b058fe0195a98b6fad088c2d4a2595f",
             text,
         )
-        self.assertIn("simplified Erik tree-fetch model counts", text)
+        self.assertIn("simplified Erik model required 1,010 requests", text)
         self.assertIn("and updated by [RFC9981]", self.source_02)
         self.assertIn("a 5.54-fold increase", text)
         self.assertIn("does not modify RRDP or rsync", text)
@@ -174,6 +174,47 @@ class DraftSubmissionTest(unittest.TestCase):
         self.assertNotIn("No production RPKI CA or RP support", self.source_02)
         self.assertNotIn("public evidence snapshot has generated", self.source_02)
         self.assertNotIn("The evidence reference is fixed", self.source_02)
+
+    def test_draft_02_measurement_appendix_is_grouped_by_experiment(self):
+        self.assertEqual(self.source_02.count("# Measurement Details"), 1)
+        self.assertEqual(self.source_02.count("## Reproducibility Metadata"), 1)
+        measurement = self.root_02.find(
+            './/section[@anchor="measurement-details"]'
+        )
+        self.assertIsNotNone(measurement)
+        self.assertEqual(
+            [name.text for name in measurement.findall("./section/name")],
+            [
+                "Reproducibility Metadata",
+                "Repeated Cryptographic Operation Timing",
+                "Composite ML-DSA Operation Measurements",
+                "Measured Certificate and CRL Sizes",
+                "Synthetic Repository Size Model",
+                "Controlled Repository Scale Measurements",
+                "Repository Transport Measurements",
+                "Open Measurement Tasks",
+            ],
+        )
+        measurement_text = " ".join(measurement.itertext())
+        self.assertIn("measured repository experiments below", measurement_text)
+        self.assertIn(
+            "identified in the Reproducibility Metadata section", measurement_text
+        )
+        self.assertNotIn("## Small-Scale End-to-End Measurement", self.source_02)
+        self.assertNotIn(
+            "## Public-Cache Profile and Controlled Scale Measurements",
+            self.source_02,
+        )
+
+    def test_draft_02_unifies_parallel_publication_terminology(self):
+        text = " ".join(self.root_02.itertext())
+        self.assertIn("correspond as defined in", text)
+        self.assertIn("RFC 6916 Parallel Publication", text)
+        self.assertNotIn('This document uses "correspond" as defined', self.source_02)
+        self.assertNotIn("RFC 6916 parallel hierarchy", self.source_02)
+        self.assertNotIn(
+            "An implementation that assumes the two are equal", self.source_02
+        )
 
     def test_draft_01_submission_is_rendered(self):
         self.assertEqual(

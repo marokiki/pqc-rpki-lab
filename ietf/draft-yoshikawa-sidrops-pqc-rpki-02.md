@@ -88,11 +88,9 @@ parent CA using the Current Suite signs a child CA certificate whose
 subject public key uses the Next Suite, allowing the child subtree to
 use the Next Suite while its ancestors remain on the Current Suite.
 
-This document uses "correspond" as defined in [RFC6916].
-
-Parallel Publication:  A migration approach in which corresponding
-products under the Current Suite and the Next Suite are published
-concurrently during a transition period.
+Parallel Publication:  A migration approach in which products that
+correspond as defined in [RFC6916] are published under both the Current
+Suite and the Next Suite during a transition period.
 
 Composite Signature:  A signature construction that combines multiple
 component algorithms into one algorithm identifier and signature value.
@@ -209,15 +207,12 @@ parallel.  RFC 6916 deliberately avoids mixed-suite CA certificates: a CA
 certificate signed using one suite does not carry a subject key associated
 with another suite.
 
-The Parallel Publication experiment publishes Current Suite and Next Suite
-products in separate, internally consistent branches.  It does not define
-new payload encodings for manifests, ROAs, or CRLs.  Parallel Publication is
-useful in test repositories for comparing a Current Suite branch with a
-candidate branch.  Its use as a production transition would need to account
-for differences caused by publication failures, timing skew, software
-defects, or configuration drift.  The experiment compares the resulting VRP
-sets.  CCR [I-D.ietf-sidrops-rpki-ccr] is a candidate common representation
-for that comparison.
+The Parallel Publication experiment publishes corresponding Current Suite
+and Next Suite products separately.  It does not define new payload
+encodings for manifests, ROAs, or CRLs.  As described in Section 6 of
+[RFC6916], RPs can retrieve product sets under both algorithm suites and
+compare their outputs for testing.  This experiment performs that comparison
+using the resulting VRP sets and CCR [I-D.ietf-sidrops-rpki-ccr].
 
 The experimental harness needs a mapping between corresponding products
 for measurement and debugging.  Such a mapping can be derived from the
@@ -257,7 +252,7 @@ signatures above the migration boundary.
 
 | Migration model | Migration ordering | Legacy RP compatibility | Parallel products | Principal limitation |
 |---|---|---|---|---|
-| RFC 6916 parallel hierarchy | Top-down | Current Suite hierarchy remains available | Required during transition | Repository and operational duplication |
+| RFC 6916 Parallel Publication | Top-down | Current Suite hierarchy remains available | Required during transition | Repository and operational duplication |
 | Mixed Tree | Per subtree after required support is available | Unsupported RPs lose the switched subtree | Not required within the switched subtree | The path still depends on Current Suite ancestors |
 
 The experiment uses test repositories and test TALs.  It does not define or
@@ -748,14 +743,6 @@ ROA payloads, stale manifests, or different CRL state.  The experiment
 detects and reports these cases rather than silently selecting one branch;
 see the Experimental Migration Approaches section.
 
-Mixed Tree deployment introduces the risk of confusing a certificate's
-signature algorithm with the algorithm of its subject public key.
-An implementation that assumes the two are equal may accept invalid
-chains or reject valid ones.  The experimental model processes each
-certificate or CRL signatureAlgorithm independently, verifies the
-signature with the issuer's public key, and processes the subject SPKI
-algorithm as a separate field.
-
 A Mixed Tree rooted in a Current Suite trust anchor is not
 quantum resistant as a complete certification path.  Validation of the
 certification path depends on every certificate signature along it,
@@ -888,202 +875,108 @@ metadata.  The harness remains the durable record.
 ## Reproducibility Metadata
 
 The evidence snapshot cited by this revision is Git commit
-bbbc401336b0c917b7bb89a9e8f5b783c81012db.  The cryptographic-operation
-measurements cover key generation, signing, and verification without
-X.509, CMS, or repository processing.  They were run on macOS 26.5.2 arm64
-on an Apple M4 using
-OpenSSL 3.6.2 and a C harness compiled with
-`cc -O2 -Wall -Wextra -Werror`.  The recorded environment also identifies
-Python 3.14.4 and liboqs 0.15.0.  The Composite ML-DSA operation benchmark,
-implementing revision 19 of the LAMPS construction, used
-`cc -O3 -Wall -Wextra -Werror` with OpenSSL 3.6.2.  The small-scale end-to-end
-and controlled-scale measurements below were run separately on the stated
-12-vCPU x86-64 host.  The Composite provider used for the X.509, CMS, and RP
-experiments was CompositeCrypto/composite-provider commit
-2263161f6b058fe0195a98b6fad088c2d4a2595f, with the repository's private-key
-decoder patch applied.
+bbbc401336b0c917b7bb89a9e8f5b783c81012db of [pqc-rpki-lab].  The
+repository contains the scripts, raw outputs, and additional environment
+metadata used for the measurements in this appendix.
 
-## Small-Scale End-to-End Measurement
+The cryptographic-operation measurements were performed on an Apple M4
+running macOS 26.5.2 with OpenSSL 3.6.2 and liboqs 0.15.0.  The primary
+algorithm benchmark was compiled with optimization level -O2, while the
+Composite ML-DSA benchmark was compiled with -O3.  The latter implements
+revision 19 of [I-D.ietf-lamps-pq-composite-sigs].
 
-A 12-vCPU x86-64 host used OpenSSL 3.6.2, the evaluated Composite
-provider, and rpki-client 9.8.  Each scenario used 100 complete generation
-repetitions and 1000 local RP-validation repetitions.  Standalone validation repositories were
-generated in the same benchmark run, and the Mixed Tree repository was
-generated immediately before it.  Each standalone generation sample
-creates one CA key and two one-time-use EE keys.  The table reports the
-median and sample standard deviation in separate fields, together with
-the minimum and maximum.  Wall time uses a monotonic nanosecond clock, CPU
-time uses child-resource usage deltas, and maximum RSS is in KiB.
+The X.509, CMS, and RP experiments used OpenSSL 3.6.2 and
+CompositeCrypto/composite-provider commit
+2263161f6b058fe0195a98b6fad088c2d4a2595f.  End-to-end validation was
+also exercised on a 12-vCPU x86-64 host using rpki-client 9.8.  Each
+scenario used 100 complete generation repetitions and 1000 local
+RP-validation repetitions.  The RSA, pure ML-DSA-65, Composite, and
+Mixed Tree repositories all produced the expected VRPs.
 
-| Phase | Scenario | Metric | Median | Sample stdev | Min | Max |
-|---|---|---|---:|---:|---:|---:|
-| Generation | RSA baseline | Wall (s) | 0.606 | 0.094 | 0.427 | 0.893 |
-| Generation | RSA baseline | CPU (s) | 0.635 | 0.102 | 0.444 | 0.947 |
-| Generation | RSA baseline | RSS (KiB) | 22400 | 58 | 22268 | 22528 |
-| Generation | Pure ML-DSA-65 | Wall (s) | 0.335 | 0.010 | 0.314 | 0.361 |
-| Generation | Pure ML-DSA-65 | CPU (s) | 0.339 | 0.010 | 0.318 | 0.365 |
-| Generation | Pure ML-DSA-65 | RSS (KiB) | 22396 | 25 | 22268 | 22400 |
-| Generation | Composite standalone | Wall (s) | 0.355 | 0.011 | 0.339 | 0.388 |
-| Generation | Composite standalone | CPU (s) | 0.359 | 0.011 | 0.342 | 0.392 |
-| Generation | Composite standalone | RSS (KiB) | 22396 | 37 | 22268 | 22400 |
-| Generation | Mixed Tree (RSA parent, Composite child) | Wall (s) | 0.619 | 0.072 | 0.514 | 0.839 |
-| Generation | Mixed Tree (RSA parent, Composite child) | CPU (s) | 0.638 | 0.078 | 0.526 | 0.874 |
-| Generation | Mixed Tree (RSA parent, Composite child) | RSS (KiB) | 21248 | 80 | 21120 | 21504 |
-| Validation | RSA baseline | Wall (s) | 0.0136 | 0.0010 | 0.0116 | 0.0190 |
-| Validation | RSA baseline | CPU (s) | 0.0138 | 0.0010 | 0.0118 | 0.0191 |
-| Validation | RSA baseline | RSS (KiB) | 7424 | 25 | 7168 | 7424 |
-| Validation | Pure ML-DSA-65 | Wall (s) | 0.0158 | 0.0011 | 0.0134 | 0.0220 |
-| Validation | Pure ML-DSA-65 | CPU (s) | 0.0160 | 0.0011 | 0.0135 | 0.0223 |
-| Validation | Pure ML-DSA-65 | RSS (KiB) | 7424 | 17 | 7296 | 7424 |
-| Validation | Composite standalone | Wall (s) | 0.0189 | 0.0013 | 0.0162 | 0.0285 |
-| Validation | Composite standalone | CPU (s) | 0.0190 | 0.0013 | 0.0164 | 0.0288 |
-| Validation | Composite standalone | RSS (KiB) | 7424 | 22 | 7296 | 7516 |
-| Validation | Mixed Tree (RSA parent, Composite child) | Wall (s) | 0.0200 | 0.0014 | 0.0167 | 0.0269 |
-| Validation | Mixed Tree (RSA parent, Composite child) | CPU (s) | 0.0200 | 0.0014 | 0.0168 | 0.0269 |
-| Validation | Mixed Tree (RSA parent, Composite child) | RSS (KiB) | 7424 | 29 | 7296 | 7584 |
+## Repeated Cryptographic Operation Timing
 
-All four validation scenarios produced the expected two VRPs with the
-experimental rpki-client extension.
-The four required repository products had a median of 4843 bytes for
-RSA and occupied 28247 bytes for pure ML-DSA-65 in every repetition.
-Composite standalone had a median of 28855 bytes and range of
-[28851, 28859].  The seven products across both publication points in the
-Mixed Tree had a median of 29095 bytes and range of [29092, 29098].
+This experiment compares the raw signing and verification cost of the
+evaluated algorithms independently of X.509, CMS, repository transfer, and
+RP processing.  In particular, verification performance is relevant to RPs,
+which repeatedly validate large numbers of repository objects.
 
-These very small validation runs measure complete local RP processes,
-but must not be extrapolated to global RPKI validation.  They exclude
-network transfer and do not measure a real repository, RRDP, rsync,
-validation with an initially empty cache, or incremental validation.  The Composite ML-DSA
-100,000-operation measurements elsewhere in this appendix are cryptographic
-signing and verification loops, not 100,000 complete end-to-end validations.
+The table reports the median and sample standard deviation across ten
+repetitions of 1,000 operations on a fixed 32-byte message.  Values are
+wall-clock seconds per 1,000 operations.
 
-## Public-Cache Profile and Controlled Scale Measurements
+| Algorithm | Sign median | Sign stdev | Verify median | Verify stdev |
+|---|---|---|---|---|
+| RSA-2048/SHA-256 | 0.340326 | 0.002114 | 0.009792 | 0.000057 |
+| P-256/SHA-256 | 0.012660 | 0.000332 | 0.034535 | 0.005361 |
+| Ed25519 | 0.016657 | 0.006613 | 0.040442 | 0.018694 |
+| ML-DSA-44 | 0.249238 | 0.029970 | 0.047798 | 0.002460 |
+| ML-DSA-65 | 0.405729 | 0.017570 | 0.073411 | 0.014139 |
+| ML-DSA-87 | 0.477243 | 0.012468 | 0.115963 | 0.001536 |
 
-One Routinator 0.15.2 RRDP-only cache snapshot was reduced to aggregate
-counts and byte distributions.  It contained 550,210 public-cache objects
-across 54,960 publication points and the validation run produced 980,019
-VRPs.  The ARIN trust anchor was unavailable during collection.  No source
-objects, keys, repository URIs, or local paths are included in the public
-result.  This is one incomplete snapshot rather than a measurement of the
-entire global RPKI, update churn, or incremental validation.
+The measurements show that RSA-2048 is substantially faster at verification
+than the other evaluated algorithms in this environment.  ML-DSA verification
+cost increases with the parameter set, with ML-DSA-65 requiring about
+7.5 times the RSA verification time and ML-DSA-87 about 11.8 times.  Signing
+shows a different pattern: ML-DSA-44 is faster than RSA-2048, while
+ML-DSA-65 and ML-DSA-87 are somewhat slower.
 
-A separate Krill campaign used one RSA parent and one child publication
-point.  For 1, 10, and 100 ROAs, complete generation was repeated 30
-times; the 1,000-ROA case was repeated 10 times.  At every size, each
-validation scenario was repeated 100 times using a fresh validator cache.  The
-experimental rpki-client and Routinator modes produced the expected VRPs in
-every repetition.
+These measurements isolate cryptographic operations and therefore do not
+represent complete RP-validation performance.  Their main implication for
+the RPKI is that algorithm selection should consider verification cost
+separately from signing cost, because RP workloads are verification
+dominated.
 
-| ROAs | Generation samples | Generation wall median (s) | Generation wall sample stdev (s) |
-|---:|---:|---:|---:|
-| 1 | 30 | 6.990 | 0.244 |
-| 10 | 30 | 7.675 | 0.348 |
-| 100 | 30 | 19.360 | 0.519 |
-| 1000 | 10 | 141.530 | 2.436 |
+The benchmark also covers 512-byte, 2-KiB, and 8-KiB messages and records
+key-generation timing, variance, and process peak RSS.  Those raw results
+remain in the evidence snapshot rather than being duplicated here.
 
-The captured 1,000-ROA Composite state contained 1008 rsync files
-occupying 9,797,596 bytes.  Its RRDP snapshot was 13,145,809 bytes
-uncompressed and 9,190,012 bytes with deterministic gzip.  The captured
-delta for the bulk Composite publication state was 13,133,093 bytes
-uncompressed and 9,182,046 bytes with deterministic gzip.  It is not the
-delta produced by the later one-ROA update under these cache conditions.  These are
-generated-state sizes, not network-throughput measurements.
+## Composite ML-DSA Operation Measurements
 
-The same 1,000-ROA repository was used to compare three cache conditions,
-with 30 repetitions per RP and condition.  One ROA was replaced;
-the ROA, manifest, and CRL were the three changed files.  Their combined
-size was 73,160 bytes before the update and 73,204 bytes afterward.  This
-experiment under these cache conditions did not capture the corresponding
-RRDP delta.
-rpki-client does not retain a parsed validation cache between these processes, and
-its wall medians were 0.86 seconds for a fresh cache, 0.86 seconds for
-an unchanged repository, and 0.85 seconds after the one-ROA update.
-Routinator's corresponding medians were 2.26, 1.99, and 2.30 seconds.
-The OS page cache was uncontrolled.  These values therefore characterize
-this harness, not a general incremental-validation speedup.
+This experiment measures the additional cryptographic cost of combining
+ML-DSA with a classical signature algorithm in the Composite construction.
+It compares signing and verification time, public-key size, signature size,
+and the resulting synthetic repository-size ratio across the evaluated
+Composite configurations.
 
-A separate synthetic topology pilot generated one RSA parent and 100
-Composite child CAs, each with one publication point and one ROA.  Its
-403 objects occupied 2,598,482 bytes.  Both experimental RPs produced
-100 VRPs.  After the complete publication point for one child was
-removed, each produced the 99 sibling VRPs.  This test shows that removing
-one child publication point did not affect VRPs from sibling child CAs, but
-it does not use Krill or reproduce public-RPKI topology.
+The following single-run measurements execute 100,000 signing operations
+and 100,000 verification operations for each configuration.  They include
+message-representative construction, ML-DSA context binding, both component
+signature operations, raw key and signature concatenation, and verification
+of all component signatures.  The ML-DSA-87 configuration uses P-384
+because revision 19 of [I-D.ietf-lamps-pq-composite-sigs] does not define
+ML-DSA-87 with P-256.
 
-For each captured Krill state, the harness waits for the published
-object count to converge, waits an additional two seconds with no publication
-changes, and
-overlays the publication API's current objects at canonical
-rsync-module paths before validation.
+| Composite | Sign (s/100k) | Verify (s/100k) | PubKey (B) | Mean sig (B) | Repository ratio |
+|---|---:|---:|---:|---:|---:|
+| ML-DSA-44 + P-256 | 26.0 | 8.3 | 1377 | 2491 | 3.16 |
+| ML-DSA-65 + P-256 | 45.6 | 11.9 | 2017 | 3380 | 4.09 |
+| ML-DSA-87 + P-384 | 59.4 | 32.8 | 2689 | 4730 | 5.40 |
 
-The public cache profile supplies topology and object-size inputs for a future
-re-signed synthetic corpus.  The controlled campaign adds repeated
-single-child scale, evidence under different cache conditions, and
-multi-publication-point evidence.  However, full re-signing of the evaluated
-configurations over a topology modeled on the public RPKI
-remains future work, as do production measurements of RRDP, rsync,
-and Erik.
+The measurements show that both cryptographic cost and object size increase
+with the ML-DSA parameter set.  For the evaluated ML-DSA-65 + P-256
+configuration, the classical component adds relatively little to the
+repository-size ratio compared with ML-DSA-65 alone, while verification
+must still perform both component checks.
 
-## Repository Transport Measurements
-
-The transport campaign reused the measured 1,000-ROA object count and the
-captured RSA and Composite repository totals.  The pure ML-DSA-65 total was
-derived from measured certificate, CRL, manifest, and ROA sizes.
-Each state contained 1008 files: two certificates, three CRLs, three
-manifests, and 1,000 ROAs.  These counts reproduce the captured 1,000-ROA
-Krill state.  For each transition, five local rsync repetitions using
-checksum comparison started from the same cache state.  RRDP values are the uncompressed
-notification plus snapshot or delta response bodies.  Erik values use a
-deliberately simplified single-partition accounting model: one ErikIndex,
-one ErikPartition, and only the required objects fetched by hash.  This is a
-lower-bound response-body model, not a complete simulation of AKI-based
-partitioning or segment-prefetch behavior.  Request and response headers,
-TLS, HPACK or QPACK, connection setup, and Compression Dictionary Transport
-[RFC9842] are excluded.
-
-| Algorithm | State | Local rsync exchanged (B) | RRDP response bodies (B) | Erik response bodies (B) |
-|---|---|---:|---:|---:|
-| RSA-2048 | Initial | 1,897,870 | 2,444,873 | 1,769,082 |
-| RSA-2048 | Unchanged | 60,562 | 184 | 113 |
-| RSA-2048 | One ROA update | 203,695 | 191,067 | 143,259 |
-| RSA-2048 | 10% ROA churn | 370,906 | 413,520 | 303,738 |
-| ML-DSA-65 | Initial | 9,752,914 | 12,916,933 | 9,624,126 |
-| ML-DSA-65 | Unchanged | 60,562 | 184 | 113 |
-| ML-DSA-65 | One ROA update | 222,370 | 215,967 | 161,934 |
-| ML-DSA-65 | 10% ROA churn | 1,163,068 | 1,469,604 | 1,095,900 |
-| Composite | Initial | 9,926,678 | 13,147,301 | 9,797,898 |
-| Composite | Unchanged | 60,562 | 184 | 113 |
-| Composite | One ROA update | 169,476 | 145,451 | 109,048 |
-| Composite | 10% ROA churn | 1,133,142 | 1,429,580 | 1,065,982 |
-
-The request counts included one rsync session per state.  RRDP used two response
-bodies for initial or changed states and one notification for the unchanged
-state.  The simplified Erik tree-fetch model counts 1,010 requests for the
-initial synchronization, one when unchanged, five for a one-ROA update, and
-104 for 10% churn.  Under the modeled Erik snapshot prefetch, the initial
-object transfer was consolidated into one bulk response of 1,768,736 bytes
-for RSA, 9,623,780 bytes for ML-DSA-65, and 9,797,552 bytes for Composite;
-a tree comparison still follows the prefetch as specified by the protocol.
-
-These models show that larger signatures amplify initial and churn traffic,
-while selective synchronization can avoid retransmitting most unchanged
-object bodies under the modeled conditions.  They do not establish that
-Erik is a prerequisite for deployment:
-the rsync run was local, RRDP and Erik were response-body models rather than
-production servers, and the deterministic payloads do not reproduce real
-compression ratios.  Experiments measuring obsolete intermediate-state
-retrieval under realistic polling intervals remain future work.
+These measurements isolate the Composite cryptographic operations.  They
+exclude key generation, file I/O, X.509, CMS, RP processing, and HSM
+latency, and the repository ratios are synthetic model outputs rather than
+complete-repository measurements.
 
 ## Measured Certificate and CRL Sizes
 
-RFC 6487-profiled certificates (including RFC 3779 resource
-extensions) and CRLs generated with OpenSSL 3.6.2 are shown below.  The
-RSA, P-256, Ed25519, ML-DSA, and SLH-DSA rows use the OpenSSL default
-provider.  The FN-DSA-512 row uses the experimental provider described
-below.
+This experiment measures the size impact of the evaluated signature
+algorithms when applied to RPKI-profiled certificates and CRLs.  It
+provides measured object sizes for comparison with the repository-size
+models and transport experiments in the following sections.
+
+RFC 6487-profiled certificates, including RFC 3779 resource extensions,
+and CRLs were generated with OpenSSL 3.6.2.  The RSA, P-256, Ed25519,
+ML-DSA, and SLH-DSA rows use the OpenSSL default provider.  The
+FN-DSA-512 row uses the experimental provider described below.
 
 | Algorithm | CA cert (B) | EE cert (B) | CRL (B) |
-|---|---|---|---|
+|---|---:|---:|---:|
 | RSA-2048/SHA-256 | 1038 | 984 | 381 |
 | P-256/SHA-256 | 641 | 587 | 187 |
 | Ed25519 | 578 | 524 | 170 |
@@ -1102,25 +995,34 @@ Falcon-512 OID and encoding from oqs-provider 0.11.0-rc1 with liboqs
 profile.  Falcon signatures are variable length, so its certificate and
 CRL sizes can vary between runs.
 
+The measurements show that certificate and CRL size varies substantially
+among the candidate algorithms.  ML-DSA increases object size by several
+times relative to RSA-2048, while the evaluated SLH-DSA configurations
+produce substantially larger objects.  FN-DSA-512 is comparatively compact
+in this experiment, although its measured encoding is not a final FN-DSA
+profile.  These differences directly contribute to the repository-size and
+transport costs evaluated in the following sections.
+
 ## Synthetic Repository Size Model
 
-First-order repository size ratios relative to the RSA-2048 baseline,
-computed by applying the key and signature inputs above to an explicit
-synthetic corpus.  The corpus contains 10 CA certificates, 100 EE
-certificates, 10 CRLs, 10 manifests, and 100 ROAs.  Its base payload
-assumptions are respectively 1500, 1500, 600, 1500, and 200 bytes.
+This model estimates how the measured key and signature sizes translate
+into repository growth when applied across a representative set of RPKI
+objects.  It is intended as a first-order comparison between candidate
+algorithms rather than as a prediction of the size of the global RPKI.
+
+The synthetic corpus contains 10 CA certificates, 100 EE certificates,
+10 CRLs, 10 manifests, and 100 ROAs.  Its base payload assumptions are
+1500, 1500, 600, 1500, and 200 bytes, respectively.
 
 For certificates, the model adds both a public-key input and a signature
 input to the base payload.  For CRLs, manifests, and ROAs, it adds the
-signature input.  It multiplies each resulting size by the corresponding
-object count and sums the products.  The reported repository ratio is the sum of the
-modeled object sizes, normalized to the RSA-2048 baseline.  Transport
-encoding and cache overhead are not included in the reported ratio.  No
-real repository snapshot or snapshot date was used.  These are synthetic
-model outputs, not full-repository measurements:
+signature input.  The resulting object sizes are multiplied by the
+corresponding object counts and summed.  The repository ratio is then
+normalized to the RSA-2048 baseline.  Transport encoding and cache
+overhead are not included.
 
 | Algorithm | Repository ratio |
-|---|---|
+|---|---:|
 | Ed25519 | 0.76 |
 | P-256 | 0.78 |
 | RSA-2048 | 1.00 |
@@ -1132,10 +1034,12 @@ model outputs, not full-repository measurements:
 | SLH-DSA-SHAKE-128s | 6.85 |
 | SLH-DSA-SHAKE-192s | 13.38 |
 
-As a check on the model, the same formula was applied to the standalone
-repository object counts: one CA certificate, two EE certificates, one CRL, one
-manifest, and one ROA.  The error below is (predicted - measured) divided
-by measured.
+As a consistency check, the same formula was applied to the standalone
+repository object counts: one CA certificate, two EE certificates, one
+CRL, one manifest, and one ROA.  The measured medians are the four
+required products of the standalone repositories generated by the
+end-to-end experiment identified in the Reproducibility Metadata section.
+The error below is (predicted - measured) divided by measured.
 
 | Suite | Model prediction (B) | Measured median (B) | Model error |
 |---|---:|---:|---:|
@@ -1144,51 +1048,130 @@ by measured.
 
 For these counts, the model predicts a Composite-to-RSA ratio of 3.62,
 whereas the measured ratio is 5.96.  The difference results primarily
-from fixed base-payload assumptions that overestimate the small RSA
-repository.  The 4.09 ratio above is therefore specific to the stated
-synthetic corpus and must not be treated as a measured repository-wide
-ratio.
+from the fixed base-payload assumptions, which overestimate the small RSA
+repository.
 
-## Repeated Cryptographic Operation Timing
+The model shows that repository growth is strongly dependent on signature
+and public-key size.  ML-DSA-44 and ML-DSA-65 produce approximately three-
+and four-fold increases over the RSA baseline in this corpus, while the
+evaluated Composite configuration is close to ML-DSA-65 because the
+additional P-256 component is small relative to the ML-DSA component.
+SLH-DSA produces substantially larger estimates, whereas FN-DSA remains
+comparatively compact.
 
-The primary timing summary below reports the median and sample standard
-deviation across ten repetitions of 1000 operations on a fixed 32-byte
-message.  Values are wall-clock seconds per 1000 operations.
+These ratios depend on the assumed object mix and base payload sizes and
+must not be treated as measured repository-wide growth factors.  The
+measured repository experiments below provide more representative evidence
+for the configurations that were implemented.
 
-| Algorithm | Sign median | Sign stdev | Verify median | Verify stdev |
-|---|---|---|---|---|
-| RSA-2048/SHA-256 | 0.340326 | 0.002114 | 0.009792 | 0.000057 |
-| P-256/SHA-256 | 0.012660 | 0.000332 | 0.034535 | 0.005361 |
-| Ed25519 | 0.016657 | 0.006613 | 0.040442 | 0.018694 |
-| ML-DSA-44 | 0.249238 | 0.029970 | 0.047798 | 0.002460 |
-| ML-DSA-65 | 0.405729 | 0.017570 | 0.073411 | 0.014139 |
-| ML-DSA-87 | 0.477243 | 0.012468 | 0.115963 | 0.001536 |
+## Controlled Repository Scale Measurements
 
-The sweep also covers 512-byte, 2-KiB, and 8-KiB messages and records
-key-generation timing, variance, and process peak RSS.  Those raw
-results remain in the evidence snapshot rather than being duplicated
-here.
+This experiment examines how object generation and RP validation behave as
+the number of RPKI objects and child CAs increases.  A public Routinator
+cache snapshot was used only as a reference for the scale of the deployed
+RPKI; the performance measurements themselves use controlled repositories.
 
-## Composite ML-DSA Operation Measurements
+The reference snapshot, collected with Routinator 0.15.2 using RRDP,
+contained 550,210 objects across 54,960 publication points and produced
+980,019 VRPs.  The ARIN trust anchor was unavailable during collection, so
+these values do not represent the complete global RPKI.
 
-The following single-run measurements execute 100,000 signing operations
-and 100,000 verification operations for each Composite ML-DSA configuration.
-They implement the message representative, ML-DSA context binding, both
-component operations, raw key and signature concatenation, and all-component
-verification in [I-D.ietf-lamps-pq-composite-sigs].  The ML-DSA-87 combination uses
-P-384 because revision 19 does not define ML-DSA-87 with P-256.
+A controlled Krill experiment used one RSA parent and one Composite child.
+Complete repository generation was repeated 30 times for 1, 10, and 100
+ROAs and 10 times for 1,000 ROAs.  Each repository size was also validated
+100 times with a fresh validator cache using the experimental rpki-client
+and Routinator implementations.  Both RPs produced the expected VRPs in
+every run.
 
-| Composite | Sign (s/100k) | Verify (s/100k) | PubKey (B) | Mean sig (B) | Repository ratio |
-|---|---|---|---|---|---|
-| ML-DSA-44 + P-256 | 26.0 | 8.3 | 1377 | 2491 | 3.16 |
-| ML-DSA-65 + P-256 | 45.6 | 11.9 | 2017 | 3380 | 4.09 |
-| ML-DSA-87 + P-384 | 59.4 | 32.8 | 2689 | 4730 | 5.40 |
+| ROAs | Generation samples | Generation wall median (s) | Generation wall sample stdev (s) |
+|---:|---:|---:|---:|
+| 1 | 30 | 6.990 | 0.244 |
+| 10 | 30 | 7.675 | 0.348 |
+| 100 | 30 | 19.360 | 0.519 |
+| 1000 | 10 | 141.530 | 2.436 |
 
-The timing includes message-representative construction and raw
-signature concatenation.  It excludes key generation, file I/O, X.509,
-CMS, validator processing, and HSM latency.  The repository ratios are
-synthetic model outputs derived from the measured raw key and mean
-signature sizes; they are not complete-repository measurements.
+The captured 1,000-ROA Composite repository contained 1,008 files occupying
+9,797,596 bytes.  Its RRDP snapshot was 13,145,809 bytes uncompressed and
+9,190,012 bytes with deterministic gzip.
+
+The same repository was used to compare validation with a fresh cache, an
+unchanged repository, and a one-ROA update, with 30 repetitions per RP and
+condition.  The update changed the ROA, manifest, and CRL.  rpki-client wall
+time medians were 0.86, 0.86, and 0.85 seconds, respectively; Routinator
+medians were 2.26, 1.99, and 2.30 seconds.  The OS page cache was not
+controlled, so these results do not demonstrate a general incremental-
+validation speedup.
+
+A separate synthetic topology used one RSA parent and 100 Composite child
+CAs, each publishing one ROA.  The repository contained 403 objects and
+produced 100 VRPs with both experimental RPs.  Removing one child
+publication point reduced the result to 99 VRPs without affecting the
+remaining children.
+
+The results show that the prototype continues to produce the expected VRPs
+as the controlled repository grows, while repository generation cost
+increases substantially with the number of ROAs.  The cache experiment does
+not show a consistent reduction in validation time after a small update, and
+the 100-child experiment confirms that failure of one child publication
+point does not invalidate sibling results.  These experiments characterize
+controlled scaling behavior; they do not measure performance on the complete
+public RPKI or over production repository transport.
+
+## Repository Transport Measurements
+
+This experiment evaluates how larger RPKI objects affect repository
+synchronization under rsync, RRDP, and Erik Synchronization.  It compares
+initial synchronization, an unchanged repository, a one-ROA update, and
+10% ROA churn for RSA-2048, ML-DSA-65, and the evaluated Composite
+configuration.
+
+The experiment reused the measured 1,000-ROA repository size and object
+count.  Each state contained 1,008 files: two certificates, three CRLs,
+three manifests, and 1,000 ROAs.  The RSA and Composite totals were taken
+from captured repositories, while the ML-DSA-65 total was derived from
+measured certificate, CRL, manifest, and ROA sizes.
+
+For each transition, five local rsync runs started from the same cache
+state.  RRDP values are calculated from notification, snapshot, and delta
+response bodies.  Erik values use a simplified single-partition model with
+one ErikIndex, one ErikPartition, and the required objects fetched by hash.
+Protocol headers, TLS, connection setup, and Compression Dictionary
+Transport [RFC9842] are not included.
+
+| Algorithm | State | Local rsync exchanged (B) | RRDP response bodies (B) | Erik response bodies (B) |
+|---|---|---:|---:|---:|
+| RSA-2048 | Initial | 1,897,870 | 2,444,873 | 1,769,082 |
+| RSA-2048 | Unchanged | 60,562 | 184 | 113 |
+| RSA-2048 | One ROA update | 203,695 | 191,067 | 143,259 |
+| RSA-2048 | 10% ROA churn | 370,906 | 413,520 | 303,738 |
+| ML-DSA-65 | Initial | 9,752,914 | 12,916,933 | 9,624,126 |
+| ML-DSA-65 | Unchanged | 60,562 | 184 | 113 |
+| ML-DSA-65 | One ROA update | 222,370 | 215,967 | 161,934 |
+| ML-DSA-65 | 10% ROA churn | 1,163,068 | 1,469,604 | 1,095,900 |
+| Composite | Initial | 9,926,678 | 13,147,301 | 9,797,898 |
+| Composite | Unchanged | 60,562 | 184 | 113 |
+| Composite | One ROA update | 169,476 | 145,451 | 109,048 |
+| Composite | 10% ROA churn | 1,133,142 | 1,429,580 | 1,065,982 |
+
+The simplified Erik model required 1,010 requests for initial
+synchronization, one for an unchanged repository, five for a one-ROA
+update, and 104 for 10% churn.  With snapshot prefetch, the modeled
+initial object transfer was consolidated into one bulk response of
+1,768,736 bytes for RSA, 9,623,780 bytes for ML-DSA-65, and 9,797,552
+bytes for Composite.
+
+The results show that larger signatures substantially increase transfer
+volume during initial synchronization and repository churn, while the cost
+of an unchanged repository remains small for RRDP and the modeled Erik
+case.  Selective synchronization also avoids retransmitting most unchanged
+object data in the update scenarios.  Repository distribution therefore
+becomes a more significant consideration as RPKI object sizes increase.
+
+These results do not establish the relative production performance of the
+three protocols.  The rsync measurements were local, while the RRDP and
+Erik results are response-body models rather than measurements from
+production servers.  Network latency, HTTP behavior, compression effects,
+and retrieval of obsolete intermediate states remain to be evaluated.
 
 ## Open Measurement Tasks
 

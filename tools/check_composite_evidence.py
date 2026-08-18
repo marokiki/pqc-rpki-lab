@@ -132,7 +132,7 @@ def find_inconsistencies() -> list[str]:
             failures.append(f"pinned dependency commit is undocumented: {commit}")
 
     required_scaled_phrases = (
-        "550,210 public-cache objects",
+        "550,210 objects",
         "54,960 publication points",
         "980,019 VRPs",
         "1,000-ROA",
