@@ -3,7 +3,7 @@
 
 
 SIDROPS                                                     T. Yoshikawa
-Internet-Draft          Graduate School of Informatics, Kyoto University
+Internet-Draft                                          Kyoto University
 Intended status: Informational                             L. Velvindron
 Expires: 21 February 2027                                  cyberstorm.mu
                                                           20 August 2026
@@ -2133,7 +2133,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 Authors' Addresses
 
    Tomoki Yoshikawa
-   Graduate School of Informatics, Kyoto University
+   Kyoto University
    Japan
    Email: yoshikawa.tomoki.67i@st.kyoto-u.ac.jp
 

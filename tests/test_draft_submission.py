@@ -70,7 +70,7 @@ class DraftSubmissionTest(unittest.TestCase):
                     "Tomoki Yoshikawa",
                     "T.",
                     "Yoshikawa",
-                    "Graduate School of Informatics, Kyoto University",
+                    "Kyoto University",
                     "JP",
                     "yoshikawa.tomoki.67i@st.kyoto-u.ac.jp",
                 ),

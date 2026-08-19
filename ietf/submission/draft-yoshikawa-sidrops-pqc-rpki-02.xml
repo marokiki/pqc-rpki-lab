@@ -4,7 +4,7 @@
     <title abbrev="PQC for RPKI">Post-Quantum Signature Experiments and Migration Considerations for the Resource Public Key Infrastructure (RPKI)</title>
     <seriesInfo name="Internet-Draft" value="draft-yoshikawa-sidrops-pqc-rpki-02" />
     <author fullname="Tomoki Yoshikawa" initials="T." surname="Yoshikawa">
-      <organization>Graduate School of Informatics, Kyoto University</organization>
+      <organization>Kyoto University</organization>
       <address>
         <postal>
           <country>JP</country>

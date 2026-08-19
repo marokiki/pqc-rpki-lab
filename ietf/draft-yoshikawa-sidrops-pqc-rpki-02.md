@@ -18,7 +18,7 @@ keyword:
 stand_alone: true
 author:
   - fullname: "Tomoki Yoshikawa"
-    organization: "Graduate School of Informatics, Kyoto University"
+    organization: "Kyoto University"
     email: "yoshikawa.tomoki.67i@st.kyoto-u.ac.jp"
     country: JP
   - fullname: "Loganaden Velvindron"
