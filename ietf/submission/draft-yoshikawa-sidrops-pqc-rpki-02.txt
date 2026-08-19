@@ -1431,9 +1431,9 @@ Internet-Draft                PQC for RPKI                   August 2026
               Snijders, J., Azimov, A., Uskov, E., Bush, R., Housley,
               R., and B. Maddison, "A Profile for Autonomous System
               Provider Authorization", Work in Progress, Internet-Draft,
-              draft-ietf-sidrops-aspa-profile-28, 19 July 2026,
+              draft-ietf-sidrops-aspa-profile-29, 29 July 2026,
               <https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-
-              aspa-profile-28>.
+              aspa-profile-29>.
 
    [I-D.ietf-sidrops-rpki-erik-protocol]
               Snijders, J., Bruijnzeels, T., Harrison, T., and W. Ohgai,

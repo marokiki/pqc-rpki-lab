@@ -834,7 +834,7 @@
         </front>
         <seriesInfo name="Internet-Draft" value="draft-ietf-sidrops-rpki-ccr-11" />
       </reference>
-      <reference anchor="I-D.ietf-sidrops-aspa-profile" target="https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-aspa-profile-28">
+      <reference anchor="I-D.ietf-sidrops-aspa-profile" target="https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-aspa-profile-29">
         <front>
           <title>A Profile for Autonomous System Provider Authorization</title>
           <author initials="J." surname="Snijders" fullname="Job Snijders">
@@ -855,7 +855,7 @@
           <author initials="B." surname="Maddison" fullname="Ben Maddison">
             <organization>Workonline</organization>
           </author>
-          <date month="July" day="19" year="2026" />
+          <date month="July" day="29" year="2026" />
           <abstract>
             <t>   This document defines a Cryptographic Message Syntax (CMS) protected
    content type for Autonomous System Provider Authorization (ASPA)
@@ -870,7 +870,7 @@
 	 </t>
           </abstract>
         </front>
-        <seriesInfo name="Internet-Draft" value="draft-ietf-sidrops-aspa-profile-28" />
+        <seriesInfo name="Internet-Draft" value="draft-ietf-sidrops-aspa-profile-29" />
       </reference>
       <reference anchor="I-D.ietf-sidrops-rpki-erik-protocol" target="https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-rpki-erik-protocol-07">
         <front>

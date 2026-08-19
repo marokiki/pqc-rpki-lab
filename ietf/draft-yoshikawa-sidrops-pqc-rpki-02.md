@@ -1361,8 +1361,8 @@ T. Buehler, "A Profile for Resource Public Key Infrastructure (RPKI)
 Canonical Cache Representation (CCR)", draft-ietf-sidrops-rpki-ccr-11,
 Work in Progress, 1 July 2026.
 
-[I-D.ietf-sidrops-aspa-profile] Azimov, A., Uskov, E., Bush, R., Snijders,
-J., Housley, R., and B. Maddison, "A Profile for Autonomous System
+[I-D.ietf-sidrops-aspa-profile] Snijders, J., Azimov, A., Uskov, E., Bush,
+R., Housley, R., and B. Maddison, "A Profile for Autonomous System
 Provider Authorization", draft-ietf-sidrops-aspa-profile-29,
 Work in Progress, 29 July 2026.
 

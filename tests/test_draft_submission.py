@@ -32,7 +32,7 @@ class DraftSubmissionTest(unittest.TestCase):
         )
         self.assertEqual(
             aspa.find("./seriesInfo").get("value"),
-            "draft-ietf-sidrops-aspa-profile-28",
+            "draft-ietf-sidrops-aspa-profile-29",
         )
         text = " ".join(self.root_02.itertext())
         self.assertIn("This document is informational.", text)
