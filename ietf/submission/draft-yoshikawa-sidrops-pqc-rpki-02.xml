@@ -12,7 +12,16 @@
         <email>yoshikawa.tomoki.67i@st.kyoto-u.ac.jp</email>
       </address>
     </author>
-    <date year="2026" month="August" day="18" />
+    <author fullname="Loganaden Velvindron" initials="L." surname="Velvindron">
+      <organization>cyberstorm.mu</organization>
+      <address>
+        <postal>
+          <country>MU</country>
+        </postal>
+        <email>logan@cyberstorm.mu</email>
+      </address>
+    </author>
+    <date year="2026" month="August" day="20" />
     <area>Operations and Management</area>
     <workgroup>SIDROPS</workgroup>
     <keyword>RPKI</keyword>
@@ -1436,7 +1445,7 @@
     </section>
     <section anchor="acknowledgements" numbered="false">
       <name>Acknowledgements</name>
-      <t>The author thanks Job Snijders, Dirk Doesburg, Loganaden Velvindron, and Ties de Kock for their reviews and comments.  The author also thanks the SIDROPS and LAMPS communities for the specifications and implementation work that make this experiment possible.</t>
+      <t>The authors thank Job Snijders, Dirk Doesburg, and Ties de Kock for their reviews and comments.  The authors also thank the SIDROPS and LAMPS communities for the specifications and implementation work that make this experiment possible.</t>
     </section>
   </back>
 </rfc>

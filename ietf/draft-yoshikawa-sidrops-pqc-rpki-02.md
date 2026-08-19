@@ -8,7 +8,7 @@ area: Operations and Management
 wg: SIDROPS
 submissiontype: IETF
 consensus: false
-date: 2026-08-18
+date: 2026-08-20
 keyword:
   - RPKI
   - PQC
@@ -21,6 +21,10 @@ author:
     organization: "Graduate School of Informatics, Kyoto University"
     email: "yoshikawa.tomoki.67i@st.kyoto-u.ac.jp"
     country: JP
+  - fullname: "Loganaden Velvindron"
+    organization: "cyberstorm.mu"
+    email: "logan@cyberstorm.mu"
+    country: MU
 --- abstract
 
 This document reports experiments with post-quantum signature algorithms
@@ -1233,10 +1237,10 @@ This section is to be removed before publication as an RFC.
 
 # Acknowledgements
 
-The author thanks Job Snijders, Dirk Doesburg, Loganaden Velvindron, and
-Ties de Kock for their reviews and comments.  The author also thanks the
-SIDROPS and LAMPS communities for the specifications and implementation
-work that make this experiment possible.
+The authors thank Job Snijders, Dirk Doesburg, and Ties de Kock for
+their reviews and comments.  The authors also thank the SIDROPS and
+LAMPS communities for the specifications and implementation work that
+make this experiment possible.
 
 # References
 

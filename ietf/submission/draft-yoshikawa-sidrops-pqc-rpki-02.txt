@@ -4,8 +4,9 @@
 
 SIDROPS                                                     T. Yoshikawa
 Internet-Draft          Graduate School of Informatics, Kyoto University
-Intended status: Informational                            18 August 2026
-Expires: 19 February 2027
+Intended status: Informational                             L. Velvindron
+Expires: 21 February 2027                                  cyberstorm.mu
+                                                          20 August 2026
 
 
 Post-Quantum Signature Experiments and Migration Considerations for the
@@ -44,19 +45,23 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on 19 February 2027.
+   This Internet-Draft will expire on 21 February 2027.
+
+
+
+
+
+
+
+Yoshikawa & Velvindron  Expires 21 February 2027                [Page 1]
+
+Internet-Draft                PQC for RPKI                   August 2026
+
 
 Copyright Notice
 
    Copyright (c) 2026 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
-
-
-
-Yoshikawa               Expires 19 February 2027                [Page 1]
-
-Internet-Draft                PQC for RPKI                   August 2026
-
 
    This document is subject to BCP 78 and the IETF Trust's Legal
    Provisions Relating to IETF Documents (https://trustee.ietf.org/
@@ -101,19 +106,19 @@ Table of Contents
    14. Security Considerations . . . . . . . . . . . . . . . . . . .  20
    15. IANA Considerations . . . . . . . . . . . . . . . . . . . . .  22
    16. Questions for Further Work  . . . . . . . . . . . . . . . . .  22
+
+
+
+Yoshikawa & Velvindron  Expires 21 February 2027                [Page 2]
+
+Internet-Draft                PQC for RPKI                   August 2026
+
+
      16.1.  Algorithm Configurations . . . . . . . . . . . . . . . .  22
      16.2.  Migration Design . . . . . . . . . . . . . . . . . . . .  22
      16.3.  Repository Distribution  . . . . . . . . . . . . . . . .  23
      16.4.  Operational Readiness  . . . . . . . . . . . . . . . . .  23
    17. Informative References  . . . . . . . . . . . . . . . . . . .  23
-
-
-
-Yoshikawa               Expires 19 February 2027                [Page 2]
-
-Internet-Draft                PQC for RPKI                   August 2026
-
-
    Appendix A.  Measurement Details  . . . . . . . . . . . . . . . .  27
      A.1.  Reproducibility Metadata  . . . . . . . . . . . . . . . .  27
      A.2.  Repeated Cryptographic Operation Timing . . . . . . . . .  28
@@ -125,7 +130,7 @@ Internet-Draft                PQC for RPKI                   August 2026
      A.8.  Open Measurement Tasks  . . . . . . . . . . . . . . . . .  37
    Appendix B.  Changes from -01 . . . . . . . . . . . . . . . . . .  37
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  38
-   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  39
+   Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  39
 
 1.  Introduction
 
@@ -160,12 +165,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-
-
-
-
-
-Yoshikawa               Expires 19 February 2027                [Page 3]
+Yoshikawa & Velvindron  Expires 21 February 2027                [Page 3]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -221,7 +221,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027                [Page 4]
+Yoshikawa & Velvindron  Expires 21 February 2027                [Page 4]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -277,7 +277,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027                [Page 5]
+Yoshikawa & Velvindron  Expires 21 February 2027                [Page 5]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -333,7 +333,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027                [Page 6]
+Yoshikawa & Velvindron  Expires 21 February 2027                [Page 6]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -389,7 +389,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027                [Page 7]
+Yoshikawa & Velvindron  Expires 21 February 2027                [Page 7]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -445,7 +445,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027                [Page 8]
+Yoshikawa & Velvindron  Expires 21 February 2027                [Page 8]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -501,7 +501,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027                [Page 9]
+Yoshikawa & Velvindron  Expires 21 February 2027                [Page 9]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -557,7 +557,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 10]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 10]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -613,7 +613,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 11]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 11]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -669,7 +669,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 12]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 12]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -725,7 +725,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 13]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 13]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -781,7 +781,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 14]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 14]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -837,7 +837,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 15]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 15]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -893,7 +893,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 16]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 16]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -949,7 +949,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 17]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 17]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1005,7 +1005,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 18]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 18]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1061,7 +1061,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 19]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 19]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1117,7 +1117,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 20]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 20]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1173,7 +1173,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 21]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 21]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1229,7 +1229,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 22]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 22]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1285,7 +1285,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 23]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 23]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1341,7 +1341,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 24]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 24]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1397,7 +1397,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 25]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 25]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1453,7 +1453,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 26]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 26]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1509,7 +1509,7 @@ A.1.  Reproducibility Metadata
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 27]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 27]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1565,7 +1565,7 @@ A.2.  Repeated Cryptographic Operation Timing
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 28]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 28]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1621,7 +1621,7 @@ A.3.  Composite ML-DSA Operation Measurements
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 29]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 29]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1677,7 +1677,7 @@ A.4.  Measured Certificate and CRL Sizes
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 30]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 30]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1733,7 +1733,7 @@ A.5.  Synthetic Repository Size Model
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 31]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 31]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1789,7 +1789,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 32]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 32]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1845,7 +1845,7 @@ A.6.  Controlled Repository Scale Measurements
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 33]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 33]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1901,7 +1901,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 34]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 34]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -1957,7 +1957,7 @@ A.7.  Repository Transport Measurements
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 35]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 35]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -2013,7 +2013,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 36]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 36]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -2069,7 +2069,7 @@ Appendix B.  Changes from -01
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 37]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 37]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
@@ -2117,20 +2117,20 @@ Internet-Draft                PQC for RPKI                   August 2026
 
 Acknowledgements
 
-   The author thanks Job Snijders, Dirk Doesburg, Loganaden Velvindron,
-   and Ties de Kock for their reviews and comments.  The author also
-   thanks the SIDROPS and LAMPS communities for the specifications and
-   implementation work that make this experiment possible.
+   The authors thank Job Snijders, Dirk Doesburg, and Ties de Kock for
+   their reviews and comments.  The authors also thank the SIDROPS and
+   LAMPS communities for the specifications and implementation work that
+   make this experiment possible.
 
 
 
 
-Yoshikawa               Expires 19 February 2027               [Page 38]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 38]
 
 Internet-Draft                PQC for RPKI                   August 2026
 
 
-Author's Address
+Authors' Addresses
 
    Tomoki Yoshikawa
    Graduate School of Informatics, Kyoto University
@@ -2138,6 +2138,10 @@ Author's Address
    Email: yoshikawa.tomoki.67i@st.kyoto-u.ac.jp
 
 
+   Loganaden Velvindron
+   cyberstorm.mu
+   Mauritius
+   Email: logan@cyberstorm.mu
 
 
 
@@ -2177,8 +2181,4 @@ Author's Address
 
 
 
-
-
-
-
-Yoshikawa               Expires 19 February 2027               [Page 39]
+Yoshikawa & Velvindron  Expires 21 February 2027               [Page 39]

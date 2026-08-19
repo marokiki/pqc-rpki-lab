@@ -51,15 +51,46 @@ class DraftSubmissionTest(unittest.TestCase):
             "bbbc401336b0c917b7bb89a9e8f5b783c81012db", self.source_02
         )
 
-    def test_draft_02_author_records_country_code(self):
+    def test_draft_02_records_both_authors_with_country_codes(self):
+        authors = self.root_02.findall("./front/author")
         self.assertEqual(
-            self.root_02.findtext("./front/author/address/postal/country"),
-            "JP",
+            [
+                (
+                    author.get("fullname"),
+                    author.get("initials"),
+                    author.get("surname"),
+                    author.findtext("./organization"),
+                    author.findtext("./address/postal/country"),
+                    author.findtext("./address/email"),
+                )
+                for author in authors
+            ],
+            [
+                (
+                    "Tomoki Yoshikawa",
+                    "T.",
+                    "Yoshikawa",
+                    "Graduate School of Informatics, Kyoto University",
+                    "JP",
+                    "yoshikawa.tomoki.67i@st.kyoto-u.ac.jp",
+                ),
+                (
+                    "Loganaden Velvindron",
+                    "L.",
+                    "Velvindron",
+                    "cyberstorm.mu",
+                    "MU",
+                    "logan@cyberstorm.mu",
+                ),
+            ],
         )
-        self.assertEqual(
-            self.root_02.findtext("./front/author/address/email"),
-            "yoshikawa.tomoki.67i@st.kyoto-u.ac.jp",
+        # A co-author is no longer thanked as a reviewer.
+        acknowledgements = self.root_02.find(
+            './/section[@anchor="acknowledgements"]'
         )
+        acknowledgement_text = " ".join(acknowledgements.itertext())
+        self.assertNotIn("Loganaden Velvindron", acknowledgement_text)
+        self.assertIn("Job Snijders", acknowledgement_text)
 
     def test_draft_02_records_review_boundaries(self):
         text = " ".join(self.root_02.itertext())

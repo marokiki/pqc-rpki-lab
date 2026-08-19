@@ -56,7 +56,7 @@ def split_source(text: str) -> tuple[dict[str, object], str, str, str]:
     abstract, rest = rest.split("--- middle", 1)
     middle, back = rest.split("--- back", 1)
     meta: dict[str, object] = {}
-    author: dict[str, str] = {}
+    authors: list[dict[str, str]] = []
     keywords: list[str] = []
     in_keywords = False
     in_author = False
@@ -78,16 +78,17 @@ def split_source(text: str) -> tuple[dict[str, object], str, str, str]:
         if in_author:
             stripped = line.strip()
             if stripped.startswith("- "):
+                authors.append({})
                 stripped = stripped[2:]
-            if ":" in stripped:
+            if ":" in stripped and authors:
                 key, value = stripped.split(":", 1)
-                author[key.strip()] = value.strip().strip('"')
+                authors[-1][key.strip()] = value.strip().strip('"')
             continue
         if ":" in line:
             key, value = line.split(":", 1)
             meta[key.strip()] = value.strip().strip('"')
     meta["keywords"] = keywords
-    meta["author"] = author
+    meta["authors"] = authors
     return meta, abstract.strip(), middle.strip(), back.strip()
 
 
@@ -258,6 +259,15 @@ def add_sections(parent: ET.Element, sections: list[Section]) -> None:
         stack.append((sec.level, element))
 
 
+def author_name(author: dict[str, str]) -> dict[str, str]:
+    given, _, surname = author["fullname"].rpartition(" ")
+    return {
+        "fullname": author["fullname"],
+        "initials": author.get("initials", f"{given[:1]}." if given else ""),
+        "surname": author.get("surname", surname),
+    }
+
+
 def anchor(title: str) -> str:
     value = re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")
     return value or "section"
@@ -344,18 +354,14 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
         meta.get("title", "")
     )
     ET.SubElement(front, "seriesInfo", {"name": "Internet-Draft", "value": DOCNAME})
-    author = meta["author"]  # type: ignore[index]
-    author_el = ET.SubElement(
-        front,
-        "author",
-        {"fullname": author["fullname"], "initials": "T.", "surname": "Yoshikawa"},
-    )
-    ET.SubElement(author_el, "organization").text = author["organization"]
-    address = ET.SubElement(author_el, "address")
-    if author.get("country"):
-        postal = ET.SubElement(address, "postal")
-        ET.SubElement(postal, "country").text = author["country"]
-    ET.SubElement(address, "email").text = author["email"]
+    for author in meta["authors"]:  # type: ignore[union-attr]
+        author_el = ET.SubElement(front, "author", author_name(author))
+        ET.SubElement(author_el, "organization").text = author["organization"]
+        address = ET.SubElement(author_el, "address")
+        if author.get("country"):
+            postal = ET.SubElement(address, "postal")
+            ET.SubElement(postal, "country").text = author["country"]
+        ET.SubElement(address, "email").text = author["email"]
     draft_date = date.fromisoformat(str(meta.get("date", date.today().isoformat())))
     ET.SubElement(
         front,
