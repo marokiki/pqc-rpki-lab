@@ -1387,5 +1387,5 @@ https://arxiv.org/abs/2603.06968.
 
 [pqc-rpki-lab] Yoshikawa, T., "pqc-rpki-lab experimental evidence
 snapshot", release tag draft-yoshikawa-sidrops-pqc-rpki-02,
-18 August 2026,
+20 August 2026,
 https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-02.

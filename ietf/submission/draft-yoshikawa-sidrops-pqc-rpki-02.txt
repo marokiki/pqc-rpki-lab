@@ -1486,7 +1486,7 @@ Internet-Draft                PQC for RPKI                   August 2026
 
    [pqc-rpki-lab]
               Yoshikawa, T., "pqc-rpki-lab experimental evidence
-              snapshot", 18 August 2026, <https://github.com/marokiki/
+              snapshot", 20 August 2026, <https://github.com/marokiki/
               pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-
               rpki-02>.
 

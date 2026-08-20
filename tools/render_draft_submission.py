@@ -502,7 +502,7 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
         author_fullname="Tomoki Yoshikawa",
         author_initials="T.",
         author_surname="Yoshikawa",
-        day="18" if DOCNAME.endswith("-02") else "28",
+        day="20" if DOCNAME.endswith("-02") else "28",
         month="August" if DOCNAME.endswith("-02") else "July",
         year="2026",
     )
