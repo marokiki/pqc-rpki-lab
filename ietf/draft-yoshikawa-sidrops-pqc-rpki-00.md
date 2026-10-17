@@ -197,7 +197,8 @@ signature, PKIX, and CMS specifications [FIPS205] [RFC9909] [RFC9814].
 Falcon/FN-DSA and other additional-signature candidates may be attractive
 for size or performance reasons, but they are outside the mandatory path
 of this revision until stable PKIX and CMS profiles and RPKI validator
-evidence are available.
+evidence are available. Falcon/FN-DSA is also difficult to implement securely
+as it requires constant-time operations.
 
 The first-order repository estimator gives Falcon-512, using a 666-octet
 maximum signature size, a 1.5542 ratio to the RSA baseline and gives
