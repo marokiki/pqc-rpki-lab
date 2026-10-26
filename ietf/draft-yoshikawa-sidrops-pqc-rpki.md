@@ -1,14 +1,14 @@
 ---
 title: "Post-Quantum Signature Experiments and Migration Considerations for the Resource Public Key Infrastructure (RPKI)"
 abbrev: "PQC for RPKI"
-docname: draft-yoshikawa-sidrops-pqc-rpki-02
+docname: draft-yoshikawa-sidrops-pqc-rpki-03
 category: info
 ipr: trust200902
 area: Operations and Management
 wg: SIDROPS
 submissiontype: IETF
 consensus: false
-date: 2026-08-20
+date: 2026-10-25
 keyword:
   - RPKI
   - PQC
@@ -51,6 +51,11 @@ Routers that consume Validated ROA Payloads (VRPs) through the RPKI-Router Proto
 
 The descriptions of algorithms, encodings, validation behavior, and migration steps in this document are experimental assumptions and observations.
 They are not interoperability requirements for production RPKI implementations.
+
+This document does not select or recommend a production PQ algorithm.
+The candidate algorithms and experimental results explore the problem space and identify requirements and trade-offs for a future RPKI PQ migration.
+The eventual production algorithm choice should be made separately when sufficient cryptographic, implementation, and operational information is available.
+This uncertainty does not prevent continued investigation of PQ migration.
 
 # Terminology
 
@@ -123,6 +128,10 @@ The experiments use the following evaluation goals.
 
 This section describes the two migration approaches evaluated in this document.
 The choice of signature suite is independent of this comparison.
+
+An RPKI cryptographic transition incurs implementation, testing, and operational costs that may be distributed across RP and CA software implementers, RIRs and other CA operators, network operators, vendors, and hardware and HSM providers.
+The cost and which parties must bear it are relevant considerations when choosing an algorithm and migration strategy, including the effort needed to coordinate deployment and maintain service during transition.
+This document does not resolve how those costs should be funded.
 
 ## Parallel Publication
 
@@ -291,6 +300,19 @@ FN-DSA remains in the comparison set as the compact signature candidate, and the
 Algorithm selection for the RPKI cannot be based on software benchmarks alone.
 HSM support for a candidate algorithm is also a deployment prerequisite for CAs that protect their signing keys in HSMs.
 
+## Risk of Premature Algorithm Selection
+
+Algorithm selection itself carries a deployment risk.
+An RPKI algorithm transition requires substantial implementation and operational effort across the ecosystem.
+If the selected algorithm later proves unsuitable due to security or operational issues, another ecosystem-wide transition may be required.
+Even if it remains secure, the emergence of a significantly more efficient algorithm could make the original choice costly in hindsight.
+
+The set of practical PQ algorithms and their properties is still evolving.
+A future algorithm may have materially better size, performance, implementation, hardware, or operational properties.
+The size, performance, and repository results in this document illustrate relevant trade-offs but do not establish which algorithm should be selected for production.
+Algorithm maturity and deployment experience, as well as cryptographic security, should therefore inform the choice and its timing.
+Candidate evaluation should explicitly consider the cost of an unsuitable selection and a subsequent ecosystem-wide transition.
+
 # Experimental Object Encoding
 
 ## Certificate and CRL Encoding
@@ -436,6 +458,25 @@ Not yet implemented or incomplete:
 * HSM support, long-running RP resource use, and additional candidate suites.
 
 The highest-priority gaps are independent cryptographic interoperability and validation over a multi-CA corpus modeled on the public RPKI that can be re-signed under each evaluated configuration.
+
+## Production Implementation Status
+
+This snapshot of upstream library support was updated on 25 October 2026.
+Released library functionality is distinguished from the lab extensions above; it does not establish production RPKI CA or RP support, RPKI profile conformance, or independent interoperability.
+Support for a PQ signature primitive alone does not establish X.509 or CMS SignedData support, and pure PQ signatures are distinct from composite or hybrid constructions.
+
+* OpenSSL: The released 3.5 series introduced pure ML-DSA and SLH-DSA primitives [OpenSSL-3.5].
+  Upstream release tests cover ML-DSA X.509 certificate generation [OpenSSL-X509-Tests] and CMS signing and verification using X.509 signer certificates with ML-DSA and SLH-DSA [OpenSSL-CMS-Tests].
+  SLH-DSA certificate-signature coverage has not been separately verified for this snapshot.
+  These pure PQ capabilities are separate from the external Composite provider used by this experiment; the lab results do not establish native production support for the evaluated Composite profile.
+* LibreSSL: Version 4.4.0 was released as a stable release on 22 October 2026 [LibreSSL-Releases].
+  Its release notes describe hybrid TLS key establishment using X25519MLKEM768, which does not establish PQ signature support.
+  The reviewed 4.4.0 release notes do not establish ML-DSA or SLH-DSA signature support, either for X.509 or CMS SignedData.
+  Such support remains unverified in this snapshot; this is not a claim that no implementation exists.
+* Bouncy Castle: The released Java 1.86 source includes tests that generate pure ML-DSA and SLH-DSA X.509 certificates and create and verify CMS SignedData [BC-PQC-Tests].
+  Its release notes also record composite signature support, including CMS support added in 1.83 [BC-Java-Release-Notes].
+  Released composite functionality should not be confused with a final algorithm profile: compatibility with the specific LAMPS revisions and Composite configuration evaluated here remains to be verified.
+  This snapshot concerns the regular Java release, not every Bouncy Castle language or FIPS product.
 
 # Security Considerations
 
@@ -682,8 +723,9 @@ Both RPs produced the expected VRPs in every run.
 | 100 | 30 | 19.360 | 0.519 |
 | 1000 | 10 | 141.530 | 2.436 |
 
-The captured 1,000-ROA Composite repository contained 1,008 files occupying 9,797,596 bytes.
+The 1,000-ROA Composite repository captured in the repeated-generation campaign contained 1,008 files occupying 9,797,596 bytes.
 Its RRDP snapshot was 13,145,809 bytes uncompressed and 9,190,012 bytes with deterministic gzip.
+This is a separate capture from the 9,797,552-byte repository used to calibrate the transport experiment.
 
 The same repository was used to compare validation with a fresh cache, an unchanged repository, and a one-ROA update, with 30 repetitions per RP and condition.
 The update changed the ROA, manifest, and CRL.
@@ -703,7 +745,7 @@ These experiments characterize controlled scaling behavior; they do not measure 
 This experiment evaluates how larger RPKI objects affect repository synchronization under rsync, RRDP, and Erik Synchronization.
 It compares initial synchronization, an unchanged repository, a one-ROA update, and 10% ROA churn for RSA-2048, ML-DSA-65, and the evaluated Composite configuration.
 
-The experiment reused the measured 1,000-ROA repository size and object count.
+The experiment reused the repository size and object count from the single-run 1,000-ROA capture.
 Each state contained 1,008 files: two certificates, three CRLs, three manifests, and 1,000 ROAs.
 The RSA and Composite totals were taken from captured repositories, while the ML-DSA-65 total was derived from measured certificate, CRL, manifest, and ROA sizes.
 
@@ -726,6 +768,12 @@ Protocol headers, TLS, connection setup, and Compression Dictionary Transport [R
 | Composite | Unchanged | 60,562 | 184 | 113 |
 | Composite | One ROA update | 169,476 | 145,451 | 109,048 |
 | Composite | 10% ROA churn | 1,133,142 | 1,429,580 | 1,065,982 |
+
+The one-ROA update changes the same three paths for each algorithm: the ROA, child manifest, and child CRL.
+However, the workload generator places the difference between the captured repository total and the nominal per-file size total entirely in the child manifest.
+This produces a 140,877-byte child manifest for RSA and a 95,494-byte child manifest for Composite, explaining the lower Composite update volume.
+This is a calibration artifact, not evidence of an algorithmic transfer advantage; comparison with equivalent manifest contents remains necessary.
+Consequently, the one-ROA update results should not be used to compare the relative transfer costs of the evaluated algorithms.
 
 The simplified Erik model required 1,010 requests for initial synchronization, one for an unchanged repository, five for a one-ROA update, and 104 for 10% churn.
 With snapshot prefetch, the modeled initial object transfer was consolidated into one bulk response of 1,768,736 bytes for RSA, 9,623,780 bytes for ML-DSA-65, and 9,797,552 bytes for Composite.
@@ -751,24 +799,15 @@ The following dimensions are not yet backed by confirmed measurements and are de
 * HSM performance and support.
 
 
-# Changes from -01
+# Changes from -02
 
 This section is to be removed before publication as an RFC.
 
-* Changed the intended status from Standards Track to Informational and reframed the document as an experiment report rather than an RPKI algorithm profile.
-* Replaced interoperability requirements with experimental assumptions, observed behavior, and production-readiness questions.
-* Added an explicit relationship to RFC 6916 and confined the Mixed Tree construction not permitted by RFC 6916 to test TALs and repositories.
-* Distinguished RFC 6916 correspondence between products from equality of validated VRP results and separated CCR ROAPayloadState comparison from TrustAnchorState and comparison of certificate chains and publication sources.
-* Clarified the conditional EUF-CMA guarantee and SUF-CMA limitation of the evaluated composite construction.
-* Treated composite signatures, Mixed Tree migration, and Parallel Publication as independent design axes.
-* Added repeated-run statistics, explicit synthetic-corpus inputs and formulas, tool versions, and compiler flags.
-* Added Composite ML-DSA operation measurements, based on revision 19, for ML-DSA-44 with P-256, ML-DSA-65 with P-256, and ML-DSA-87 with P-384.
-* Added experimental Krill Composite-child issuance, publication, one-ROA update, and rollback evidence validated by both experimental RPs.
-* Added 15 cryptographic/profile and seven operational negative cases.
-* Added a public-cache aggregate profile, repeated Krill measurements through 1,000 ROAs, a 1,000-ROA comparison under different cache conditions, and a 100-publication-point test showing that removal of one child publication point leaves sibling VRPs unaffected.
-* Added actual rpki-client CCR DER parsing and verified equal ROAPayloadState hashes while keeping ManifestState, TrustAnchorState, and provenance separate.
-* Added an rsync, RRDP, and Erik repository-transport comparison, with measured and modeled results explicitly distinguished.
-* Kept a future production algorithm profile and transition procedure as separate standards work informed by these results.
+* Clarified that the candidate algorithms and experiments inform a future RPKI PQ migration without selecting or recommending a production algorithm.
+* Added the risk and cost of premature algorithm selection, including a subsequent ecosystem-wide transition.
+* Added migration cost and responsibility considerations for implementers, operators, vendors, and hardware and HSM providers.
+* Added a dated production-library implementation snapshot distinguishing primitives, X.509, CMS, and pure PQ and composite support.
+* Distinguished separate repository captures and explained the manifest-size calibration artifact in the transport comparison.
 
 # Acknowledgements
 
@@ -848,3 +887,15 @@ The authors also thank the SIDROPS and LAMPS communities for the specifications 
 [pqRPKI] Li, W., Li, Y., and T. Chung, "pqRPKI: A Practical RPKI Architecture for the Post-Quantum Era", arXiv:2603.06968, March 2026, https://arxiv.org/abs/2603.06968.
 
 [pqc-rpki-lab] Yoshikawa, T., "pqc-rpki-lab experimental evidence snapshot", release tag draft-yoshikawa-sidrops-pqc-rpki-02, 20 August 2026, https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-02.
+
+[OpenSSL-3.5] OpenSSL Project, "OpenSSL 3.5 Series Release Notes", https://openssl-library.org/news/openssl-3.5-notes/, accessed 8 October 2026.
+
+[OpenSSL-X509-Tests] OpenSSL Project, "Certificate request and certificate generation tests", OpenSSL 3.5.0 release source, https://github.com/openssl/openssl/blob/openssl-3.5.0/test/recipes/25-test_req.t.
+
+[OpenSSL-CMS-Tests] OpenSSL Project, "CMS tests", OpenSSL 3.5.0 release source, https://github.com/openssl/openssl/blob/openssl-3.5.0/test/recipes/80-test_cms.t.
+
+[LibreSSL-Releases] LibreSSL Project, "Releases" and "LibreSSL 4.4.0 Release Notes", 22 October 2026, https://www.libressl.org/releases.html, https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-4.4.0-relnotes.txt, accessed 25 October 2026.
+
+[BC-PQC-Tests] Legion of the Bouncy Castle, "PQCSignedDataTest", Bouncy Castle Java 1.86 release source, https://github.com/bcgit/bc-java/blob/r1rv86/pkix/src/test/java/org/bouncycastle/cms/test/PQCSignedDataTest.java.
+
+[BC-Java-Release-Notes] Legion of the Bouncy Castle, "Release Notes", Bouncy Castle Java 1.86 release source, https://github.com/bcgit/bc-java/blob/r1rv86/docs/releasenotes.md.
