@@ -1,5 +1,13 @@
 name: ci
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Git ref to validate (leave empty for the workflow commit)
+        required: false
+        default: ''
 env:
   PYTHONDONTWRITEBYTECODE: "1"
 jobs:
@@ -10,6 +18,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+        with:
+          # Historical draft tests read pinned sources from Git history.
+          fetch-depth: 0
+          ref: ${{ inputs.ref || github.sha }}
       - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python-version }}
@@ -34,6 +46,10 @@ jobs:
       OPENSSL_SHA256: aaf51a1fe064384f811daeaeb4ec4dce7340ec8bd893027eee676af31e83a04f
     steps:
       - uses: actions/checkout@v6
+        with:
+          # Historical draft tests read pinned sources from Git history.
+          fetch-depth: 0
+          ref: ${{ inputs.ref || github.sha }}
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
