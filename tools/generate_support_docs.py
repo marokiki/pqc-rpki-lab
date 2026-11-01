@@ -139,7 +139,7 @@ uncontrolled OS page cache, not global-repository or network benchmarks.""")
 7. Are Null Scheme-like reductions useful enough to justify new SIDROPS work?
 8. Which downgrade and mixed-validator failures require normative handling?
 
-The protocol-level issue list is maintained in the Open Issues section of `ietf/draft-yoshikawa-sidrops-pqc-rpki-00.md`.""")
+The protocol-level issue list is maintained in the Questions for Further Work section of `ietf/draft-yoshikawa-sidrops-pqc-rpki.md`.""")
 
     write("docs/references.md", """# References
 

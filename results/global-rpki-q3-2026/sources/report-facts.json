@@ -1,0 +1,885 @@
+{
+  "source_file": "Global_RPKI_Report_2026_Q3.pdf",
+  "sha256": "5938005de892b3b7b060d4035531971b3be02e4c334fd72780d4e4d67a9612f4",
+  "period_utc": [
+    "2026-07-01T00:00:00Z",
+    "2026-10-01T00:00:00Z"
+  ],
+  "period_endpoint": "exclusive",
+  "period_interpretation": "Calendar-quarter UTC boundaries used for this assessment; the report labels July-September without explicit monthly capture timezones.",
+  "source_methodology_page": 1,
+  "tables": [
+    {
+      "table": 1,
+      "pdf_page": 3,
+      "printed_page": 3,
+      "population": "instantaneous_cache_objects",
+      "unit": "count; k abbreviation retained",
+      "definition": "Exact sampling instant within each month and k scale not explicitly specified.",
+      "rows": [
+        [
+          "arin.net",
+          "217k",
+          "222k",
+          "227k",
+          "230k",
+          "234k",
+          "236k"
+        ],
+        [
+          "ripe.net",
+          "114k",
+          "115k",
+          "116k",
+          "121k",
+          "119k",
+          "121k"
+        ],
+        [
+          "apnic.net",
+          "41k",
+          "41k",
+          "41k",
+          "41k",
+          "41k",
+          "46k"
+        ],
+        [
+          "registro.br",
+          "27k",
+          "27k",
+          "27k",
+          "28k",
+          "29k",
+          "29k"
+        ],
+        [
+          "lacnic.net",
+          "26k",
+          "26k",
+          "27k",
+          "27k",
+          "27k",
+          "27k"
+        ],
+        [
+          "amazonaws.com",
+          "21k",
+          "21k",
+          "21k",
+          "21k",
+          "21k",
+          "21k"
+        ],
+        [
+          "afrinic.net",
+          "15k",
+          "15k",
+          "16k",
+          "16k",
+          "16k",
+          "16k"
+        ],
+        [
+          "idnic.net",
+          "16k",
+          "13k",
+          "16k",
+          "16k",
+          "16k",
+          "16k"
+        ],
+        [
+          "paas.ripe.net",
+          "8k",
+          "9k",
+          "9k",
+          "9k",
+          "9k",
+          "9k"
+        ],
+        [
+          "rps.cnnic.cn",
+          "2k",
+          "6k",
+          "8k",
+          "9k",
+          "9k",
+          "9k"
+        ],
+        [
+          "nic.ad.jp",
+          "8k",
+          "8k",
+          "8k",
+          "8k",
+          "8k",
+          "8k"
+        ],
+        [
+          "fiti.net.cn",
+          "0",
+          "0",
+          "4k",
+          "4k",
+          "4k",
+          "4k"
+        ],
+        [
+          "rps.arin.net",
+          "2k",
+          "2k",
+          "3k",
+          "3k",
+          "2k",
+          "3k"
+        ],
+        [
+          "twnic.tw",
+          "6k",
+          "6k",
+          "3k",
+          "3k",
+          "3k",
+          "3k"
+        ]
+      ]
+    },
+    {
+      "table": 2,
+      "pdf_page": 4,
+      "printed_page": 4,
+      "population": "instantaneous_cache_der_volume",
+      "unit": "bytes; M abbreviation retained",
+      "definition": "Sum of complete DER object lengths; excludes storage/transport overhead. Exact month sample instant and M scale unspecified.",
+      "rows": [
+        [
+          "arin.net",
+          "464M",
+          "475M",
+          "485M",
+          "493M",
+          "503M",
+          "506M"
+        ],
+        [
+          "ripe.net",
+          "186M",
+          "188M",
+          "190M",
+          "198M",
+          "191M",
+          "194M"
+        ],
+        [
+          "apnic.net",
+          "72M",
+          "73M",
+          "74M",
+          "75M",
+          "76M",
+          "77M"
+        ],
+        [
+          "registro.br",
+          "48M",
+          "49M",
+          "49M",
+          "51M",
+          "53M",
+          "54M"
+        ],
+        [
+          "lacnic.net",
+          "49M",
+          "49M",
+          "50M",
+          "50M",
+          "50M",
+          "51M"
+        ],
+        [
+          "amazonaws.com",
+          "45M",
+          "43M",
+          "45M",
+          "45M",
+          "46M",
+          "46M"
+        ],
+        [
+          "afrinic.net",
+          "28M",
+          "29M",
+          "30M",
+          "30M",
+          "31M",
+          "31M"
+        ],
+        [
+          "idnic.net",
+          "26M",
+          "23M",
+          "27M",
+          "27M",
+          "27M",
+          "27M"
+        ],
+        [
+          "paas.ripe.net",
+          "17M",
+          "18M",
+          "18M",
+          "19M",
+          "19M",
+          "20M"
+        ],
+        [
+          "rps.cnnic.cn",
+          "4M",
+          "11M",
+          "15M",
+          "18M",
+          "17M",
+          "17M"
+        ],
+        [
+          "nic.ad.jp",
+          "13M",
+          "13M",
+          "13M",
+          "13M",
+          "14M",
+          "14M"
+        ],
+        [
+          "fiti.net.cn",
+          "0",
+          "0",
+          "7M",
+          "8M",
+          "8M",
+          "8M"
+        ],
+        [
+          "rps.arin.net",
+          "5M",
+          "5M",
+          "5M",
+          "5M",
+          "5M",
+          "5M"
+        ],
+        [
+          "twnic.tw",
+          "10M",
+          "10M",
+          "5M",
+          "5M",
+          "5M",
+          "5M"
+        ]
+      ]
+    },
+    {
+      "table": 3,
+      "pdf_page": 5,
+      "printed_page": 5,
+      "population": "new_rrdp_delta_documents_and_volume",
+      "unit": "count and bytes; G abbreviation retained",
+      "definition": "Merged/deduplicated observed delta XML documents, not traffic to all RPs; excludes retries and partial downloads.",
+      "rows": [
+        [
+          "deltas",
+          "215,035",
+          "241,329",
+          "230,450",
+          "240,356",
+          "238,359",
+          "220,073"
+        ],
+        [
+          "volume",
+          "33.3G",
+          "33.3G",
+          "34.5G",
+          "40.8G",
+          "49.3G",
+          "54.6G"
+        ]
+      ]
+    },
+    {
+      "table": 4,
+      "pdf_page": 5,
+      "printed_page": 5,
+      "population": "quarterly_rrdp_deltas_publish_elements_and_volume",
+      "unit": "count and bytes; k/G retained",
+      "definition": "Publish elements are not unique objects or issuance events; withdrawals not tabulated.",
+      "rows": [
+        [
+          "idnic.net",
+          "168k",
+          "455k",
+          "1.8G",
+          "202k",
+          "569k",
+          "2.0G"
+        ],
+        [
+          "registro.br",
+          "133k",
+          "955k",
+          "37.2G",
+          "129k",
+          "990k",
+          "78.6G"
+        ],
+        [
+          "rps.cnnic.cn",
+          "57k",
+          "184k",
+          "1.2G",
+          "38k",
+          "121k",
+          "0.8G"
+        ],
+        [
+          "lacnic.net",
+          "50k",
+          "315k",
+          "1.0G",
+          "48k",
+          "315k",
+          "1.0G"
+        ],
+        [
+          "nic.ad.jp",
+          "44k",
+          "756k",
+          "1.8G",
+          "46k",
+          "763k",
+          "1.8G"
+        ],
+        [
+          "twnic.tw",
+          "39k",
+          "102k",
+          "0.4G",
+          "36k",
+          "98k",
+          "0.3G"
+        ],
+        [
+          "paas.ripe.net",
+          "35k",
+          "124k",
+          "2.5G",
+          "37k",
+          "182k",
+          "7.8G"
+        ],
+        [
+          "apnic.net",
+          "34k",
+          "1,051k",
+          "5.2G",
+          "34k",
+          "1,042k",
+          "5.1G"
+        ],
+        [
+          "ripe.net",
+          "22k",
+          "11,814k",
+          "32.5G",
+          "23k",
+          "11,630k",
+          "28.4G"
+        ],
+        [
+          "amazonaws.com",
+          "18k",
+          "67k",
+          "2.9G",
+          "20k",
+          "71k",
+          "3.5G"
+        ],
+        [
+          "arin.net",
+          "17k",
+          "2,032k",
+          "11.9G",
+          "18k",
+          "2,231k",
+          "14.0G"
+        ],
+        [
+          "rps.arin.net",
+          "13k",
+          "40k",
+          "0.3G",
+          "13k",
+          "42k",
+          "0.3G"
+        ],
+        [
+          "afrinic.net",
+          "11k",
+          "290k",
+          "2.5G",
+          "11k",
+          "293k",
+          "2.4G"
+        ]
+      ]
+    },
+    {
+      "table": 5,
+      "pdf_page": 6,
+      "printed_page": 6,
+      "population": "newly_discovered_objects",
+      "unit": "count",
+      "definition": "Distinct captured object versions newly discovered during the month, not instantaneous objects, VRPs, or guaranteed issuance timestamps.",
+      "rows": [
+        [
+          "objects",
+          "5,312,637",
+          "5,731,081",
+          "5,587,355",
+          "5,927,525",
+          "5,936,302",
+          "5,817,566"
+        ]
+      ]
+    },
+    {
+      "table": 6,
+      "pdf_page": 6,
+      "printed_page": 6,
+      "population": "newly_discovered_object_der_volume",
+      "unit": "bytes; M abbreviation retained",
+      "definition": "Newly discovered objects, not RRDP XML or network traffic.",
+      "rows": [
+        [
+          "volume",
+          "19,598M",
+          "21,836M",
+          "22,791M",
+          "26,526M",
+          "31,687M",
+          "34,497M"
+        ]
+      ]
+    },
+    {
+      "table": 7,
+      "pdf_page": 6,
+      "printed_page": 6,
+      "population": "newly_discovered_objects_by_type",
+      "unit": "count",
+      "definition": "Quarterly new object versions; not per-type instantaneous population or RRDP publish event counts.",
+      "rows": [
+        [
+          "Manifests",
+          "8,122,073",
+          "8,493,374"
+        ],
+        [
+          "CRLs",
+          "8,116,283",
+          "8,487,012"
+        ],
+        [
+          "ROAs",
+          "357,013",
+          "532,103"
+        ],
+        [
+          "Certificates",
+          "37,050",
+          "49,000"
+        ],
+        [
+          "ASPAs",
+          "2,385",
+          "4,137"
+        ]
+      ]
+    },
+    {
+      "table": 8,
+      "pdf_page": 7,
+      "printed_page": 7,
+      "population": "q2_newly_discovered_objects_by_type_and_location",
+      "unit": "count",
+      "definition": "Subset of locations; no assumption that rows exhaust the global quarterly total.",
+      "rows": [
+        [
+          "ripe.net",
+          "3,674",
+          "5,350,417",
+          "5,350,417",
+          "24,994",
+          "1,296"
+        ],
+        [
+          "arin.net",
+          "2,677",
+          "851,660",
+          "851,660",
+          "220,341",
+          "639"
+        ],
+        [
+          "registro.br",
+          "19,593",
+          "425,295",
+          "425,295",
+          "8,072",
+          "84"
+        ],
+        [
+          "apnic.net",
+          "3,384",
+          "413,529",
+          "413,529",
+          "11,971",
+          "31"
+        ],
+        [
+          "nic.ad.jp",
+          "2,012",
+          "357,311",
+          "357,190",
+          "325",
+          "0"
+        ],
+        [
+          "idnic.net",
+          "2,481",
+          "214,542",
+          "214,542",
+          "10,863",
+          "0"
+        ],
+        [
+          "lacnic.net",
+          "208",
+          "148,501",
+          "148,501",
+          "2,630",
+          "0"
+        ],
+        [
+          "afrinic.net",
+          "95",
+          "128,849",
+          "128,849",
+          "6,296",
+          "0"
+        ],
+        [
+          "paas.ripe.net",
+          "1,049",
+          "48,957",
+          "48,957",
+          "12,508",
+          "237"
+        ],
+        [
+          "twnic.tw",
+          "416",
+          "48,342",
+          "48,342",
+          "1,989",
+          "0"
+        ],
+        [
+          "rps.cnnic.cn",
+          "875",
+          "68,151",
+          "68,151",
+          "16,555",
+          "0"
+        ],
+        [
+          "amazonaws.com",
+          "0",
+          "14,313",
+          "8,644",
+          "31,325",
+          "2"
+        ],
+        [
+          "rps.arin.net",
+          "242",
+          "17,070",
+          "17,070",
+          "2,423",
+          "32"
+        ]
+      ]
+    },
+    {
+      "table": 9,
+      "pdf_page": 7,
+      "printed_page": 7,
+      "population": "q3_newly_discovered_objects_by_type_and_location",
+      "unit": "count",
+      "definition": "Subset of locations; no assumption that rows exhaust the global quarterly total.",
+      "rows": [
+        [
+          "ripe.net",
+          "2,559",
+          "5,502,213",
+          "5,502,213",
+          "33,740",
+          "1,336"
+        ],
+        [
+          "arin.net",
+          "3,160",
+          "935,774",
+          "935,774",
+          "413,095",
+          "1,441"
+        ],
+        [
+          "registro.br",
+          "29,682",
+          "449,861",
+          "449,861",
+          "10,436",
+          "101"
+        ],
+        [
+          "apnic.net",
+          "3,208",
+          "433,859",
+          "433,859",
+          "13,745",
+          "787"
+        ],
+        [
+          "nic.ad.jp",
+          "2,149",
+          "379,418",
+          "379,280",
+          "250",
+          "0"
+        ],
+        [
+          "idnic.net",
+          "26",
+          "280,838",
+          "280,838",
+          "612",
+          "0"
+        ],
+        [
+          "lacnic.net",
+          "291",
+          "154,802",
+          "154,802",
+          "2,987",
+          "24"
+        ],
+        [
+          "afrinic.net",
+          "113",
+          "134,444",
+          "134,444",
+          "6,758",
+          "0"
+        ],
+        [
+          "paas.ripe.net",
+          "6,810",
+          "61,324",
+          "61,324",
+          "15,196",
+          "193"
+        ],
+        [
+          "twnic.tw",
+          "64",
+          "48,276",
+          "48,276",
+          "177",
+          "0"
+        ],
+        [
+          "rps.cnnic.cn",
+          "67",
+          "43,003",
+          "43,003",
+          "1,728",
+          "0"
+        ],
+        [
+          "amazonaws.com",
+          "0",
+          "15,519",
+          "9,295",
+          "28,771",
+          "2"
+        ],
+        [
+          "rps.arin.net",
+          "331",
+          "18,103",
+          "18,103",
+          "2,319",
+          "14"
+        ]
+      ]
+    },
+    {
+      "table": 10,
+      "pdf_page": 8,
+      "printed_page": 8,
+      "population": "quarterly_discovered_object_sizes",
+      "unit": "bytes; M/G abbreviations retained",
+      "definition": "Means/medians and volumes refer to quarter discovery datasets, not the initial cache.",
+      "rows": [
+        [
+          "registro.br",
+          "25,216",
+          "48,147",
+          "2,081",
+          "1,997",
+          "22.1G",
+          "45.5G"
+        ],
+        [
+          "ripe.net",
+          "2,014",
+          "1,766",
+          "1,924",
+          "1,923",
+          "21.6G",
+          "19.7G"
+        ],
+        [
+          "arin.net",
+          "4,406",
+          "4,693",
+          "2,126",
+          "2,126",
+          "8.5G",
+          "10.5G"
+        ],
+        [
+          "apnic.net",
+          "3,902",
+          "3,823",
+          "1,979",
+          "1,979",
+          "3.2G",
+          "3.4G"
+        ],
+        [
+          "afrinic.net",
+          "6,904",
+          "6,548",
+          "2,049",
+          "2,049",
+          "1.8G",
+          "1.8G"
+        ],
+        [
+          "paas.ripe.net",
+          "15,628",
+          "34,987",
+          "2,031",
+          "2,083",
+          "1.7G",
+          "6.0G"
+        ],
+        [
+          "amazonaws.com",
+          "29,341",
+          "36,336",
+          "2,056",
+          "2,056",
+          "1.6G",
+          "2.1G"
+        ],
+        [
+          "nic.ad.jp",
+          "1,581",
+          "1,560",
+          "1,859",
+          "1,857",
+          "1.1G",
+          "1.2G"
+        ],
+        [
+          "idnic.net",
+          "1,797",
+          "1,641",
+          "1,845",
+          "1,967",
+          "795M",
+          "931M"
+        ],
+        [
+          "lacnic.net",
+          "1,773",
+          "1,855",
+          "1,998",
+          "1,998",
+          "532M",
+          "584M"
+        ],
+        [
+          "rps.cnnic.cn",
+          "3,392",
+          "3,621",
+          "1,936",
+          "2,029",
+          "521M",
+          "429M"
+        ],
+        [
+          "rps.arin.net",
+          "4,385",
+          "4,166",
+          "2,106",
+          "2,156",
+          "162M",
+          "162M"
+        ],
+        [
+          "twnic.tw",
+          "1,556",
+          "1,581",
+          "1,769",
+          "1,885",
+          "154M",
+          "155M"
+        ]
+      ]
+    }
+  ],
+  "other_facts": [
+    {
+      "page": 4,
+      "quantity": "quarterly_delta_volume",
+      "q2": 101.8,
+      "q3": 146.4,
+      "unit": "GiB as explicitly printed in prose"
+    },
+    {
+      "page": 11,
+      "quantity": "roa_payloads_milestone",
+      "value": 1000000,
+      "timestamp_utc": "2026-09-03T00:53:40Z",
+      "reported_plot_axis": "Unique VRPs per instance",
+      "definition": "Report text calls these ROA payloads; Figure 2 labels unique VRPs per instance. This is not a count of unique ROA DER objects, and this analysis has not independently recomputed the milestone VRPs."
+    }
+  ]
+}

@@ -27,7 +27,7 @@ def find_inconsistencies() -> list[str]:
     benchmark = load("results/composite-e2e/benchmark-summary.json")
     summary = load("results/composite-e2e/summary.json")
     pins = load("experiments/composite-dependencies.json")
-    draft = (ROOT / "ietf/draft-yoshikawa-sidrops-pqc-rpki-02.md").read_text()
+    draft = (ROOT / "ietf/draft-yoshikawa-sidrops-pqc-rpki.md").read_text()
     readme = (ROOT / "README.md").read_text()
     normalized_draft = " ".join(draft.split())
 
@@ -138,15 +138,16 @@ def find_inconsistencies() -> list[str]:
         if commit not in combined_docs:
             failures.append(f"pinned dependency commit is undocumented: {commit}")
 
-    required_scaled_phrases = (
-        "550,210 objects",
-        "54,960 publication points",
-        "980,019 VRPs",
-        "1,000-ROA",
+    # The draft now reports the source-calibrated repository, while the older
+    # scaled measurements remain checked above and retained as evidence.
+    cache = load("results/global-rpki-q3-2026/snapshot-summary.json")
+    required_population = (
+        f"{cache['object_count']:,} objects",
+        f"{cache['object_bytes']:,} DER bytes",
     )
-    for phrase in required_scaled_phrases:
+    for phrase in required_population:
         if phrase not in normalized_draft:
-            failures.append(f"draft does not contain scaled evidence: {phrase}")
+            failures.append(f"draft does not contain observed cache population: {phrase}")
 
     return failures
 

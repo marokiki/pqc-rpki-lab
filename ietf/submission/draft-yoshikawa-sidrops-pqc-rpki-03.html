@@ -1,0 +1,2556 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Post-Quantum Signature Experiments and Migration Considerations for the Resource Public Key Infrastructure (RPKI)</title>
+<meta content="Tomoki Yoshikawa" name="author">
+<meta content="Loganaden Velvindron" name="author">
+<meta content="
+       This document reports experiments with post-quantum signature algorithms and analyzes migration approaches for the Resource Public Key Infrastructure (RPKI). The experiments compare classical, post-quantum, and composite signature candidates; generate and validate RPKI-profiled certificate, CRL, manifest, and ROA test objects; compare separately produced Current Suite and Next Suite validation outputs; and demonstrate an experimental Mixed Tree. The evaluation also models an idealized parallel-publication footprint and estimates RRDP delta and snapshot response-body sizes from captured RPKI data. The results identify implementation, interoperability, repository-distribution, and operational questions that need to be resolved before a production algorithm profile or transition procedure can be specified. This document is informational. It does not update RFC 7935 or RFC 6916, define a new RPKI algorithm profile, or authorize the use of the evaluated algorithms or Mixed Tree migration in the production RPKI. 
+    " name="description">
+<meta content="xml2rfc 3.35.0" name="generator">
+<meta content="RPKI" name="keyword">
+<meta content="PQC" name="keyword">
+<meta content="ML-DSA" name="keyword">
+<meta content="SLH-DSA" name="keyword">
+<meta content="SIDROPS" name="keyword">
+<meta content="draft-yoshikawa-sidrops-pqc-rpki-03" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.35.0
+    Python 3.14.4
+    ConfigArgParse 1.9.0
+    google-i18n-address 3.1.1
+    intervaltree 3.2.1
+    Jinja2 3.1.6
+    lxml 6.1.3
+    natsort 8.4.0
+    platformdirs 4.14.2
+    pycountry 26.2.16
+    PyYAML 6.0.3
+    requests 2.34.2
+    wcwidth 0.9.4
+    weasyprint 70.0
+-->
+<link href="draft-yoshikawa-sidrops-pqc-rpki-03.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">/*
+
+  NOTE: Changes at the bottom of this file overrides some earlier settings.
+
+  Once the style has stabilized and has been adopted as an official RFC style,
+  this can be consolidated so that style settings occur only in one place, but
+  for now the contents of this file consists first of the initial CSS work as
+  provided to the RFC Formatter (xml2rfc) work, followed by itemized and
+  commented changes found necessary during the development of the v3
+  formatters.
+
+*/
+
+/* fonts */
+@import url('https://static.ietf.org/fonts/noto-sans/import.css'); /* Sans-serif */
+@import url('https://static.ietf.org/fonts/noto-serif/import.css'); /* Serif (print) */
+@import url('https://static.ietf.org/fonts/roboto-mono/import.css'); /* Monospace */
+
+:root {
+  --font-sans: 'Noto Sans', Arial, Helvetica, sans-serif;
+  --font-serif: 'Noto Serif', 'Times', 'Times New Roman', serif;
+  --font-mono: 'Roboto Mono', Courier, 'Courier New', monospace;
+}
+
+@viewport {
+  zoom: 1.0;
+}
+@-ms-viewport {
+  width: extend-to-zoom;
+  zoom: 1.0;
+}
+/* general and mobile first */
+html {
+}
+body {
+  max-width: 90%;
+  margin: 1.5em auto;
+  color: #222;
+  background-color: #fff;
+  font-size: 14px;
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  scroll-behavior: smooth;
+  overflow-wrap: break-word;
+}
+.ears {
+  display: none;
+}
+
+/* headings */
+#title, h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+  line-height: 1.3;
+}
+#title {
+  clear: both;
+  border-bottom: 1px solid #ddd;
+  margin: 0 0 0.5em 0;
+  padding: 1em 0 0.5em;
+}
+.author {
+  padding-bottom: 4px;
+}
+h1 {
+  font-size: 26px;
+  margin: 1em 0;
+}
+h2 {
+  font-size: 22px;
+  margin-top: -20px;  /* provide offset for in-page anchors */
+  padding-top: 33px;
+}
+h3 {
+  font-size: 18px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h4 {
+  font-size: 16px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h5, h6 {
+  font-size: 14px;
+}
+#n-copyright-notice {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+}
+/* general structure */
+p {
+  padding: 0;
+  margin: 0 0 1em 0;
+  text-align: left;
+}
+div, span {
+  position: relative;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+@media print {
+  svg {
+    max-height: 850px;
+    max-width: 660px;
+  }
+}
+svg[font-family~="serif" i], svg [font-family~="serif" i] {
+  font-family: var(--font-serif);
+}
+svg[font-family~="sans-serif" i], svg [font-family~="sans-serif" i] {
+  font-family: var(--font-sans);
+}
+svg[font-family~="monospace" i], svg [font-family~="monospace" i] {
+  font-family: var(--font-mono);
+}
+.alignCenter.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  display: table;
+  border: none;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 1em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.ulBare, li.ulBare {
+  margin-left: 0em !important;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+/* 
+dl.nohang > dt {
+  float: none;
+}
+*/
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+
+/* links */
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #22e; /* Arlen: WCAG 2019 */
+}
+a[href]:hover {
+  background-color: #f2f2f2;
+}
+figcaption a[href],
+a[href].selfRef {
+  color: #222;
+}
+/* XXX probably not this:
+a.selfRef:hover {
+  background-color: transparent;
+  cursor: default;
+} */
+
+/* Figures */
+tt, code, pre {
+  background-color: #f9f9f9;
+  font-family: var(--font-mono);
+}
+pre {
+  border: 1px solid #eee;
+  margin: 0;
+  padding: 1em;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption {
+  font-style: italic;
+  margin: 0 0 1em 0;
+}
+@media screen {
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+    max-width: calc(100% - 22px);
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 1.2em 2em;
+}
+blockquote {
+  background-color: #f9f9f9;
+  color: #111; /* Arlen: WCAG 2019 */
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin: 1em 0;
+}
+blockquote > *:last-child {
+  margin-bottom: 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+.xref {
+  overflow-wrap: normal;
+}
+
+/* tables */
+table {
+  width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+  border: 1px solid #eee;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5em 0.75em;
+}
+th {
+  text-align: left;
+  background-color: #e9e9e9;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f5f5f5;
+}
+table caption {
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+table p {
+  /* XXX to avoid bottom margin on table row signifiers. If paragraphs should
+     be allowed within tables more generally, it would be far better to select on a class. */
+  margin: 0;
+}
+sub,
+sup {
+ white-space: nowrap;
+}
+
+/* pilcrow */
+a.pilcrow {
+  color: #666; /* Arlen: AHDJ 2019 */
+  text-decoration: none;
+  visibility: hidden;
+  user-select: none;
+  -ms-user-select: none;
+  -o-user-select:none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+@media screen {
+  aside:hover > a.pilcrow,
+  p:hover > a.pilcrow,
+  blockquote:hover > a.pilcrow,
+  div:hover > a.pilcrow,
+  li:hover > a.pilcrow,
+  pre:hover > a.pilcrow {
+    visibility: visible;
+  }
+  a.pilcrow:hover {
+    background-color: transparent;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: 0.9em;
+}
+#identifiers dt {
+  width: 3em;
+  clear: left;
+}
+#identifiers dd {
+  float: left;
+  margin-bottom: 0;
+}
+/* Fix PDF info block run off issue */
+@media print {
+  #identifiers dd {
+    max-width: 100%;
+  }
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #666; /* Arlen: WCAG 2019 */
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc  {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+nav.toc ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+nav.toc li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.refSubseries {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+.index ul {
+  margin: 0 0 0 1em;
+  padding: 0;
+  list-style: none;
+}
+.index ul ul {
+  margin: 0;
+}
+.index li {
+  margin: 0;
+  text-indent: -2em;
+  padding-left: 2em;
+  padding-bottom: 5px;
+}
+.indexIndex {
+  margin: 0.5em 0 1em;
+}
+.index a {
+  font-weight: 700;
+}
+/* make the index two-column on all but the smallest screens */
+@media (min-width: 600px) {
+  .index ul {
+    -moz-column-count: 2;
+    -moz-column-gap: 20px;
+  }
+  .index ul ul {
+    -moz-column-count: 1;
+    -moz-column-gap: 0;
+  }
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  font-family: var(--font-sans);
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+
+/* temporary notes */
+.rfcEditorRemove::before {
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
+  padding: 0.2em;
+  content: "The RFC Editor will remove this note";
+  color: #9e2a00; /* Arlen: WCAG 2019 */
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+}
+.rfcEditorRemove {
+  position: relative;
+  padding-top: 1.8em;
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  border-radius: 3px;
+}
+.cref {
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 1023px) {
+  body {
+    padding-top: 2em;
+  }
+  #title {
+    padding: 1em 0;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+    margin-top: -18px;  /* provide offset for in-page anchors */
+    padding-top: 38px;
+  }
+  #identifiers dd {
+    max-width: 60%;
+  }
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    border-bottom: 1px solid #ccc;
+  }
+  #toc h2 {
+    margin: -1px 0 0 0;
+    padding: 4px 0 4px 6px;
+    padding-right: 1em;
+    min-width: 190px;
+    font-size: 1.1em;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 6px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 1024px) {
+  body {
+    max-width: 724px;
+    margin: 42px auto;
+    padding-left: 1.5em;
+    padding-right: 29em;
+  }
+  #toc {
+    position: fixed;
+    top: 42px;
+    right: 42px;
+    width: 25%;
+    margin: 0;
+    padding: 0 1em;
+    z-index: 1;
+  }
+  #toc h2 {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 0;
+    overflow: auto;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  .breakable pre {
+    break-inside: auto;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+/* This is commented out here, as the string-set: doesn't
+   pass W3C validation currently */
+/*
+.ears thead .left {
+  string-set: ears-top-left content();
+}
+
+.ears thead .center {
+  string-set: ears-top-center content();
+}
+
+.ears thead .right {
+  string-set: ears-top-right content();
+}
+
+.ears tfoot .left {
+  string-set: ears-bottom-left content();
+}
+
+.ears tfoot .center {
+  string-set: ears-bottom-center content();
+}
+
+.ears tfoot .right {
+  string-set: ears-bottom-right content();
+}
+*/
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+  /* The following is commented out here, but set appropriately by in code, as
+     the content depends on the document */
+  /*
+  @top-left {
+    content: 'Internet-Draft';
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-left {
+    content: string(ears-top-left);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-center {
+    content: string(ears-top-center);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-right {
+    content: string(ears-top-right);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @bottom-left {
+    content: string(ears-bottom-left);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-center {
+    content: string(ears-bottom-center);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-right {
+      content: '[Page ' counter(page) ']';
+      vertical-align: top;
+      border-top: solid 1px #ccc;
+  }
+  */
+
+}
+
+/* Changes introduced to fix issues found during implementation */
+/* Make sure links are clickable even if overlapped by following H* */
+a {
+  z-index: 2;
+}
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Leave room in document info to show Internet-Draft on one line */
+#identifiers dt {
+  width: 8em;
+}
+
+/* Don't waste quite as much whitespace between label and value in doc info */
+#identifiers dd {
+  margin-left: 1em;
+}
+
+/* Give floating toc a background color (needed when it's a div inside section */
+#toc {
+  background-color: white;
+}
+
+/* Make the collapsed ToC header render white on gray also when it's a link */
+@media screen and (max-width: 1023px) {
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+}
+
+/* Give the bottom of the ToC some whitespace */
+@media screen and (min-width: 1024px) {
+  #toc {
+    padding: 0 0 1em 1em;
+  }
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* prevent monospace from becoming overly large */
+tt, code, pre {
+  font-size: 95%;
+}
+
+/* Fix the height/width aspect for ascii art*/
+.sourcecode pre,
+.art-text pre {
+  line-height: 1.12;
+}
+
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin-right: 0.5em;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table td.text-left,
+table th.text-left {
+  text-align: left;
+}
+table td.text-center,
+table th.text-center {
+  text-align: center;
+}
+table td.text-right,
+table th.text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact information look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 30em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Provide table alignment support.  We can't use the alignX classes above
+   since they do unwanted things with caption and other styling. */
+table.right {
+ margin-left: auto;
+ margin-right: 0;
+}
+table.center {
+ margin-left: auto;
+ margin-right: auto;
+}
+table.left {
+ margin-left: 0;
+ margin-right: auto;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+caption a[href] {
+  color: #222;
+}
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+/* Tweak the invisible space above H* in order not to overlay links in text above */
+ h2 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 31px;
+ }
+ h3 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+ h4 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+/* Float artwork pilcrow to the right */
+@media screen {
+  .artwork a.pilcrow {
+    display: block;
+    line-height: 0.7;
+    margin-top: 0.15em;
+  }
+}
+/* Make pilcrows on dd visible */
+@media screen {
+  dd:hover > a.pilcrow {
+    visibility: visible;
+  }
+}
+/* Make the placement of figcaption match that of a table's caption
+   by removing the figure's added bottom margin */
+.alignLeft.art-text,
+.alignCenter.art-text,
+.alignRight.art-text {
+   margin-bottom: 0;
+}
+.alignLeft,
+.alignCenter,
+.alignRight {
+  margin: 1em 0 0 0;
+}
+/* In print, the pilcrow won't show on hover, so prevent it from taking up space,
+   possibly even requiring a new line */
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+/* Styling for the external metadata */
+div#external-metadata {
+  background-color: #eee;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  display: none;
+}
+div#internal-metadata {
+  padding: 0.5em;                       /* to match the external-metadata padding */
+}
+/* Styling for title RFC Number */
+h1#rfcnum {
+  clear: both;
+  margin: 0 0 -1em;
+  padding: 1em 0 0 0;
+}
+/* Make .olPercent look the same as <ol><li> */
+dl.olPercent > dd {
+  margin-bottom: 0.25em;
+  min-height: initial;
+}
+/* Give aside some styling to set it apart */
+aside {
+  border-left: 1px solid #ddd;
+  margin: 1em 0 1em 2em;
+  padding: 0.2em 2em;
+}
+aside > dl,
+aside > ol,
+aside > ul,
+aside > table,
+aside > p {
+  margin-bottom: 0.5em;
+}
+/* Additional page break settings */
+@media print {
+  figcaption, table caption {
+    page-break-before: avoid;
+  }
+  table {
+    page-break-inside: avoid;
+  }
+}
+/* Font size adjustments for print */
+@media print {
+  body  { font-size: 10pt;      line-height: normal; max-width: 96%; }
+  h1    { font-size: 1.72em;    padding-top: 1.5em; } /* 1*1.2*1.2*1.2 */
+  h2    { font-size: 1.44em;    padding-top: 1.5em; } /* 1*1.2*1.2 */
+  h3    { font-size: 1.2em;     padding-top: 1.5em; } /* 1*1.2 */
+  h4    { font-size: 1em;       padding-top: 1.5em; }
+  h5, h6 { font-size: 1em;      margin: initial; padding: 0.5em 0 0.3em; }
+}
+/* Sourcecode margin in print, when there's no pilcrow */
+@media print {
+  .artwork,
+  .artwork > pre,
+  .sourcecode {
+    margin-bottom: 1em;
+  }
+}
+/* Avoid narrow tables forcing too narrow table captions, which may render badly */
+table {
+  min-width: 20em;
+}
+/* ol type a */
+ol.type-a { list-style-type: lower-alpha; }
+ol.type-A { list-style-type: upper-alpha; }
+ol.type-i { list-style-type: lower-roman; }
+ol.type-I { list-style-type: upper-roman; }
+/* Apply the print table and row borders in general, on request from the RPC,
+and increase the contrast between border and odd row background slightly */
+table {
+  border: 1px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+}
+tr {
+  break-inside: avoid;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f8f8f8;
+}
+/* Use style rules to govern display of the TOC. */
+@media screen and (max-width: 1023px) {
+  #toc nav { display: none; }
+  #toc.active nav { display: block; }
+}
+/* Add support for keepWithNext */
+.keepWithNext {
+  break-after: avoid-page;
+  break-after: avoid-page;
+}
+/* Add support for keepWithPrevious */
+.keepWithPrevious {
+  break-before: avoid-page;
+}
+/* Change the approach to avoiding breaks inside artwork etc. */
+figure, pre, table, .artwork, .sourcecode  {
+  break-before: auto;
+  break-after: auto;
+}
+/* Avoid breaks between <dt> and <dd> */
+dl {
+  break-before: auto;
+  break-inside: auto;
+}
+dt {
+  break-before: auto;
+  break-after: avoid-page;
+}
+dd {
+  break-before: avoid-page;
+  break-after: auto;
+  orphans: 3;
+  widows: 3
+}
+span.break, dd.break {
+  margin-bottom: 0;
+  min-height: 0;
+  break-before: auto;
+  break-inside: auto;
+  break-after: auto;
+}
+/* Undo break-before ToC */
+@media print {
+  #toc {
+    break-before: auto;
+  }
+}
+/* Text in compact lists should not get extra bottom margin space,
+   since that would makes the list not compact */
+ul.compact p, .ulCompact p,
+ol.compact p, .olCompact p {
+ margin: 0;
+}
+/* But the list as a whole needs the extra space at the end */
+section ul.compact,
+section .ulCompact,
+section ol.compact,
+section .olCompact {
+  margin-bottom: 1em;                    /* same as p not within ul.compact etc. */
+}
+/* The tt and code background above interferes with for instance table cell
+   backgrounds.  Changed to something a bit more selective. */
+tt, code {
+  background-color: transparent;
+}
+p tt, p code, li tt, li code, dt tt, dt code {
+  background-color: #f8f8f8;
+}
+/* Tweak the pre margin -- 0px doesn't come out well */
+pre {
+   margin-top: 0.5px;
+}
+/* Tweak the compact list text */
+ul.compact, .ulCompact,
+ol.compact, .olCompact,
+dl.compact, .dlCompact {
+  line-height: normal;
+}
+/* Don't add top margin for nested lists */
+li > ul, li > ol, li > dl,
+dd > ul, dd > ol, dd > dl,
+dl > dd > dl {
+  margin-top: initial;
+}
+/* Elements that should not be rendered on the same line as a <dt> */
+/* This should match the element list in writer.text.TextWriter.render_dl() */
+dd > div.artwork:first-child,
+dd > aside:first-child,
+dd > blockquote:first-child,
+dd > figure:first-child,
+dd > ol:first-child,
+dd > div.sourcecode:first-child,
+dd > table:first-child,
+dd > ul:first-child {
+  clear: left;
+}
+/* fix for weird browser behaviour when <dd/> is empty */
+dt+dd:empty::before{
+  content: "\00a0";
+}
+/* Make paragraph spacing inside <li> smaller than in body text, to fit better within the list */
+li > p {
+  margin-bottom: 0.5em
+}
+/* Don't let p margin spill out from inside list items */
+li > p:last-of-type:only-child {
+  margin-bottom: 0;
+}
+</style>
+<link href="rfc-local.css" rel="stylesheet" type="text/css">
+<script type="application/javascript">async function addMetadata(){try{const e=document.styleSheets[0].cssRules;for(let t=0;t<e.length;t++)if(/#identifiers/.exec(e[t].selectorText)){const a=e[t].cssText.replace("#identifiers","#external-updates");document.styleSheets[0].insertRule(a,document.styleSheets[0].cssRules.length)}}catch(e){console.log(e)}const e=document.getElementById("external-metadata");if(e)try{var t,a="",o=function(e){const t=document.getElementsByTagName("meta");for(let a=0;a<t.length;a++)if(t[a].getAttribute("name")===e)return t[a].getAttribute("content");return""}("rfc.number");if(o){t="https://www.rfc-editor.org/rfc/rfc"+o+".json";try{const e=await fetch(t);a=await e.json()}catch(e){t=document.URL.indexOf("html")>=0?document.URL.replace(/html$/,"json"):document.URL+".json";const o=await fetch(t);a=await o.json()}}if(!a)return;e.style.display="block";const s="",d="https://datatracker.ietf.org/doc",n="https://datatracker.ietf.org/ipr/search",c="https://www.rfc-editor.org/info",l=a.doc_id.toLowerCase(),i=a.doc_id.slice(0,3).toLowerCase(),f=a.doc_id.slice(3).replace(/^0+/,""),u={status:"Status",obsoletes:"Obsoletes",obsoleted_by:"Obsoleted By",updates:"Updates",updated_by:"Updated By",see_also:"See Also",errata_url:"Errata"};let h="<dl style='overflow:hidden' id='external-updates'>";["status","obsoletes","obsoleted_by","updates","updated_by","see_also","errata_url"].forEach(e=>{if("status"==e){a[e]=a[e].toLowerCase();var t=a[e].split(" "),o=t.length,w="",p=1;for(let e=0;e<o;e++)p<o?w=w+r(t[e])+" ":w+=r(t[e]),p++;a[e]=w}else if("obsoletes"==e||"obsoleted_by"==e||"updates"==e||"updated_by"==e){var g,m="",b=1;g=a[e].length;for(let t=0;t<g;t++)a[e][t]&&(a[e][t]=String(a[e][t]).toLowerCase(),m=b<g?m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>, ":m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>",b++);a[e]=m}else if("see_also"==e){var y,L="",C=1;y=a[e].length;for(let t=0;t<y;t++)if(a[e][t]){a[e][t]=String(a[e][t]);var _=a[e][t].slice(0,3),v=a[e][t].slice(3).replace(/^0+/,"");L=C<y?"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>, ":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>, ":"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>",C++}a[e]=L}else if("errata_url"==e){var R="";R=a[e]?R+"<a href='"+a[e]+"'>Errata exist</a> | <a href='"+d+"/"+l+"'>Datatracker</a>| <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>":"<a href='"+d+"/"+l+"'>Datatracker</a> | <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>",a[e]=R}""!=a[e]?"Errata"==u[e]?h+=`<dt>More info:</dt><dd>${a[e]}</dd>`:h+=`<dt>${u[e]}:</dt><dd>${a[e]}</dd>`:"Errata"==u[e]&&(h+=`<dt>More info:</dt><dd>${a[e]}</dd>`)}),h+="</dl>",e.innerHTML=h}catch(e){console.log(e)}else console.log("Could not locate metadata <div> element");function r(e){return e.charAt(0).toUpperCase()+e.slice(1)}}window.removeEventListener("load",addMetadata),window.addEventListener("load",addMetadata);</script>
+</head>
+<body class="xml2rfc">
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">PQC for RPKI</td>
+<td class="right">November 2026</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Yoshikawa &amp; Velvindron</td>
+<td class="center">Expires 5 May 2027</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">SIDROPS</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-yoshikawa-sidrops-pqc-rpki-03</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2026-11-01" class="published">1 November 2026</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2027-05-05">5 May 2027</time></dd>
+<dt class="label-authors">Authors:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">T. Yoshikawa</div>
+<div class="org">Kyoto University</div>
+</div>
+<div class="author">
+      <div class="author-name">L. Velvindron</div>
+<div class="org">cyberstorm.mu</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Post-Quantum Signature Experiments and Migration Considerations for the Resource Public Key Infrastructure (RPKI)</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">This document reports experiments with post-quantum signature algorithms and analyzes migration approaches for the Resource Public Key Infrastructure (RPKI). The experiments compare classical, post-quantum, and composite signature candidates; generate and validate RPKI-profiled certificate, CRL, manifest, and ROA test objects; compare separately produced Current Suite and Next Suite validation outputs; and demonstrate an experimental Mixed Tree. The evaluation also models an idealized parallel-publication footprint and estimates RRDP delta and snapshot response-body sizes from captured RPKI data. The results identify implementation, interoperability, repository-distribution, and operational questions that need to be resolved before a production algorithm profile or transition procedure can be specified. This document is informational. It does not update RFC 7935 or RFC 6916, define a new RPKI algorithm profile, or authorize the use of the evaluated algorithms or Mixed Tree migration in the production RPKI.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 5 May 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2026 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-scope" class="internal xref">Scope</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-signed-object-coverage" class="internal xref">Signed Object Coverage</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-relationship-to-rfc-6916" class="internal xref">Relationship to RFC 6916</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-evaluation-goals" class="internal xref">Evaluation Goals</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-experimental-migration-appr" class="internal xref">Experimental Migration Approaches</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-parallel-publication" class="internal xref">Parallel Publication</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-mixed-tree" class="internal xref">Mixed Tree</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-evaluated-algorithm-suites" class="internal xref">Evaluated Algorithm Suites</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-current-suite" class="internal xref">Current Suite</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-evaluated-composite-configu" class="internal xref">Evaluated Composite Configuration</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-additional-candidate-suites" class="internal xref">Additional Candidate Suites</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.4">
+                <p id="section-toc.1-1.8.2.4.1"><a href="#section-8.4" class="auto internal xref">8.4</a>.  <a href="#name-classical-reference-points" class="internal xref">Classical Reference Points</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.5">
+                <p id="section-toc.1-1.8.2.5.1"><a href="#section-8.5" class="auto internal xref">8.5</a>.  <a href="#name-evaluation-dimensions" class="internal xref">Evaluation Dimensions</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.6">
+                <p id="section-toc.1-1.8.2.6.1"><a href="#section-8.6" class="auto internal xref">8.6</a>.  <a href="#name-rationale-for-the-experimen" class="internal xref">Rationale for the Experimental Configurations</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.7">
+                <p id="section-toc.1-1.8.2.7.1"><a href="#section-8.7" class="auto internal xref">8.7</a>.  <a href="#name-risk-of-premature-algorithm" class="internal xref">Risk of Premature Algorithm Selection</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-experimental-object-encodin" class="internal xref">Experimental Object Encoding</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.1">
+                <p id="section-toc.1-1.9.2.1.1"><a href="#section-9.1" class="auto internal xref">9.1</a>.  <a href="#name-certificate-and-crl-encodin" class="internal xref">Certificate and CRL Encoding</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.2">
+                <p id="section-toc.1-1.9.2.2.1"><a href="#section-9.2" class="auto internal xref">9.2</a>.  <a href="#name-cms-signed-object-encoding" class="internal xref">CMS Signed Object Encoding</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9.2.3">
+                <p id="section-toc.1-1.9.2.3.1"><a href="#section-9.3" class="auto internal xref">9.3</a>.  <a href="#name-manifest-processing-during-" class="internal xref">Manifest Processing During Migration</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-related-experimental-design" class="internal xref">Related Experimental Designs</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#section-11" class="auto internal xref">11</a>. <a href="#name-repository-distribution-con" class="internal xref">Repository Distribution Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.1">
+                <p id="section-toc.1-1.11.2.1.1"><a href="#section-11.1" class="auto internal xref">11.1</a>.  <a href="#name-impact-of-larger-objects" class="internal xref">Impact of Larger Objects</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.2">
+                <p id="section-toc.1-1.11.2.2.1"><a href="#section-11.2" class="auto internal xref">11.2</a>.  <a href="#name-rrdp-rsync-and-erik-synchro" class="internal xref">RRDP, rsync, and Erik Synchronization</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11.2.3">
+                <p id="section-toc.1-1.11.2.3.1"><a href="#section-11.3" class="auto internal xref">11.3</a>.  <a href="#name-transport-experiment-bounda" class="internal xref">Transport Experiment Boundary</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12">
+            <p id="section-toc.1-1.12.1"><a href="#section-12" class="auto internal xref">12</a>. <a href="#name-experimental-results" class="internal xref">Experimental Results</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.1">
+                <p id="section-toc.1-1.12.2.1.1"><a href="#section-12.1" class="auto internal xref">12.1</a>.  <a href="#name-results-summary" class="internal xref">Results Summary</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.12.2.2">
+                <p id="section-toc.1-1.12.2.2.1"><a href="#section-12.2" class="auto internal xref">12.2</a>.  <a href="#name-relying-party-evaluation" class="internal xref">Relying Party Evaluation</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13">
+            <p id="section-toc.1-1.13.1"><a href="#section-13" class="auto internal xref">13</a>. <a href="#name-implementation-status" class="internal xref">Implementation Status</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.13.2.1">
+                <p id="section-toc.1-1.13.2.1.1"><a href="#section-13.1" class="auto internal xref">13.1</a>.  <a href="#name-upstream-library-support-sn" class="internal xref">Upstream Library Support Snapshot</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.14">
+            <p id="section-toc.1-1.14.1"><a href="#section-14" class="auto internal xref">14</a>. <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.15">
+            <p id="section-toc.1-1.15.1"><a href="#section-15" class="auto internal xref">15</a>. <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.16">
+            <p id="section-toc.1-1.16.1"><a href="#section-16" class="auto internal xref">16</a>. <a href="#name-questions-for-further-work" class="internal xref">Questions for Further Work</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17">
+            <p id="section-toc.1-1.17.1"><a href="#section-17" class="auto internal xref">17</a>. <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17.2.1">
+                <p id="section-toc.1-1.17.2.1.1"><a href="#section-17.1" class="auto internal xref">17.1</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.17.2.2">
+                <p id="section-toc.1-1.17.2.2.1"><a href="#section-17.2" class="auto internal xref">17.2</a>.  <a href="#name-additional-informative-refe" class="internal xref">Additional Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18">
+            <p id="section-toc.1-1.18.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-measurement-details" class="internal xref">Measurement Details</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.1">
+                <p id="section-toc.1-1.18.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-experimental-artifacts-and-" class="internal xref">Experimental Artifacts and Environment</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.2">
+                <p id="section-toc.1-1.18.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-repeated-cryptographic-oper" class="internal xref">Repeated Cryptographic Operation Timing</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.3">
+                <p id="section-toc.1-1.18.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-composite-ml-dsa-operation-" class="internal xref">Composite ML-DSA Operation Measurements</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.4">
+                <p id="section-toc.1-1.18.2.4.1"><a href="#appendix-A.4" class="auto internal xref">A.4</a>.  <a href="#name-measured-complete-object-si" class="internal xref">Measured Complete Object Sizes</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.5">
+                <p id="section-toc.1-1.18.2.5.1"><a href="#appendix-A.5" class="auto internal xref">A.5</a>.  <a href="#name-source-calibrated-repositor" class="internal xref">Source-Calibrated Repository Projection</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.6">
+                <p id="section-toc.1-1.18.2.6.1"><a href="#appendix-A.6" class="auto internal xref">A.6</a>.  <a href="#name-repository-transport-measur" class="internal xref">Repository Transport Measurements</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.18.2.7">
+                <p id="section-toc.1-1.18.2.7.1"><a href="#appendix-A.7" class="auto internal xref">A.7</a>.  <a href="#name-open-measurement-tasks" class="internal xref">Open Measurement Tasks</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.19">
+            <p id="section-toc.1-1.19.1"><a href="#appendix-B" class="auto internal xref">Appendix B</a>.  <a href="#name-changes-from-02" class="internal xref">Changes from -02</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.20">
+            <p id="section-toc.1-1.20.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-acknowledgements" class="internal xref">Acknowledgements</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.21">
+            <p id="section-toc.1-1.21.1"><a href="#appendix-D" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="introduction">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">The RPKI relies on digital signatures in resource certificates, CRLs, certification requests, and CMS signed objects such as manifests and Route Origin Authorizations (ROAs). The deployed RPKI algorithm profile is based on RSA with SHA-256. A Cryptographically Relevant Quantum Computer (CRQC) capable of executing the required quantum algorithms would undermine the unforgeability of the RSA signatures used by the deployed RPKI profile. Preparing for that risk requires measurements and interoperable implementations before a production transition procedure can be selected.<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">This document records that preparatory work. The evaluation also examines the impact of post-quantum signatures on repository size and distribution using observed RPKI data. Certification Authority (CA) and Relying Party (RP) implementations require support for the additional signature algorithms. The Mixed Tree experiment also evaluates a certificate-path construction that is not permitted by the migration procedure in RFC 6916. Routers that consume Validated ROA Payloads (VRPs) through the RPKI-Router Protocol (RTR) <span>[<a href="#RFC8210" class="cite xref">RFC8210</a>]</span> or local files do not process the evaluated signatures directly.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">The descriptions of algorithms, encodings, validation behavior, and migration steps in this document are experimental assumptions and observations. They are not interoperability requirements for production RPKI implementations.<a href="#section-1-3" class="pilcrow">¶</a></p>
+<p id="section-1-4">This document does not select or recommend a production PQ algorithm. The candidate algorithms and experimental results explore the problem space and identify requirements and trade-offs for a future RPKI PQ migration. The eventual production algorithm choice should be made separately when sufficient cryptographic, implementation, and operational information is available. Investigation of PQ migration can continue while this choice remains open.<a href="#section-1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="terminology">
+<section id="section-2">
+      <h2 id="name-terminology">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+      </h2>
+<p id="section-2-1">This document uses the terminology of the RPKI architecture <span>[<a href="#RFC6480" class="cite xref">RFC6480</a>]</span>, the resource certificate profile <span>[<a href="#RFC6487" class="cite xref">RFC6487</a>]</span>, the RPKI signed object template <span>[<a href="#RFC6488" class="cite xref">RFC6488</a>]</span>, the RPKI algorithm agility procedure <span>[<a href="#RFC6916" class="cite xref">RFC6916</a>]</span>, and the RPKI algorithm profile <span>[<a href="#RFC7935" class="cite xref">RFC7935</a>]</span>.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">Current Suite: The algorithm suite specified by the currently applicable production RPKI algorithm profile. At the time of writing, this is RSA-2048/SHA-256 as profiled by RFC 7935.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<p id="section-2-3">Next Suite: A candidate algorithm suite that is implemented and tested before it becomes the Current Suite.<a href="#section-2-3" class="pilcrow">¶</a></p>
+<p id="section-2-4">Mixed Tree: An experimental RPKI certification hierarchy in which a parent CA using the Current Suite signs a child CA certificate whose subject public key uses the Next Suite, allowing the child subtree to use the Next Suite while its ancestors remain on the Current Suite.<a href="#section-2-4" class="pilcrow">¶</a></p>
+<p id="section-2-5">Parallel Publication: A migration approach in which products that correspond as defined in <span>[<a href="#RFC6916" class="cite xref">RFC6916</a>]</span> are published under both the Current Suite and the Next Suite during a transition period.<a href="#section-2-5" class="pilcrow">¶</a></p>
+<p id="section-2-6">Composite Signature: A signature construction that combines multiple component algorithms into one algorithm identifier and signature value. In the LAMPS construction evaluated by this document, verification succeeds only when every component signature validates.<a href="#section-2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="scope">
+<section id="section-3">
+      <h2 id="name-scope">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-scope" class="section-name selfRef">Scope</a>
+      </h2>
+<p id="section-3-1">The algorithm-profile analysis in this document applies to RPKI resource certificates, CRLs, certification requests, BGPsec Router Certificates <span>[<a href="#RFC8209" class="cite xref">RFC8209</a>]</span>, and the CMS signed objects that reuse the RPKI signed object template <span>[<a href="#RFC6488" class="cite xref">RFC6488</a>]</span>, including manifests <span>[<a href="#RFC9286" class="cite xref">RFC9286</a>]</span>, ROAs <span>[<a href="#RFC9582" class="cite xref">RFC9582</a>]</span>, Signed Checklists (RSC) <span>[<a href="#RFC9323" class="cite xref">RFC9323</a>]</span>, ASPA objects <span>[<a href="#I-D.ietf-sidrops-aspa-profile" class="cite xref">I-D.ietf-sidrops-aspa-profile</a>]</span>, and Trust Anchor Key (TAK) objects <span>[<a href="#RFC9691" class="cite xref">RFC9691</a>]</span>. The generated signed objects in these experiments cover manifests and ROAs; additional object types are listed in the Implementation Status section. The CMS signed objects are treated as a single signed-object algorithm profile, as described in the following section.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">This document covers the RPKI signatures on BGPsec Router Certificates, but does not define or change the BGPsec UPDATE signature algorithm specified by <span>[<a href="#RFC8608" class="cite xref">RFC8608</a>]</span>. For a BGPsec Router Certificate, the experiment applies only to the certificate signature made by the issuing RPKI CA. The subject public key algorithm remains governed by the BGPsec UPDATE algorithm profile and is not required to match the RPKI certificate-signature suite.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<p id="section-3-3">This document does not specify changes to RTR, TAL formats, RRDP <span>[<a href="#RFC8182" class="cite xref">RFC8182</a>]</span>, rsync, the RPKI Certificate Policy, or the BPKI used to authenticate provisioning and publication relationships established through <span>[<a href="#RFC8183" class="cite xref">RFC8183</a>]</span>. BPKI algorithm migration is a related operational problem, but is not evaluated by this document and need not use the same algorithm or transition schedule as RPKI repository objects. The repository-distribution evaluation estimates RRDP delta and snapshot response-body sizes; equivalent rsync and Erik Synchronization comparisons remain future work.<a href="#section-3-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="signed-object-coverage">
+<section id="section-4">
+      <h2 id="name-signed-object-coverage">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-signed-object-coverage" class="section-name selfRef">Signed Object Coverage</a>
+      </h2>
+<p id="section-4-1">Manifests <span>[<a href="#RFC9286" class="cite xref">RFC9286</a>]</span>, ROAs <span>[<a href="#RFC9582" class="cite xref">RFC9582</a>]</span>, Signed Checklists <span>[<a href="#RFC9323" class="cite xref">RFC9323</a>]</span>, ASPA objects <span>[<a href="#I-D.ietf-sidrops-aspa-profile" class="cite xref">I-D.ietf-sidrops-aspa-profile</a>]</span>, TAK objects <span>[<a href="#RFC9691" class="cite xref">RFC9691</a>]</span>, and any future object types built on the RFC 6488 template share one CMS structure, one EE certificate model, one certification infrastructure, and one repository. The evaluation model therefore treats them as one signed-object algorithm profile. Migrating, for example, ROAs to a PQC suite while leaving ASPA objects on RSA would introduce per-object-type algorithm diversity, leaving part of the RPKI signed-object set dependent on the Current Suite.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">Changing only the CMS signature algorithm does not change an object's eContentType or object-specific payload syntax. Some objects, notably TAK objects, may nevertheless carry public keys whose algorithms change as part of a wider trust-anchor migration and therefore require separate object-specific interoperability testing. A future standards-track profile that selects a new mandatory RPKI algorithm suite would update <span>[<a href="#RFC7935" class="cite xref">RFC7935</a>]</span>. An object-specific RFC needs an update only if that object's payload or validation semantics also change; this document makes no such change.<a href="#section-4-2" class="pilcrow">¶</a></p>
+<p id="section-4-3">BGPsec UPDATE signatures are not RFC 6488 signed objects and are outside this experiment. BGPsec Router Certificates and their covering CRLs and manifests are repository products and remain part of the evaluation scope.<a href="#section-4-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="relationship-to-rfc-6916">
+<section id="section-5">
+      <h2 id="name-relationship-to-rfc-6916">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-relationship-to-rfc-6916" class="section-name selfRef">Relationship to RFC 6916</a>
+      </h2>
+<p id="section-5-1">RFC 6916 specifies a top-down algorithm transition using parallel certification hierarchies. Section 4.2 of <span>[<a href="#RFC6916" class="cite xref">RFC6916</a>]</span> states that a CA "MUST NOT" sign a CA certificate whose subject key corresponds to an algorithm suite different from the suite used to sign that certificate.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">The Mixed Tree experiment described in this document deliberately evaluates the X.509 construction excluded by RFC 6916. Objects produced by this experiment are therefore confined to test TALs and test repositories. Production use of this construction would require separate Standards Track work updating or replacing the applicable algorithm profile and migration procedure.<a href="#section-5-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="evaluation-goals">
+<section id="section-6">
+      <h2 id="name-evaluation-goals">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-evaluation-goals" class="section-name selfRef">Evaluation Goals</a>
+      </h2>
+<p id="section-6-1">The experiments use the following evaluation goals.<a href="#section-6-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-6-2.1">
+          <p id="section-6-2.1.1">Evaluate post-quantum and composite signatures within the existing RPKI object and validation model, reusing LAMPS PKIX and CMS encodings without introducing new object formats.<a href="#section-6-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-2.2">
+          <p id="section-6-2.2.1">Keep routers as consumers of validated payloads and apply a common signature suite to all RFC 6488 signed objects.<a href="#section-6-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-2.3">
+          <p id="section-6-2.3.1">Compare Parallel Publication and Mixed Tree migration, including compatibility and the operational effects of algorithm coexistence.<a href="#section-6-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-2.4">
+          <p id="section-6-2.4.1">Measure cryptographic performance, repository size, and distribution impact, and compare validated outputs across algorithm suites.<a href="#section-6-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-6-2.5">
+          <p id="section-6-2.5.1">Document reproducible evidence, implementation limitations, and remaining interoperability and operational questions.<a href="#section-6-2.5.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+</section>
+</div>
+<div id="experimental-migration-approaches">
+<section id="section-7">
+      <h2 id="name-experimental-migration-appr">
+<a href="#section-7" class="section-number selfRef">7. </a><a href="#name-experimental-migration-appr" class="section-name selfRef">Experimental Migration Approaches</a>
+      </h2>
+<p id="section-7-1">This section describes the two migration approaches evaluated in this document. The signature suite can be chosen independently of the migration approach.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-2">An RPKI cryptographic transition incurs implementation, testing, and operational costs that may be distributed across RP and CA software implementers, RIRs and other CA operators, network operators, vendors, and hardware and HSM providers. These costs, who bears them, and the effort needed to coordinate deployment and maintain service during transition are relevant when choosing an algorithm and migration strategy. This document does not resolve how those costs should be funded.<a href="#section-7-2" class="pilcrow">¶</a></p>
+<div id="parallel-publication">
+<section id="section-7.1">
+        <h3 id="name-parallel-publication">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-parallel-publication" class="section-name selfRef">Parallel Publication</a>
+        </h3>
+<p id="section-7.1-1">RFC 6916 specifies a top-down transition in which a parent CA adopts support for the Next Suite before its children. During phases 2 and 3, corresponding Current Suite and Next Suite product sets are maintained in parallel. RFC 6916 deliberately avoids mixed-suite CA certificates: a CA certificate signed using one suite does not carry a subject key associated with another suite.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">The Parallel Publication experiment compares validation outputs from separately produced Current Suite and Next Suite repositories and models an idealized duplicate footprint. It does not implement concurrent maintenance of corresponding products through the complete RFC 6916 phase-by-phase operational transition. It does not define new payload encodings for manifests, ROAs, or CRLs. As described in Section 6 of <span>[<a href="#RFC6916" class="cite xref">RFC6916</a>]</span>, RPs can retrieve product sets under both algorithm suites and compare their outputs for testing. This experiment performs that comparison using the resulting VRP sets and CCR <span>[<a href="#I-D.ietf-sidrops-rpki-ccr" class="cite xref">I-D.ietf-sidrops-rpki-ccr</a>]</span>.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+<p id="section-7.1-3">The experimental harness needs a mapping between corresponding products for measurement and debugging. Such a mapping can be derived from the publication point structure, object names, CA hierarchy, or an implementation-specific record. It is not proposed as a new on-wire RPKI object.<a href="#section-7.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="mixed-tree">
+<section id="section-7.2">
+        <h3 id="name-mixed-tree">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-mixed-tree" class="section-name selfRef">Mixed Tree</a>
+        </h3>
+<p id="section-7.2-1">A parent using the Current Suite signs a child CA certificate whose subject public key belongs to the Next Suite. The child then issues its certificates, CRLs, and CMS signed objects using the Next Suite without first requiring the parent to migrate its own CA key and product set. Production issuance would still require the parent to process the child's Next Suite certificate request and proof of possession. The fixture generator issues the child certificate from a locally generated PKCS#10 request using OpenSSL. The Krill experiment creates and verifies a Composite CSR through a same-server issuance path that bypasses the RFC 6492 CMS/HTTP exchange; independent provisioning interoperability is not established <span>[<a href="#RFC6492" class="cite xref">RFC6492</a>]</span>.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">The Mixed Tree migration approach is independent of the selected signature suite. The evaluated repository instantiates the Next Suite with the Composite ML-DSA configuration evaluated in this document. This construction is not permitted by the RFC 6916 transition procedure and is evaluated only as an experimental alternative under test TALs.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.2-3">Unlike the RFC 6916 procedure, a switched subtree does not maintain corresponding Current Suite and Next Suite products. This avoids duplicate repository content and the publication, configuration, and rollover work needed to keep two product sets aligned. It also permits subtrees to move independently after the necessary parent and RP support is available, rather than waiting for every ancestor to migrate its own CA key and product set.<a href="#section-7.2-3" class="pilcrow">¶</a></p>
+<p id="section-7.2-4">This introduces a compatibility trade-off: once a subtree switches, an RP that does not support the Next Suite cannot validate it through the certification path. Mixed Tree deployment therefore replaces the parallel legacy hierarchy with a requirement for sufficient RP support before each subtree is migrated. The complete certification path remains dependent on Current Suite certificate signatures above the migration boundary.<a href="#section-7.2-4" class="pilcrow">¶</a></p>
+<table class="center" id="table-1">
+          <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Migration model</th>
+              <th class="text-left" rowspan="1" colspan="1">Migration ordering</th>
+              <th class="text-left" rowspan="1" colspan="1">Legacy RP compatibility</th>
+              <th class="text-left" rowspan="1" colspan="1">Parallel products</th>
+              <th class="text-left" rowspan="1" colspan="1">Principal limitation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">RFC 6916 Parallel Publication</td>
+              <td class="text-left" rowspan="1" colspan="1">Top-down</td>
+              <td class="text-left" rowspan="1" colspan="1">Current Suite hierarchy remains available</td>
+              <td class="text-left" rowspan="1" colspan="1">Required during transition</td>
+              <td class="text-left" rowspan="1" colspan="1">Repository and operational duplication</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">Mixed Tree</td>
+              <td class="text-left" rowspan="1" colspan="1">Per subtree after required support is available</td>
+              <td class="text-left" rowspan="1" colspan="1">Unsupported RPs lose the switched subtree</td>
+              <td class="text-left" rowspan="1" colspan="1">Not required within the switched subtree</td>
+              <td class="text-left" rowspan="1" colspan="1">The path still depends on Current Suite ancestors</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="section-7.2-6">The experiment uses test repositories and test TALs. It does not define or authorize a production transition procedure.<a href="#section-7.2-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="evaluated-algorithm-suites">
+<section id="section-8">
+      <h2 id="name-evaluated-algorithm-suites">
+<a href="#section-8" class="section-number selfRef">8. </a><a href="#name-evaluated-algorithm-suites" class="section-name selfRef">Evaluated Algorithm Suites</a>
+      </h2>
+<div id="current-suite">
+<section id="section-8.1">
+        <h3 id="name-current-suite">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-current-suite" class="section-name selfRef">Current Suite</a>
+        </h3>
+<p id="section-8.1-1">The Current Suite baseline used by this experiment is RSA PKCS #1 v1.5 with SHA-256 as specified by RFC 7935. This document does not set a production transition timetable.<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="evaluated-composite-configuration">
+<section id="section-8.2">
+        <h3 id="name-evaluated-composite-configu">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-evaluated-composite-configu" class="section-name selfRef">Evaluated Composite Configuration</a>
+        </h3>
+<p id="section-8.2-1">The composite signature construction used by this experiment is defined in revision 19 of <span>[<a href="#I-D.ietf-lamps-pq-composite-sigs" class="cite xref">I-D.ietf-lamps-pq-composite-sigs</a>]</span>. The evaluated configuration is id-MLDSA65-ECDSA-P256-SHA512 (OID 1.3.6.1.5.5.7.6.45), whose identifier and component-algorithm combination are specified by that document. It combines ML-DSA-65 with ECDSA P-256 and requires both component signatures to validate. The corresponding CMS use is specified by <span>[<a href="#I-D.ietf-lamps-cms-composite-sigs" class="cite xref">I-D.ietf-lamps-cms-composite-sigs</a>]</span>. The choice of this composite configuration is an experimental input, not a recommendation for production deployment.<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-2">The object experiment applies <span>[<a href="#I-D.ietf-lamps-pq-composite-sigs" class="cite xref">I-D.ietf-lamps-pq-composite-sigs</a>]</span> to composite public keys and certificate signatures, and <span>[<a href="#I-D.ietf-lamps-cms-composite-sigs" class="cite xref">I-D.ietf-lamps-cms-composite-sigs</a>]</span> to composite CMS SignedData. The public reference implementation has generated complete composite X.509 certificates, CRLs, ROAs, and manifests and has validated a Mixed Tree with an RSA parent and a Composite child using experimental rpki-client and Routinator extensions. The two RP processing paths share one OpenSSL and Composite provider backend, so this is not independent cryptographic interoperability evidence.<a href="#section-8.2-2" class="pilcrow">¶</a></p>
+<p id="section-8.2-3">Experiments with the composite suite are confined to isolated repositories under test TALs. Experimental objects, production repositories, production keys, and production TALs are deliberately kept separate.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="additional-candidate-suites">
+<section id="section-8.3">
+        <h3 id="name-additional-candidate-suites">
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-additional-candidate-suites" class="section-name selfRef">Additional Candidate Suites</a>
+        </h3>
+<p id="section-8.3-1">ML-DSA-44 is an additional experimental configuration. It produces smaller public keys and signatures and may sign and verify faster, which matters in a system where RPs repeatedly synchronize repository state and validate large numbers of objects. The experiment uses ML-DSA-65 in the composite configuration as an explicit experimental choice, not because the RPKI requires NIST security Category 3. The Rationale for the Experimental Configurations section discusses this choice and its counterarguments.<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+<p id="section-8.3-2">ML-DSA-87 is included as a higher-security comparison candidate. It is more conservative than ML-DSA-65 but carries correspondingly larger size and performance costs.<a href="#section-8.3-2" class="pilcrow">¶</a></p>
+<p id="section-8.3-3">SLH-DSA-SHAKE-128s and SLH-DSA-SHAKE-192s are included for cryptographic-diversity comparison. Their signature algorithm, PKIX, and CMS specifications are defined by <span>[<a href="#FIPS205" class="cite xref">FIPS205</a>]</span>, <span>[<a href="#RFC9909" class="cite xref">RFC9909</a>]</span>, and <span>[<a href="#RFC9814" class="cite xref">RFC9814</a>]</span>. They are not proposed as the initial experimental suite because their signature sizes are substantially larger than those of ML-DSA in the evaluated configurations. Their primitive and certificate/CRL measurements do not include end-to-end RP validation or global repository/RRDP projections.<a href="#section-8.3-3" class="pilcrow">¶</a></p>
+<p id="section-8.3-4">Supplementary primitive benchmarks include experimental Falcon, MAYO, and SNOVA, and certificate/CRL measurements include experimental Falcon-512. These configurations remain unevaluated for end-to-end RP validation and the global repository/RRDP projections. The Rationale for the Experimental Configurations section discusses FN-DSA further because its compact signatures make it an attractive candidate for the RPKI's bulk validation model.<a href="#section-8.3-4" class="pilcrow">¶</a></p>
+<p id="section-8.3-5">Other Composite ML-DSA combinations specified by LAMPS remain candidates for comparison. Changing the component pair would change object sizes and cryptographic costs, but would not determine whether a deployment uses Parallel Publication or Mixed Tree migration. RP support for a selected suite remains a deployment prerequisite.<a href="#section-8.3-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="classical-reference-points">
+<section id="section-8.4">
+        <h3 id="name-classical-reference-points">
+<a href="#section-8.4" class="section-number selfRef">8.4. </a><a href="#name-classical-reference-points" class="section-name selfRef">Classical Reference Points</a>
+        </h3>
+<p id="section-8.4-1">To put the cost of PQC candidates in context, this document uses two compact classical algorithms as non-normative reference points: ECDSA P-256 with SHA-256 <span>[<a href="#FIPS186-5" class="cite xref">FIPS186-5</a>]</span>, which is already used for BGPsec UPDATE signatures <span>[<a href="#RFC8608" class="cite xref">RFC8608</a>]</span>, and Ed25519 <span>[<a href="#RFC8032" class="cite xref">RFC8032</a>]</span>. Neither is a CRQC-resistant algorithm, and neither is proposed here as an RPKI suite. They provide compact classical reference points for signature and key sizes in the classical setting: RSA-2048 public keys and signatures are several times larger than those of these curves, and PQC candidates should be compared against both baselines rather than against RSA alone.<a href="#section-8.4-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="evaluation-dimensions">
+<section id="section-8.5">
+        <h3 id="name-evaluation-dimensions">
+<a href="#section-8.5" class="section-number selfRef">8.5. </a><a href="#name-evaluation-dimensions" class="section-name selfRef">Evaluation Dimensions</a>
+        </h3>
+<p id="section-8.5-1">The evaluation considers the following dimensions: certificate and CRL size under the RPKI profile; CMS signed object size; signing and verification cost under the RP workload; impact on repository size and RRDP response-body sizes; CA key rollover and publication cycle impact; HSM support; and standardization and implementation maturity.<a href="#section-8.5-1" class="pilcrow">¶</a></p>
+<p id="section-8.5-2">RP workloads are dominated by verification: an RP verifies repository objects but signs nothing as part of validation. The deployed RSA profile is particularly inexpensive to verify, so increases in verification cost are especially relevant to RP operation. The source-calibrated projections in Appendix A put ML-DSA-44 at 3.52 times and ML-DSA-65 at 4.65 times the observed RSA DER footprint. These projections do not cover every candidate algorithm.<a href="#section-8.5-2" class="pilcrow">¶</a></p>
+<p id="section-8.5-3">Appendix A gives the measurements and open measurement tasks. Measured values depend on the implementation and environment; they are not protocol requirements.<a href="#section-8.5-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="rationale-for-the-experimental-configurations">
+<section id="section-8.6">
+        <h3 id="name-rationale-for-the-experimen">
+<a href="#section-8.6" class="section-number selfRef">8.6. </a><a href="#name-rationale-for-the-experimen" class="section-name selfRef">Rationale for the Experimental Configurations</a>
+        </h3>
+<p id="section-8.6-1">This experiment evaluates a composite suite because a global RPKI migration may benefit from not depending exclusively on a newly deployed PQC algorithm. The LAMPS construction accepts a composite signature only when both component signatures validate. Under the assumptions stated by that construction, its EUF-CMA guarantee is retained when at least one component remains EUF-CMA secure and the prehash remains collision resistant.<a href="#section-8.6-1" class="pilcrow">¶</a></p>
+<p id="section-8.6-2">A CRQC defeats the ECDSA component, so security against a quantum adversary still depends on ML-DSA-65 remaining secure. The composite suite also does not protect against failures shared by both components or by the combiner, encoding, key management, or validation implementation. It does not in general preserve strong unforgeability when only one component has that property. An implementation defect in one component can be tolerated only when the other component, the combiner, encodings, key handling, and the verification of all component signatures remain unaffected.<a href="#section-8.6-2" class="pilcrow">¶</a></p>
+<p id="section-8.6-3">ML-DSA-65 is used as the PQC component of the evaluated composite configuration because it has a final FIPS signature specification <span>[<a href="#FIPS204" class="cite xref">FIPS204</a>]</span>, corresponding PKIX <span>[<a href="#RFC9881" class="cite xref">RFC9881</a>]</span> and CMS <span>[<a href="#RFC9882" class="cite xref">RFC9882</a>]</span> algorithm identifier specifications, and implementations available in the software environment used by this experiment. The experiment uses Category 3 as an experimental choice to examine the cost of a larger security margin in a system where another global algorithm migration could take multiple years. This is not an RPKI requirement. It was not selected for minimum size or maximum speed; it is neither the smallest nor the fastest possible signature algorithm.<a href="#section-8.6-3" class="pilcrow">¶</a></p>
+<p id="section-8.6-4">The choice between ML-DSA-44 and ML-DSA-65 remains open. The argument for ML-DSA-65 is conservatism: the RPKI is a single global system, algorithm migrations in it are slow and expensive, and a larger security margin reduces the probability of needing another migration. The argument for ML-DSA-44 is that a structural cryptanalytic break of module lattices would likely affect all ML-DSA parameter sets. On this view, the extra category mainly protects against gradual erosion of concrete security estimates rather than a qualitative break. The roughly 25-35% smaller keys and signatures of ML-DSA-44, or a composite configuration using ML-DSA-44, may therefore be a better use of the size budget <span>[<a href="#Doesburg2025" class="cite xref">Doesburg2025</a>]</span>. The experiments use ML-DSA-65 in the measured composite configuration, keep ML-DSA-44 in the comparison, and leave the parameter-set choice as a question for further work.<a href="#section-8.6-4" class="pilcrow">¶</a></p>
+<p id="section-8.6-5">ML-DSA-87 provides a higher-security comparison point, but its larger signatures and higher verification cost warrant further evaluation before deployment.<a href="#section-8.6-5" class="pilcrow">¶</a></p>
+<p id="section-8.6-6">The experimental Falcon-512 encoding used for FN-DSA-512 comparison has signatures roughly one fifth the size of ML-DSA-65 signatures; this is a size comparison, not a comparison at equal security categories. Both published RPKI analysis <span>[<a href="#Doesburg2025" class="cite xref">Doesburg2025</a>]</span> and repository-scale redesign work <span>[<a href="#pqRPKI" class="cite xref">pqRPKI</a>]</span> identify Falcon as the compact lattice option. FN-DSA composite configurations, end-to-end RP validation, and global repository/RRDP projections remain future work for the following reasons:<a href="#section-8.6-6" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-8.6-7.1">
+            <p id="section-8.6-7.1.1">FIPS 206 remains under development <span>[<a href="#NIST-FN-DSA-Plan" class="cite xref">NIST-FN-DSA-Plan</a>]</span>, and the LAMPS PKIX and CMS profiles remain works in progress <span>[<a href="#I-D.ietf-lamps-fn-dsa-certificates" class="cite xref">I-D.ietf-lamps-fn-dsa-certificates</a>]</span>
+              <span>[<a href="#I-D.ietf-lamps-cms-fn-dsa" class="cite xref">I-D.ietf-lamps-cms-fn-dsa</a>]</span>. The measured Falcon-512 encoding is not a final FN-DSA profile.<a href="#section-8.6-7.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<ul class="normal">
+<li class="normal" id="section-8.6-8.1">
+            <p id="section-8.6-8.1.1">Side-channel-resistant FN-DSA implementations and HSM support require separate implementation and deployment evaluation.<a href="#section-8.6-8.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<ul class="normal">
+<li class="normal" id="section-8.6-9.1">
+            <p id="section-8.6-9.1.1">Availability of FN-DSA in the platforms that RPKI CAs, RIRs, HSM vendors, and validator implementations actually use is a separate question from the algorithm's intrinsic merits. This experiment does not evaluate production RPKI CA or RP support for FN-DSA.<a href="#section-8.6-9.1.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+<p id="section-8.6-10">These are reasons to sequence the evaluation, not to dismiss the algorithm. FN-DSA remains in the comparison set as the compact signature candidate. Conditions for further evaluation are listed in the Questions for Further Work section.<a href="#section-8.6-10" class="pilcrow">¶</a></p>
+<p id="section-8.6-11">Algorithm selection for the RPKI cannot be based on software benchmarks alone. HSM support for a candidate algorithm is also a deployment prerequisite for CAs that protect their signing keys in HSMs.<a href="#section-8.6-11" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="risk-of-premature-algorithm-selection">
+<section id="section-8.7">
+        <h3 id="name-risk-of-premature-algorithm">
+<a href="#section-8.7" class="section-number selfRef">8.7. </a><a href="#name-risk-of-premature-algorithm" class="section-name selfRef">Risk of Premature Algorithm Selection</a>
+        </h3>
+<p id="section-8.7-1">Algorithm selection itself carries a deployment risk. An RPKI algorithm transition requires substantial implementation and operational effort across the ecosystem. If the selected algorithm later proves unsuitable due to security or operational issues, another ecosystem-wide transition may be required. Even if it remains secure, the emergence of a significantly more efficient algorithm could make the original choice costly in hindsight.<a href="#section-8.7-1" class="pilcrow">¶</a></p>
+<p id="section-8.7-2">The set of practical PQ algorithms and their properties is still evolving. A future algorithm may offer materially better size, performance, implementation, hardware, or operational characteristics. The size, performance, and repository results in this document illustrate relevant trade-offs but do not establish which algorithm should be selected for production. Algorithm maturity and deployment experience, as well as cryptographic security, should therefore inform the choice and its timing. Candidate evaluation should explicitly consider the cost of an unsuitable selection and a subsequent ecosystem-wide transition.<a href="#section-8.7-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="experimental-object-encoding">
+<section id="section-9">
+      <h2 id="name-experimental-object-encodin">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-experimental-object-encodin" class="section-name selfRef">Experimental Object Encoding</a>
+      </h2>
+<div id="certificate-and-crl-encoding">
+<section id="section-9.1">
+        <h3 id="name-certificate-and-crl-encodin">
+<a href="#section-9.1" class="section-number selfRef">9.1. </a><a href="#name-certificate-and-crl-encodin" class="section-name selfRef">Certificate and CRL Encoding</a>
+        </h3>
+<p id="section-9.1-1">The composite certificate and CRL experiment follows the encodings in <span>[<a href="#I-D.ietf-lamps-pq-composite-sigs" class="cite xref">I-D.ietf-lamps-pq-composite-sigs</a>]</span>. Under that assumption, a composite subject carries id-MLDSA65-ECDSA-P256-SHA512 in the SPKI AlgorithmIdentifier with absent parameters. A certificate or CRL signed by the composite issuer uses that identifier in its signatureAlgorithm field. A child CA certificate signed by a Current Suite issuer instead retains the issuer's Current Suite signatureAlgorithm while carrying the composite identifier in the subject SPKI.<a href="#section-9.1-1" class="pilcrow">¶</a></p>
+<p id="section-9.1-2">The same composite SPKI and signature encodings are assumed for resource certificate requests and their proof-of-possession signatures. Pure ML-DSA certificates and CRLs used for component measurements follow <span>[<a href="#RFC9881" class="cite xref">RFC9881</a>]</span>; they provide component-level evidence and are not proposed as a production Next Suite. Local OpenSSL issuance and the Krill same-server path exercise Composite request signing and verification, but not an independent RFC 6492 CMS/HTTP provisioning exchange.<a href="#section-9.1-2" class="pilcrow">¶</a></p>
+<p id="section-9.1-3">The generated RPKI test objects preserve the existing keyUsage constraints. CA certificates carry keyCertSign and cRLSign, while EE certificates for signed objects carry digitalSignature and are not used as CA certificates. The experiment does not change resource extension semantics, the certificate policy OID, certificate path validation, manifest processing, or CRL processing.<a href="#section-9.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="cms-signed-object-encoding">
+<section id="section-9.2">
+        <h3 id="name-cms-signed-object-encoding">
+<a href="#section-9.2" class="section-number selfRef">9.2. </a><a href="#name-cms-signed-object-encoding" class="section-name selfRef">CMS Signed Object Encoding</a>
+        </h3>
+<p id="section-9.2-1">The composite CMS experiment combines <span>[<a href="#I-D.ietf-lamps-cms-composite-sigs" class="cite xref">I-D.ietf-lamps-cms-composite-sigs</a>]</span> with the RPKI signed object template in <span>[<a href="#RFC6488" class="cite xref">RFC6488</a>]</span>, as updated by <span>[<a href="#RFC9589" class="cite xref">RFC9589</a>]</span>. The assumed SignerInfo signatureAlgorithm is id-MLDSA65-ECDSA-P256-SHA512 with absent parameters. The SignedData digestAlgorithms set contains exactly one AlgorithmIdentifier, id-sha512, and the SignerInfo digestAlgorithm is id-sha512, retaining the single-digest cardinality in Section 2.1.2 of <span>[<a href="#RFC6488" class="cite xref">RFC6488</a>]</span>. The parameters are absent in both AlgorithmIdentifiers, and the message-digest signed attribute contains the SHA-512 digest of the eContent. Using SHA-512 here is an experimental departure from the deployed SHA-256 profile in <span>[<a href="#RFC7935" class="cite xref">RFC7935</a>]</span>, not authorization for production use.<a href="#section-9.2-1" class="pilcrow">¶</a></p>
+<p id="section-9.2-2">The experiment retains the signedAttrs restrictions from the existing RPKI signed object profile: one content-type attribute, one message-digest attribute, and one signing-time attribute, with no binary-signing-time or other signed attributes. The eContentType, eContent, and object-specific validation rules remain unchanged.<a href="#section-9.2-2" class="pilcrow">¶</a></p>
+<p id="section-9.2-3">The implementation generated and validated complete Composite ROA and manifest SignedData using these encodings, together with the certificates and CRLs required for repository validation. Experimental rpki-client and Routinator extensions processed the resulting repository. Interoperability with a cryptographic implementation independent of the shared OpenSSL and Composite provider remains open work.<a href="#section-9.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="manifest-processing-during-migration">
+<section id="section-9.3">
+        <h3 id="name-manifest-processing-during-">
+<a href="#section-9.3" class="section-number selfRef">9.3. </a><a href="#name-manifest-processing-during-" class="section-name selfRef">Manifest Processing During Migration</a>
+        </h3>
+<p id="section-9.3-1">A manifest covers the products of one CA instance at one publication point, as specified by <span>[<a href="#RFC9286" class="cite xref">RFC9286</a>]</span> and updated by <span>[<a href="#RFC9981" class="cite xref">RFC9981</a>]</span>. The manifest is signed with a one-time-use EE certificate issued by that CA. Its fileList contains the certificates issued and published by that CA, the CA's current CRL, and signed objects whose embedded EE certificates were issued by that CA.<a href="#section-9.3-1" class="pilcrow">¶</a></p>
+<p id="section-9.3-2">The relevant RP check is therefore issuer and publication-scope consistency, not equality between the manifest signing key and product keys. An RP validates the manifest EE certificate under the associated CA, verifies each listed certificate, CRL, or signed object under that same CA instance as required by its object profile, and checks the publication point, file name, and file hash according to <span>[<a href="#RFC9286" class="cite xref">RFC9286</a>]</span>. A shared publication point can contain products from multiple CA instances during key rollover, but each manifest covers only its associated CA instance.<a href="#section-9.3-2" class="pilcrow">¶</a></p>
+<p id="section-9.3-3">Mixed Tree migration and composite signatures do not change these checks. This document therefore introduces no additional requirement for the manifest EE key to equal a key used by a listed product, and it does not weaken the existing RP checks that bind every listed product to the manifest's CA scope.<a href="#section-9.3-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="related-experimental-designs">
+<section id="section-10">
+      <h2 id="name-related-experimental-design">
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-related-experimental-design" class="section-name selfRef">Related Experimental Designs</a>
+      </h2>
+<p id="section-10-1">The cryptographic-object and Mixed Tree experiments preserve the existing X.509 resource-certificate and CMS signed-object model while changing signature algorithms and, in the Mixed Tree case, the certification path. The Null Scheme <span>[<a href="#I-D.doesburg-sidrops-nullscheme" class="cite xref">I-D.doesburg-sidrops-nullscheme</a>]</span> preserves the signed-object structure but replaces the one-time-use EE key pair and CMS signature with a public key derived from the message digest and an empty signature, reducing redundant cryptographic cost.<a href="#section-10-1" class="pilcrow">¶</a></p>
+<p id="section-10-2">pqRPKI <span>[<a href="#pqRPKI" class="cite xref">pqRPKI</a>]</span> instead introduces a Merkle Tree Ladder and restructures manifest, delegation, and bulk-verification processing. It is an alternative repository architecture rather than a direct algorithm substitution. Comparing these object-design alternatives requires separate measurements; the cryptographic-object experiments in this document cover only the structure-preserving approach.<a href="#section-10-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="repository-distribution-considerations">
+<section id="section-11">
+      <h2 id="name-repository-distribution-con">
+<a href="#section-11" class="section-number selfRef">11. </a><a href="#name-repository-distribution-con" class="section-name selfRef">Repository Distribution Considerations</a>
+      </h2>
+<div id="impact-of-larger-objects">
+<section id="section-11.1">
+        <h3 id="name-impact-of-larger-objects">
+<a href="#section-11.1" class="section-number selfRef">11.1. </a><a href="#name-impact-of-larger-objects" class="section-name selfRef">Impact of Larger Objects</a>
+        </h3>
+<p id="section-11.1-1">Changing the signature suite affects both cryptographic processing and repository distribution. Larger certificates, CRLs, manifests, and signed objects increase the bytes transferred during initial repository synchronization and in updates that contain those objects. For the observed cache assessed in Appendix A, full replacement with the evaluated Composite suite is projected to increase the DER footprint from 1.017 GiB to 4.825 GiB. Transport scalability is therefore a deployment constraint that needs to be evaluated separately from algorithm correctness and RP validation time.<a href="#section-11.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="rrdp-rsync-and-erik-synchronization">
+<section id="section-11.2">
+        <h3 id="name-rrdp-rsync-and-erik-synchro">
+<a href="#section-11.2" class="section-number selfRef">11.2. </a><a href="#name-rrdp-rsync-and-erik-synchro" class="section-name selfRef">RRDP, rsync, and Erik Synchronization</a>
+        </h3>
+<p id="section-11.2-1">RRDP <span>[<a href="#RFC8182" class="cite xref">RFC8182</a>]</span> distributes snapshots and a journal of deltas. An RP obtains a complete snapshot when the notification file no longer offers a contiguous delta chain from the RP's serial, or when the session identifier changes. A polling RP can receive intermediate publication states that it does not ultimately use. An rsync synchronization first exchanges repository metadata and then transfers changed files; even an unchanged repository therefore has a cost that grows with the file list.<a href="#section-11.2-1" class="pilcrow">¶</a></p>
+<p id="section-11.2-2">Erik Synchronization <span>[<a href="#I-D.ietf-sidrops-rpki-erik-protocol" class="cite xref">I-D.ietf-sidrops-rpki-erik-protocol</a>]</span> is an RPKI-specific replication protocol using Merkle trees, content-addressable naming, and HTTP. An RP compares ErikIndex and ErikPartition objects and fetches selected objects by hash. Snapshot and segment prefetching can reduce the request cost of cache bootstrap and catch-up. This document does not specify Erik or require it for PQC deployment; equivalent trace-backed rsync and Erik comparisons remain separate work.<a href="#section-11.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="transport-experiment-boundary">
+<section id="section-11.3">
+        <h3 id="name-transport-experiment-bounda">
+<a href="#section-11.3" class="section-number selfRef">11.3. </a><a href="#name-transport-experiment-bounda" class="section-name selfRef">Transport Experiment Boundary</a>
+        </h3>
+<p id="section-11.3-1">Appendix A projects complete DER object sizes from a public RPKI cache and evaluates captured RRDP delta and snapshot XML bodies for RSA-2048, ML-DSA-44, ML-DSA-65, and the evaluated Composite suite. The delta and snapshot samples have different capture dates and are reported separately. These results quantify object and response-body sizes, not production-network throughput or per-client traffic.<a href="#section-11.3-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="experimental-results">
+<section id="section-12">
+      <h2 id="name-experimental-results">
+<a href="#section-12" class="section-number selfRef">12. </a><a href="#name-experimental-results" class="section-name selfRef">Experimental Results</a>
+      </h2>
+<div id="results-summary">
+<section id="section-12.1">
+        <h3 id="name-results-summary">
+<a href="#section-12.1" class="section-number selfRef">12.1. </a><a href="#name-results-summary" class="section-name selfRef">Results Summary</a>
+        </h3>
+<p id="section-12.1-1">OpenSSL 3.6.2 and the evaluated Composite provider generated complete certificate, CRL, manifest, and ROA sets for pure ML-DSA-65, Composite ML-DSA, and a Mixed Tree with an RSA parent and a Composite child. Experimental rpki-client and Routinator extensions validated each repository and produced the same two VRPs as the RSA baseline. An experimental Krill extension then created a Composite child below an RSA parent, published and replaced ROAs, and rolled the child back to RSA. Both experimental RPs derived the expected VRPs at each stage. The Krill test used same-server issuance with CSR signature verification, not a complete external RFC 6492 provisioning exchange.<a href="#section-12.1-1" class="pilcrow">¶</a></p>
+<p id="section-12.1-2">Appendix A reports the cryptographic benchmarks, complete-DER repository projections, and captured RRDP body-size projections, with their methods and limitations.<a href="#section-12.1-2" class="pilcrow">¶</a></p>
+<p id="section-12.1-3">The two RP extensions use the same OpenSSL and Composite provider backend. The experiment therefore demonstrates two RP processing paths, but not independent cryptographic interoperability or production readiness.<a href="#section-12.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="relying-party-evaluation">
+<section id="section-12.2">
+        <h3 id="name-relying-party-evaluation">
+<a href="#section-12.2" class="section-number selfRef">12.2. </a><a href="#name-relying-party-evaluation" class="section-name selfRef">Relying Party Evaluation</a>
+        </h3>
+<p id="section-12.2-1">The experiment extended rpki-client and Routinator to recognize the id-ml-dsa-65 and id-MLDSA65-ECDSA-P256-SHA512 identifiers and to delegate their cryptographic operations to OpenSSL providers. Each RP processed four complete repositories: the RSA baseline, pure ML-DSA-65, Composite ML-DSA, and a Mixed Tree with an RSA parent and a Composite child. For every repository, the test covered certificate-path and CRL validation, manifest and CMS validation, ROA processing, and VRP production.<a href="#section-12.2-1" class="pilcrow">¶</a></p>
+<p id="section-12.2-2">The Mixed Tree test additionally verified that the issuer signature algorithm and subject SPKI algorithm are processed independently. The RSA parent's public key verifies the signature on the child CA certificate, while the Next Suite public key carried in that certificate's SPKI is used to validate signatures issued by the child.<a href="#section-12.2-2" class="pilcrow">¶</a></p>
+<p id="section-12.2-3">Both experimental RPs also produced the expected VRPs for controlled repositories with an RSA parent and a Composite child publishing up to 1,000 ROAs. A separate synthetic topology used one RSA parent and 100 Composite child CAs, each publishing one ROA. The repository contained 403 objects and produced 100 VRPs with both experimental RPs. Removing one child publication point reduced the result to 99 VRPs without affecting the remaining children.<a href="#section-12.2-3" class="pilcrow">¶</a></p>
+<p id="section-12.2-4">When an experiment validates both Current Suite and Next Suite products, it separately compares their validated outputs. For ROAs, the comparison uses equality of the canonical VRP sets by prefix, maxLength, and origin AS. When both runs use the same CCR version and hash algorithm, equal ROAPayloadState hashes indicate equality of those canonical VRP sets under the collision-resistance assumption of the CCR digest <span>[<a href="#I-D.ietf-sidrops-rpki-ccr" class="cite xref">I-D.ietf-sidrops-rpki-ccr</a>]</span>. The experiment parsed actual rpki-client CCR DER for the RSA, pure ML-DSA-65, Composite, and Mixed Tree repositories and recomputed every embedded collection hash. All four ROAPayloadState hashes were equal, while ManifestState differed as expected. TrustAnchorState differed because the four test runs used distinct TA public keys and SKIs. This result uses one RP implementation that produced CCR output. ROAPayloadState does not preserve per-VRP certificate-chain or publication provenance, so comparing the certificate chain and publication source associated with each VRP requires additional experiment records. Differences in validated outputs are recorded as an experimental result rather than silently merged.<a href="#section-12.2-4" class="pilcrow">¶</a></p>
+<p id="section-12.2-5">This document does not require routers to support PQC. Routers receive validated payloads through RTR or local export formats; the algorithm migration is intended to leave the semantic content of those outputs unchanged.<a href="#section-12.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="implementation-status">
+<section id="section-13">
+      <h2 id="name-implementation-status">
+<a href="#section-13" class="section-number selfRef">13. </a><a href="#name-implementation-status" class="section-name selfRef">Implementation Status</a>
+      </h2>
+<p id="section-13-1">This section records the status of the experiments at the time of posting this Internet-Draft, using the reporting pattern described in <span>[<a href="#RFC7942" class="cite xref">RFC7942</a>]</span>. It is intended to assist IETF discussion and is to be removed before publication as an RFC.<a href="#section-13-1" class="pilcrow">¶</a></p>
+<p id="section-13-2">pqc-rpki-lab is a research prototype used for the experiments described in this document.<a href="#section-13-2" class="pilcrow">¶</a></p>
+<p id="section-13-3">Implemented:<a href="#section-13-3" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-13-4.1">
+          <p id="section-13-4.1.1">Generation of complete pure ML-DSA-65 and Composite certificates, CRLs, manifests, and ROAs, including a Mixed Tree repository with an RSA parent and a Composite child.<a href="#section-13-4.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-13-4.2">
+          <p id="section-13-4.2.1">Experimental rpki-client and Routinator extensions that validate the RSA, pure ML-DSA-65, Composite, and Mixed Tree repositories and produce the expected VRPs.<a href="#section-13-4.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-13-4.3">
+          <p id="section-13-4.3.1">Experimental Krill same-server issuance with Composite CSR/PoP processing, publication, one-ROA replacement, and RSA rollback for a Composite child below an RSA parent.<a href="#section-13-4.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-13-4.4">
+          <p id="section-13-4.4.1">Complete-DER repository-size projections and captured RRDP delta and snapshot response-body size accounting described in Appendix A.<a href="#section-13-4.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-13-4.5">
+          <p id="section-13-4.5.1">Fifteen negative cases for cryptographic and profile failures, seven cases for repository-operation failures, tests showing that removal of one child publication point leaves sibling VRPs unaffected, and CCR output comparisons.<a href="#section-13-4.5.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-13-5">Not yet implemented or incomplete:<a href="#section-13-5" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-13-6.1">
+          <p id="section-13-6.1.1">Independent RFC 6492 provisioning interoperability with Composite certificate requests and proof of possession, BGPsec Router Certificates, and Composite ASPA, RSC, and TAK objects.<a href="#section-13-6.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-13-6.2">
+          <p id="section-13-6.2.1">Independent cryptographic interoperability and a second RP implementation capable of producing CCR output.<a href="#section-13-6.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-13-6.3">
+          <p id="section-13-6.3.1">Re-signing of a multi-CA corpus modeled on the public RPKI and production-network RRDP, rsync, and Erik measurements.<a href="#section-13-6.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-13-6.4">
+          <p id="section-13-6.4.1">HSM support, long-running RP resource use, and additional candidate suites.<a href="#section-13-6.4.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+<p id="section-13-7">The highest-priority gaps are independent cryptographic interoperability and validation over a multi-CA corpus modeled on the public RPKI that can be re-signed under each evaluated configuration.<a href="#section-13-7" class="pilcrow">¶</a></p>
+<div id="upstream-library-support-snapshot">
+<section id="section-13.1">
+        <h3 id="name-upstream-library-support-sn">
+<a href="#section-13.1" class="section-number selfRef">13.1. </a><a href="#name-upstream-library-support-sn" class="section-name selfRef">Upstream Library Support Snapshot</a>
+        </h3>
+<p id="section-13.1-1">This snapshot of upstream library support was updated on 25 October 2026. Released library functionality is distinguished from the lab extensions above; it does not establish production RPKI CA or RP support, RPKI profile conformance, or independent interoperability. Support for a PQ signature primitive alone does not establish X.509 or CMS SignedData support, and pure PQ signatures are distinct from composite or hybrid constructions.<a href="#section-13.1-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-13.1-2.1">
+            <p id="section-13.1-2.1.1">OpenSSL: The released 3.5 series introduced pure ML-DSA and SLH-DSA primitives <span>[<a href="#OpenSSL-3.5" class="cite xref">OpenSSL-3.5</a>]</span>. Upstream release tests cover ML-DSA X.509 certificate generation <span>[<a href="#OpenSSL-X509-Tests" class="cite xref">OpenSSL-X509-Tests</a>]</span> and CMS signing and verification using X.509 signer certificates with ML-DSA and SLH-DSA <span>[<a href="#OpenSSL-CMS-Tests" class="cite xref">OpenSSL-CMS-Tests</a>]</span>. SLH-DSA certificate-signature coverage has not been separately verified for this snapshot. These pure PQ capabilities are separate from the external Composite provider used by this experiment; the lab results do not establish native production support for the evaluated Composite profile.<a href="#section-13.1-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-13.1-2.2">
+            <p id="section-13.1-2.2.1">LibreSSL: Version 4.4.0 was released as a stable release on 22 October 2026 <span>[<a href="#LibreSSL-Releases" class="cite xref">LibreSSL-Releases</a>]</span>. Its release notes describe hybrid TLS key establishment using X25519MLKEM768, which does not establish PQ signature support. The reviewed 4.4.0 release notes do not establish ML-DSA or SLH-DSA signature support, either for X.509 or CMS SignedData. Such support remains unverified in this snapshot; this is not a claim that no implementation exists.<a href="#section-13.1-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="section-13.1-2.3">
+            <p id="section-13.1-2.3.1">Bouncy Castle: The released Java 1.86 source includes tests that generate pure ML-DSA and SLH-DSA X.509 certificates and create and verify CMS SignedData <span>[<a href="#BC-PQC-Tests" class="cite xref">BC-PQC-Tests</a>]</span>. Its release notes also record composite signature support, including CMS support added in 1.83 <span>[<a href="#BC-Java-Release-Notes" class="cite xref">BC-Java-Release-Notes</a>]</span>. Released composite functionality should not be confused with a final algorithm profile: compatibility with the specific LAMPS revisions and Composite configuration evaluated here remains to be verified. This snapshot concerns the regular Java release, not every Bouncy Castle language or FIPS product.<a href="#section-13.1-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="security-considerations">
+<section id="section-14">
+      <h2 id="name-security-considerations">
+<a href="#section-14" class="section-number selfRef">14. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-14-1">This document addresses forgery of RPKI signatures in the presence of a CRQC. Existing considerations for CA compromise, repository compromise, operational misissuance, BGP policy mistakes, and route leaks are unchanged.<a href="#section-14-1" class="pilcrow">¶</a></p>
+<p id="section-14-2">A rollback to the Current Suite is a recovery mechanism only while that suite remains trustworthy and policy permits its use. After the Current Suite becomes forgeable, or after a deployment adopts a policy that permits only the Next Suite, such a rollback is a downgrade rather than recovery. Where a transition phase permits fallback to Current Suite products, accepting them after a CRQC makes that suite forgeable can admit forged products; Section 11 of <span>[<a href="#RFC6916" class="cite xref">RFC6916</a>]</span> already identifies transition-period downgrade risks.<a href="#section-14-2" class="pilcrow">¶</a></p>
+<p id="section-14-3">Divergent algorithm policies and downgrade behavior are primary concerns during a long transition. Divergent suite-selection policies across the RP population can cause different RPs to derive different VRP sets from the same repository. This systemic risk of the transition itself persists for as long as classical and post-quantum algorithm suites coexist.<a href="#section-14-3" class="pilcrow">¶</a></p>
+<p id="section-14-4">Parallel Publication can produce different validation results between the Current Suite and Next Suite branches. For example, the RSA branch and the PQC branch might contain different ROA payloads, stale manifests, or different CRL state. The experiment compares validated outputs between the two suites but does not evaluate all possible forms of divergence.<a href="#section-14-4" class="pilcrow">¶</a></p>
+<p id="section-14-5">A Mixed Tree rooted in a Current Suite trust anchor is not quantum resistant as a complete certification path. Validation of the certification path depends on every certificate signature along it, including signatures made under the Current Suite. If an adversary can forge a Current Suite certificate signature above the migration boundary, the adversary can substitute a different Next Suite child key and construct a forged subtree.<a href="#section-14-5" class="pilcrow">¶</a></p>
+<p id="section-14-6">Mixed Tree migration is therefore suitable only while Current Suite certificate signatures remain trustworthy. It does not provide a recovery procedure after those signatures become forgeable, nor does it by itself establish a quantum-resistant trust anchor. Achieving end-to-end post-quantum security ultimately requires removing dependence on the Current Suite from the complete certification path. Trust-anchor migration and establishment of such a path are separate concerns from the Mixed Tree migration evaluated here.<a href="#section-14-6" class="pilcrow">¶</a></p>
+<p id="section-14-7">Larger public keys, signatures, certificates, CRLs, and CMS objects increase the network and processing resources required for repository retrieval and validation. A hostile or misbehaving publication point can impose disproportionate transfer and CPU cost on RPs, and PQC object sizes raise the ceiling of that cost. Resource limits and operational measurements of object size, object count, validation time, and memory use therefore belong in a production readiness evaluation. Production-network measurements of RRDP, rsync, and Erik Synchronization under projected repository sizes and churn rates are needed before large-scale deployment.<a href="#section-14-7" class="pilcrow">¶</a></p>
+<p id="section-14-8">HSM implementations of PQC algorithms are newer than their software counterparts and may lag in side-channel hardening, fault-attack resistance, and certification. A CA key that is protected against extraction but is used by an implementation that leaks sensitive information through side channels does not receive the intended level of protection. Side-channel resistance is algorithm- and implementation-dependent and requires separate evaluation for each candidate and platform.<a href="#section-14-8" class="pilcrow">¶</a></p>
+<p id="section-14-9">ML-DSA supports both deterministic and randomized signing. Signatures generated using either mode are interoperable. The experiment uses the signing mode selected by the implementation and does not compare the two modes. Randomized signing can make implementations easier to harden against fault and hardware side-channel attacks <span>[<a href="#RFC9881" class="cite xref">RFC9881</a>]</span>.<a href="#section-14-9" class="pilcrow">¶</a></p>
+<p id="section-14-10">Algorithm confusion is possible if AlgorithmIdentifier parameters, SignerInfo digestAlgorithm, CMS signed attributes, or certificate SubjectPublicKeyInfo encodings are inconsistently handled. The experimental validation criteria reject malformed AlgorithmIdentifier encodings and follow the parameter rules of the referenced LAMPS specifications.<a href="#section-14-10" class="pilcrow">¶</a></p>
+<p id="section-14-11">The LAMPS composite construction provides a conditional EUF-CMA guarantee only when every component is verified, at least one component remains EUF-CMA secure, and the prehash remains collision resistant. It does not generally preserve SUF-CMA from only one strongly unforgeable component. The experiment follows the component-key separation rules in <span>[<a href="#I-D.ietf-lamps-pq-composite-sigs" class="cite xref">I-D.ietf-lamps-pq-composite-sigs</a>]</span>; reuse as standalone keys or in other composite combinations can enable stripping and cross-protocol attacks. A defect in one component is tolerated only if the other component and the combiner, parser, encoding, key management, and verification of all component signatures are unaffected. A shared implementation defect or compromise of both component keys is not mitigated by the composite construction. After a CRQC breaks ECDSA, the composite suite's unforgeability depends on ML-DSA-65.<a href="#section-14-11" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-considerations">
+<section id="section-15">
+      <h2 id="name-iana-considerations">
+<a href="#section-15" class="section-number selfRef">15. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-15-1">This document requests no IANA actions. It reuses algorithm identifiers defined by the referenced LAMPS specifications and defines no new RPKI object type, file extension, or content type.<a href="#section-15-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="questions-for-further-work">
+<section id="section-16">
+      <h2 id="name-questions-for-further-work">
+<a href="#section-16" class="section-number selfRef">16. </a><a href="#name-questions-for-further-work" class="section-name selfRef">Questions for Further Work</a>
+      </h2>
+<p id="section-16-1">The following questions require further discussion and implementation evidence.<a href="#section-16-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="section-16-2.1">
+          <p id="section-16-2.1.1">Which post-quantum signature suite offers an appropriate balance of security, object size, validation performance, implementation maturity, and HSM support for the RPKI?<a href="#section-16-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-16-2.2">
+          <p id="section-16-2.2.1">How should the algorithms used for EE certificates and CMS signatures be related, and should alternative constructions such as the Null Scheme be considered?<a href="#section-16-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-16-2.3">
+          <p id="section-16-2.3.1">Under what conditions should Parallel Publication or Mixed Tree migration be used, and how should RP readiness and migration timing be determined?<a href="#section-16-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-16-2.4">
+          <p id="section-16-2.4.1">How should provisioning protocols support a Next Suite child CA under a Current Suite parent, including certificate requests, proof of possession, and the algorithm-suite associations defined by RFC 6916?<a href="#section-16-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-16-2.5">
+          <p id="section-16-2.5.1">How should RPKI trust anchors and the separate BPKI used for provisioning and publication be migrated while maintaining trust and operational continuity?<a href="#section-16-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="section-16-2.6">
+          <p id="section-16-2.6.1">Can RRDP and rsync accommodate the increased repository size and publication activity, or is a more selective synchronization protocol such as Erik needed?<a href="#section-16-2.6.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+</section>
+</div>
+<section id="section-17">
+      <h2 id="name-references">
+<a href="#section-17" class="section-number selfRef">17. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<section id="section-17.1">
+        <h3 id="name-informative-references">
+<a href="#section-17.1" class="section-number selfRef">17.1. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC6480">[RFC6480]</dt>
+        <dd>
+<span class="refAuthor">Lepinski, M.</span> and <span class="refAuthor">S. Kent</span>, <span class="refTitle">"An Infrastructure to Support Secure Internet Routing"</span>, <span class="seriesInfo">RFC 6480</span>, <span class="seriesInfo">DOI 10.17487/RFC6480</span>, <time datetime="2012-02" class="refDate">February 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6480">https://www.rfc-editor.org/info/rfc6480</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6487">[RFC6487]</dt>
+        <dd>
+<span class="refAuthor">Huston, G.</span>, <span class="refAuthor">Michaelson, G.</span>, and <span class="refAuthor">R. Loomans</span>, <span class="refTitle">"A Profile for X.509 PKIX Resource Certificates"</span>, <span class="seriesInfo">RFC 6487</span>, <span class="seriesInfo">DOI 10.17487/RFC6487</span>, <time datetime="2012-02" class="refDate">February 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6487">https://www.rfc-editor.org/info/rfc6487</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6488">[RFC6488]</dt>
+        <dd>
+<span class="refAuthor">Lepinski, M.</span>, <span class="refAuthor">Chi, A.</span>, and <span class="refAuthor">S. Kent</span>, <span class="refTitle">"Signed Object Template for the Resource Public Key Infrastructure (RPKI)"</span>, <span class="seriesInfo">RFC 6488</span>, <span class="seriesInfo">DOI 10.17487/RFC6488</span>, <time datetime="2012-02" class="refDate">February 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6488">https://www.rfc-editor.org/info/rfc6488</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6916">[RFC6916]</dt>
+        <dd>
+<span class="refAuthor">Gagliano, R.</span>, <span class="refAuthor">Kent, S.</span>, and <span class="refAuthor">S. Turner</span>, <span class="refTitle">"Algorithm Agility Procedure for the Resource Public Key Infrastructure (RPKI)"</span>, <span class="refContent">BCP 182</span>, <span class="seriesInfo">RFC 6916</span>, <span class="seriesInfo">DOI 10.17487/RFC6916</span>, <time datetime="2013-04" class="refDate">April 2013</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6916">https://www.rfc-editor.org/info/rfc6916</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7935">[RFC7935]</dt>
+        <dd>
+<span class="refAuthor">Huston, G.</span> and <span class="refAuthor">G. Michaelson</span>, <span class="refTitle">"The Profile for Algorithms and Key Sizes for Use in the Resource Public Key Infrastructure"</span>, <span class="seriesInfo">RFC 7935</span>, <span class="seriesInfo">DOI 10.17487/RFC7935</span>, <time datetime="2016-08" class="refDate">August 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7935">https://www.rfc-editor.org/info/rfc7935</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8182">[RFC8182]</dt>
+        <dd>
+<span class="refAuthor">Bruijnzeels, T.</span>, <span class="refAuthor">Muravskiy, O.</span>, <span class="refAuthor">Weber, B.</span>, and <span class="refAuthor">R. Austein</span>, <span class="refTitle">"The RPKI Repository Delta Protocol (RRDP)"</span>, <span class="seriesInfo">RFC 8182</span>, <span class="seriesInfo">DOI 10.17487/RFC8182</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8182">https://www.rfc-editor.org/info/rfc8182</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8209">[RFC8209]</dt>
+        <dd>
+<span class="refAuthor">Reynolds, M.</span>, <span class="refAuthor">Turner, S.</span>, and <span class="refAuthor">S. Kent</span>, <span class="refTitle">"A Profile for BGPsec Router Certificates, Certificate Revocation Lists, and Certification Requests"</span>, <span class="seriesInfo">RFC 8209</span>, <span class="seriesInfo">DOI 10.17487/RFC8209</span>, <time datetime="2017-09" class="refDate">September 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8209">https://www.rfc-editor.org/info/rfc8209</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9286">[RFC9286]</dt>
+        <dd>
+<span class="refAuthor">Austein, R.</span>, <span class="refAuthor">Huston, G.</span>, <span class="refAuthor">Kent, S.</span>, and <span class="refAuthor">M. Lepinski</span>, <span class="refTitle">"Manifests for the Resource Public Key Infrastructure (RPKI)"</span>, <span class="seriesInfo">RFC 9286</span>, <span class="seriesInfo">DOI 10.17487/RFC9286</span>, <time datetime="2022-06" class="refDate">June 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9286">https://www.rfc-editor.org/info/rfc9286</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9582">[RFC9582]</dt>
+        <dd>
+<span class="refAuthor">Snijders, J.</span>, <span class="refAuthor">Maddison, B.</span>, <span class="refAuthor">Lepinski, M.</span>, <span class="refAuthor">Kong, D.</span>, and <span class="refAuthor">S. Kent</span>, <span class="refTitle">"A Profile for Route Origin Authorizations (ROAs)"</span>, <span class="seriesInfo">RFC 9582</span>, <span class="seriesInfo">DOI 10.17487/RFC9582</span>, <time datetime="2024-05" class="refDate">May 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9582">https://www.rfc-editor.org/info/rfc9582</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9589">[RFC9589]</dt>
+        <dd>
+<span class="refAuthor">Snijders, J.</span> and <span class="refAuthor">T. Harrison</span>, <span class="refTitle">"On the Use of the Cryptographic Message Syntax (CMS) Signing-Time Attribute in Resource Public Key Infrastructure (RPKI) Signed Objects"</span>, <span class="seriesInfo">RFC 9589</span>, <span class="seriesInfo">DOI 10.17487/RFC9589</span>, <time datetime="2024-05" class="refDate">May 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9589">https://www.rfc-editor.org/info/rfc9589</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9691">[RFC9691]</dt>
+        <dd>
+<span class="refAuthor">Martinez, C.</span>, <span class="refAuthor">Michaelson, G.</span>, <span class="refAuthor">Harrison, T.</span>, <span class="refAuthor">Bruijnzeels, T.</span>, and <span class="refAuthor">R. Austein</span>, <span class="refTitle">"A Profile for Resource Public Key Infrastructure (RPKI) Trust Anchor Keys (TAKs)"</span>, <span class="seriesInfo">RFC 9691</span>, <span class="seriesInfo">DOI 10.17487/RFC9691</span>, <time datetime="2024-12" class="refDate">December 2024</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9691">https://www.rfc-editor.org/info/rfc9691</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9881">[RFC9881]</dt>
+        <dd>
+<span class="refAuthor">Massimo, J.</span>, <span class="refAuthor">Kampanakis, P.</span>, <span class="refAuthor">Turner, S.</span>, and <span class="refAuthor">B. E. Westerbaan</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure -- Algorithm Identifiers for the Module-Lattice-Based Digital Signature Algorithm (ML-DSA)"</span>, <span class="seriesInfo">RFC 9881</span>, <span class="seriesInfo">DOI 10.17487/RFC9881</span>, <time datetime="2025-10" class="refDate">October 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9881">https://www.rfc-editor.org/info/rfc9881</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9882">[RFC9882]</dt>
+        <dd>
+<span class="refAuthor">Salter, B.</span>, <span class="refAuthor">Raine, A.</span>, and <span class="refAuthor">D. Van</span>, <span class="refTitle">"Use of the ML-DSA Signature Algorithm in the Cryptographic Message Syntax (CMS)"</span>, <span class="seriesInfo">RFC 9882</span>, <span class="seriesInfo">DOI 10.17487/RFC9882</span>, <time datetime="2025-10" class="refDate">October 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9882">https://www.rfc-editor.org/info/rfc9882</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9981">[RFC9981]</dt>
+        <dd>
+<span class="refAuthor">Harrison, T.</span>, <span class="refAuthor">Michaelson, G.</span>, and <span class="refAuthor">J. Snijders</span>, <span class="refTitle">"Resource Public Key Infrastructure (RPKI) Manifest Number Handling"</span>, <span class="seriesInfo">RFC 9981</span>, <span class="seriesInfo">DOI 10.17487/RFC9981</span>, <time datetime="2026-05" class="refDate">May 2026</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9981">https://www.rfc-editor.org/info/rfc9981</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="FIPS204">[FIPS204]</dt>
+        <dd>
+<span class="refAuthor">National Institute of Standards and Technology</span>, <span class="refTitle">"Module-Lattice-Based Digital Signature Standard"</span>, <span class="seriesInfo">FIPS 204</span>, <span class="seriesInfo">DOI 10.6028/NIST.FIPS.204</span>, <time datetime="2024-08" class="refDate">August 2024</time>, <span>&lt;<a href="https://doi.org/10.6028/NIST.FIPS.204">https://doi.org/10.6028/NIST.FIPS.204</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-lamps-pq-composite-sigs">[I-D.ietf-lamps-pq-composite-sigs]</dt>
+        <dd>
+<span class="refAuthor">Ounsworth, M.</span>, <span class="refAuthor">Gray, J.</span>, <span class="refAuthor">Pala, M.</span>, <span class="refAuthor">Klaussner, J.</span>, and <span class="refAuthor">S. Fluhrer</span>, <span class="refTitle">"Composite Module-Lattice-Based Digital Signature Algorithm (ML-DSA) for use in X.509 Public Key Infrastructure"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-lamps-pq-composite-sigs-19</span>, <time datetime="2026-04-21" class="refDate">21 April 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-lamps-pq-composite-sigs-19">https://datatracker.ietf.org/doc/html/draft-ietf-lamps-pq-composite-sigs-19</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-lamps-cms-composite-sigs">[I-D.ietf-lamps-cms-composite-sigs]</dt>
+      <dd>
+<span class="refAuthor">Ounsworth, M.</span>, <span class="refAuthor">Gray, J.</span>, <span class="refAuthor">Klaussner, J.</span>, and <span class="refAuthor">D. Van Geest</span>, <span class="refTitle">"Composite Module-Lattice-Based Digital Signature Algorithm (ML-DSA) for use in Cryptographic Message Syntax (CMS)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-lamps-cms-composite-sigs-05</span>, <time datetime="2026-05-22" class="refDate">22 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cms-composite-sigs-05">https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cms-composite-sigs-05</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-17.2">
+        <h3 id="name-additional-informative-refe">
+<a href="#section-17.2" class="section-number selfRef">17.2. </a><a href="#name-additional-informative-refe" class="section-name selfRef">Additional Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC7942">[RFC7942]</dt>
+        <dd>
+<span class="refAuthor">Sheffer, Y.</span> and <span class="refAuthor">A. Farrel</span>, <span class="refTitle">"Improving Awareness of Running Code: The Implementation Status Section"</span>, <span class="refContent">BCP 205</span>, <span class="seriesInfo">RFC 7942</span>, <span class="seriesInfo">DOI 10.17487/RFC7942</span>, <time datetime="2016-07" class="refDate">July 2016</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7942">https://www.rfc-editor.org/info/rfc7942</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8032">[RFC8032]</dt>
+        <dd>
+<span class="refAuthor">Josefsson, S.</span> and <span class="refAuthor">I. Liusvaara</span>, <span class="refTitle">"Edwards-Curve Digital Signature Algorithm (EdDSA)"</span>, <span class="seriesInfo">RFC 8032</span>, <span class="seriesInfo">DOI 10.17487/RFC8032</span>, <time datetime="2017-01" class="refDate">January 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8032">https://www.rfc-editor.org/info/rfc8032</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8183">[RFC8183]</dt>
+        <dd>
+<span class="refAuthor">Austein, R.</span>, <span class="refTitle">"An Out-of-Band Setup Protocol for Resource Public Key Infrastructure (RPKI) Production Services"</span>, <span class="seriesInfo">RFC 8183</span>, <span class="seriesInfo">DOI 10.17487/RFC8183</span>, <time datetime="2017-07" class="refDate">July 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8183">https://www.rfc-editor.org/info/rfc8183</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8608">[RFC8608]</dt>
+        <dd>
+<span class="refAuthor">Turner, S.</span> and <span class="refAuthor">O. Borchert</span>, <span class="refTitle">"BGPsec Algorithms, Key Formats, and Signature Formats"</span>, <span class="seriesInfo">RFC 8608</span>, <span class="seriesInfo">DOI 10.17487/RFC8608</span>, <time datetime="2019-06" class="refDate">June 2019</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8608">https://www.rfc-editor.org/info/rfc8608</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9323">[RFC9323]</dt>
+        <dd>
+<span class="refAuthor">Snijders, J.</span>, <span class="refAuthor">Harrison, T.</span>, and <span class="refAuthor">B. Maddison</span>, <span class="refTitle">"A Profile for RPKI Signed Checklists (RSCs)"</span>, <span class="seriesInfo">RFC 9323</span>, <span class="seriesInfo">DOI 10.17487/RFC9323</span>, <time datetime="2022-11" class="refDate">November 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9323">https://www.rfc-editor.org/info/rfc9323</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9814">[RFC9814]</dt>
+        <dd>
+<span class="refAuthor">Housley, R.</span>, <span class="refAuthor">Fluhrer, S.</span>, <span class="refAuthor">Kampanakis, P.</span>, and <span class="refAuthor">B. Westerbaan</span>, <span class="refTitle">"Use of the SLH-DSA Signature Algorithm in the Cryptographic Message Syntax (CMS)"</span>, <span class="seriesInfo">RFC 9814</span>, <span class="seriesInfo">DOI 10.17487/RFC9814</span>, <time datetime="2025-07" class="refDate">July 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9814">https://www.rfc-editor.org/info/rfc9814</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9909">[RFC9909]</dt>
+        <dd>
+<span class="refAuthor">Bashiri, K.</span>, <span class="refAuthor">Fluhrer, S.</span>, <span class="refAuthor">Gazdag, S.</span>, <span class="refAuthor">Geest, D.</span>, and <span class="refAuthor">S. Kousidis</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure -- Algorithm Identifiers for the Stateless Hash-Based Digital Signature Algorithm (SLH-DSA)"</span>, <span class="seriesInfo">RFC 9909</span>, <span class="seriesInfo">DOI 10.17487/RFC9909</span>, <time datetime="2025-12" class="refDate">December 2025</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9909">https://www.rfc-editor.org/info/rfc9909</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="FIPS186-5">[FIPS186-5]</dt>
+        <dd>
+<span class="refAuthor">National Institute of Standards and Technology</span>, <span class="refTitle">"Digital Signature Standard (DSS)"</span>, <span class="seriesInfo">FIPS 186-5</span>, <span class="seriesInfo">DOI 10.6028/NIST.FIPS.186-5</span>, <time datetime="2023-02" class="refDate">February 2023</time>, <span>&lt;<a href="https://doi.org/10.6028/NIST.FIPS.186-5">https://doi.org/10.6028/NIST.FIPS.186-5</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="FIPS205">[FIPS205]</dt>
+        <dd>
+<span class="refAuthor">National Institute of Standards and Technology</span>, <span class="refTitle">"Stateless Hash-Based Digital Signature Standard"</span>, <span class="seriesInfo">FIPS 205</span>, <span class="seriesInfo">DOI 10.6028/NIST.FIPS.205</span>, <time datetime="2024-08" class="refDate">August 2024</time>, <span>&lt;<a href="https://doi.org/10.6028/NIST.FIPS.205">https://doi.org/10.6028/NIST.FIPS.205</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-sidrops-rpki-ccr">[I-D.ietf-sidrops-rpki-ccr]</dt>
+        <dd>
+<span class="refAuthor">Snijders, J.</span>, <span class="refAuthor">Bakker, B.</span>, <span class="refAuthor">Bruijnzeels, T.</span>, and <span class="refAuthor">T. Buehler</span>, <span class="refTitle">"A Profile for Resource Public Key Infrastructure (RPKI) Canonical Cache Representation (CCR)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-sidrops-rpki-ccr-11</span>, <time datetime="2026-07-01" class="refDate">1 July 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-rpki-ccr-11">https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-rpki-ccr-11</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-sidrops-aspa-profile">[I-D.ietf-sidrops-aspa-profile]</dt>
+        <dd>
+<span class="refAuthor">Snijders, J.</span>, <span class="refAuthor">Azimov, A.</span>, <span class="refAuthor">Uskov, E.</span>, <span class="refAuthor">Bush, R.</span>, <span class="refAuthor">Housley, R.</span>, and <span class="refAuthor">B. Maddison</span>, <span class="refTitle">"A Profile for Autonomous System Provider Authorization"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-sidrops-aspa-profile-29</span>, <time datetime="2026-07-29" class="refDate">29 July 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-aspa-profile-29">https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-aspa-profile-29</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-sidrops-rpki-erik-protocol">[I-D.ietf-sidrops-rpki-erik-protocol]</dt>
+        <dd>
+<span class="refAuthor">Snijders, J.</span>, <span class="refAuthor">Bruijnzeels, T.</span>, <span class="refAuthor">Harrison, T.</span>, and <span class="refAuthor">W. Ohgai</span>, <span class="refTitle">"The Erik Synchronization Protocol for use with the Resource Public Key Infrastructure (RPKI)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-sidrops-rpki-erik-protocol-07</span>, <time datetime="2026-08-16" class="refDate">16 August 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-rpki-erik-protocol-07">https://datatracker.ietf.org/doc/html/draft-ietf-sidrops-rpki-erik-protocol-07</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.doesburg-sidrops-nullscheme">[I-D.doesburg-sidrops-nullscheme]</dt>
+        <dd>
+<span class="refAuthor">Doesburg, D.</span>, <span class="refTitle">"Null Scheme for Signed Objects in the Resource Public Key Infrastructure (RPKI)"</span>, <span class="refContent">expired and archived</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-doesburg-sidrops-nullscheme-00</span>, <time datetime="2025-10-05" class="refDate">5 October 2025</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-doesburg-sidrops-nullscheme-00">https://datatracker.ietf.org/doc/html/draft-doesburg-sidrops-nullscheme-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="Doesburg2025">[Doesburg2025]</dt>
+        <dd>
+<span class="refAuthor">Doesburg, D.</span>, <span class="refTitle">"Post-Quantum Cryptography for the RPKI"</span>, <span class="refContent">Master's thesis, Radboud University</span>, <time datetime="2025-06-27" class="refDate">27 June 2025</time>, <span>&lt;<a href="https://www.sidnlabs.nl/en/news-and-blogs/thesis-pqc-for-the-rpki">https://www.sidnlabs.nl/en/news-and-blogs/thesis-pqc-for-the-rpki</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="pqRPKI">[pqRPKI]</dt>
+        <dd>
+<span class="refAuthor">Li, W.</span>, <span class="refAuthor">Li, Y.</span>, and <span class="refAuthor">T. Chung</span>, <span class="refTitle">"pqRPKI: A Practical RPKI Architecture for the Post-Quantum Era"</span>, <span class="refContent">arXiv:2603.06968</span>, <time datetime="2026-03" class="refDate">March 2026</time>, <span>&lt;<a href="https://arxiv.org/abs/2603.06968">https://arxiv.org/abs/2603.06968</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="pqc-rpki-lab">[pqc-rpki-lab]</dt>
+        <dd>
+<span class="refAuthor">Yoshikawa, T.</span>, <span class="refTitle">"pqc-rpki-lab experimental evidence snapshot"</span>, <span class="refContent">release tag draft-yoshikawa-sidrops-pqc-rpki-03</span>, <span>&lt;<a href="https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-03">https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-03</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="OpenSSL-3.5">[OpenSSL-3.5]</dt>
+        <dd>
+<span class="refAuthor">OpenSSL Project</span>, <span class="refTitle">"OpenSSL 3.5 Series Release Notes"</span>, <span class="refContent">accessed 8 October 2026</span>, <span>&lt;<a href="https://openssl-library.org/news/openssl-3.5-notes/">https://openssl-library.org/news/openssl-3.5-notes/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="OpenSSL-X509-Tests">[OpenSSL-X509-Tests]</dt>
+        <dd>
+<span class="refAuthor">OpenSSL Project</span>, <span class="refTitle">"Certificate request and certificate generation tests"</span>, <span class="refContent">OpenSSL 3.5.0 release source</span>, <span>&lt;<a href="https://github.com/openssl/openssl/blob/openssl-3.5.0/test/recipes/25-test_req.t">https://github.com/openssl/openssl/blob/openssl-3.5.0/test/recipes/25-test_req.t</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="OpenSSL-CMS-Tests">[OpenSSL-CMS-Tests]</dt>
+        <dd>
+<span class="refAuthor">OpenSSL Project</span>, <span class="refTitle">"CMS tests"</span>, <span class="refContent">OpenSSL 3.5.0 release source</span>, <span>&lt;<a href="https://github.com/openssl/openssl/blob/openssl-3.5.0/test/recipes/80-test_cms.t">https://github.com/openssl/openssl/blob/openssl-3.5.0/test/recipes/80-test_cms.t</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="LibreSSL-Releases">[LibreSSL-Releases]</dt>
+        <dd>
+<span class="refAuthor">LibreSSL Project</span>, <span class="refTitle">"Releases"</span>, <span class="refContent">and "LibreSSL 4.4.0 Release Notes", accessed 25 October 2026; https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-4.4.0-relnotes.txt</span>, <time datetime="2026-10-22" class="refDate">22 October 2026</time>, <span>&lt;<a href="https://www.libressl.org/releases.html">https://www.libressl.org/releases.html</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="BC-PQC-Tests">[BC-PQC-Tests]</dt>
+        <dd>
+<span class="refAuthor">Legion of the Bouncy Castle</span>, <span class="refTitle">"PQCSignedDataTest"</span>, <span class="refContent">Bouncy Castle Java 1.86 release source</span>, <span>&lt;<a href="https://github.com/bcgit/bc-java/blob/r1rv86/pkix/src/test/java/org/bouncycastle/cms/test/PQCSignedDataTest.java">https://github.com/bcgit/bc-java/blob/r1rv86/pkix/src/test/java/org/bouncycastle/cms/test/PQCSignedDataTest.java</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="BC-Java-Release-Notes">[BC-Java-Release-Notes]</dt>
+        <dd>
+<span class="refAuthor">Legion of the Bouncy Castle</span>, <span class="refTitle">"Release Notes"</span>, <span class="refContent">Bouncy Castle Java 1.86 release source</span>, <span>&lt;<a href="https://github.com/bcgit/bc-java/blob/r1rv86/docs/releasenotes.md">https://github.com/bcgit/bc-java/blob/r1rv86/docs/releasenotes.md</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="Global-RPKI-Q3-2026">[Global-RPKI-Q3-2026]</dt>
+        <dd>
+<span class="refAuthor">Snijders, J.</span>, <span class="refTitle">"Global RPKI Report: 2026 Q3"</span>, <span class="seriesInfo">DOI 10.5281/zenodo.23512896</span>, <time datetime="2026-10" class="refDate">October 2026</time>, <span>&lt;<a href="https://doi.org/10.5281/zenodo.23512896">https://doi.org/10.5281/zenodo.23512896</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RPKIViews-Cache-20260930">[RPKIViews-Cache-20260930]</dt>
+        <dd>
+<span class="refAuthor">RPKIViews</span>, <span class="refTitle">"dango RPKI cache archive, 2026-09-30T23:49:58Z"</span>, <span>&lt;<a href="https://dango.attn.jp/rpkidata/2026/09/30/rpki-20260930T234958Z.tgz">https://dango.attn.jp/rpkidata/2026/09/30/rpki-20260930T234958Z.tgz</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RPKIViews-RRDP">[RPKIViews-RRDP]</dt>
+        <dd>
+<span class="refAuthor">Snijders, J.</span>, <span class="refTitle">"Easter gift: introducing the RPKIViews Raw RRDP Archive!"</span>, <span class="refContent">SIDROPS mailing list</span>, <time datetime="2026-04-05" class="refDate">5 April 2026</time>, <span>&lt;<a href="https://mailarchive.ietf.org/arch/msg/sidrops/w2BUb4-MGj_T383S58yTBEbn9so/">https://mailarchive.ietf.org/arch/msg/sidrops/w2BUb4-MGj_T383S58yTBEbn9so/</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC3779">[RFC3779]</dt>
+        <dd>
+<span class="refAuthor">Lynn, C.</span>, <span class="refAuthor">Kent, S.</span>, and <span class="refAuthor">K. Seo</span>, <span class="refTitle">"X.509 Extensions for IP Addresses and AS Identifiers"</span>, <span class="seriesInfo">RFC 3779</span>, <span class="seriesInfo">DOI 10.17487/RFC3779</span>, <time datetime="2004-06" class="refDate">June 2004</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc3779">https://www.rfc-editor.org/info/rfc3779</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC6492">[RFC6492]</dt>
+        <dd>
+<span class="refAuthor">Huston, G.</span>, <span class="refAuthor">Loomans, R.</span>, <span class="refAuthor">Ellacott, B.</span>, and <span class="refAuthor">R. Austein</span>, <span class="refTitle">"A Protocol for Provisioning Resource Certificates"</span>, <span class="seriesInfo">RFC 6492</span>, <span class="seriesInfo">DOI 10.17487/RFC6492</span>, <time datetime="2012-02" class="refDate">February 2012</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc6492">https://www.rfc-editor.org/info/rfc6492</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8210">[RFC8210]</dt>
+        <dd>
+<span class="refAuthor">Bush, R.</span> and <span class="refAuthor">R. Austein</span>, <span class="refTitle">"The Resource Public Key Infrastructure (RPKI) to Router Protocol, Version 1"</span>, <span class="seriesInfo">RFC 8210</span>, <span class="seriesInfo">DOI 10.17487/RFC8210</span>, <time datetime="2017-09" class="refDate">September 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8210">https://www.rfc-editor.org/info/rfc8210</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-lamps-fn-dsa-certificates">[I-D.ietf-lamps-fn-dsa-certificates]</dt>
+        <dd>
+<span class="refAuthor">Massimo, J.</span>, <span class="refAuthor">Kampanakis, P.</span>, <span class="refAuthor">Turner, S.</span>, and <span class="refAuthor">B. E. Westerbaan</span>, <span class="refTitle">"Internet X.509 Public Key Infrastructure -- Algorithm Identifiers for the Fast-Fourier Transform over NTRU-Lattice-Based Digital Signature Algorithm (FN-DSA)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-lamps-fn-dsa-certificates-00</span>, <time datetime="2026-05-20" class="refDate">20 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-lamps-fn-dsa-certificates-00">https://datatracker.ietf.org/doc/html/draft-ietf-lamps-fn-dsa-certificates-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-lamps-cms-fn-dsa">[I-D.ietf-lamps-cms-fn-dsa]</dt>
+        <dd>
+<span class="refAuthor">Geest, D.</span> and <span class="refAuthor">S. Turner</span>, <span class="refTitle">"Use of the FN-DSA Signature Algorithm in the Cryptographic Message Syntax (CMS)"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-lamps-cms-fn-dsa-00</span>, <time datetime="2026-05-20" class="refDate">20 May 2026</time>, <span>&lt;<a href="https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cms-fn-dsa-00">https://datatracker.ietf.org/doc/html/draft-ietf-lamps-cms-fn-dsa-00</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="NIST-FN-DSA-Plan">[NIST-FN-DSA-Plan]</dt>
+      <dd>
+<span class="refAuthor">Perlner, R.</span>, <span class="refTitle">"New plan for FN-DSA"</span>, <span class="refContent">NIST pqc-forum</span>, <time datetime="2026-09-28" class="refDate">28 September 2026</time>, <span>&lt;<a href="https://groups.google.com/a/list.nist.gov/g/pqc-forum/c/7z-y5qp-W2Y/m/11ctn8s1BQAJ">https://groups.google.com/a/list.nist.gov/g/pqc-forum/c/7z-y5qp-W2Y/m/11ctn8s1BQAJ</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</section>
+<div id="measurement-details">
+<section id="appendix-A">
+      <h2 id="name-measurement-details">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-measurement-details" class="section-name selfRef">Measurement Details</a>
+      </h2>
+<div id="experimental-artifacts-and-environment">
+<section id="appendix-A.1">
+        <h3 id="name-experimental-artifacts-and-">
+<a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-experimental-artifacts-and-" class="section-name selfRef">Experimental Artifacts and Environment</a>
+        </h3>
+<p id="appendix-A.1-1">The designated evidence snapshot is the GitHub release <code>draft-yoshikawa-sidrops-pqc-rpki-03</code>
+          <span>[<a href="#pqc-rpki-lab" class="cite xref">pqc-rpki-lab</a>]</span>. It includes code and results for the cryptographic, RP, repository, and RRDP experiments, with source manifests recording origins, observation times, and hashes. Large raw datasets are kept outside Git; exact snapshot reanalysis requires the retained bodies if the source URLs have expired.<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-2">Cryptographic benchmarks used an Apple M4 running macOS 26.5.2, OpenSSL 3.6.2, and liboqs 0.15.0. The primary algorithm benchmark was compiled with optimization level -O2, while the Composite ML-DSA benchmark was compiled with -O3. The latter implements revision 19 of <span>[<a href="#I-D.ietf-lamps-pq-composite-sigs" class="cite xref">I-D.ietf-lamps-pq-composite-sigs</a>]</span>.<a href="#appendix-A.1-2" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-3">The X.509, CMS, and RP experiments used OpenSSL 3.6.2 and the experimental Composite implementation recorded in the evidence snapshot. End-to-end validation was also exercised on a 12-vCPU x86-64 host using rpki-client 9.8. The RSA, pure ML-DSA-65, Composite, and Mixed Tree repositories all produced the expected VRPs.<a href="#appendix-A.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="repeated-cryptographic-operation-timing">
+<section id="appendix-A.2">
+        <h3 id="name-repeated-cryptographic-oper">
+<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-repeated-cryptographic-oper" class="section-name selfRef">Repeated Cryptographic Operation Timing</a>
+        </h3>
+<p id="appendix-A.2-1">The table reports the median and sample standard deviation across ten repetitions of 1,000 operations on a fixed 32-byte message. Values are wall-clock seconds per 1,000 operations.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
+<table class="center" id="table-2">
+          <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Algorithm</th>
+              <th class="text-left" rowspan="1" colspan="1">Sign median</th>
+              <th class="text-left" rowspan="1" colspan="1">Sign stdev</th>
+              <th class="text-left" rowspan="1" colspan="1">Verify median</th>
+              <th class="text-left" rowspan="1" colspan="1">Verify stdev</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">RSA-2048/SHA-256</td>
+              <td class="text-left" rowspan="1" colspan="1">0.340326</td>
+              <td class="text-left" rowspan="1" colspan="1">0.002114</td>
+              <td class="text-left" rowspan="1" colspan="1">0.009792</td>
+              <td class="text-left" rowspan="1" colspan="1">0.000057</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">P-256/SHA-256</td>
+              <td class="text-left" rowspan="1" colspan="1">0.012660</td>
+              <td class="text-left" rowspan="1" colspan="1">0.000332</td>
+              <td class="text-left" rowspan="1" colspan="1">0.034535</td>
+              <td class="text-left" rowspan="1" colspan="1">0.005361</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">Ed25519</td>
+              <td class="text-left" rowspan="1" colspan="1">0.016657</td>
+              <td class="text-left" rowspan="1" colspan="1">0.006613</td>
+              <td class="text-left" rowspan="1" colspan="1">0.040442</td>
+              <td class="text-left" rowspan="1" colspan="1">0.018694</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-44</td>
+              <td class="text-left" rowspan="1" colspan="1">0.249238</td>
+              <td class="text-left" rowspan="1" colspan="1">0.029970</td>
+              <td class="text-left" rowspan="1" colspan="1">0.047798</td>
+              <td class="text-left" rowspan="1" colspan="1">0.002460</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-65</td>
+              <td class="text-left" rowspan="1" colspan="1">0.405729</td>
+              <td class="text-left" rowspan="1" colspan="1">0.017570</td>
+              <td class="text-left" rowspan="1" colspan="1">0.073411</td>
+              <td class="text-left" rowspan="1" colspan="1">0.014139</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-87</td>
+              <td class="text-left" rowspan="1" colspan="1">0.477243</td>
+              <td class="text-left" rowspan="1" colspan="1">0.012468</td>
+              <td class="text-left" rowspan="1" colspan="1">0.115963</td>
+              <td class="text-left" rowspan="1" colspan="1">0.001536</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="appendix-A.2-3">The measurements show that RSA-2048 is substantially faster at verification than the other evaluated algorithms in this environment. ML-DSA verification cost increases with the parameter set, with ML-DSA-65 requiring about 7.5 times the RSA verification time and ML-DSA-87 about 11.8 times. Signing shows a different pattern: ML-DSA-44 is faster than RSA-2048, while ML-DSA-65 and ML-DSA-87 are somewhat slower. The Ed25519 verification samples show substantial variability, as reflected in the reported standard deviation.<a href="#appendix-A.2-3" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-4">These are primitive-operation timings, not complete RP-validation timings.<a href="#appendix-A.2-4" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-5">The benchmark also covers 512-byte, 2-KiB, and 8-KiB messages and records key-generation timing, variance, and process peak RSS. Those raw results are retained in <span>[<a href="#pqc-rpki-lab" class="cite xref">pqc-rpki-lab</a>]</span>.<a href="#appendix-A.2-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="composite-ml-dsa-operation-measurements">
+<section id="appendix-A.3">
+        <h3 id="name-composite-ml-dsa-operation-">
+<a href="#appendix-A.3" class="section-number selfRef">A.3. </a><a href="#name-composite-ml-dsa-operation-" class="section-name selfRef">Composite ML-DSA Operation Measurements</a>
+        </h3>
+<p id="appendix-A.3-1">Each configuration was measured in one run of 100,000 signing and 100,000 verification operations. The timings include message-representative construction, ML-DSA context binding, both component signature operations, raw key and signature concatenation, and verification of all component signatures. The ML-DSA-87 configuration uses P-384 because revision 19 of <span>[<a href="#I-D.ietf-lamps-pq-composite-sigs" class="cite xref">I-D.ietf-lamps-pq-composite-sigs</a>]</span> does not define ML-DSA-87 with P-256.<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
+<table class="center" id="table-3">
+          <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Composite</th>
+              <th class="text-left" rowspan="1" colspan="1">Sign (s/100k)</th>
+              <th class="text-left" rowspan="1" colspan="1">Verify (s/100k)</th>
+              <th class="text-left" rowspan="1" colspan="1">PubKey (B)</th>
+              <th class="text-left" rowspan="1" colspan="1">Mean sig (B)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-44 + P-256</td>
+              <td class="text-left" rowspan="1" colspan="1">26.0</td>
+              <td class="text-left" rowspan="1" colspan="1">8.3</td>
+              <td class="text-left" rowspan="1" colspan="1">1377</td>
+              <td class="text-left" rowspan="1" colspan="1">2491</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-65 + P-256</td>
+              <td class="text-left" rowspan="1" colspan="1">45.6</td>
+              <td class="text-left" rowspan="1" colspan="1">11.9</td>
+              <td class="text-left" rowspan="1" colspan="1">2017</td>
+              <td class="text-left" rowspan="1" colspan="1">3380</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-87 + P-384</td>
+              <td class="text-left" rowspan="1" colspan="1">59.4</td>
+              <td class="text-left" rowspan="1" colspan="1">32.8</td>
+              <td class="text-left" rowspan="1" colspan="1">2689</td>
+              <td class="text-left" rowspan="1" colspan="1">4730</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="appendix-A.3-3">The measurements show that both cryptographic cost and key and signature sizes increase with the ML-DSA parameter set. For the evaluated ML-DSA-65 + P-256 configuration, the classical component adds relatively little to key and signature sizes compared with ML-DSA-65 alone, while verification must still perform both component checks.<a href="#appendix-A.3-3" class="pilcrow">¶</a></p>
+<p id="appendix-A.3-4">The timings exclude key generation, file I/O, X.509, CMS, RP processing, and HSM latency.<a href="#appendix-A.3-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="measured-complete-object-sizes">
+<section id="appendix-A.4">
+        <h3 id="name-measured-complete-object-si">
+<a href="#appendix-A.4" class="section-number selfRef">A.4. </a><a href="#name-measured-complete-object-si" class="section-name selfRef">Measured Complete Object Sizes</a>
+        </h3>
+<p id="appendix-A.4-1">The laboratory fixtures in <span>[<a href="#pqc-rpki-lab" class="cite xref">pqc-rpki-lab</a>]</span> were generated with OpenSSL 3.6.2 and the existing Composite provider. They contain complete DER-encoded RFC 6487-profiled certificates with <span>[<a href="#RFC3779" class="cite xref">RFC3779</a>]</span> resource extensions, CRLs, ROA CMS objects, and manifest CMS objects. CMS sizes include the embedded EE certificate, signed attributes, and signature.<a href="#appendix-A.4-1" class="pilcrow">¶</a></p>
+<table class="center" id="table-4">
+          <caption><a href="#table-4" class="selfRef">Table 4</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Suite</th>
+              <th class="text-left" rowspan="1" colspan="1">CA cert (B)</th>
+              <th class="text-left" rowspan="1" colspan="1">CRL (B)</th>
+              <th class="text-left" rowspan="1" colspan="1">ROA CMS (B)</th>
+              <th class="text-left" rowspan="1" colspan="1">Manifest CMS (B)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">RSA-2048</td>
+              <td class="text-left" rowspan="1" colspan="1">1064</td>
+              <td class="text-left" rowspan="1" colspan="1">415</td>
+              <td class="text-left" rowspan="1" colspan="1">1621</td>
+              <td class="text-left" rowspan="1" colspan="1">1743</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-44</td>
+              <td class="text-left" rowspan="1" colspan="1">4264</td>
+              <td class="text-left" rowspan="1" colspan="1">2575</td>
+              <td class="text-left" rowspan="1" colspan="1">7016</td>
+              <td class="text-left" rowspan="1" colspan="1">7138</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-65</td>
+              <td class="text-left" rowspan="1" colspan="1">5793</td>
+              <td class="text-left" rowspan="1" colspan="1">3464</td>
+              <td class="text-left" rowspan="1" colspan="1">9434</td>
+              <td class="text-left" rowspan="1" colspan="1">9556</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-65 + P-256 Composite</td>
+              <td class="text-left" rowspan="1" colspan="1">5927</td>
+              <td class="text-left" rowspan="1" colspan="1">3533</td>
+              <td class="text-left" rowspan="1" colspan="1">9637</td>
+              <td class="text-left" rowspan="1" colspan="1">9758</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="appendix-A.4-3">The laboratory manifests contain two fixed fileList entries; the repository projection instead preserves observed fileLists. The Composite sizes reflect variable-length ECDSA signatures in this capture; the projection uses the maximum signature size stated below.<a href="#appendix-A.4-3" class="pilcrow">¶</a></p>
+<p id="appendix-A.4-4">The earlier, separate certificate/CRL measurements for classical reference algorithms, ML-DSA-87, SLH-DSA, and experimental Falcon-512 are retained in <span>[<a href="#pqc-rpki-lab" class="cite xref">pqc-rpki-lab</a>]</span>. The Falcon-512 measurements use oqs-provider 0.11.0-rc1 with liboqs 0.15.0 and an experimental OID and encoding, not a final FN-DSA PKIX profile. Those supplementary measurements are not inputs to the repository and RRDP projections.<a href="#appendix-A.4-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="source-calibrated-repository-projection">
+<section id="appendix-A.5">
+        <h3 id="name-source-calibrated-repositor">
+<a href="#appendix-A.5" class="section-number selfRef">A.5. </a><a href="#name-source-calibrated-repositor" class="section-name selfRef">Source-Calibrated Repository Projection</a>
+        </h3>
+<p id="appendix-A.5-1">The Global RPKI Report for Q3 2026 <span>[<a href="#Global-RPKI-Q3-2026" class="cite xref">Global-RPKI-Q3-2026</a>]</span> reports initial-state objects (Tables 1-2), newly discovered objects (Tables 5-10), and RRDP deltas (Tables 3-4) as distinct populations. Object counts differ from VRP counts, and discovery does not establish issuance time. Rounded values and unspecified sampling instants prevent exact reconstruction of its merged multi-vantage baseline; discrepancies are documented in <span>[<a href="#pqc-rpki-lab" class="cite xref">pqc-rpki-lab</a>]</span>.<a href="#appendix-A.5-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.5-2">The byte baseline is the RPKIViews dango cache archive labeled 2026-09-30T23:49:58Z <span>[<a href="#RPKIViews-Cache-20260930" class="cite xref">RPKIViews-Cache-20260930</a>]</span>. It contains 565,166 objects totaling 1,092,318,658 DER bytes; an independent tar-header scan reproduced both totals. This is one collector's cache, not the complete merged global RPKI or a new independent RPKI validation. Objects are counted by archived path, including five trust-anchor cache certificates; embedded EE certificates are counted only within CMS objects.<a href="#appendix-A.5-2" class="pilcrow">¶</a></p>
+<table class="center" id="table-5">
+          <caption><a href="#table-5" class="selfRef">Table 5</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Object type</th>
+              <th class="text-left" rowspan="1" colspan="1">Count</th>
+              <th class="text-left" rowspan="1" colspan="1">DER MiB</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ASA (ASPA)</td>
+              <td class="text-left" rowspan="1" colspan="1">3,352</td>
+              <td class="text-left" rowspan="1" colspan="1">5.98</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">CER</td>
+              <td class="text-left" rowspan="1" colspan="1">55,089</td>
+              <td class="text-left" rowspan="1" colspan="1">82.89</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">CRL</td>
+              <td class="text-left" rowspan="1" colspan="1">54,963</td>
+              <td class="text-left" rowspan="1" colspan="1">44.18</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">MFT</td>
+              <td class="text-left" rowspan="1" colspan="1">54,963</td>
+              <td class="text-left" rowspan="1" colspan="1">140.27</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ROA</td>
+              <td class="text-left" rowspan="1" colspan="1">396,799</td>
+              <td class="text-left" rowspan="1" colspan="1">768.41</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="appendix-A.5-4">The laboratory fixtures passed certificate-chain, CRL-signature, and CMS checks, but independent cryptographic interoperability remains unverified. The projection re-encodes each observed object with the candidate key, signature, AlgorithmIdentifier, and CMS digest-attribute lengths, accounting for DER length boundaries. It preserves payloads, names, resource extensions, revoked entries, and manifest fileLists and hash lengths. Observed manifests contain 1 to 48,932 entries and CRLs up to 65,312 revoked entries. BGPsec subject public keys remain unchanged. The evaluated Composite projection uses a conservative maximum 3,381-byte encoded signature because its ECDSA component is variable length. Projected key, signature, and digest values are placeholders for size calculation; these are not valid re-signed PQ repositories.<a href="#appendix-A.5-4" class="pilcrow">¶</a></p>
+<table class="center" id="table-6">
+          <caption><a href="#table-6" class="selfRef">Table 6</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Suite</th>
+              <th class="text-left" rowspan="1" colspan="1">Full replacement GiB</th>
+              <th class="text-left" rowspan="1" colspan="1">Idealized parallel GiB</th>
+              <th class="text-left" rowspan="1" colspan="1">Mixed subtree GiB</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">RSA-2048</td>
+              <td class="text-left" rowspan="1" colspan="1">1.017</td>
+              <td class="text-left" rowspan="1" colspan="1">2.035</td>
+              <td class="text-left" rowspan="1" colspan="1">1.017</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-44</td>
+              <td class="text-left" rowspan="1" colspan="1">3.579</td>
+              <td class="text-left" rowspan="1" colspan="1">4.596</td>
+              <td class="text-left" rowspan="1" colspan="1">2.302</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-65</td>
+              <td class="text-left" rowspan="1" colspan="1">4.728</td>
+              <td class="text-left" rowspan="1" colspan="1">5.745</td>
+              <td class="text-left" rowspan="1" colspan="1">2.878</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-65 + P-256 Composite</td>
+              <td class="text-left" rowspan="1" colspan="1">4.825</td>
+              <td class="text-left" rowspan="1" colspan="1">5.842</td>
+              <td class="text-left" rowspan="1" colspan="1">2.927</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="appendix-A.5-6">Idealized parallel publication adds a complete Next Suite counterpart to the observed baseline; the RSA parallel row is a duplicate-baseline control. This is a hypothetical steady-state footprint, not an RFC 6916 phase schedule or operational deployment procedure. The Mixed Tree scenario selects the largest observed non-self-issued CA subtree with a known parent, using SKI/AKI links: 9,873 CA keys and 265,585 affected objects. The boundary certificate keeps its RSA parent signature while its subject key changes; descendant signatures change only where their issuer is in the selected subtree. These links describe a structural hierarchy; they do not establish resource/path validity or migration readiness. The selected boundary and exact byte totals are recorded in <span>[<a href="#pqc-rpki-lab" class="cite xref">pqc-rpki-lab</a>]</span>.<a href="#appendix-A.5-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="repository-transport-measurements">
+<section id="appendix-A.6">
+        <h3 id="name-repository-transport-measur">
+<a href="#appendix-A.6" class="section-number selfRef">A.6. </a><a href="#name-repository-transport-measur" class="section-name selfRef">Repository Transport Measurements</a>
+        </h3>
+<p id="appendix-A.6-1">The assessment uses observed publication activity; it does not assume ROA churn or apply a multiplier to aggregate RRDP traffic. The September delta sample comes from the RPKIViews raw RRDP archive <span>[<a href="#RPKIViews-RRDP" class="cite xref">RPKIViews-RRDP</a>]</span>. It contains 6,953 documents across 13 notification hosts, covering complete serial intervals after the first and through the last observations in the 2026-09-30 collector log. The collector log's timezone is unspecified. The sample contains 190,738 publish elements: 93,357 manifests, 93,265 CRLs, 3,499 ROAs, 545 certificates, and 72 ASPA objects. Of these publishes, 189,289 contain a replacement hash; the sample also contains 768 withdrawal elements. Repeated publishes are counted, including periodic republication and replacement.<a href="#appendix-A.6-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.6-2">A separate live snapshot sample was captured on 2026-10-27 between 00:16 and 00:19 UTC from all 39 distinct notification URLs at the selected September hosts. This October cohort is separate from the September data and does not represent a simultaneous global state. All bodies were uncompressed and matched their notifications' SHA-256, session, and serial. The 39 snapshot documents contain 569,070 publish elements and total 1,565,796,047 XML bytes. A 496-byte text TAL published in the AFRINIC snapshot is included in transfer bytes, excluded from DER totals, and held at its observed size; future TAL contents are outside this model.<a href="#appendix-A.6-2" class="pilcrow">¶</a></p>
+<table class="center" id="table-7">
+          <caption><a href="#table-7" class="selfRef">Table 7</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Suite</th>
+              <th class="text-left" rowspan="1" colspan="1">Sep 30 delta sequence GiB</th>
+              <th class="text-left" rowspan="1" colspan="1">Oct 27 snapshots once GiB</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">RSA-2048</td>
+              <td class="text-left" rowspan="1" colspan="1">1.834</td>
+              <td class="text-left" rowspan="1" colspan="1">1.458</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-44</td>
+              <td class="text-left" rowspan="1" colspan="1">2.736</td>
+              <td class="text-left" rowspan="1" colspan="1">4.888</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-65</td>
+              <td class="text-left" rowspan="1" colspan="1">3.131</td>
+              <td class="text-left" rowspan="1" colspan="1">6.426</td>
+            </tr>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">ML-DSA-65 + P-256 Composite</td>
+              <td class="text-left" rowspan="1" colspan="1">3.164</td>
+              <td class="text-left" rowspan="1" colspan="1">6.556</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="appendix-A.6-4">RSA values are captured XML body sizes; PQ values are estimates from the same observed object contents. For each publish element, the model changes its base64 length by 4*ceil(new_DER_bytes/3) - 4*ceil(old_DER_bytes/3), retaining the original URI, XML framing, whitespace, and withdrawal elements. RSA identity projections reproduce the captured byte totals exactly. Snapshot payloads were parsed, without full schema or RPKI resource/path validation.<a href="#appendix-A.6-4" class="pilcrow">¶</a></p>
+<p id="appendix-A.6-5">The snapshot column counts one copy of each selected body for bootstrap or fallback, not recurring traffic. The columns cover different dates and must not be added or used to infer a snapshot-to-delta traffic ratio. The estimates exclude notifications, compression, HTTP/TLS overhead, retries, polling, client catch-up, and snapshot fallback frequency. Neither cohort covers a full quarter or all publication points; no quarterly or all-client traffic total is inferred. Equivalent trace-backed rsync and Erik comparisons remain separate work. Collection and validation details, exact totals, and retention limits are recorded in <span>[<a href="#pqc-rpki-lab" class="cite xref">pqc-rpki-lab</a>]</span>.<a href="#appendix-A.6-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="open-measurement-tasks">
+<section id="appendix-A.7">
+        <h3 id="name-open-measurement-tasks">
+<a href="#appendix-A.7" class="section-number selfRef">A.7. </a><a href="#name-open-measurement-tasks" class="section-name selfRef">Open Measurement Tasks</a>
+        </h3>
+<p id="appendix-A.7-1">Remaining measurement tasks include:<a href="#appendix-A.7-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-A.7-2.1">
+            <p id="appendix-A.7-2.1.1">CA key rollover, publication cycle, and full validation across the evaluated configurations over a multi-CA corpus modeled on the public RPKI that can be re-signed under each evaluated configuration. The controlled single-child and synthetic 100-child results do not reproduce public RPKI topology.<a href="#appendix-A.7-2.1.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-A.7-2.2">
+            <p id="appendix-A.7-2.2.1">Full-quarter and all-publication-point RRDP transfer, snapshot fallback frequency, compression, polling-interval, and cache behavior, and equivalent trace-backed rsync and Erik comparisons. The captured XML bodies and length projections do not measure per-client WAN traffic or throughput.<a href="#appendix-A.7-2.2.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-A.7-2.3">
+            <p id="appendix-A.7-2.3.1">Long-running validator memory and cache growth. The current results record process peak RSS for bounded executions only.<a href="#appendix-A.7-2.3.1" class="pilcrow">¶</a></p>
+</li>
+          <li class="normal" id="appendix-A.7-2.4">
+            <p id="appendix-A.7-2.4.1">HSM performance and support.<a href="#appendix-A.7-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="changes-from-02">
+<section id="appendix-B">
+      <h2 id="name-changes-from-02">
+<a href="#appendix-B" class="section-number selfRef">Appendix B. </a><a href="#name-changes-from-02" class="section-name selfRef">Changes from -02</a>
+      </h2>
+<p id="appendix-B-1">This section is to be removed before publication as an RFC.<a href="#appendix-B-1" class="pilcrow">¶</a></p>
+<ul class="normal">
+<li class="normal" id="appendix-B-2.1">
+          <p id="appendix-B-2.1.1">Clarified the experimental scope and expanded the discussion of premature algorithm selection, migration costs, and operational risks.<a href="#appendix-B-2.1.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-2.2">
+          <p id="appendix-B-2.2.1">Updated the implementation status of cryptographic libraries and clarified the limitations of experimental Krill issuance, CSR/PoP processing, and RP interoperability.<a href="#appendix-B-2.2.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-2.3">
+          <p id="appendix-B-2.3.1">Replaced the synthetic repository-size model with complete-DER size projections based on an observed RPKI cache and real object structures.<a href="#appendix-B-2.3.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-2.4">
+          <p id="appendix-B-2.4.1">Added repository-footprint comparisons for idealized Parallel Publication and Mixed Tree migration using the observed CA hierarchy.<a href="#appendix-B-2.4.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-2.5">
+          <p id="appendix-B-2.5.1">Replaced synthetic transport evaluations with projections based on captured RRDP delta activity and snapshot data. Equivalent rsync and Erik Synchronization comparisons remain future work.<a href="#appendix-B-2.5.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-2.6">
+          <p id="appendix-B-2.6.1">Clarified the distinction between measured and projected results, including data coverage, assumptions, limitations, and reproducibility.<a href="#appendix-B-2.6.1" class="pilcrow">¶</a></p>
+</li>
+        <li class="normal" id="appendix-B-2.7">
+          <p id="appendix-B-2.7.1">Simplified the presentation of earlier experiments while retaining relevant RP validation results and updating the supporting experimental evidence.<a href="#appendix-B-2.7.1" class="pilcrow">¶</a></p>
+</li>
+      </ul>
+</section>
+</div>
+<div id="acknowledgements">
+<section id="appendix-C">
+      <h2 id="name-acknowledgements">
+<a href="#name-acknowledgements" class="section-name selfRef">Acknowledgements</a>
+      </h2>
+<p id="appendix-C-1">The authors thank Job Snijders, Dirk Doesburg, and Ties de Kock for their reviews and comments. The authors also thank the SIDROPS and LAMPS communities for the specifications and implementation work that make this experiment possible.<a href="#appendix-C-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-D">
+      <h2 id="name-authors-addresses">
+<a href="#name-authors-addresses" class="section-name selfRef">Authors' Addresses</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Tomoki Yoshikawa</span></div>
+<div dir="auto" class="left"><span class="org">Kyoto University</span></div>
+<div dir="auto" class="left"><span class="country-name">Japan</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:yoshikawa.tomoki.67i@st.kyoto-u.ac.jp" class="email">yoshikawa.tomoki.67i@st.kyoto-u.ac.jp</a>
+</div>
+</address>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Loganaden Velvindron</span></div>
+<div dir="auto" class="left"><span class="org">cyberstorm.mu</span></div>
+<div dir="auto" class="left"><span class="country-name">Mauritius</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:logan@cyberstorm.mu" class="email">logan@cyberstorm.mu</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>

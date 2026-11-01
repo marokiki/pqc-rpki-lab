@@ -1,1 +1,6 @@
-*.patch -whitespace
+# Preserve CSV bytes and patch context lines without whitespace-only rewrites.
+*.csv whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+*.diff -whitespace
+# These files are generated verbatim by the report and RFC renderers.
+results/global-rpki-q3-2026/RRDP.md -whitespace
+ietf/submission/*.html -whitespace

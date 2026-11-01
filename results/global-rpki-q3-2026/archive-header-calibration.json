@@ -1,0 +1,42 @@
+{
+  "method": "independent tar-header count and byte sum, without DER parsing",
+  "counts": {
+    ".cer": 55089,
+    ".crl": 54963,
+    ".mft": 54963,
+    ".roa": 396799,
+    ".asa": 3352
+  },
+  "bytes_by_type": {
+    ".cer": 86913356,
+    ".crl": 46321334,
+    ".mft": 147079186,
+    ".roa": 805737896,
+    ".asa": 6266886
+  },
+  "object_count": 565166,
+  "object_bytes": 1092318658,
+  "nonregular_object_members": [],
+  "trust_anchor_cache_members": [
+    {
+      "name": "rpki-20260930T234958Z/data/ta/afrinic/AfriNIC.cer",
+      "bytes": 1216
+    },
+    {
+      "name": "rpki-20260930T234958Z/data/ta/apnic/apnic-rpki-root-iana-origin.cer",
+      "bytes": 1222
+    },
+    {
+      "name": "rpki-20260930T234958Z/data/ta/arin/arin-rpki-ta.cer",
+      "bytes": 1143
+    },
+    {
+      "name": "rpki-20260930T234958Z/data/ta/lacnic/rta-lacnic-rpki.cer",
+      "bytes": 1166
+    },
+    {
+      "name": "rpki-20260930T234958Z/data/ta/ripe/ripe-ncc-ta.cer",
+      "bytes": 1036
+    }
+  ]
+}

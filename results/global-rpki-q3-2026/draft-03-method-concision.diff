@@ -1,0 +1,221 @@
+--- before/ietf/draft-yoshikawa-sidrops-pqc-rpki-03.md
++++ ietf/draft-yoshikawa-sidrops-pqc-rpki-03.md
+@@ -234,15 +234,13 @@
+ 
+ The evaluation considers the following dimensions: certificate and CRL size under the RPKI profile; CMS signed object size; signing and verification cost under the RP workload; impact on repository size and RRDP response-body sizes; CA key rollover and publication cycle impact; HSM support; and standardization and implementation maturity.
+ 
+-Two qualitative observations from the preliminary evidence inform the rationale in the next section.
+-First, RP workloads are dominated by verification: an RP verifies repository objects but signs nothing as part of validation.
++RP workloads are dominated by verification: an RP verifies repository objects but signs nothing as part of validation.
+ The deployed RSA profile is particularly inexpensive to verify, so increases in verification cost are especially relevant to RP operation.
+-Second, the source-calibrated projections in Appendix A put ML-DSA-44 at 3.52 times and ML-DSA-65 at 4.65 times the observed RSA DER footprint.
++The source-calibrated projections in Appendix A put ML-DSA-44 at 3.52 times and ML-DSA-65 at 4.65 times the observed RSA DER footprint.
+ These projections do not cover every candidate algorithm.
+ 
+-Appendix A gives the supporting measurements, their conditions and caveats, and the dimensions for which measurements remain unconfirmed.
+-Reproducible evidence for the experiments and the source-calibrated assessment is maintained in [pqc-rpki-lab].
+-Measured values are implementation and environment dependent and are not protocol requirements.
++Appendix A gives the measurements and open measurement tasks.
++Measured values depend on the implementation and environment; they are not protocol requirements.
+ 
+ ## Rationale for the Experimental Configurations
+ 
+@@ -392,11 +390,7 @@
+ Both experimental RPs derived the expected VRPs at each stage.
+ The Krill test used same-server issuance with CSR signature verification, not a complete external RFC 6492 provisioning exchange.
+ 
+-The primary repeated cryptographic-operation benchmarks measure key generation, signing, and verification without X.509, CMS, repository transfer, or RP processing.
+-The benchmark rows report the median and sample standard deviation from ten independent runs.
+-Additional Composite ML-DSA operation measurements and their conditions are identified separately in Appendix A.
+-Repository projections use the observed object population and complete DER encodings; RRDP projections use individual captured publish payloads and preserve XML framing.
+-Appendix A records the complete methods, results, and limitations.
++Appendix A reports the cryptographic benchmarks, complete-DER repository projections, and captured RRDP body-size projections, with their methods and limitations.
+ 
+ The two RP extensions use the same OpenSSL and Composite provider backend.
+ The experiment therefore demonstrates two RP processing paths, but not independent cryptographic interoperability or production readiness.
+@@ -420,7 +414,7 @@
+ When both runs use the same CCR version and hash algorithm, equal ROAPayloadState hashes indicate equality of those canonical VRP sets under the collision-resistance assumption of the CCR digest [I-D.ietf-sidrops-rpki-ccr].
+ The experiment parsed actual rpki-client CCR DER for the RSA, pure ML-DSA-65, Composite, and Mixed Tree repositories and recomputed every embedded collection hash.
+ All four ROAPayloadState hashes were equal, while ManifestState differed as expected.
+-TrustAnchorState was compared separately, and its values also differed because the four saved test runs used distinct TA public keys and SKIs, as confirmed by their cached TA certificates, matching test TALs, and CCR collections.
++TrustAnchorState differed because the four test runs used distinct TA public keys and SKIs.
+ This result uses one RP implementation that produced CCR output.
+ ROAPayloadState does not preserve per-VRP certificate-chain or publication provenance, so comparing the certificate chain and publication source associated with each VRP requires additional experiment records.
+ Differences in validated outputs are recorded as an experimental result rather than silently merged.
+@@ -434,7 +428,6 @@
+ It is intended to assist IETF discussion and is to be removed before publication as an RFC.
+ 
+ pqc-rpki-lab is a research prototype used for the experiments described in this document.
+-The lists below distinguish the implemented experimental coverage from remaining work.
+ 
+ Implemented:
+ 
+@@ -542,16 +535,13 @@
+ 
+ # Measurement Details
+ 
+-This appendix provides the methods, measurements, and limitations of the experiments described in this document.
+-
+ ## Experimental Artifacts and Environment
+ 
+ The designated evidence snapshot is the GitHub release `draft-yoshikawa-sidrops-pqc-rpki-03` [pqc-rpki-lab].
+-It covers the experimental code, measurement results, and supporting documentation for the cryptographic benchmarks, RP validation experiments, and repository and RRDP size assessments.
+-Source manifests record dataset origins, observation times, and hashes.
+-Large raw inputs are retained outside Git; exact snapshot reanalysis requires the retained bodies if the pinned origin URLs have expired.
+-
+-The cryptographic-operation measurements were performed on an Apple M4 running macOS 26.5.2 with OpenSSL 3.6.2 and liboqs 0.15.0.
++It includes code and results for the cryptographic, RP, repository, and RRDP experiments, with source manifests recording origins, observation times, and hashes.
++Large raw datasets are kept outside Git; exact snapshot reanalysis requires the retained bodies if the source URLs have expired.
++
++Cryptographic benchmarks used an Apple M4 running macOS 26.5.2, OpenSSL 3.6.2, and liboqs 0.15.0.
+ The primary algorithm benchmark was compiled with optimization level -O2, while the Composite ML-DSA benchmark was compiled with -O3.
+ The latter implements revision 19 of [I-D.ietf-lamps-pq-composite-sigs].
+ 
+@@ -560,9 +550,6 @@
+ The RSA, pure ML-DSA-65, Composite, and Mixed Tree repositories all produced the expected VRPs.
+ 
+ ## Repeated Cryptographic Operation Timing
+-
+-This experiment compares the raw signing and verification cost of the evaluated algorithms independently of X.509, CMS, repository transfer, and RP processing.
+-In particular, verification performance is relevant to RPs, which repeatedly validate large numbers of repository objects.
+ 
+ The table reports the median and sample standard deviation across ten repetitions of 1,000 operations on a fixed 32-byte message.
+ Values are wall-clock seconds per 1,000 operations.
+@@ -581,19 +568,15 @@
+ Signing shows a different pattern: ML-DSA-44 is faster than RSA-2048, while ML-DSA-65 and ML-DSA-87 are somewhat slower.
+ The Ed25519 verification samples show substantial variability, as reflected in the reported standard deviation.
+ 
+-These measurements isolate cryptographic operations and therefore do not represent complete RP-validation performance.
+-Algorithm selection should assess verification cost separately from signing cost because RP workloads are dominated by verification.
++These are primitive-operation timings, not complete RP-validation timings.
+ 
+ The benchmark also covers 512-byte, 2-KiB, and 8-KiB messages and records key-generation timing, variance, and process peak RSS.
+-The evidence snapshot retains those raw results; they are not duplicated here.
++Those raw results are retained in [pqc-rpki-lab].
+ 
+ ## Composite ML-DSA Operation Measurements
+ 
+-This experiment measures the additional cryptographic cost of combining ML-DSA with a classical signature algorithm in the Composite construction.
+-It compares signing and verification time, public-key size, and signature size across the evaluated Composite configurations.
+-
+-The following single-run measurements execute 100,000 signing operations and 100,000 verification operations for each configuration.
+-They include message-representative construction, ML-DSA context binding, both component signature operations, raw key and signature concatenation, and verification of all component signatures.
++Each configuration was measured in one run of 100,000 signing and 100,000 verification operations.
++The timings include message-representative construction, ML-DSA context binding, both component signature operations, raw key and signature concatenation, and verification of all component signatures.
+ The ML-DSA-87 configuration uses P-384 because revision 19 of [I-D.ietf-lamps-pq-composite-sigs] does not define ML-DSA-87 with P-256.
+ 
+ | Composite | Sign (s/100k) | Verify (s/100k) | PubKey (B) | Mean sig (B) |
+@@ -605,8 +588,7 @@
+ The measurements show that both cryptographic cost and key and signature sizes increase with the ML-DSA parameter set.
+ For the evaluated ML-DSA-65 + P-256 configuration, the classical component adds relatively little to key and signature sizes compared with ML-DSA-65 alone, while verification must still perform both component checks.
+ 
+-These measurements isolate the Composite cryptographic operations.
+-They exclude key generation, file I/O, X.509, CMS, RP processing, and HSM latency.
++The timings exclude key generation, file I/O, X.509, CMS, RP processing, and HSM latency.
+ 
+ ## Measured Complete Object Sizes
+ 
+@@ -621,27 +603,23 @@
+ | ML-DSA-65 | 5793 | 3464 | 9434 | 9556 |
+ | ML-DSA-65 + P-256 Composite | 5927 | 3533 | 9637 | 9758 |
+ 
+-The laboratory manifests contain two fixed fileList entries; these sizes are not field-size distributions from the observed cache.
+-The global projection preserves each observed manifest's actual contents instead of substituting the laboratory fixture.
+-Composite ECDSA signatures are variable length, so the measured Composite sizes describe this capture; the projection uses the maximum encoded signature size stated below.
++The laboratory manifests contain two fixed fileList entries; the global projection instead preserves observed fileLists.
++The Composite sizes reflect variable-length ECDSA signatures in this capture; the projection uses the maximum signature size stated below.
+ 
+ The earlier, separate certificate/CRL measurements for classical reference algorithms, ML-DSA-87, SLH-DSA, and experimental Falcon-512 are retained in [pqc-rpki-lab].
+ The Falcon-512 measurements use oqs-provider 0.11.0-rc1 with liboqs 0.15.0 and an experimental OID and encoding, not a final FN-DSA PKIX profile.
+-Those supplementary runs do not supply the object rows for the global repository/RRDP projections and should not be conflated with the complete-object capture above.
++Those supplementary measurements are not inputs to the global projections.
+ 
+ ## Source-Calibrated Repository Projection
+ 
+-The Global RPKI Report for Q3 2026 [Global-RPKI-Q3-2026] provides the population and publication-activity context.
+-Its initial-state object counts and sizes (Tables 1-2), newly discovered objects (Tables 5-10), and RRDP delta statistics (Tables 3-4) describe different populations.
+-Unique VRPs are not repository-object counts, and object discoveries are not issuance events.
+-Rounded values and unspecified initial-state sampling instants prevent exact reconstruction of the report's merged multi-vantage baseline.
+-Source discrepancies are recorded without adjusting object counts or sizes to force agreement.
++The Global RPKI Report for Q3 2026 [Global-RPKI-Q3-2026] reports initial-state objects (Tables 1-2), newly discovered objects (Tables 5-10), and RRDP deltas (Tables 3-4) as distinct populations.
++Object counts differ from VRP counts, and discovery does not establish issuance time.
++Rounded values and unspecified sampling instants prevent exact reconstruction of its merged multi-vantage baseline; discrepancies are documented in [pqc-rpki-lab].
+ 
+ The byte baseline is the RPKIViews dango cache archive labeled 2026-09-30T23:49:58Z [RPKIViews-Cache-20260930].
+ It contains 565,166 objects totaling 1,092,318,658 DER bytes; an independent tar-header scan reproduced both totals.
+ This is one collector's cache, not the complete merged global RPKI or a new independent RPKI validation.
+ Objects are counted by archived path, including five trust-anchor cache certificates; embedded EE certificates are counted only within CMS objects.
+-MiB and GiB in the following tables mean 2^20 and 2^30 bytes, respectively.
+ 
+ | Object type | Count | DER MiB |
+ |---|---|---|
+@@ -651,10 +629,9 @@
+ | MFT | 54,963 | 140.27 |
+ | ROA | 396,799 | 768.41 |
+ 
+-Complete certificate, CRL, ROA, and manifest fixtures for the four evaluated suites were generated with the existing OpenSSL 3.6.2 and Composite backend.
+-Certificate-chain, CRL-signature, and CMS checks passed; this is laboratory cryptographic verification, not independent RP interoperability.
+-The projection then re-encodes each observed object after changing algorithm-dependent key, signature, AlgorithmIdentifier, and CMS digest-attribute lengths.
+-It retains actual payloads, names, resource extensions, CRL revoked entries, and manifest fileList filenames, counts, and hash lengths, including DER length-boundary changes.
++The laboratory fixtures passed certificate-chain, CRL-signature, and CMS checks; independent RP interoperability remains unverified.
++The projection re-encodes each observed object with the candidate key, signature, AlgorithmIdentifier, and CMS digest-attribute lengths, accounting for DER length boundaries.
++It preserves payloads, names, resource extensions, revoked entries, and manifest fileLists and hash lengths.
+ Observed manifests contain 1 to 48,932 entries and CRLs up to 65,312 revoked entries.
+ BGPsec subject public keys remain unchanged.
+ The evaluated Composite projection uses a conservative maximum 3,381-byte encoded signature because its ECDSA component is variable length.
+@@ -679,23 +656,18 @@
+ The assessment uses observed publication activity; it does not assume ROA churn or apply a multiplier to aggregate RRDP traffic.
+ The September delta sample comes from the RPKIViews raw RRDP archive [RPKIViews-RRDP].
+ It contains 6,953 documents across 13 notification hosts, covering complete serial intervals after the first and through the last observations in the 2026-09-30 collector log.
+-The log does not specify its timezone; recorded timestamps are preserved without assigning one.
+-This covers neither the full quarter nor all publication points.
++The collector log's timezone is unspecified.
+ The sample contains 190,738 publish elements: 93,357 manifests, 93,265 CRLs, 3,499 ROAs, 545 certificates, and 72 ASPA objects.
+ Of these publishes, 189,289 contain a replacement hash; the sample also contains 768 withdrawal elements.
+-Repeated publications in different deltas are counted, so the results reflect observed periodic republication and replacement.
++Repeated publishes are counted, including periodic republication and replacement.
+ 
+ For broader context, Table 7 of the Global RPKI Report for Q3 2026 [Global-RPKI-Q3-2026] reports 8,493,374 newly discovered manifests, 8,487,012 CRLs, and 532,103 ROAs.
+ It also reports 49,000 certificates and 4,137 ASPA objects.
+ These quarterly discovery counts describe a different population from RRDP publish events and are not used in the transfer-size projections.
+ 
+ A separate live snapshot sample was captured on 2026-10-27 between 00:16 and 00:19 UTC from all 39 distinct notification URLs at the selected September hosts.
+-One endpoint required a second network vantage after the primary connection was reset.
+-This is a dated October cohort, not a September snapshot or a simultaneous global state.
+-For example, the archived September end-of-day RIPE snapshot reference now returns HTTP 404, and its hash was absent from the inspected session archive listing.
+-No current snapshot is substituted for a missing historical measurement.
+-Every captured snapshot body matched its notification's SHA-256, session, and serial.
+-Requests used Accept-Encoding: identity, and the recorded bodies were uncompressed.
++This October cohort is separate from the September data and does not represent a simultaneous global state.
++All bodies were uncompressed and matched their notifications' SHA-256, session, and serial.
+ The 39 snapshot documents contain 569,070 publish elements and total 1,565,796,047 XML bytes.
+ A 496-byte text TAL published in the AFRINIC snapshot is included in transfer bytes, excluded from DER totals, and held at its observed size; future TAL contents are outside this model.
+ 
+@@ -709,20 +681,18 @@
+ RSA values are captured XML body sizes; PQ values are estimates from the same observed object contents.
+ For each publish element, the model changes its base64 length by 4*ceil(new_DER_bytes/3) - 4*ceil(old_DER_bytes/3), retaining the original URI, XML framing, whitespace, and withdrawal elements.
+ RSA identity projections reproduce the captured byte totals exactly.
+-Every snapshot publish payload was parsed; duplicate URIs, replacement hashes, and withdrawals in snapshot files are rejected.
+-This does not establish full schema conformance, resource/path validity, or a validated state chain under TALs.
+-
+-The snapshot column counts one copy of each selected snapshot body, a bootstrap or fallback payload; it is not a recurring traffic total.
++Snapshot payloads were parsed, without full schema or RPKI resource/path validation.
++
++The snapshot column counts one copy of each selected body for bootstrap or fallback, not recurring traffic.
+ The columns cover different dates and must not be added or used to infer a snapshot-to-delta traffic ratio.
+-Notification bodies are recorded separately and are excluded from this table; future PQ notification size is not modeled.
+-Compression, HTTP/TLS overhead, retries, polling, client catch-up, and snapshot fallback frequency remain unmeasured.
++The estimates exclude notifications, compression, HTTP/TLS overhead, retries, polling, client catch-up, and snapshot fallback frequency.
++Neither cohort covers a full quarter or all publication points; no quarterly or all-client traffic total is inferred.
+ Equivalent trace-backed rsync and Erik comparisons remain separate work.
+-No quarterly or all-client transfer total is inferred from these samples.
+-The scripts, endpoint coverage, capture times, hashes, exact byte totals, and retention limitations are recorded in [pqc-rpki-lab].
++Collection and validation details, exact totals, and retention limits are recorded in [pqc-rpki-lab].
+ 
+ ## Open Measurement Tasks
+ 
+-The following dimensions remain open measurement tasks; this document does not report confirmed measurements for them:
++Remaining measurement tasks include:
+ 
+ * CA key rollover, publication cycle, and full validation across the evaluated configurations over a multi-CA corpus modeled on the public RPKI that can be re-signed under each evaluated configuration.
+   The controlled single-child and synthetic 100-child results do not reproduce public RPKI topology.

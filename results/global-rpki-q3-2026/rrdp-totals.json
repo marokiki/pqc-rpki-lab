@@ -1,0 +1,23 @@
+{
+  "classification": "observed archive documents, not per-client network traffic",
+  "errors": [],
+  "method": "preserve original XML framing, URIs, whitespace, and withdrawal elements; replace base64 payload length using re-encoded complete DER lengths",
+  "projections": {
+    "delta_composite-mldsa65-p256": 3397062374,
+    "delta_ml-dsa-44": 2937567726,
+    "delta_ml-dsa-65": 3361818058,
+    "delta_rsa": 1969363778
+  },
+  "status": "estimated",
+  "totals": {
+    "delta_documents": 6953,
+    "delta_publish_asa": 72,
+    "delta_publish_cer": 545,
+    "delta_publish_crl": 93265,
+    "delta_publish_mft": 93357,
+    "delta_publish_roa": 3499,
+    "delta_replacement_publishes": 189289,
+    "delta_withdrawals": 768,
+    "delta_xml_bytes": 1969363778
+  }
+}

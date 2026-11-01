@@ -1,4 +1,5 @@
 import unittest
+import subprocess
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -6,9 +7,11 @@ from pathlib import Path
 class DraftSubmissionTest(unittest.TestCase):
     def setUp(self):
         root_dir = Path(__file__).resolve().parents[1]
-        self.source_02 = (
-            root_dir / "ietf/draft-yoshikawa-sidrops-pqc-rpki-02.md"
-        ).read_text()
+        self.source_02 = subprocess.check_output(
+            ["git", "show", "3cddcf7339eaa46fc5c8d2d9a03764194a9ca80a:"
+             "ietf/draft-yoshikawa-sidrops-pqc-rpki-02.md"],
+            cwd=root_dir, text=True,
+        )
         self.root = ET.parse(
             root_dir / "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-00.xml"
         ).getroot()

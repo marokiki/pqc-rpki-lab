@@ -1,0 +1,5 @@
+suite,excluded_object_bytes,full_replacement_bytes,idealized_parallel_publication_bytes,mixed_affected_objects,mixed_tree_bytes,status
+composite-mldsa65-p256,0,5180716047,6273034705,265585,3142342242,estimated
+ml-dsa-44,0,3842631184,4934949842,265585,2471583884,estimated
+ml-dsa-65,0,5076188753,6168507411,265585,3089928255,estimated
+rsa,0,1092318658,2184637316,265585,1092318658,estimated

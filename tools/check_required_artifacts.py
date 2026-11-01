@@ -12,11 +12,13 @@ REQUIRED_FILES = (
     "Makefile",
     ".gitignore",
     "pyproject.toml",
-    "ietf/draft-yoshikawa-sidrops-pqc-rpki-01.md",
+    "ietf/draft-yoshikawa-sidrops-pqc-rpki.md",
     "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-01.xml",
-    "ietf/draft-yoshikawa-sidrops-pqc-rpki-02.md",
     "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-02.xml",
     "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-02.txt",
+    "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.xml",
+    "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.txt",
+    "results/global-rpki-q3-2026/source-manifest.json",
     "docs/draft-01-completion-status.md",
     "docs/draft-01-remaining-tasks.md",
     "docs/implementation-status.md",
@@ -97,7 +99,12 @@ def tracked_deletions(root: Path = ROOT) -> list[str]:
         capture_output=True,
         text=True,
     )
-    return [line for line in process.stdout.splitlines() if line]
+    # Versioned Markdown was deliberately consolidated into the shared source.
+    archived = {
+        f"ietf/draft-yoshikawa-sidrops-pqc-rpki-{revision}.md"
+        for revision in ("00", "01", "02", "03")
+    }
+    return [line for line in process.stdout.splitlines() if line and line not in archived]
 
 
 def main() -> int:

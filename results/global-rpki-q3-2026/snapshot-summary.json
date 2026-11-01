@@ -1,0 +1,844 @@
+{
+  "archive_bytes": 601419431,
+  "archive_sha256": "68dee009a74835cb2e0dae138a5764f9bb32f8552461e4a07ab2bd47c8fb0322",
+  "by_location": {
+    "_trust_anchors": {
+      "bytes": 5783,
+      "count": 5,
+      "types": {
+        "cer": 5
+      }
+    },
+    "afrinic.net": {
+      "bytes": 31249323,
+      "count": 16605,
+      "types": {
+        "cer": 1437,
+        "crl": 1438,
+        "mft": 1438,
+        "roa": 12292
+      }
+    },
+    "akane.maru.co.jp": {
+      "bytes": 56979,
+      "count": 36,
+      "types": {
+        "asa": 2,
+        "crl": 10,
+        "mft": 10,
+        "roa": 14
+      }
+    },
+    "amazonaws.com": {
+      "bytes": 45917454,
+      "count": 21523,
+      "types": {
+        "asa": 1,
+        "crl": 28,
+        "mft": 28,
+        "roa": 21466
+      }
+    },
+    "apnic.net": {
+      "bytes": 78508949,
+      "count": 47037,
+      "types": {
+        "asa": 437,
+        "cer": 9358,
+        "crl": 9266,
+        "mft": 9266,
+        "roa": 18710
+      }
+    },
+    "arin.net": {
+      "bytes": 526719023,
+      "count": 244065,
+      "types": {
+        "asa": 635,
+        "cer": 9857,
+        "crl": 9681,
+        "mft": 9681,
+        "roa": 214211
+      }
+    },
+    "ca.nat.moe": {
+      "bytes": 202068,
+      "count": 101,
+      "types": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 99
+      }
+    },
+    "ca.rg.net": {
+      "bytes": 19886,
+      "count": 12,
+      "types": {
+        "cer": 2,
+        "crl": 1,
+        "mft": 1,
+        "roa": 8
+      }
+    },
+    "chloe.sobornost.net": {
+      "bytes": 13397,
+      "count": 9,
+      "types": {
+        "cer": 2,
+        "crl": 1,
+        "mft": 1,
+        "roa": 5
+      }
+    },
+    "cloudie-repo.rpki.app": {
+      "bytes": 817333,
+      "count": 432,
+      "types": {
+        "cer": 30,
+        "crl": 5,
+        "mft": 5,
+        "roa": 392
+      }
+    },
+    "fiti.net.cn": {
+      "bytes": 7533868,
+      "count": 4180,
+      "types": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 4178
+      }
+    },
+    "idnic.net": {
+      "bytes": 26986681,
+      "count": 16103,
+      "types": {
+        "asa": 1,
+        "cer": 2310,
+        "crl": 2315,
+        "mft": 2315,
+        "roa": 9162
+      }
+    },
+    "krill.47272.net": {
+      "bytes": 452809,
+      "count": 209,
+      "types": {
+        "asa": 1,
+        "cer": 6,
+        "crl": 4,
+        "mft": 4,
+        "roa": 194
+      }
+    },
+    "krill.accuristechnologies.ca": {
+      "bytes": 105711,
+      "count": 52,
+      "types": {
+        "asa": 3,
+        "cer": 4,
+        "crl": 3,
+        "mft": 3,
+        "roa": 39
+      }
+    },
+    "krill.byhill.de": {
+      "bytes": 12678,
+      "count": 8,
+      "types": {
+        "asa": 1,
+        "crl": 2,
+        "mft": 2,
+        "roa": 3
+      }
+    },
+    "krill.cxy.hk": {
+      "bytes": 17054,
+      "count": 12,
+      "types": {
+        "asa": 1,
+        "crl": 4,
+        "mft": 4,
+        "roa": 3
+      }
+    },
+    "krill.dacs.utwente.nl": {
+      "bytes": 17354,
+      "count": 8,
+      "types": {
+        "asa": 2,
+        "crl": 1,
+        "mft": 1,
+        "roa": 4
+      }
+    },
+    "krill.dispaisy.systems": {
+      "bytes": 66896,
+      "count": 37,
+      "types": {
+        "asa": 2,
+        "cer": 1,
+        "crl": 4,
+        "mft": 4,
+        "roa": 26
+      }
+    },
+    "krill.peering.ee.columbia.edu": {
+      "bytes": 12605,
+      "count": 7,
+      "types": {
+        "asa": 1,
+        "cer": 2,
+        "crl": 1,
+        "mft": 1,
+        "roa": 2
+      }
+    },
+    "krill.peravix.group": {
+      "bytes": 4223,
+      "count": 3,
+      "types": {
+        "asa": 1,
+        "crl": 1,
+        "mft": 1
+      }
+    },
+    "krill.rg.net": {
+      "bytes": 9706,
+      "count": 6,
+      "types": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 4
+      }
+    },
+    "krill.rpki-measurement.site": {
+      "bytes": 17849,
+      "count": 5,
+      "types": {
+        "cer": 1,
+        "crl": 2,
+        "mft": 2
+      }
+    },
+    "krill.starlamp.su": {
+      "bytes": 4597,
+      "count": 3,
+      "types": {
+        "asa": 1,
+        "crl": 1,
+        "mft": 1
+      }
+    },
+    "krill.sy5.nsw.au.infininet.com.au": {
+      "bytes": 43912,
+      "count": 23,
+      "types": {
+        "asa": 1,
+        "crl": 1,
+        "mft": 1,
+        "roa": 20
+      }
+    },
+    "lacnic.net": {
+      "bytes": 51706076,
+      "count": 27693,
+      "types": {
+        "asa": 9,
+        "cer": 3444,
+        "crl": 3443,
+        "mft": 3443,
+        "roa": 17354
+      }
+    },
+    "nic.ad.jp": {
+      "bytes": 14061392,
+      "count": 8374,
+      "types": {
+        "cer": 707,
+        "crl": 711,
+        "mft": 711,
+        "roa": 6245
+      }
+    },
+    "paas.ripe.net": {
+      "bytes": 21165562,
+      "count": 9869,
+      "types": {
+        "asa": 104,
+        "cer": 163,
+        "crl": 331,
+        "mft": 331,
+        "roa": 8940
+      }
+    },
+    "r.magellan.ipxo.com": {
+      "bytes": 794909,
+      "count": 370,
+      "types": {
+        "crl": 5,
+        "mft": 5,
+        "roa": 360
+      }
+    },
+    "registro.br": {
+      "bytes": 55819395,
+      "count": 29926,
+      "types": {
+        "asa": 139,
+        "cer": 3619,
+        "crl": 3580,
+        "mft": 3580,
+        "roa": 19008
+      }
+    },
+    "repo.nkn.in": {
+      "bytes": 5972,
+      "count": 4,
+      "types": {
+        "asa": 1,
+        "crl": 1,
+        "mft": 1,
+        "roa": 1
+      }
+    },
+    "repo.rpki.space": {
+      "bytes": 175173,
+      "count": 97,
+      "types": {
+        "asa": 1,
+        "cer": 3,
+        "crl": 6,
+        "mft": 6,
+        "roa": 81
+      }
+    },
+    "repo2.nkn.in": {
+      "bytes": 30040,
+      "count": 18,
+      "types": {
+        "asa": 5,
+        "cer": 2,
+        "crl": 2,
+        "mft": 2,
+        "roa": 7
+      }
+    },
+    "ripe.net": {
+      "bytes": 196399938,
+      "count": 121800,
+      "types": {
+        "asa": 1936,
+        "cer": 23089,
+        "crl": 22809,
+        "mft": 22809,
+        "roa": 51157
+      }
+    },
+    "rov-measurements.nlnetlabs.net": {
+      "bytes": 2386,
+      "count": 2,
+      "types": {
+        "crl": 1,
+        "mft": 1
+      }
+    },
+    "rpki-01.pdxnet.uk": {
+      "bytes": 177240,
+      "count": 90,
+      "types": {
+        "asa": 3,
+        "crl": 6,
+        "mft": 6,
+        "roa": 75
+      }
+    },
+    "rpki-pp.com": {
+      "bytes": 4553,
+      "count": 3,
+      "types": {
+        "cer": 1,
+        "crl": 1,
+        "mft": 1
+      }
+    },
+    "rpki-repo.as207960.net": {
+      "bytes": 189710,
+      "count": 129,
+      "types": {
+        "asa": 3,
+        "cer": 2,
+        "crl": 44,
+        "mft": 44,
+        "roa": 36
+      }
+    },
+    "rpki-rsync.mnihyc.com": {
+      "bytes": 4258,
+      "count": 3,
+      "types": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 1
+      }
+    },
+    "rpki-rsync.warpnet.xyz": {
+      "bytes": 36353,
+      "count": 20,
+      "types": {
+        "asa": 2,
+        "crl": 1,
+        "mft": 1,
+        "roa": 16
+      }
+    },
+    "rpki.admin.freerangecloud.com": {
+      "bytes": 465562,
+      "count": 245,
+      "types": {
+        "crl": 6,
+        "mft": 6,
+        "roa": 233
+      }
+    },
+    "rpki.apernet.io": {
+      "bytes": 45817,
+      "count": 20,
+      "types": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 18
+      }
+    },
+    "rpki.athene-center.net": {
+      "bytes": 9956,
+      "count": 6,
+      "types": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 4
+      }
+    },
+    "rpki.axivora.net": {
+      "bytes": 102454,
+      "count": 56,
+      "types": {
+        "asa": 1,
+        "cer": 3,
+        "crl": 4,
+        "mft": 4,
+        "roa": 44
+      }
+    },
+    "rpki.blw.moe": {
+      "bytes": 10351,
+      "count": 7,
+      "types": {
+        "asa": 1,
+        "crl": 2,
+        "mft": 2,
+        "roa": 2
+      }
+    },
+    "rpki.cc": {
+      "bytes": 47695,
+      "count": 28,
+      "types": {
+        "cer": 2,
+        "crl": 4,
+        "mft": 4,
+        "roa": 18
+      }
+    },
+    "rpki.gns.net.br": {
+      "bytes": 13493,
+      "count": 8,
+      "types": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 6
+      }
+    },
+    "rpki.komorebi.network": {
+      "bytes": 29598,
+      "count": 18,
+      "types": {
+        "asa": 2,
+        "cer": 2,
+        "crl": 3,
+        "mft": 3,
+        "roa": 8
+      }
+    },
+    "rpki.multacom.com": {
+      "bytes": 24412,
+      "count": 16,
+      "types": {
+        "crl": 5,
+        "mft": 5,
+        "roa": 6
+      }
+    },
+    "rpki.n3solucoes.com.br": {
+      "bytes": 6277,
+      "count": 4,
+      "types": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 2
+      }
+    },
+    "rpki.nellicus.net": {
+      "bytes": 35843,
+      "count": 21,
+      "types": {
+        "asa": 2,
+        "crl": 4,
+        "mft": 4,
+        "roa": 11
+      }
+    },
+    "rpki.net.baiyuexiao.cn": {
+      "bytes": 6856,
+      "count": 5,
+      "types": {
+        "asa": 1,
+        "crl": 2,
+        "mft": 2
+      }
+    },
+    "rpki.owl.net": {
+      "bytes": 49560,
+      "count": 28,
+      "types": {
+        "crl": 2,
+        "mft": 2,
+        "roa": 24
+      }
+    },
+    "rpki.pudu.be": {
+      "bytes": 39390,
+      "count": 24,
+      "types": {
+        "asa": 3,
+        "crl": 4,
+        "mft": 4,
+        "roa": 13
+      }
+    },
+    "rpki.rand.apnic.net": {
+      "bytes": 25339,
+      "count": 8,
+      "types": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 6
+      }
+    },
+    "rpki.roa.net": {
+      "bytes": 613012,
+      "count": 332,
+      "types": {
+        "asa": 1,
+        "crl": 16,
+        "mft": 16,
+        "roa": 299
+      }
+    },
+    "rpki.sailx.co": {
+      "bytes": 51544,
+      "count": 27,
+      "types": {
+        "crl": 2,
+        "mft": 2,
+        "roa": 23
+      }
+    },
+    "rpki.satcom.com.br": {
+      "bytes": 7998,
+      "count": 5,
+      "types": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 3
+      }
+    },
+    "rpki.sub.apnic.net": {
+      "bytes": 546543,
+      "count": 291,
+      "types": {
+        "asa": 6,
+        "cer": 2,
+        "crl": 19,
+        "mft": 19,
+        "roa": 245
+      }
+    },
+    "rpki.sunoaki.net": {
+      "bytes": 80681,
+      "count": 36,
+      "types": {
+        "asa": 3,
+        "cer": 3,
+        "crl": 2,
+        "mft": 2,
+        "roa": 26
+      }
+    },
+    "rpki.tools.westconnect.ca": {
+      "bytes": 39507,
+      "count": 20,
+      "types": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 18
+      }
+    },
+    "rpki.xindi.eu": {
+      "bytes": 45016,
+      "count": 25,
+      "types": {
+        "asa": 4,
+        "crl": 1,
+        "mft": 1,
+        "roa": 19
+      }
+    },
+    "rps.arin.net": {
+      "bytes": 5565329,
+      "count": 2706,
+      "types": {
+        "asa": 29,
+        "cer": 38,
+        "crl": 125,
+        "mft": 125,
+        "roa": 2389
+      }
+    },
+    "rps.cnnic.cn": {
+      "bytes": 17848884,
+      "count": 9045,
+      "types": {
+        "cer": 595,
+        "crl": 618,
+        "mft": 618,
+        "roa": 7214
+      }
+    },
+    "rrdp.as214749.net": {
+      "bytes": 16232,
+      "count": 11,
+      "types": {
+        "asa": 2,
+        "cer": 1,
+        "crl": 3,
+        "mft": 3,
+        "roa": 2
+      }
+    },
+    "rsync-ipv4.prefixlogic.com": {
+      "bytes": 7244,
+      "count": 3,
+      "types": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 1
+      }
+    },
+    "rsync-rpki.inara.pk": {
+      "bytes": 8260,
+      "count": 5,
+      "types": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 3
+      }
+    },
+    "rsync.cernet.net": {
+      "bytes": 182270,
+      "count": 63,
+      "types": {
+        "cer": 2,
+        "crl": 4,
+        "mft": 4,
+        "roa": 53
+      }
+    },
+    "rsync.ip.deals": {
+      "bytes": 2818,
+      "count": 2,
+      "types": {
+        "crl": 1,
+        "mft": 1
+      }
+    },
+    "rsync.krill.clnexus.dev": {
+      "bytes": 15049,
+      "count": 10,
+      "types": {
+        "asa": 2,
+        "crl": 3,
+        "mft": 3,
+        "roa": 2
+      }
+    },
+    "rsync.krill.nlnetlabs.nl": {
+      "bytes": 30094,
+      "count": 17,
+      "types": {
+        "cer": 1,
+        "crl": 1,
+        "mft": 1,
+        "roa": 14
+      }
+    },
+    "rsync.netplanety.com.br": {
+      "bytes": 8094,
+      "count": 5,
+      "types": {
+        "asa": 1,
+        "crl": 1,
+        "mft": 1,
+        "roa": 2
+      }
+    },
+    "rsync.prefixlogic.com": {
+      "bytes": 1596145,
+      "count": 3,
+      "types": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 1
+      }
+    },
+    "rsync.rp.ki": {
+      "bytes": 165829,
+      "count": 91,
+      "types": {
+        "crl": 5,
+        "mft": 5,
+        "roa": 81
+      }
+    },
+    "rsync.rpki.tianhai.link": {
+      "bytes": 35991,
+      "count": 22,
+      "types": {
+        "asa": 1,
+        "crl": 4,
+        "mft": 4,
+        "roa": 13
+      }
+    },
+    "sakuya.nat.moe": {
+      "bytes": 6122,
+      "count": 4,
+      "types": {
+        "cer": 2,
+        "crl": 1,
+        "mft": 1
+      }
+    },
+    "twnic.tw": {
+      "bytes": 5164298,
+      "count": 3070,
+      "types": {
+        "cer": 393,
+        "crl": 397,
+        "mft": 397,
+        "roa": 1883
+      }
+    }
+  },
+  "classification": "one validated-cache snapshot, not the report merged global dataset",
+  "hierarchy": {
+    "ca_certificates": 55087,
+    "ca_keys_with_missing_parent": 5,
+    "migrated_ca_keys": 9873,
+    "mixed_selection": "largest observed non-self-issued CA subtree with a known parent; hypothetical scenario",
+    "selected_ca_ski": "62477e1fd9e525d0d7a2bb63d914e14ee454a364",
+    "selected_ca_uri": "rsync://rpki.arin.net/repository/arin-rpki-ta/5e4a23ea-e80a-403e-b08c-2171da2157d3.cer",
+    "selected_parent_ski": "13d4f24f9a9fcd98db36f930631808c88f3974bc"
+  },
+  "object_bytes": 1092318658,
+  "object_count": 565166,
+  "object_sizes": {
+    "asa": {
+      "bytes": 6266886,
+      "count": 3352,
+      "max_bytes": 3148,
+      "mean_bytes": 1869.5960620525059,
+      "median_bytes": 1804.0,
+      "min_bytes": 1685
+    },
+    "cer": {
+      "bytes": 86913356,
+      "count": 55089,
+      "max_bytes": 103178,
+      "mean_bytes": 1577.689847337944,
+      "median_bytes": 1537,
+      "min_bytes": 898
+    },
+    "crl": {
+      "bytes": 46321334,
+      "count": 54963,
+      "max_bytes": 2547352,
+      "mean_bytes": 842.7730291286865,
+      "median_bytes": 510,
+      "min_bytes": 409
+    },
+    "mft": {
+      "bytes": 147079186,
+      "count": 54963,
+      "max_bytes": 3867843,
+      "mean_bytes": 2675.967214307807,
+      "median_bytes": 2072,
+      "min_bytes": 1786
+    },
+    "roa": {
+      "bytes": 805737896,
+      "count": 396799,
+      "max_bytes": 198631,
+      "mean_bytes": 2030.5945730710007,
+      "median_bytes": 2125,
+      "min_bytes": 1700
+    }
+  },
+  "parse_errors": [],
+  "projections": {
+    "composite-mldsa65-p256": {
+      "excluded_object_bytes": 0,
+      "full_replacement_bytes": 5180716047,
+      "idealized_parallel_publication_bytes": 6273034705,
+      "mixed_affected_objects": 265585,
+      "mixed_tree_bytes": 3142342242,
+      "status": "estimated"
+    },
+    "ml-dsa-44": {
+      "excluded_object_bytes": 0,
+      "full_replacement_bytes": 3842631184,
+      "idealized_parallel_publication_bytes": 4934949842,
+      "mixed_affected_objects": 265585,
+      "mixed_tree_bytes": 2471583884,
+      "status": "estimated"
+    },
+    "ml-dsa-65": {
+      "excluded_object_bytes": 0,
+      "full_replacement_bytes": 5076188753,
+      "idealized_parallel_publication_bytes": 6168507411,
+      "mixed_affected_objects": 265585,
+      "mixed_tree_bytes": 3089928255,
+      "status": "estimated"
+    },
+    "rsa": {
+      "excluded_object_bytes": 0,
+      "full_replacement_bytes": 1092318658,
+      "idealized_parallel_publication_bytes": 2184637316,
+      "mixed_affected_objects": 265585,
+      "mixed_tree_bytes": 1092318658,
+      "status": "estimated"
+    }
+  },
+  "skipped_nonobject_members": {},
+  "snapshot_name": "rpki-20260930T234958Z.tgz"
+}

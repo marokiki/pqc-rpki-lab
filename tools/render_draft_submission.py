@@ -2,14 +2,16 @@
 """Render the PQC RPKI markdown draft into submission helper artifacts.
 
 This is intentionally small and dependency-free.  It produces RFCXML v3 that is
-well-formed and suitable for xml2rfc/datatracker validation, plus a plain-text
-review copy.  It is not a full mmark implementation.
+suitable for validation and TXT/HTML/PDF rendering with xml2rfc.
+It is not a full mmark implementation.
 """
 
 from __future__ import annotations
 
 import argparse
+import copy
 import re
+import subprocess
 import xml.etree.ElementTree as ET
 from dataclasses import dataclass, field
 from datetime import date
@@ -17,10 +19,11 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "ietf" / "draft-yoshikawa-sidrops-pqc-rpki-01.md"
+SOURCE = ROOT / "ietf" / "draft-yoshikawa-sidrops-pqc-rpki.md"
 OUTDIR = ROOT / "ietf" / "submission"
 BIBXML_DIR = ROOT / "ietf" / "bibxml"
-DOCNAME = "draft-yoshikawa-sidrops-pqc-rpki-01"
+DOCNAME = "draft-yoshikawa-sidrops-pqc-rpki-03"
+HISTORICAL_SOURCE_COMMIT = "3cddcf7339eaa46fc5c8d2d9a03764194a9ca80a"
 
 
 @dataclass
@@ -334,6 +337,113 @@ def add_bibxml(parent: ET.Element, filename: str) -> None:
     parent.append(ET.parse(path).getroot())
 
 
+
+def read_source(revision: str) -> str:
+    """Use the shared source for -03 and the frozen source history for older drafts."""
+    if revision == "03":
+        return (ROOT / "ietf/draft-yoshikawa-sidrops-pqc-rpki.md").read_text()
+    filename = f"ietf/draft-yoshikawa-sidrops-pqc-rpki-{revision}.md"
+    return subprocess.check_output(
+        ["git", "show", f"{HISTORICAL_SOURCE_COMMIT}:{filename}"],
+        cwd=ROOT, text=True,
+    )
+
+
+def add_source_references(parent: ET.Element, back: str) -> None:
+    """Render the source bibliography rather than an independently maintained list."""
+    bibliography = back.split("# References", 1)[1]
+    container = None
+    months = "January February March April May June July August September October November December".split()
+    month_pattern = "|".join(months)
+    for line in bibliography.splitlines():
+        if line.startswith("## "):
+            if container is None:
+                outer = ET.SubElement(parent, "references")
+                ET.SubElement(outer, "name").text = "References"
+            container = ET.SubElement(outer, "references")
+            ET.SubElement(container, "name").text = line[3:]
+            continue
+        match = re.fullmatch(r'\[([^]]+)\] (.*?), "([^"]+)",?\s*(.*)', line)
+        if not match:
+            if line.strip():
+                raise ValueError(f"unsupported bibliography line: {line}")
+            continue
+        key, authors, title, details = match.groups()
+        if container is None:
+            raise ValueError("reference before bibliography heading")
+        urls = re.findall(r"https?://[^\s]+", details)
+        urls = [url.rstrip(".,") for url in urls]
+        target = urls[0] if urls else None
+        series = []
+        rfc_match = re.search(r"\bRFC (\d+)\b", details)
+        draft_match = re.search(r"\bdraft-[a-z0-9-]+-\d{2}\b", details) if key.startswith("I-D.") else None
+        fips_match = re.search(r"\bFIPS (\d+(?:-\d+)?)\b", details)
+        doi_match = re.search(r"\bDOI (10\.[^,\s]+)", details)
+        for found, name in [(rfc_match, "RFC"), (fips_match, "FIPS"), (doi_match, "DOI")]:
+            if found:
+                series.append((name, found.group(1)))
+                details = details.replace(found.group(0), "", 1)
+        if draft_match:
+            series.append(("Internet-Draft", draft_match.group(0)))
+            details = details.replace(draft_match.group(0), "", 1)
+        if target is None:
+            if rfc_match:
+                target = f"https://www.rfc-editor.org/info/rfc{rfc_match.group(1)}"
+            elif draft_match:
+                target = f"https://datatracker.ietf.org/doc/html/{draft_match.group(0)}"
+            elif doi_match:
+                target = f"https://doi.org/{doi_match.group(1)}"
+        attrs = {"anchor": key}
+        if target:
+            attrs["target"] = target
+        ref = ET.SubElement(container, "reference", attrs)
+        front = ET.SubElement(ref, "front")
+        ET.SubElement(front, "title").text = title
+        people = re.findall(r"([A-Z][A-Za-z'-]+), ([A-Z]\.(?: [A-Z]\.)*)|(?:and )?([A-Z]\.(?: [A-Z]\.)*) ([A-Z][A-Za-z'-]+)", authors)
+        if people:
+            for surname, initials, reversed_initials, reversed_surname in people:
+                ET.SubElement(front, "author", {"surname": surname or reversed_surname, "initials": initials or reversed_initials})
+        else:
+            author = ET.SubElement(front, "author")
+            ET.SubElement(author, "organization").text = authors
+        # An access date is not a publication date.
+        publication_details = details.split(", accessed", 1)[0]
+        date_match = re.search(rf"(?:(\d{{1,2}}) )?({month_pattern}) (\d{{4}})", publication_details)
+        date_attrs = {}
+        if date_match:
+            day, month, year = date_match.groups()
+            date_attrs = {"month": month, "year": year}
+            if day:
+                date_attrs["day"] = day
+            details = details.replace(date_match.group(0), "", 1)
+        ET.SubElement(front, "date", date_attrs)
+        for name, value in series:
+            ET.SubElement(ref, "seriesInfo", {"name": name, "value": value})
+        for url in urls:
+            details = details.replace(url, "", 1)
+        # Keep source notes, access dates and secondary links in the reference.
+        details = re.sub(r"(?:,\s*){2,}", ", ", details).strip(" ,. ")
+        if draft_match:
+            # xml2rfc supplies the Work in Progress label for Internet-Drafts.
+            details = details.replace("Work in Progress", "").strip(" ,;")
+        if "et al." in authors:
+            # Expand the abbreviated author list from the already pinned bibxml.
+            bib_path = BIBXML_DIR / f"reference.{key}.xml"
+            bib = ET.parse(bib_path).getroot()
+            if bib.find("seriesInfo").get("value") != draft_match.group(0):
+                raise ValueError(f"bibxml revision mismatch: {key}")
+            for author in front.findall("author"):
+                front.remove(author)
+            insertion = 1
+            for author in bib.findall("./front/author"):
+                front.insert(insertion, copy.deepcopy(author))
+                insertion += 1
+        if len(urls) > 1:
+            details = "; ".join(x for x in [details, *urls[1:]] if x)
+        if details:
+            ET.SubElement(ref, "refcontent").text = details
+
+
 def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) -> ET.Element:
     category = str(meta.get("category", "std"))
     rfc = ET.Element(
@@ -384,6 +494,10 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
     add_sections(middle_el, parse_sections(middle))
 
     back_el = ET.SubElement(rfc, "back")
+    if DOCNAME.endswith("-03"):
+        add_source_references(back_el, back)
+        add_sections(back_el, parse_sections(back.split("# References", 1)[0].strip()))
+        return rfc
     # Keep references compact.  xml2rfc/datatracker can replace these with
     # complete bibxml references if desired.
     if category == "std":
@@ -514,12 +628,14 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--revision", choices=("00", "01", "02"), default="02")
+    parser.add_argument("--revision", choices=("00", "01", "02", "03"), default="03")
     args = parser.parse_args()
     global SOURCE, DOCNAME
     DOCNAME = f"draft-yoshikawa-sidrops-pqc-rpki-{args.revision}"
-    SOURCE = ROOT / "ietf" / f"{DOCNAME}.md"
-    meta, abstract, middle, back = split_source(SOURCE.read_text())
+    SOURCE = ROOT / "ietf" / ("draft-yoshikawa-sidrops-pqc-rpki.md" if args.revision == "03" else f"{DOCNAME}.md")
+    meta, abstract, middle, back = split_source(read_source(args.revision))
+    if str(meta["docname"]) != DOCNAME:
+        raise ValueError("requested revision does not match source docname")
     OUTDIR.mkdir(parents=True, exist_ok=True)
     xml_root = build_xml(meta, abstract, middle, back)
     xml_path = OUTDIR / f"{DOCNAME}.xml"

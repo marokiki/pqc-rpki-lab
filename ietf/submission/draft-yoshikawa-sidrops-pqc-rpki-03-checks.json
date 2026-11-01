@@ -1,0 +1,66 @@
+{
+  "document": "draft-yoshikawa-sidrops-pqc-rpki-03",
+  "document_date": "2026-11-01",
+  "tools": {
+    "xml2rfc": "3.35.0",
+    "weasyprint": "70.0",
+    "idnits": "3.3.0",
+    "xml2rfc_fonts_commit": "04a6b4b4ef8eea19cddf04e7adf8733e539231ce"
+  },
+  "rfcxml_v3_relaxng": "passed",
+  "resolved_reference_count": 48,
+  "xml2rfc_outputs": [
+    "txt",
+    "html",
+    "pdf"
+  ],
+  "idnits_submission_online": {
+    "result": "pass",
+    "file": {
+      "path": "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.txt",
+      "size": 92766
+    },
+    "nitsBySeverity": {
+      "error": 0,
+      "warning": 0,
+      "comment": 0
+    },
+    "nits": []
+  },
+  "unit_tests": {
+    "passed": 119,
+    "failed": 0
+  },
+  "global_evaluation": {
+    "data_model_checks": 71,
+    "retained_backend_verification_records": 28,
+    "offline_model_tests": 17,
+    "status": "passed"
+  },
+  "ietf_submission_performed": false,
+  "datatracker_revision_before_release": "02",
+  "inputs_and_outputs": {
+    "ietf/draft-yoshikawa-sidrops-pqc-rpki.md": {
+      "bytes": 68650,
+      "sha256": "12252a128cad8d755e226288be9723f97071460286d3ca7f6100e66f46b92879"
+    },
+    "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.xml": {
+      "bytes": 101150,
+      "sha256": "0c442654d33e07669176c56dbae36b78c099a960d6b153393dd8fad83a3fae69"
+    },
+    "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.txt": {
+      "bytes": 92766,
+      "sha256": "12a1fc72c43370148968df71e57c6d4e7d790085c4d4e185bae03f5e63258a4c"
+    },
+    "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.html": {
+      "bytes": 179601,
+      "sha256": "3f5cd4b81bcb2b706e171ed41b4c0e783eecae8d1674d2c09951a43675a3a034"
+    },
+    "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.pdf": {
+      "bytes": 144167,
+      "sha256": "29092c23d9502fde3c63f5d151acc4dddda0c2cd135ca3948142f3fe8f4ba02d"
+    }
+  },
+  "pdf_pages": 30,
+  "pdf_layout_review": "passed: all 30 page thumbnails and detailed table pages inspected"
+}

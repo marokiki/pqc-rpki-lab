@@ -1,0 +1,13 @@
+{
+  "checked_utc": "2026-10-27T00:18:51.307475+00:00",
+  "notification_archive_uri": "rsync://rrdp.rpkiviews.org/data/2026/09/rrdp.ripe.net/172322cf-c642-4e6f-806c-bd2375d8001a/notification.232362.a052334289a3d2e1a3cf5338949e7550ca321426114df41d7702d3cc14ef1d71.xml",
+  "notification_sha256": "a052334289a3d2e1a3cf5338949e7550ca321426114df41d7702d3cc14ef1d71",
+  "session_id": "172322cf-c642-4e6f-806c-bd2375d8001a",
+  "serial": "232362",
+  "snapshot_uri": "https://rrdp.ripe.net/172322cf-c642-4e6f-806c-bd2375d8001a/232362/snapshot-cb19fcd2bc73aced88c3aa262ef5b1a4f5af44a2e7baecaf409f4176fa12116a.xml",
+  "snapshot_sha256": "b26bfb51777c2bb1b1df6479309ee17a6290226b64286255ab6a864c1254a37d",
+  "snapshot_origin_http_status": 404,
+  "snapshot_hash_found_in_session_archive_listing": false,
+  "archive_listing_sha256": "1105b0b74f0d46ddfe8678ae4baeabdd4d06b9e021bcc98a4b7278a42327152e",
+  "scope": "RIPE end-of-day historical reference only; not a claim about every archive file"
+}

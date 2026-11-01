@@ -1,0 +1,173 @@
+--- before/ietf/draft-yoshikawa-sidrops-pqc-rpki-03.md
++++ ietf/draft-yoshikawa-sidrops-pqc-rpki-03.md
+@@ -78,7 +78,7 @@
+ # Scope
+ 
+ The algorithm-profile analysis in this document applies to RPKI resource certificates, CRLs, certification requests, BGPsec Router Certificates [RFC8209], and the CMS signed objects that reuse the RPKI signed object template [RFC6488], including manifests [RFC9286], ROAs [RFC9582], Signed Checklists (RSC) [RFC9323], ASPA objects [I-D.ietf-sidrops-aspa-profile], and Trust Anchor Key (TAK) objects [RFC9691].
+-The generated signed objects in this revision cover manifests and ROAs; additional object types are listed in the Implementation Status section.
++The generated signed objects in these experiments cover manifests and ROAs; additional object types are listed in the Implementation Status section.
+ The CMS signed objects are treated as a single signed-object algorithm profile, as described in the following section.
+ 
+ This document covers the RPKI signatures on BGPsec Router Certificates, but does not define or change the BGPsec UPDATE signature algorithm specified by [RFC8608].
+@@ -160,7 +160,7 @@
+ The Krill experiment creates and verifies a Composite CSR through a same-server issuance path that bypasses the RFC 6492 CMS/HTTP exchange; independent provisioning interoperability is not established [RFC6492].
+ 
+ The Mixed Tree migration approach is independent of the selected signature suite.
+-The evaluated repository instantiates the Next Suite with the Composite ML-DSA configuration evaluated in this revision.
++The evaluated repository instantiates the Next Suite with the Composite ML-DSA configuration evaluated in this document.
+ This construction is not permitted by the RFC 6916 transition procedure and is evaluated only as an experimental alternative under test TALs.
+ 
+ Unlike the RFC 6916 procedure, a switched subtree does not maintain corresponding Current Suite and Next Suite products.
+@@ -186,7 +186,7 @@
+ The Current Suite baseline used by this experiment is RSA PKCS #1 v1.5 with SHA-256 as specified by RFC 7935.
+ This document does not set a production transition timetable.
+ 
+-## Composite Configuration Evaluated in This Revision
++## Evaluated Composite Configuration
+ 
+ The composite signature construction used by this experiment is defined in revision 19 of [I-D.ietf-lamps-pq-composite-sigs].
+ The evaluated configuration is id-MLDSA65-ECDSA-P256-SHA512 (OID 1.3.6.1.5.5.7.6.45), whose identifier and component-algorithm combination are specified by that document.
+@@ -205,7 +205,7 @@
+ 
+ ML-DSA-44 is an additional experimental configuration.
+ It produces smaller public keys and signatures and may sign and verify faster, which matters in a system where RPs repeatedly synchronize repository state and validate large numbers of objects.
+-This revision uses ML-DSA-65 in the composite configuration as an explicit experimental choice, not because the RPKI requires NIST security Category 3.
++The experiment uses ML-DSA-65 in the composite configuration as an explicit experimental choice, not because the RPKI requires NIST security Category 3.
+ The Rationale for the Experimental Configurations section discusses this choice and its counterarguments.
+ 
+ ML-DSA-87 is included as a higher-security comparison candidate.
+@@ -213,7 +213,7 @@
+ 
+ SLH-DSA-SHAKE-128s and SLH-DSA-SHAKE-192s are included for cryptographic-diversity comparison.
+ Their signature algorithm, PKIX, and CMS specifications are defined by [FIPS205], [RFC9909], and [RFC9814].
+-They are not proposed as the initial suite in this revision because their signature sizes are substantially larger than those of ML-DSA in the evaluated configurations.
++They are not proposed as the initial experimental suite because their signature sizes are substantially larger than those of ML-DSA in the evaluated configurations.
+ Their primitive and certificate/CRL measurements do not include end-to-end RP validation or global repository/RRDP projections.
+ 
+ Supplementary primitive benchmarks include experimental Falcon, MAYO, and SNOVA, and certificate/CRL measurements include experimental Falcon-512.
+@@ -233,7 +233,6 @@
+ ## Evaluation Dimensions
+ 
+ The evaluation considers the following dimensions: certificate and CRL size under the RPKI profile; CMS signed object size; signing and verification cost under the RP workload; impact on repository size and RRDP response-body sizes; CA key rollover and publication cycle impact; HSM support; and standardization and implementation maturity.
+-The dimensions backed by measurements in this revision are identified in Appendix A.
+ 
+ Two qualitative observations from the preliminary evidence inform the rationale in the next section.
+ First, RP workloads are dominated by verification: an RP verifies repository objects but signs nothing as part of validation.
+@@ -242,7 +241,7 @@
+ These projections do not cover every candidate algorithm.
+ 
+ Appendix A gives the supporting measurements, their conditions and caveats, and the dimensions for which measurements remain unconfirmed.
+-Reproducible evidence is maintained in the experimental harness [pqc-rpki-lab] and the source-calibrated assessment [pqc-rpki-global-evaluation].
++Reproducible evidence for the experiments and the source-calibrated assessment is maintained in [pqc-rpki-lab].
+ Measured values are implementation and environment dependent and are not protocol requirements.
+ 
+ ## Rationale for the Experimental Configurations
+@@ -256,8 +255,8 @@
+ It does not in general preserve strong unforgeability when only one component has that property.
+ An implementation defect in one component can be tolerated only when the other component, the combiner, encodings, key handling, and the verification of all component signatures remain unaffected.
+ 
+-ML-DSA-65 is used as the PQC component of the composite configuration evaluated in this revision because it has a final FIPS signature specification [FIPS204], corresponding PKIX [RFC9881] and CMS [RFC9882] algorithm identifier specifications, and implementations available in the software environment used by this experiment.
+-This revision uses Category 3 as an experimental choice to examine the cost of a larger security margin in a system where another global algorithm migration could take multiple years.
++ML-DSA-65 is used as the PQC component of the evaluated composite configuration because it has a final FIPS signature specification [FIPS204], corresponding PKIX [RFC9881] and CMS [RFC9882] algorithm identifier specifications, and implementations available in the software environment used by this experiment.
++The experiment uses Category 3 as an experimental choice to examine the cost of a larger security margin in a system where another global algorithm migration could take multiple years.
+ This is not an RPKI requirement.
+ It was not selected for minimum size or maximum speed; it is neither the smallest nor the fastest possible signature algorithm.
+ 
+@@ -266,7 +265,7 @@
+ The argument for ML-DSA-44 is that a structural cryptanalytic break of module lattices would likely affect all ML-DSA parameter sets.
+ On this view, the extra category mainly protects against gradual erosion of concrete security estimates rather than a qualitative break.
+ The roughly 25-35% smaller keys and signatures of ML-DSA-44, or a composite configuration using ML-DSA-44, may therefore be a better use of the size budget [Doesburg2025].
+-This document uses ML-DSA-65 in the composite configuration measured in this revision, keeps ML-DSA-44 in the comparison, and records the parameter-set choice as a question for further work.
++The experiments use ML-DSA-65 in the measured composite configuration, keep ML-DSA-44 in the comparison, and leave the parameter-set choice as a question for further work.
+ 
+ ML-DSA-87 provides a higher-security comparison point, but its larger signatures and higher verification cost warrant further evaluation before deployment.
+ 
+@@ -530,7 +529,7 @@
+ 
+ # Questions for Further Work
+ 
+-The following questions require further discussion and implementation evidence. 
++The following questions require further discussion and implementation evidence.
+ 
+ * Which post-quantum signature suite offers an appropriate balance of security, object size, validation performance, implementation maturity, and HSM support for the RPKI?
+ * How should the algorithms used for EE certificates and CMS signatures be related, and should alternative constructions such as the Null Scheme be considered?
+@@ -543,16 +542,13 @@
+ 
+ # Measurement Details
+ 
+-This appendix records measurements referenced by the Evaluation Dimensions, Experimental Results, and Implementation Status sections.
+-The cryptographic and RP experiments are recorded in [pqc-rpki-lab]; the source-calibrated cache and RRDP projections are recorded in [pqc-rpki-global-evaluation].
+-The harness remains the durable record.
+-
+-## Reproducibility Metadata
+-
+-The evidence snapshot for the earlier cryptographic and controlled-repository experiments is the GitHub release `draft-yoshikawa-sidrops-pqc-rpki-02` of [pqc-rpki-lab].
+-The release contains the scripts, raw outputs, and environment metadata for those earlier experiments.
+-The source-calibrated cache and RRDP assessment is recorded separately in [pqc-rpki-global-evaluation], including source manifests, object measurements, projection scripts, and verification results.
+-The designated evidence snapshot for this assessment is the GitHub release `draft-yoshikawa-sidrops-pqc-rpki-03`.
++This appendix provides the methods, measurements, and limitations of the experiments described in this document.
++
++## Experimental Artifacts and Environment
++
++The designated evidence snapshot is the GitHub release `draft-yoshikawa-sidrops-pqc-rpki-03` [pqc-rpki-lab].
++It covers the experimental code, measurement results, and supporting documentation for the cryptographic benchmarks, RP validation experiments, and repository and RRDP size assessments.
++Source manifests record dataset origins, observation times, and hashes.
+ Large raw inputs are retained outside Git; exact snapshot reanalysis requires the retained bodies if the pinned origin URLs have expired.
+ 
+ The cryptographic-operation measurements were performed on an Apple M4 running macOS 26.5.2 with OpenSSL 3.6.2 and liboqs 0.15.0.
+@@ -614,7 +610,7 @@
+ 
+ ## Measured Complete Object Sizes
+ 
+-The laboratory fixtures in [pqc-rpki-global-evaluation] were generated with OpenSSL 3.6.2 and the existing Composite provider.
++The laboratory fixtures in [pqc-rpki-lab] were generated with OpenSSL 3.6.2 and the existing Composite provider.
+ They contain complete DER-encoded RFC 6487-profiled certificates with [RFC3779] resource extensions, CRLs, ROA CMS objects, and manifest CMS objects.
+ CMS sizes include the embedded EE certificate, signed attributes, and signature.
+ 
+@@ -676,7 +672,7 @@
+ The Mixed Tree scenario selects the largest observed non-self-issued CA subtree with a known parent, using SKI/AKI links: 9,873 CA keys and 265,585 affected objects.
+ The boundary certificate keeps its RSA parent signature while its subject key changes; descendant signatures change only where their issuer is in the selected subtree.
+ These links describe a structural hierarchy; they do not establish resource/path validity or migration readiness.
+-The selected boundary and exact byte totals are recorded in [pqc-rpki-global-evaluation].
++The selected boundary and exact byte totals are recorded in [pqc-rpki-lab].
+ 
+ ## Repository Transport Measurements
+ 
+@@ -688,6 +684,10 @@
+ The sample contains 190,738 publish elements: 93,357 manifests, 93,265 CRLs, 3,499 ROAs, 545 certificates, and 72 ASPA objects.
+ Of these publishes, 189,289 contain a replacement hash; the sample also contains 768 withdrawal elements.
+ Repeated publications in different deltas are counted, so the results reflect observed periodic republication and replacement.
++
++For broader context, Table 7 of the Global RPKI Report for Q3 2026 [Global-RPKI-Q3-2026] reports 8,493,374 newly discovered manifests, 8,487,012 CRLs, and 532,103 ROAs.
++It also reports 49,000 certificates and 4,137 ASPA objects.
++These quarterly discovery counts describe a different population from RRDP publish events and are not used in the transfer-size projections.
+ 
+ A separate live snapshot sample was captured on 2026-10-27 between 00:16 and 00:19 UTC from all 39 distinct notification URLs at the selected September hosts.
+ One endpoint required a second network vantage after the primary connection was reset.
+@@ -718,7 +718,7 @@
+ Compression, HTTP/TLS overhead, retries, polling, client catch-up, and snapshot fallback frequency remain unmeasured.
+ Equivalent trace-backed rsync and Erik comparisons remain separate work.
+ No quarterly or all-client transfer total is inferred from these samples.
+-The scripts, endpoint coverage, capture times, hashes, exact byte totals, and retention limitations are recorded in [pqc-rpki-global-evaluation].
++The scripts, endpoint coverage, capture times, hashes, exact byte totals, and retention limitations are recorded in [pqc-rpki-lab].
+ 
+ ## Open Measurement Tasks
+ 
+@@ -820,7 +820,7 @@
+ 
+ [pqRPKI] Li, W., Li, Y., and T. Chung, "pqRPKI: A Practical RPKI Architecture for the Post-Quantum Era", arXiv:2603.06968, March 2026, https://arxiv.org/abs/2603.06968.
+ 
+-[pqc-rpki-lab] Yoshikawa, T., "pqc-rpki-lab experimental evidence snapshot", release tag draft-yoshikawa-sidrops-pqc-rpki-02, 20 August 2026, https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-02.
++[pqc-rpki-lab] Yoshikawa, T., "pqc-rpki-lab experimental evidence snapshot", release tag draft-yoshikawa-sidrops-pqc-rpki-03, https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-03.
+ 
+ [OpenSSL-3.5] OpenSSL Project, "OpenSSL 3.5 Series Release Notes", https://openssl-library.org/news/openssl-3.5-notes/, accessed 8 October 2026.
+ 
+@@ -840,8 +840,6 @@
+ 
+ [RPKIViews-RRDP] Snijders, J., "Easter gift: introducing the RPKIViews Raw RRDP Archive!", SIDROPS mailing list, 5 April 2026, https://mailarchive.ietf.org/arch/msg/sidrops/w2BUb4-MGj_T383S58yTBEbn9so/.
+ 
+-[pqc-rpki-global-evaluation] Yoshikawa, T., "Public-cache and RRDP size projections", release tag draft-yoshikawa-sidrops-pqc-rpki-03, October 2026, https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-03.
+-
+ [RFC3779] Lynn, C., Kent, S., and K. Seo, "X.509 Extensions for IP Addresses and AS Identifiers", RFC 3779, DOI 10.17487/RFC3779, June 2004.
+ 
+ [RFC6492] Huston, G., Loomans, R., Ellacott, B., and R. Austein, "A Protocol for Provisioning Resource Certificates", RFC 6492, DOI 10.17487/RFC6492, February 2012.

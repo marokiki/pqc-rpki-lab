@@ -1,0 +1,35 @@
+--- before/ietf/draft-yoshikawa-sidrops-pqc-rpki-03.md
++++ ietf/draft-yoshikawa-sidrops-pqc-rpki-03.md
+@@ -480,7 +480,7 @@
+ 
+ Parallel Publication can produce different validation results between the Current Suite and Next Suite branches.
+ For example, the RSA branch and the PQC branch might contain different ROA payloads, stale manifests, or different CRL state.
+-The experiment detects and reports these cases without silently selecting a branch; see the Relying Party Evaluation section.
++The experiment compares validated outputs between the two suites but does not evaluate all possible forms of divergence.
+ 
+ A Mixed Tree rooted in a Current Suite trust anchor is not quantum resistant as a complete certification path.
+ Validation of the certification path depends on every certificate signature along it, including signatures made under the Current Suite.
+@@ -603,12 +603,12 @@
+ | ML-DSA-65 | 5793 | 3464 | 9434 | 9556 |
+ | ML-DSA-65 + P-256 Composite | 5927 | 3533 | 9637 | 9758 |
+ 
+-The laboratory manifests contain two fixed fileList entries; the global projection instead preserves observed fileLists.
++The laboratory manifests contain two fixed fileList entries; the repository projection instead preserves observed fileLists.
+ The Composite sizes reflect variable-length ECDSA signatures in this capture; the projection uses the maximum signature size stated below.
+ 
+ The earlier, separate certificate/CRL measurements for classical reference algorithms, ML-DSA-87, SLH-DSA, and experimental Falcon-512 are retained in [pqc-rpki-lab].
+ The Falcon-512 measurements use oqs-provider 0.11.0-rc1 with liboqs 0.15.0 and an experimental OID and encoding, not a final FN-DSA PKIX profile.
+-Those supplementary measurements are not inputs to the global projections.
++Those supplementary measurements are not inputs to the repository and RRDP projections.
+ 
+ ## Source-Calibrated Repository Projection
+ 
+@@ -629,7 +629,7 @@
+ | MFT | 54,963 | 140.27 |
+ | ROA | 396,799 | 768.41 |
+ 
+-The laboratory fixtures passed certificate-chain, CRL-signature, and CMS checks; independent RP interoperability remains unverified.
++The laboratory fixtures passed certificate-chain, CRL-signature, and CMS checks, but independent cryptographic interoperability remains unverified.
+ The projection re-encodes each observed object with the candidate key, signature, AlgorithmIdentifier, and CMS digest-attribute lengths, accounting for DER length boundaries.
+ It preserves payloads, names, resource extensions, revoked entries, and manifest fileLists and hash lengths.
+ Observed manifests contain 1 to 48,932 entries and CRLs up to 65,312 revoked entries.

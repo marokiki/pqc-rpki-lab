@@ -1,0 +1,202 @@
+{
+  "backend": "OpenSSL 3.6.2 7 Apr 2026 (Library: OpenSSL 3.6.2 7 Apr 2026)",
+  "scope": "cryptographic lab certificate-chain, CRL-signature and CMS checks using one shared backend; not independent RPKI policy/resource/path validation",
+  "checks": [
+    {
+      "suite": "rsa",
+      "check": "decode-ca",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": ""
+    },
+    {
+      "suite": "rsa",
+      "check": "decode-route.ee",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": ""
+    },
+    {
+      "suite": "rsa",
+      "check": "decode-manifest.ee",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": ""
+    },
+    {
+      "suite": "rsa",
+      "check": "ca-and-ee-certificate-signatures",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "$TMPDIR/ca.pem: OK\n$TMPDIR/route.ee.pem: OK\n$TMPDIR/manifest.ee.pem: OK"
+    },
+    {
+      "suite": "rsa",
+      "check": "crl-signature",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "verify OK"
+    },
+    {
+      "suite": "rsa",
+      "check": "cms-route.roa",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "CMS Verification successful"
+    },
+    {
+      "suite": "rsa",
+      "check": "cms-manifest.mft",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "CMS Verification successful"
+    },
+    {
+      "suite": "ml-dsa-44",
+      "check": "decode-ca",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": ""
+    },
+    {
+      "suite": "ml-dsa-44",
+      "check": "decode-route.ee",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": ""
+    },
+    {
+      "suite": "ml-dsa-44",
+      "check": "decode-manifest.ee",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": ""
+    },
+    {
+      "suite": "ml-dsa-44",
+      "check": "ca-and-ee-certificate-signatures",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "$TMPDIR/ca.pem: OK\n$TMPDIR/route.ee.pem: OK\n$TMPDIR/manifest.ee.pem: OK"
+    },
+    {
+      "suite": "ml-dsa-44",
+      "check": "crl-signature",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "verify OK"
+    },
+    {
+      "suite": "ml-dsa-44",
+      "check": "cms-route.roa",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "CMS Verification successful"
+    },
+    {
+      "suite": "ml-dsa-44",
+      "check": "cms-manifest.mft",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "CMS Verification successful"
+    },
+    {
+      "suite": "ml-dsa-65",
+      "check": "decode-ca",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": ""
+    },
+    {
+      "suite": "ml-dsa-65",
+      "check": "decode-route.ee",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": ""
+    },
+    {
+      "suite": "ml-dsa-65",
+      "check": "decode-manifest.ee",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": ""
+    },
+    {
+      "suite": "ml-dsa-65",
+      "check": "ca-and-ee-certificate-signatures",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "$TMPDIR/ca.pem: OK\n$TMPDIR/route.ee.pem: OK\n$TMPDIR/manifest.ee.pem: OK"
+    },
+    {
+      "suite": "ml-dsa-65",
+      "check": "crl-signature",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "verify OK"
+    },
+    {
+      "suite": "ml-dsa-65",
+      "check": "cms-route.roa",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "CMS Verification successful"
+    },
+    {
+      "suite": "ml-dsa-65",
+      "check": "cms-manifest.mft",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "CMS Verification successful"
+    },
+    {
+      "suite": "composite-mldsa65-p256",
+      "check": "decode-ca",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": ""
+    },
+    {
+      "suite": "composite-mldsa65-p256",
+      "check": "decode-route.ee",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": ""
+    },
+    {
+      "suite": "composite-mldsa65-p256",
+      "check": "decode-manifest.ee",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": ""
+    },
+    {
+      "suite": "composite-mldsa65-p256",
+      "check": "ca-and-ee-certificate-signatures",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "$TMPDIR/ca.pem: OK\n$TMPDIR/route.ee.pem: OK\n$TMPDIR/manifest.ee.pem: OK"
+    },
+    {
+      "suite": "composite-mldsa65-p256",
+      "check": "crl-signature",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "verify OK"
+    },
+    {
+      "suite": "composite-mldsa65-p256",
+      "check": "cms-route.roa",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "CMS Verification successful"
+    },
+    {
+      "suite": "composite-mldsa65-p256",
+      "check": "cms-manifest.mft",
+      "returncode": 0,
+      "status": "verified",
+      "diagnostic": "CMS Verification successful"
+    }
+  ]
+}

@@ -72,6 +72,12 @@ under repository-local ignored directories.
 
 ## Evidence
 
+The source-calibrated global-cache and RRDP assessment is in
+[`results/global-rpki-q3-2026/`](results/global-rpki-q3-2026/). It uses the
+Global RPKI Report, a September RPKIViews cache and RRDP deltas, and a
+separately dated October RRDP snapshot capture instead of arbitrary object mixes or ROA churn. Its scope and
+unavailable quarter-wide projections are explicit; earlier evidence is retained.
+
 Machine-readable results are under `results/` as CSV and JSON. Markdown files
 in the same directory are generated views. The principal outputs are:
 
@@ -337,20 +343,34 @@ under ignored `local/upstream/`.
 
 ## Draft
 
-The current published revision is
-`ietf/draft-yoshikawa-sidrops-pqc-rpki-01.md`.  The working revision is
-the Informational experiment report
-`ietf/draft-yoshikawa-sidrops-pqc-rpki-02.md`.  Its generated artifacts are:
+The working source is `ietf/draft-yoshikawa-sidrops-pqc-rpki.md` (-03).
+Earlier Markdown revisions are preserved in Git history; the separate
+versioned Markdown files have been removed. Generated -00/-01/-02 submission
+files remain unchanged.
 
-- `ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-02.xml`
-- `ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-02.txt`
+The -03 submission files are in `ietf/submission/` (XML, TXT, HTML, and PDF).
+The evidence snapshot is the
+[-03 release](https://github.com/marokiki/pqc-rpki-lab/releases/tag/draft-yoshikawa-sidrops-pqc-rpki-03),
+including the earlier experiments and `results/global-rpki-q3-2026/`.
 
-Generate the standalone XML with:
+Regenerate the XML and render it with xml2rfc 3.35.0:
 
 ```sh
-python3 tools/render_draft_submission.py
-xml2rfc --text ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-02.xml
+python3 tools/render_draft_submission.py --revision 03
+xml2rfc --no-network --text --html ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.xml
+xml2rfc --no-network --pdf ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.xml
+idnits --mode submission ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.txt
 ```
+
+PDF generation uses the official xml2rfc Noto/Roboto Mono fonts.
+`ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03-checks.json` records the
+build versions, input/output hashes, and validation results.
+
+Older XML can be regenerated with `--revision 00`, `01`, or `02`; the helper
+reads the frozen versioned sources from commit `3cddcf7` in a Git checkout.
+Historical-source tests also require a Git checkout with that commit available.
+Changes between the shared sources for -02 and -03 can be inspected with
+`git diff 86b5700 draft-yoshikawa-sidrops-pqc-rpki-03 -- ietf/draft-yoshikawa-sidrops-pqc-rpki.md`.
 
 ## Safety
 

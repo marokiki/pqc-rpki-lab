@@ -1,5 +1,6 @@
 import csv
 import unittest
+import subprocess
 from pathlib import Path
 
 
@@ -57,9 +58,11 @@ class MeasurementEvidenceTest(unittest.TestCase):
             self.assertGreater(float(rows[name]["verify_seconds"]), 0, name)
 
     def test_draft_contains_measured_values_without_tbd(self):
-        draft = (
-            self.root / "ietf/draft-yoshikawa-sidrops-pqc-rpki-02.md"
-        ).read_text()
+        draft = subprocess.check_output(
+            ["git", "show", "3cddcf7339eaa46fc5c8d2d9a03764194a9ca80a:"
+             "ietf/draft-yoshikawa-sidrops-pqc-rpki-02.md"],
+            cwd=self.root, text=True,
+        )
         for row in (
             "| P-256/SHA-256 | 641 | 587 | 187 |",
             "| Ed25519 | 578 | 524 | 170 |",

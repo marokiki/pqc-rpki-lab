@@ -1,0 +1,36 @@
+{
+  "certificate_shapes": [
+    {
+      "subject_key_oid": "1.2.840.113549.1.1.1",
+      "spki_der_bytes": 294,
+      "signature_bytes": 256,
+      "count": 55087
+    },
+    {
+      "subject_key_oid": "1.2.840.10045.2.1",
+      "spki_der_bytes": 91,
+      "signature_bytes": 256,
+      "count": 2
+    }
+  ],
+  "manifest_filelist": {
+    "count": 54963,
+    "min_entries": 1,
+    "max_entries": 48932,
+    "median_entries": 2,
+    "total_entries": 510199
+  },
+  "crl_revoked_entries": {
+    "count": 54963,
+    "min": 0,
+    "max": 65312,
+    "total": 607915
+  },
+  "hypothetical_rrdp_publish_element_subtotals": {
+    "rsa": 1556778710,
+    "ml-dsa-44": 5223613194,
+    "ml-dsa-65": 6868388874,
+    "composite-mldsa65-p256": 7007802118
+  },
+  "snapshot_rrdp_note": "Canonical publish element subtotal for the cache paths only; no XML declaration, snapshot wrappers, notifications or session partitioning. Not measured snapshot bytes or transfer traffic."
+}

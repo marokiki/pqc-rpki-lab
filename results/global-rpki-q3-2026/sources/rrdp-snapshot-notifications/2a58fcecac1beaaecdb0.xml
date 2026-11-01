@@ -1,0 +1,35 @@
+<notification xmlns="http://www.ripe.net/rpki/rrdp" version="1" session_id="8fe3109e-2561-4627-8850-83ab94b9bb91" serial="101902">
+  <snapshot uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101902/snapshot.xml" hash="beecc403aae2f6d1accc7dd30224e529d2c30c86e0eadfbfd7c8458f5682a2a4" />
+  <delta serial="101902" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101902/delta.xml" hash="2c1d8ddcd96a583d7e83f8750917b61a082728a5f57811a63f77e7d98b2da512" />
+  <delta serial="101901" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101901/delta.xml" hash="c69532cda858418517da6a7e3532d3a9e2b3e4d1c0d36635c2515fb337b12215" />
+  <delta serial="101900" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101900/delta.xml" hash="df458ce1f62ccdcdd44ec28c96365c980af45463205a3c723b2174dfe6061fb4" />
+  <delta serial="101899" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101899/delta.xml" hash="aa14161e8f27b308594535ffd0ac351d16b05426f63bb8f9ebdf926630f713ea" />
+  <delta serial="101898" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101898/delta.xml" hash="fc22de580e5cc20c6199472fd36dfe01d910e55cf01d1bbb247ff51d3a3a40f3" />
+  <delta serial="101897" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101897/delta.xml" hash="d45e67f61bcfb5bd1fecc9d789cc9223d35fa7104a7476a89a3c1c8339940f13" />
+  <delta serial="101896" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101896/delta.xml" hash="024cbb3ff7ded9de05cac556bd137260e24f6ac8ae40db0502178c3a8fe09a36" />
+  <delta serial="101895" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101895/delta.xml" hash="2efb8069b2c5662e8e6f6594fb0ddb9bc647f68a5409628527e36b2e0afe1d40" />
+  <delta serial="101894" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101894/delta.xml" hash="8f12223e189482ea8b76d0875c17df122e1c65de3b200cd91b01db0fe0a2e794" />
+  <delta serial="101893" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101893/delta.xml" hash="e19dde0262e152cdaecab1ffe55cdd0e96ee7c9082c92e7c99f90b7f5c16122f" />
+  <delta serial="101892" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101892/delta.xml" hash="72dd54e43ddacebe4b7975537fd6f33d9757cd54330ffd66487b118b7d967019" />
+  <delta serial="101891" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101891/delta.xml" hash="61f0af147630f76790813fb3c691542ecdde4b47c87eb9a75046dd51947f1070" />
+  <delta serial="101890" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101890/delta.xml" hash="51ed44a2e49e7ba5e1e328ef7cfc99f5cf7d95053147b4d97b136328735c8e6a" />
+  <delta serial="101889" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101889/delta.xml" hash="249aff674f42c7fae4afa6425ce9e16731ded644de7a14889c2556f759f239f2" />
+  <delta serial="101888" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101888/delta.xml" hash="4ac1e0644d6da5e773bcd6238fb00c63a66fb094bf7958728fe5ae65a091e1e5" />
+  <delta serial="101887" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101887/delta.xml" hash="59b370a0742653ccf2dc22d09aa40701d5e52f2f8014f910ef985165d790d863" />
+  <delta serial="101886" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101886/delta.xml" hash="b42432c75ccd742a21dff62f37e5405c8a1ad675ded5a5d70bf8a4eb28de489b" />
+  <delta serial="101885" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101885/delta.xml" hash="9bea6164b1869748bda0a8d00c259c07d775834c2bc27e9536d655694e4d293a" />
+  <delta serial="101884" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101884/delta.xml" hash="729fe32ab316dc6b9488ec8c2406ac48638adf9e0edf451564f32904cc023513" />
+  <delta serial="101883" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101883/delta.xml" hash="7dc71b58d257d59befbb3d3efa4fbfc2f5f53efc1f40853b92984a237d9a6f9a" />
+  <delta serial="101882" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101882/delta.xml" hash="b0f48920becbf56a51f944e12fcc289dc3d2528fdaef08f6fbee1c8e6b07c262" />
+  <delta serial="101881" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101881/delta.xml" hash="e43ebe4734a92cb942e34987acd3b63182521eeac7a0e907f48415b1419960df" />
+  <delta serial="101880" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101880/delta.xml" hash="f8b83073c940df325ad0209951ced4cf6253bc39f013cccfdd606559c0c9f421" />
+  <delta serial="101879" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101879/delta.xml" hash="59009a4620992eeebdca336509837e33a9ed825a742c705c57dd9fc2b7a13b8d" />
+  <delta serial="101878" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101878/delta.xml" hash="955c7477202ebc22e622a78bae3ccd0a55ea9b522a333d451e06e843d39cf9e3" />
+  <delta serial="101877" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101877/delta.xml" hash="b056272b92ca46f8f9dce7ca6471026fa84dfe092492a5c063d255bbba47ef04" />
+  <delta serial="101876" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101876/delta.xml" hash="e4e3e34b58c53f679286705464be9223c2bf19ae83da5d71cb8fe0bd8b2a5643" />
+  <delta serial="101875" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101875/delta.xml" hash="feec197c516361df1e45682a66713c3a90a5c008e99dc9010defff99e1b2ac48" />
+  <delta serial="101874" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101874/delta.xml" hash="0bf374f8a547c8235409f4d7bef359521ecc485662ca9541ed357711657c14fa" />
+  <delta serial="101873" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101873/delta.xml" hash="2ba20a5b273d0bdaf5d6b57cdd9a779d90755bccd62312d495cc408f193d8daa" />
+  <delta serial="101872" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101872/delta.xml" hash="bff8c8edeeff0e6c8d7f2aac9e2f47919782bab6c95da7ae214e076eb19c81a1" />
+  <delta serial="101871" uri="https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101871/delta.xml" hash="5591a6e526ee041de7bf3bf35527df707cb06cfdda38026e8910c0fb69d306bf" />
+</notification>

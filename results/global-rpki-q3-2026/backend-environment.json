@@ -1,0 +1,7 @@
+{
+  "openssl": "OpenSSL 3.6.2 7 Apr 2026 (Library: OpenSSL 3.6.2 7 Apr 2026)",
+  "openssl_binary_sha256": "61f2fc9464ce49540a481d14c0c8ac1a6d92624616f688b296a713d1e69014dc",
+  "composite_provider_sha256": "7d6d100dd9121252f6b354a4103838e152cd256ff80429856b507e56b738baea",
+  "existing_generator_reused": true,
+  "installation_changes": false
+}

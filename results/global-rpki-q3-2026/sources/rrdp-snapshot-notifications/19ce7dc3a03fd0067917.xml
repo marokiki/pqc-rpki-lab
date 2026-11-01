@@ -1,0 +1,23 @@
+<notification xmlns="http://www.ripe.net/rpki/rrdp" version="1" session_id="6da97e57-04a6-4f56-bfc3-6d03f0ebb55f" serial="160700">
+  <snapshot uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160700/snapshot.xml" hash="13bd5b8ac6bbb23f935c5d9a2c04256a348288756f042a88f646a18f48f9e71e" />
+  <delta serial="160700" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160700/delta.xml" hash="98e55bdf0349d244764aa01791a7f35a7feee3c9d4f9c416822a3d8d61f85766" />
+  <delta serial="160699" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160699/delta.xml" hash="cb773d3f29e223fe5a4a14e37e89bae42f2778e7759abe78a25bb4cf91604987" />
+  <delta serial="160698" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160698/delta.xml" hash="26fcd1785e1185cab4cbfa8f3ebe982e319b0198a8a4cad40a176a08a902015c" />
+  <delta serial="160697" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160697/delta.xml" hash="8a041f79a1a34c8ac58555a805567155e50274fb8e5b393d5af35a1d0c5d6e23" />
+  <delta serial="160696" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160696/delta.xml" hash="d32e62cdb2e6255f8c93b30c8b5c3bfeebde76b7f4c1e37cd5ab2db33da2aae3" />
+  <delta serial="160695" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160695/delta.xml" hash="b1a4f574c43f8f3490feb94da04213fec4e0b5630a43a333c5193dbd43caeeae" />
+  <delta serial="160694" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160694/delta.xml" hash="1424524e1aa957d4fd1f137d5058a8cc3159953b3d3c851b3d658e5533520a6d" />
+  <delta serial="160693" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160693/delta.xml" hash="350c8a8b6192dd54851f917eea86a1566f9a76d51465417ebedca6a6091ff3e7" />
+  <delta serial="160692" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160692/delta.xml" hash="c209ec89c237c8890cfa64204b9e73694702d20ef42d85adafc2a7eca3f79046" />
+  <delta serial="160691" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160691/delta.xml" hash="02dae31f42cc55047d6ef208c293ab2e50d644f5fff1e5669bf2d3899bcb8c19" />
+  <delta serial="160690" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160690/delta.xml" hash="cb063f0d6044553c7c7bfb1ad9a8ae5da699857761434cc3d48c430993b0d04f" />
+  <delta serial="160689" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160689/delta.xml" hash="893120ac1f399118c0242a0ff74321573575ded5c7f5a8330b9e35099e1ec91c" />
+  <delta serial="160688" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160688/delta.xml" hash="bc1d6bda470cd616d55fd5edffcec10bc1ccd636b6906877cea60fd5792452d4" />
+  <delta serial="160687" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160687/delta.xml" hash="d759769b92bb2194ead4e6f8d534c35f6a0fa78fb63418e182879dbcac173d1a" />
+  <delta serial="160686" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160686/delta.xml" hash="da7fd9551df13bc84a13cc53e6ff8b33cc8102b74b605dbe20f2d6d02741a67e" />
+  <delta serial="160685" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160685/delta.xml" hash="7c57efdd50b0d60fd9f955e92fd0a2f5f98b912ed9b76eafe363eb958bed13bd" />
+  <delta serial="160684" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160684/delta.xml" hash="d327eb3457a3ea79dc95c077fa18b7f5a39472b0b9944057a8ff1c3686548ee3" />
+  <delta serial="160683" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160683/delta.xml" hash="02d77b0d19a49e6400c4e1af9b717b0079558bc290fa8b333ce1a046d2974daf" />
+  <delta serial="160682" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160682/delta.xml" hash="035b394e6bbd5d9fbf3be98c0e21fc1e18abd473d088e4d29f34739f447f51db" />
+  <delta serial="160681" uri="https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160681/delta.xml" hash="b55a3af52ed36a2671b13771ae98f1b7a6c46650342373afb5325fd7f4b37dca" />
+</notification>

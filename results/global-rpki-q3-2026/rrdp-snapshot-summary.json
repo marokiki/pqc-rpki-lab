@@ -1,0 +1,952 @@
+{
+  "classification": "observed archive documents, not per-client network traffic",
+  "documents": [
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 397347,
+      "path": "005af55aea08b26910707786f73890dd9ca3035ada33b6180ebd0ee06329c7c9.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 454947,
+        "ml-dsa-44": 436187,
+        "ml-dsa-65": 453495,
+        "rsa": 397347
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 4
+      },
+      "published_der_bytes": 297224,
+      "replacement_publish_count": 0,
+      "serial": 9179,
+      "session_id": "53034905-0b14-4057-b87b-769f7c63f29b",
+      "sha256": "005af55aea08b26910707786f73890dd9ca3035ada33b6180ebd0ee06329c7c9",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 19885482,
+      "path": "13bd5b8ac6bbb23f935c5d9a2c04256a348288756f042a88f646a18f48f9e71e.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 102535938,
+        "ml-dsa-44": 75489022,
+        "ml-dsa-65": 100424574,
+        "rsa": 19885482
+      },
+      "publish_counts": {
+        "cer": 710,
+        "crl": 722,
+        "mft": 722,
+        "roa": 6298
+      },
+      "published_der_bytes": 14180088,
+      "replacement_publish_count": 0,
+      "serial": 160700,
+      "session_id": "6da97e57-04a6-4f56-bfc3-6d03f0ebb55f",
+      "sha256": "13bd5b8ac6bbb23f935c5d9a2c04256a348288756f042a88f646a18f48f9e71e",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 75834586,
+      "path": "187d5a575a4cc7ad780c71b3327b133c376daaadb020f8b6bb30642da8a25ce1.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 339750518,
+        "ml-dsa-44": 253365018,
+        "ml-dsa-65": 333000214,
+        "rsa": 75834586
+      },
+      "publish_counts": {
+        "asa": 142,
+        "cer": 3484,
+        "crl": 3483,
+        "mft": 3483,
+        "roa": 17593
+      },
+      "published_der_bytes": 52647607,
+      "replacement_publish_count": 0,
+      "serial": 500889,
+      "session_id": "66b09eea-03c7-435f-bb29-5bee810bd657",
+      "sha256": "187d5a575a4cc7ad780c71b3327b133c376daaadb020f8b6bb30642da8a25ce1",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 112086,
+      "path": "18de46bcd8a8ab8eece10be9a73c1c7a8b6b9fec9cd32bb396979b9a825da01f.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 522526,
+        "ml-dsa-44": 388358,
+        "ml-dsa-65": 512054,
+        "rsa": 112086
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 37
+      },
+      "published_der_bytes": 79490,
+      "replacement_publish_count": 0,
+      "serial": 1761,
+      "session_id": "7d81c8e0-e560-4b46-8ebd-89dca0f8ce06",
+      "sha256": "18de46bcd8a8ab8eece10be9a73c1c7a8b6b9fec9cd32bb396979b9a825da01f",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 34310257,
+      "path": "2236aaecfafc547cb232687ad631d3878ccb16f519a1d3c011d57e68ca4311c5.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 152751153,
+        "ml-dsa-44": 114035201,
+        "ml-dsa-65": 149729233,
+        "rsa": 34310257
+      },
+      "publish_counts": {
+        "asa": 167,
+        "cer": 197,
+        "crl": 579,
+        "mft": 579,
+        "roa": 9988
+      },
+      "published_der_bytes": 24328169,
+      "replacement_publish_count": 0,
+      "serial": 410455,
+      "session_id": "1c33ba5d-4e16-448d-9a22-b12599ef1cba",
+      "sha256": "2236aaecfafc547cb232687ad631d3878ccb16f519a1d3c011d57e68ca4311c5",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 70901,
+      "path": "281c82e57a93b0fce47788ae031377ac84b68abc1e62197161c4565358043c87.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 320889,
+        "ml-dsa-44": 239197,
+        "ml-dsa-65": 314533,
+        "rsa": 70901
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 22
+      },
+      "published_der_bytes": 50288,
+      "replacement_publish_count": 0,
+      "serial": 1511,
+      "session_id": "7be1c1f0-fb1a-4b5b-875a-fb3feb9a8d1b",
+      "sha256": "281c82e57a93b0fce47788ae031377ac84b68abc1e62197161c4565358043c87",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 38874763,
+      "path": "2a10d2200e4a0a55dd4f159add67ed1b2f0fcb484b76fcb4b3bf44720a7572e9.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 187958339,
+        "ml-dsa-44": 139158903,
+        "ml-dsa-65": 184147507,
+        "rsa": 38874763
+      },
+      "publish_counts": {
+        "asa": 1,
+        "cer": 2336,
+        "crl": 2341,
+        "mft": 2341,
+        "roa": 9275
+      },
+      "published_der_bytes": 27314029,
+      "replacement_publish_count": 0,
+      "serial": 357465,
+      "session_id": "63cbe046-ec3b-4fa4-a8a7-40857e2ff3f2",
+      "sha256": "2a10d2200e4a0a55dd4f159add67ed1b2f0fcb484b76fcb4b3bf44720a7572e9",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 20440517,
+      "path": "2b2f726dcdaa9f70c4ec2d81194d616006d9b560b5b80941c55ad78345b81493.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 92641037,
+        "ml-dsa-44": 69018345,
+        "ml-dsa-65": 90794425,
+        "rsa": 20440517
+      },
+      "publish_counts": {
+        "asa": 1,
+        "crl": 1,
+        "mft": 1,
+        "roa": 6752
+      },
+      "published_der_bytes": 14544101,
+      "replacement_publish_count": 0,
+      "serial": 29999,
+      "session_id": "0eac24d1-fe4a-41b7-9d76-c9f22cdfbe81",
+      "sha256": "2b2f726dcdaa9f70c4ec2d81194d616006d9b560b5b80941c55ad78345b81493",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 761830508,
+      "path": "392c048935b53c78b9942b1f51bea381c3364a306d7d82065476c2f23da4993c.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 3281060416,
+        "ml-dsa-44": 2456647996,
+        "ml-dsa-65": 3216602224,
+        "rsa": 761830508
+      },
+      "publish_counts": {
+        "asa": 696,
+        "cer": 10189,
+        "crl": 10007,
+        "mft": 10007,
+        "roa": 214895
+      },
+      "published_der_bytes": 529997266,
+      "replacement_publish_count": 0,
+      "serial": 202758,
+      "session_id": "4a394319-7460-4141-a416-1addb69284ff",
+      "sha256": "392c048935b53c78b9942b1f51bea381c3364a306d7d82065476c2f23da4993c",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 20231371,
+      "path": "3bf6db6080e9e72655e74640e51dada186119a5585eba634772f25d6fba32c04.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 92241103,
+        "ml-dsa-44": 68686875,
+        "ml-dsa-65": 90408147,
+        "rsa": 20231371
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 6736
+      },
+      "published_der_bytes": 14386939,
+      "replacement_publish_count": 0,
+      "serial": 4949,
+      "session_id": "4bd13b08-31cf-4342-af8f-0bc15fcee76b",
+      "sha256": "3bf6db6080e9e72655e74640e51dada186119a5585eba634772f25d6fba32c04",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 12138106,
+      "path": "3f08e9eacda4e022cd9a787782ad92f732650d7aa9de77c758187bad0bad3c24.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 54971922,
+        "ml-dsa-44": 40959378,
+        "ml-dsa-65": 53879130,
+        "rsa": 12138106
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 4006
+      },
+      "published_der_bytes": 8636280,
+      "replacement_publish_count": 0,
+      "serial": 26319,
+      "session_id": "2f7c3e28-e453-499f-9113-51a844b87050",
+      "sha256": "3f08e9eacda4e022cd9a787782ad92f732650d7aa9de77c758187bad0bad3c24",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 13070,
+      "path": "4074153c46d39fa1f8a12a249012455babd67937218d80d892aadde419ed85b5.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 59998,
+        "ml-dsa-44": 44734,
+        "ml-dsa-65": 58818,
+        "rsa": 13070
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 3
+      },
+      "published_der_bytes": 9141,
+      "replacement_publish_count": 0,
+      "serial": 1455,
+      "session_id": "c90ce58f-7675-4d72-9c9a-d615359ae3ba",
+      "sha256": "4074153c46d39fa1f8a12a249012455babd67937218d80d892aadde419ed85b5",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 117570548,
+      "path": "412acd311a920fffeefe3d6dd33aae795a9b411ce117f902c54aa722bd2ef84a.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 546221156,
+        "ml-dsa-44": 405966572,
+        "ml-dsa-65": 535264320,
+        "rsa": 117570548
+      },
+      "publish_counts": {
+        "asa": 549,
+        "cer": 9411,
+        "crl": 10783,
+        "mft": 10783,
+        "roa": 18860
+      },
+      "published_der_bytes": 82852614,
+      "replacement_publish_count": 0,
+      "serial": 107347,
+      "session_id": "8dad0cc8-0bc8-4021-88ed-e75e295df946",
+      "sha256": "412acd311a920fffeefe3d6dd33aae795a9b411ce117f902c54aa722bd2ef84a",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 3903,
+      "path": "43f22a98e584b914ce8f716f94ca6273c9316fccf29eaa72617a38fdcff665f9.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 18755,
+        "ml-dsa-44": 13979,
+        "ml-dsa-65": 18391,
+        "rsa": 3903
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1
+      },
+      "published_der_bytes": 2610,
+      "replacement_publish_count": 0,
+      "serial": 1330,
+      "session_id": "4da0bc15-6736-49ab-a0ba-48042a621a58",
+      "sha256": "43f22a98e584b914ce8f716f94ca6273c9316fccf29eaa72617a38fdcff665f9",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 3393909,
+      "path": "45d3357e31a8c981401cc90fb53fee357a38463ab2c5e87105b76d138bab3338.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 16257965,
+        "ml-dsa-44": 12050885,
+        "ml-dsa-65": 15930545,
+        "rsa": 3393909
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 1202
+      },
+      "published_der_bytes": 2405867,
+      "replacement_publish_count": 0,
+      "serial": 5273,
+      "session_id": "27e3c914-3741-40c5-bec7-265e2eb80946",
+      "sha256": "45d3357e31a8c981401cc90fb53fee357a38463ab2c5e87105b76d138bab3338",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 53338,
+      "path": "47883b79a8fbec3a6eb2a93439b5cb115d2bb022f4b2e836db6bf5a9c8627838.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 249946,
+        "ml-dsa-44": 185674,
+        "ml-dsa-65": 244894,
+        "rsa": 53338
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 17
+      },
+      "published_der_bytes": 37723,
+      "replacement_publish_count": 0,
+      "serial": 1608,
+      "session_id": "af012d70-97a6-4671-8800-0259f8ff833a",
+      "sha256": "47883b79a8fbec3a6eb2a93439b5cb115d2bb022f4b2e836db6bf5a9c8627838",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 283884,
+      "path": "4ec49ad31675542861928f840ada7fc684da6ce77d4d2d986758ae5b0ff24248.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 1292724,
+        "ml-dsa-44": 962816,
+        "ml-dsa-65": 1267056,
+        "rsa": 283884
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 93
+      },
+      "published_der_bytes": 201738,
+      "replacement_publish_count": 0,
+      "serial": 2066,
+      "session_id": "7f9c5bd1-c000-4f2b-9a98-bb3b625b490c",
+      "sha256": "4ec49ad31675542861928f840ada7fc684da6ce77d4d2d986758ae5b0ff24248",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 12897,
+      "path": "54476a4ef98675cbd5f3ef4963bcc3fb61ed66a38fe5ec528be2eed18123838a.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 59825,
+        "ml-dsa-44": 44553,
+        "ml-dsa-65": 58637,
+        "rsa": 12897
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 3
+      },
+      "published_der_bytes": 9010,
+      "replacement_publish_count": 0,
+      "serial": 180,
+      "session_id": "74b301dd-6631-430c-90da-d0e74c4bb78c",
+      "sha256": "54476a4ef98675cbd5f3ef4963bcc3fb61ed66a38fe5ec528be2eed18123838a",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 37318,
+      "path": "58d10d876112abe90b35661cbe07f5c6149dcf7272b33f69c69289d9b33c2838.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 169738,
+        "ml-dsa-44": 126502,
+        "ml-dsa-65": 166374,
+        "rsa": 37318
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 11
+      },
+      "published_der_bytes": 26385,
+      "replacement_publish_count": 0,
+      "serial": 1505,
+      "session_id": "c4c8c42a-ba17-45c5-b04a-58c85419df9c",
+      "sha256": "58d10d876112abe90b35661cbe07f5c6149dcf7272b33f69c69289d9b33c2838",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 65094,
+      "path": "62b5fab1a271963808e9c4dcf1e159348f29f92f798b39d2108dbed194204675.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 304474,
+        "ml-dsa-44": 226202,
+        "ml-dsa-65": 298318,
+        "rsa": 65094
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 21
+      },
+      "published_der_bytes": 46079,
+      "replacement_publish_count": 0,
+      "serial": 1638,
+      "session_id": "be5f8930-8247-40cb-9d48-559e1f1fa93a",
+      "sha256": "62b5fab1a271963808e9c4dcf1e159348f29f92f798b39d2108dbed194204675",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 64718,
+      "path": "6d129922fd46baa97e20678da921496f00fed94ab20dd5777a53f934c22257e0.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 293338,
+        "ml-dsa-44": 218630,
+        "ml-dsa-65": 287518,
+        "rsa": 64718
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 20
+      },
+      "published_der_bytes": 45887,
+      "replacement_publish_count": 0,
+      "serial": 540,
+      "session_id": "af2a4f41-37b0-4531-a576-88a42b3f670a",
+      "sha256": "6d129922fd46baa97e20678da921496f00fed94ab20dd5777a53f934c22257e0",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 1264650,
+      "path": "7786d61584270797f21b95d1d9873200e86bb8b2e3cdd6a0ed9a020132d9e81e.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 5052558,
+        "ml-dsa-44": 3813510,
+        "ml-dsa-65": 4955994,
+        "rsa": 1264650
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 353
+      },
+      "published_der_bytes": 907006,
+      "replacement_publish_count": 0,
+      "serial": 127926,
+      "session_id": "098c0ce1-b270-4006-a087-bd4f56f842f3",
+      "sha256": "7786d61584270797f21b95d1d9873200e86bb8b2e3cdd6a0ed9a020132d9e81e",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 7348858,
+      "path": "77a6f0eb2c58cb7b5df28a93b38f03057ec6f22d519cfc0cebbb801f9e60db95.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 36201186,
+        "ml-dsa-44": 26756882,
+        "ml-dsa-65": 35462738,
+        "rsa": 7348858
+      },
+      "publish_counts": {
+        "cer": 394,
+        "crl": 398,
+        "mft": 398,
+        "roa": 1907
+      },
+      "published_der_bytes": 5216237,
+      "replacement_publish_count": 0,
+      "serial": 68010,
+      "session_id": "335d178e-beb8-467d-8728-ba45540b34c9",
+      "sha256": "77a6f0eb2c58cb7b5df28a93b38f03057ec6f22d519cfc0cebbb801f9e60db95",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 25070182,
+      "path": "78f7f8ab0efdf5f84595710a127020cb9f0bf59bd83c4c1a31275f7e49f5ebbe.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 115072434,
+        "ml-dsa-44": 85627234,
+        "ml-dsa-65": 112777194,
+        "rsa": 25070182
+      },
+      "publish_counts": {
+        "cer": 593,
+        "crl": 616,
+        "mft": 616,
+        "roa": 7204
+      },
+      "published_der_bytes": 17830553,
+      "replacement_publish_count": 0,
+      "serial": 120301,
+      "session_id": "255b3209-f9d2-4b6d-803b-f7dc30865374",
+      "sha256": "78f7f8ab0efdf5f84595710a127020cb9f0bf59bd83c4c1a31275f7e49f5ebbe",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 131641,
+      "path": "890917fcdc82a9b34830b35f600d1a9692cb4bac7fd1bcf39276c1e808a35219.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 595545,
+        "ml-dsa-44": 443793,
+        "ml-dsa-65": 583609,
+        "rsa": 131641
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 42
+      },
+      "published_der_bytes": 93551,
+      "replacement_publish_count": 0,
+      "serial": 1599,
+      "session_id": "30d919c0-4898-4685-8fab-5e1c067ab213",
+      "sha256": "890917fcdc82a9b34830b35f600d1a9692cb4bac7fd1bcf39276c1e808a35219",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 280994579,
+      "path": "897fedf9842b01d50d49ab2bb5836020f9f7f3d30c91852e3dbdde6d3bb8e383.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 1347246651,
+        "ml-dsa-44": 998063635,
+        "ml-dsa-65": 1320017267,
+        "rsa": 280994579
+      },
+      "publish_counts": {
+        "asa": 2082,
+        "cer": 23266,
+        "crl": 22977,
+        "mft": 22977,
+        "roa": 51623
+      },
+      "published_der_bytes": 198538633,
+      "replacement_publish_count": 0,
+      "serial": 239077,
+      "session_id": "172322cf-c642-4e6f-806c-bd2375d8001a",
+      "sha256": "897fedf9842b01d50d49ab2bb5836020f9f7f3d30c91852e3dbdde6d3bb8e383",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 51821,
+      "path": "8bd2666a183f786c5e88ff3509b4aeb67094841e52923d98c37ddacb60db110b.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 237681,
+        "ml-dsa-44": 176969,
+        "ml-dsa-65": 232961,
+        "rsa": 51821
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 16
+      },
+      "published_der_bytes": 36681,
+      "replacement_publish_count": 0,
+      "serial": 50,
+      "session_id": "2b2eed7a-86a4-47ab-920e-5c8365a48a08",
+      "sha256": "8bd2666a183f786c5e88ff3509b4aeb67094841e52923d98c37ddacb60db110b",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 82953,
+      "path": "90e7e4167e321a981175683de54d6cf13f0b7e56280ff8655d368a48d59109f6.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 375693,
+        "ml-dsa-44": 280017,
+        "ml-dsa-65": 368249,
+        "rsa": 82953
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 26
+      },
+      "published_der_bytes": 58860,
+      "replacement_publish_count": 0,
+      "serial": 1503,
+      "session_id": "74a44187-d8e1-40af-861d-78d32361edb9",
+      "sha256": "90e7e4167e321a981175683de54d6cf13f0b7e56280ff8655d368a48d59109f6",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 6912,
+      "path": "9a6f9330502cb7c50030ae0acd3def9192bb307835e98e8f02700f59b75e8ac0.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 32452,
+        "ml-dsa-44": 24176,
+        "ml-dsa-65": 31812,
+        "rsa": 6912
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 1
+      },
+      "published_der_bytes": 4749,
+      "replacement_publish_count": 0,
+      "serial": 1452,
+      "session_id": "c6122fc7-42c8-40a4-bca2-8cc1c883d8f8",
+      "sha256": "9a6f9330502cb7c50030ae0acd3def9192bb307835e98e8f02700f59b75e8ac0",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 523831,
+      "path": "9b2f81de09ebe559ed742515a74bf97fa13c0b3335c7366085e6e43060a8ee39.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 2377103,
+        "ml-dsa-44": 1770943,
+        "ml-dsa-65": 2329879,
+        "rsa": 523831
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 172
+      },
+      "published_der_bytes": 372498,
+      "replacement_publish_count": 0,
+      "serial": 1759,
+      "session_id": "dc9f329e-549c-4f77-a043-ae2e219c1b98",
+      "sha256": "9b2f81de09ebe559ed742515a74bf97fa13c0b3335c7366085e6e43060a8ee39",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 4304773,
+      "path": "9e6df9eaa34390c1202f0f64775a6013c4289090127eb67df6b9d7f1bfc15183.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 20179897,
+        "ml-dsa-44": 14986769,
+        "ml-dsa-65": 19773557,
+        "rsa": 4304773
+      },
+      "publish_counts": {
+        "crl": 2,
+        "mft": 2,
+        "roa": 1482
+      },
+      "published_der_bytes": 3057292,
+      "replacement_publish_count": 0,
+      "serial": 8020,
+      "session_id": "e790f563-189d-4719-847f-44fdb428874c",
+      "sha256": "9e6df9eaa34390c1202f0f64775a6013c4289090127eb67df6b9d7f1bfc15183",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 85084174,
+      "path": "b1c2a4446dbd97ce3ef2e4d216e359b0e3cf3614db1cfee42481d418af22169a.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 384751662,
+        "ml-dsa-44": 286662230,
+        "ml-dsa-65": 377072554,
+        "rsa": 85084174
+      },
+      "publish_counts": {
+        "asa": 166,
+        "cer": 3657,
+        "crl": 3826,
+        "mft": 3826,
+        "roa": 20332
+      },
+      "published_der_bytes": 59746046,
+      "replacement_publish_count": 0,
+      "serial": 6288,
+      "session_id": "4409e95b-148b-4099-82c9-9ad240b7a855",
+      "sha256": "b1c2a4446dbd97ce3ef2e4d216e359b0e3cf3614db1cfee42481d418af22169a",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 18218,
+      "path": "b35774360cffac81c002121648a369d471b15129b0024405dee00795b6e684a8.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 86522,
+        "ml-dsa-44": 64250,
+        "ml-dsa-65": 84782,
+        "rsa": 18218
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 5
+      },
+      "published_der_bytes": 12772,
+      "replacement_publish_count": 0,
+      "serial": 1723,
+      "session_id": "7c2d14ed-ded9-4777-9885-dc9d35403305",
+      "sha256": "b35774360cffac81c002121648a369d471b15129b0024405dee00795b6e684a8",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 24910,
+      "path": "bccd4682f9b678d43f47c3c961012e0925ab2e4b1fe6a55c450e29d50d5868f7.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 114590,
+        "ml-dsa-44": 85334,
+        "ml-dsa-65": 112314,
+        "rsa": 24910
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 7
+      },
+      "published_der_bytes": 17552,
+      "replacement_publish_count": 0,
+      "serial": 1439,
+      "session_id": "fd0039bd-1d18-4bd9-bd0c-5e5fc3d1976a",
+      "sha256": "bccd4682f9b678d43f47c3c961012e0925ab2e4b1fe6a55c450e29d50d5868f7",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 45192093,
+      "path": "beecc403aae2f6d1accc7dd30224e529d2c30c86e0eadfbfd7c8458f5682a2a4.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 210758421,
+        "ml-dsa-44": 156574941,
+        "ml-dsa-65": 206517937,
+        "rsa": 45192093
+      },
+      "publish_counts": {
+        "cer": 1479,
+        "crl": 1560,
+        "mft": 1571,
+        "roa": 12412,
+        "tal": 1
+      },
+      "published_der_bytes": 31896080,
+      "replacement_publish_count": 0,
+      "serial": 101902,
+      "session_id": "8fe3109e-2561-4627-8850-83ab94b9bb91",
+      "sha256": "beecc403aae2f6d1accc7dd30224e529d2c30c86e0eadfbfd7c8458f5682a2a4",
+      "unmodeled_payloads": [
+        {
+          "bytes": 496,
+          "sha256": "2838ef30ea27ce5705abf5f5adb131d8c35b1f50858338a2f3c84bb207c2fa35",
+          "treatment": "opaque text TAL retained at observed size; future TAL contents not modeled",
+          "type": "tal",
+          "uri": "rsync://rpki.afrinic.net/repository/AfriNIC-simple.tal"
+        }
+      ],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 575590,
+      "path": "c110ef2b4305bcae25dfe73b4d21ac0018e14a6aca2e4981eae15d139dc73e3b.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 2760350,
+        "ml-dsa-44": 2045886,
+        "ml-dsa-65": 2704766,
+        "rsa": 575590
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 203
+      },
+      "published_der_bytes": 407796,
+      "replacement_publish_count": 0,
+      "serial": 3920,
+      "session_id": "50656cf5-c3aa-45bf-8de3-7c9fa8af5322",
+      "sha256": "c110ef2b4305bcae25dfe73b4d21ac0018e14a6aca2e4981eae15d139dc73e3b",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 8131875,
+      "path": "d12d90171216867f19dbdb9590fbd69e59e026887649c3ab829d2d7a849b1bd3.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 37273155,
+        "ml-dsa-44": 27748015,
+        "ml-dsa-65": 36529675,
+        "rsa": 8131875
+      },
+      "publish_counts": {
+        "asa": 39,
+        "cer": 41,
+        "crl": 144,
+        "mft": 144,
+        "roa": 2462
+      },
+      "published_der_bytes": 5800610,
+      "replacement_publish_count": 0,
+      "serial": 143791,
+      "session_id": "222bc4dd-08cd-46c3-b744-f99835520fa4",
+      "sha256": "d12d90171216867f19dbdb9590fbd69e59e026887649c3ab829d2d7a849b1bd3",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 9680,
+      "path": "dd4fe1edf7de941c4e853d7b98a72e00f85de7b09ad0161c8a404d80989072b1.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 45908,
+        "ml-dsa-44": 34140,
+        "ml-dsa-65": 44996,
+        "rsa": 9680
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 2
+      },
+      "published_der_bytes": 6709,
+      "replacement_publish_count": 0,
+      "serial": 475,
+      "session_id": "7d3762dc-7d10-483a-84b2-e85456b2cd55",
+      "sha256": "dd4fe1edf7de941c4e853d7b98a72e00f85de7b09ad0161c8a404d80989072b1",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    },
+    {
+      "kind": "snapshot",
+      "original_xml_bytes": 1354704,
+      "path": "eb70dd62b9d36b524a9f3bc569b26aaa0aa475296efe3960e877218c9acf2051.xml",
+      "projected_xml_bytes": {
+        "composite-mldsa65-p256": 6126000,
+        "ml-dsa-44": 4565236,
+        "ml-dsa-65": 6004324,
+        "rsa": 1354704
+      },
+      "publish_counts": {
+        "crl": 1,
+        "mft": 1,
+        "roa": 445
+      },
+      "published_der_bytes": 963831,
+      "replacement_publish_count": 0,
+      "serial": 2386,
+      "session_id": "15049d5c-515b-4018-8402-cc98e4b507da",
+      "sha256": "eb70dd62b9d36b524a9f3bc569b26aaa0aa475296efe3960e877218c9acf2051",
+      "unmodeled_payloads": [],
+      "withdraw_count": 0
+    }
+  ],
+  "errors": [],
+  "method": "preserve original XML framing, URIs, whitespace, and withdrawal elements; replace base64 payload length using re-encoded complete DER lengths",
+  "projections": {
+    "snapshot_composite-mldsa65-p256": 7039424515,
+    "snapshot_ml-dsa-44": 5247988987,
+    "snapshot_ml-dsa-65": 6899465015,
+    "snapshot_rsa": 1565796047
+  },
+  "status": "estimated",
+  "totals": {
+    "snapshot_documents": 39,
+    "snapshot_publish_asa": 3843,
+    "snapshot_publish_cer": 55757,
+    "snapshot_publish_crl": 57464,
+    "snapshot_publish_mft": 57475,
+    "snapshot_publish_roa": 394530,
+    "snapshot_publish_tal": 1,
+    "snapshot_replacement_publishes": 0,
+    "snapshot_withdrawals": 0,
+    "snapshot_xml_bytes": 1565796047
+  }
+}

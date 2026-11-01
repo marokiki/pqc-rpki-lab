@@ -1,0 +1,19 @@
+<notification xmlns="http://www.ripe.net/rpki/rrdp" version="1" session_id="255b3209-f9d2-4b6d-803b-f7dc30865374" serial="120301">
+  <snapshot uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120301/ce43c0b30fc2e285/snapshot.xml" hash="78f7f8ab0efdf5f84595710a127020cb9f0bf59bd83c4c1a31275f7e49f5ebbe"/>
+  <delta serial="120301" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120301/4f1cc549e3b3efab/delta.xml" hash="3e9e586a6c1d7660c3a1a102382569365f0251b09294bb86f2204848ae3af69e"/>
+  <delta serial="120300" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120300/f3a7efa43a46de02/delta.xml" hash="4cb8d7875e457308d16ed98985104fce300b3876f60ae7bdc7f3d22a318a9255"/>
+  <delta serial="120299" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120299/71c20dc55469b88a/delta.xml" hash="bcfdd38cdea0d961d055d91c8a0723c735fdf6b9a5f588352d73cb6444b95ef4"/>
+  <delta serial="120298" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120298/c2c4221a771c8532/delta.xml" hash="e7cefd57011280c813afcb2848b6a608b96212e44a0f00d9639ec8e7511b21a6"/>
+  <delta serial="120297" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120297/663a10b33cf52529/delta.xml" hash="cf8c3aad0b6b861c8d055027f568322206e11675ac9b33f1c510df6fad2126cc"/>
+  <delta serial="120296" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120296/ece2beb39b5d9b43/delta.xml" hash="9db176c292b226dfee85b341b868f8759ca51c2c1931b752bcd8c985ee022beb"/>
+  <delta serial="120295" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120295/b59ab1a4d015cfcb/delta.xml" hash="cb87a3653bb285ab14d0af2a7ac8105b818a21a68cf38bc1d82a09a0e0a84e05"/>
+  <delta serial="120294" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120294/dee1f347ecbb91ee/delta.xml" hash="71fb0f61531f909e1bcd5d50e1b3422cb1536ad937cec9bd5d084fa049fa8baa"/>
+  <delta serial="120293" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120293/7275d1a0518a91fb/delta.xml" hash="046eaa5f8592cc98d11da99411dbe3582c2567311b54ec0ac8bdb51248e73d28"/>
+  <delta serial="120292" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120292/94f871e41bcaa84c/delta.xml" hash="a75aeda8ff1a3838e02dc95d4475adff6b4df2bd1d0b04380c5543e8019b1abd"/>
+  <delta serial="120291" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120291/c6d1f7ed0a0f21e0/delta.xml" hash="594a36526d185659e725b9407c725b158381294bbd1f60177be9f8ceb75c337b"/>
+  <delta serial="120290" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120290/885b7cff2a1b0c65/delta.xml" hash="de56fee61ec8d29dcd29abadc4ac5313478c1f6080a4cca750f4e57bc1472c49"/>
+  <delta serial="120289" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120289/754d3bd77444eba9/delta.xml" hash="e441b64f32bbd864c656de0b82462bafe6b5b01a9f8f7090e2037c1c47012ce0"/>
+  <delta serial="120288" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120288/f1c56906a26cb62d/delta.xml" hash="194dd6a8899582d470b9922b0d98e8baf2740bf1a1e395c85eb1b6b2d8651743"/>
+  <delta serial="120287" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120287/aea2084cf3861387/delta.xml" hash="bf2cf8cbaa0949430e56b9da9c3ba74330a8d48c2344d052ba0edc62057634b2"/>
+  <delta serial="120286" uri="https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120286/8e5c6d39527d9a13/delta.xml" hash="17383ed58eccba0f654aff72244d253bf4859366c234a651ce69ecc835ce7676"/>
+</notification>

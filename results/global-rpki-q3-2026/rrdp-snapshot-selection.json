@@ -1,0 +1,1775 @@
+{
+  "classification": "live snapshot cohort, separate from September cache and deltas",
+  "started_utc": "2026-10-27T00:16:18.003606+00:00",
+  "finished_utc": "2026-10-27T00:19:49.093995+00:00",
+  "endpoint_selection": "distinct notification URLs at the selected September delta hosts, observed in the 20260930 log",
+  "selection_log_sha256": "b72da97901cb3fca9bd47dfa6e987b805795a35cb27c5088e9bb4cc5631c0957",
+  "accept_encoding": "identity",
+  "endpoints": [
+    {
+      "notification_uri": "https://rpki-repo.registro.br/rrdp/notification.xml",
+      "notification_path": "notifications/198613f16d61d95b7732.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-repo.registro.br/rrdp/notification.xml",
+        "final_uri": "https://rpki-repo.registro.br/rrdp/notification.xml",
+        "started_utc": "2026-10-27T00:16:18.005720+00:00",
+        "finished_utc": "2026-10-27T00:16:19.483957+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:19 GMT",
+          "Content-Length": "10693",
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": "\"6adfec90-29c5\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:13:04 GMT"
+        },
+        "bytes": 10693,
+        "sha256": "b2f8ca9d020c4ff2abc96b49386088338b50876ad58a33a0d9720b493da21054"
+      },
+      "session_id": "4409e95b-148b-4099-82c9-9ad240b7a855",
+      "serial": 6288,
+      "snapshot_uri": "https://rpki-repo.registro.br/rrdp/4409e95b-148b-4099-82c9-9ad240b7a855/6288/cd61815e9859816f/snapshot.xml",
+      "snapshot_sha256": "b1c2a4446dbd97ce3ef2e4d216e359b0e3cf3614db1cfee42481d418af22169a",
+      "snapshot_path": "xml/b1c2a4446dbd97ce3ef2e4d216e359b0e3cf3614db1cfee42481d418af22169a.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-repo.registro.br/rrdp/4409e95b-148b-4099-82c9-9ad240b7a855/6288/cd61815e9859816f/snapshot.xml",
+        "final_uri": "https://rpki-repo.registro.br/rrdp/4409e95b-148b-4099-82c9-9ad240b7a855/6288/cd61815e9859816f/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:19.484922+00:00",
+        "finished_utc": "2026-10-27T00:16:33.452936+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:20 GMT",
+          "Content-Length": "85084174",
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": "\"6adfec8e-512480e\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:13:02 GMT"
+        },
+        "bytes": 85084174,
+        "sha256": "b1c2a4446dbd97ce3ef2e4d216e359b0e3cf3614db1cfee42481d418af22169a"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-repository.nic.ad.jp/rrdp/ap/notification.xml",
+      "notification_path": "notifications/19ce7dc3a03fd0067917.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-repository.nic.ad.jp/rrdp/ap/notification.xml",
+        "final_uri": "https://rpki-repository.nic.ad.jp/rrdp/ap/notification.xml",
+        "started_utc": "2026-10-27T00:16:18.006848+00:00",
+        "finished_utc": "2026-10-27T00:16:18.163813+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:18 GMT",
+          "Content-Length": "4378",
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": "\"6adfed08-111a\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:15:04 GMT"
+        },
+        "bytes": 4378,
+        "sha256": "d585496c7ee2765ed5113ec38b3722825eccdc463f2ccb02d53acf339d99b079"
+      },
+      "session_id": "6da97e57-04a6-4f56-bfc3-6d03f0ebb55f",
+      "serial": 160700,
+      "snapshot_uri": "https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160700/snapshot.xml",
+      "snapshot_sha256": "13bd5b8ac6bbb23f935c5d9a2c04256a348288756f042a88f646a18f48f9e71e",
+      "snapshot_path": "xml/13bd5b8ac6bbb23f935c5d9a2c04256a348288756f042a88f646a18f48f9e71e.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160700/snapshot.xml",
+        "final_uri": "https://rpki-repository.nic.ad.jp/rrdp/ap/6da97e57-04a6-4f56-bfc3-6d03f0ebb55f/160700/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:18.164362+00:00",
+        "finished_utc": "2026-10-27T00:16:18.673140+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:18 GMT",
+          "Content-Length": "19885482",
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": "\"6adfed08-12f6daa\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:15:04 GMT"
+        },
+        "bytes": 19885482,
+        "sha256": "13bd5b8ac6bbb23f935c5d9a2c04256a348288756f042a88f646a18f48f9e71e"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.idnic.net/rrdp/notification.xml",
+      "notification_path": "notifications/918fa13000084d51056c.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.idnic.net/rrdp/notification.xml",
+        "final_uri": "https://rpki-rrdp.idnic.net/rrdp/notification.xml",
+        "started_utc": "2026-10-27T00:16:18.007793+00:00",
+        "finished_utc": "2026-10-27T00:16:18.460504+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:18 GMT",
+          "Content-Length": null,
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": "W/\"6adfed48-27b8\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:16:08 GMT"
+        },
+        "bytes": 10168,
+        "sha256": "92350395fa67ebfa08dc102269ae6d7184822bdde893bb985f479910d1d94bea"
+      },
+      "session_id": "63cbe046-ec3b-4fa4-a8a7-40857e2ff3f2",
+      "serial": 357465,
+      "snapshot_uri": "https://rpki-rrdp.idnic.net/rrdp/63cbe046-ec3b-4fa4-a8a7-40857e2ff3f2/357465/adf1c220d052bb16/snapshot.xml",
+      "snapshot_sha256": "2a10d2200e4a0a55dd4f159add67ed1b2f0fcb484b76fcb4b3bf44720a7572e9",
+      "snapshot_path": "xml/2a10d2200e4a0a55dd4f159add67ed1b2f0fcb484b76fcb4b3bf44720a7572e9.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.idnic.net/rrdp/63cbe046-ec3b-4fa4-a8a7-40857e2ff3f2/357465/adf1c220d052bb16/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.idnic.net/rrdp/63cbe046-ec3b-4fa4-a8a7-40857e2ff3f2/357465/adf1c220d052bb16/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:18.461057+00:00",
+        "finished_utc": "2026-10-27T00:16:20.650461+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:18 GMT",
+          "Content-Length": null,
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": "W/\"6adfed42-2512e8b\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:16:02 GMT"
+        },
+        "bytes": 38874763,
+        "sha256": "2a10d2200e4a0a55dd4f159add67ed1b2f0fcb484b76fcb4b3bf44720a7572e9"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/08c2f264-23f9-49fb-9d43-f8b50bec9261/notification.xml",
+      "notification_path": "notifications/76a87863882941867c9d.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/08c2f264-23f9-49fb-9d43-f8b50bec9261/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/08c2f264-23f9-49fb-9d43-f8b50bec9261/notification.xml",
+        "started_utc": "2026-10-27T00:16:18.673757+00:00",
+        "finished_utc": "2026-10-27T00:16:18.767051+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:18 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"d748fa8c9db396d1f723ca2ba3727a64\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:03:51 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "b75aaa4e348fd2c7a1b88d6f155943791ac13aedb3e2434618eaf4379b3cc516"
+      },
+      "session_id": "e790f563-189d-4719-847f-44fdb428874c",
+      "serial": 8020,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/08c2f264-23f9-49fb-9d43-f8b50bec9261/e790f563-189d-4719-847f-44fdb428874c/8020/snapshot.xml",
+      "snapshot_sha256": "9e6df9eaa34390c1202f0f64775a6013c4289090127eb67df6b9d7f1bfc15183",
+      "snapshot_path": "xml/9e6df9eaa34390c1202f0f64775a6013c4289090127eb67df6b9d7f1bfc15183.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/08c2f264-23f9-49fb-9d43-f8b50bec9261/e790f563-189d-4719-847f-44fdb428874c/8020/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/08c2f264-23f9-49fb-9d43-f8b50bec9261/e790f563-189d-4719-847f-44fdb428874c/8020/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:18.767725+00:00",
+        "finished_utc": "2026-10-27T00:16:20.324525+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:20 GMT",
+          "Content-Length": "4304773",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"8dbfdbb54e1774aa6d24811745a4138c\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:03:51 GMT"
+        },
+        "bytes": 4304773,
+        "sha256": "9e6df9eaa34390c1202f0f64775a6013c4289090127eb67df6b9d7f1bfc15183"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/20aa329b-fc52-4c61-bf53-09725c042942/notification.xml",
+      "notification_path": "notifications/0fffc93a2d580b4c1622.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/20aa329b-fc52-4c61-bf53-09725c042942/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/20aa329b-fc52-4c61-bf53-09725c042942/notification.xml",
+        "started_utc": "2026-10-27T00:16:20.325037+00:00",
+        "finished_utc": "2026-10-27T00:16:20.362850+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:12:48 GMT",
+          "Content-Length": "24173",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"b3f7bbe7cba15a3b17562066e02aff99\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:11:31 GMT"
+        },
+        "bytes": 24173,
+        "sha256": "dee827850a6ca0ee700bfe2c6aba10944c1f723f092eb1e76b615a6fc36c5e54"
+      },
+      "session_id": "0eac24d1-fe4a-41b7-9d76-c9f22cdfbe81",
+      "serial": 29999,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/20aa329b-fc52-4c61-bf53-09725c042942/0eac24d1-fe4a-41b7-9d76-c9f22cdfbe81/29999/snapshot.xml",
+      "snapshot_sha256": "2b2f726dcdaa9f70c4ec2d81194d616006d9b560b5b80941c55ad78345b81493",
+      "snapshot_path": "xml/2b2f726dcdaa9f70c4ec2d81194d616006d9b560b5b80941c55ad78345b81493.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/20aa329b-fc52-4c61-bf53-09725c042942/0eac24d1-fe4a-41b7-9d76-c9f22cdfbe81/29999/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/20aa329b-fc52-4c61-bf53-09725c042942/0eac24d1-fe4a-41b7-9d76-c9f22cdfbe81/29999/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:20.363491+00:00",
+        "finished_utc": "2026-10-27T00:16:22.451603+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:20 GMT",
+          "Content-Length": "20440517",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"a311cc4ece645610e700520c425b6bf2\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:11:30 GMT"
+        },
+        "bytes": 20440517,
+        "sha256": "2b2f726dcdaa9f70c4ec2d81194d616006d9b560b5b80941c55ad78345b81493"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/2df51cd2-e6af-493a-a88a-3221d01f7d90/notification.xml",
+      "notification_path": "notifications/3268ab3441bd0b502e21.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/2df51cd2-e6af-493a-a88a-3221d01f7d90/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/2df51cd2-e6af-493a-a88a-3221d01f7d90/notification.xml",
+        "started_utc": "2026-10-27T00:16:20.650967+00:00",
+        "finished_utc": "2026-10-27T00:16:21.115209+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:22 GMT",
+          "Content-Length": "23769",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"95bfd8de8e03d230855cd40022cfd995\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:11:13 GMT"
+        },
+        "bytes": 23769,
+        "sha256": "930fda2c3d2a59fa674b15cf1cc077bf1693c2dfdebc1b7ef3ba4a47551a5068"
+      },
+      "session_id": "af2a4f41-37b0-4531-a576-88a42b3f670a",
+      "serial": 540,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/2df51cd2-e6af-493a-a88a-3221d01f7d90/af2a4f41-37b0-4531-a576-88a42b3f670a/540/snapshot.xml",
+      "snapshot_sha256": "6d129922fd46baa97e20678da921496f00fed94ab20dd5777a53f934c22257e0",
+      "snapshot_path": "xml/6d129922fd46baa97e20678da921496f00fed94ab20dd5777a53f934c22257e0.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/2df51cd2-e6af-493a-a88a-3221d01f7d90/af2a4f41-37b0-4531-a576-88a42b3f670a/540/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/2df51cd2-e6af-493a-a88a-3221d01f7d90/af2a4f41-37b0-4531-a576-88a42b3f670a/540/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:21.116053+00:00",
+        "finished_utc": "2026-10-27T00:16:21.725319+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:22 GMT",
+          "Content-Length": "64718",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"d210d6cddd102e99ba93453c94016ef5\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:11:13 GMT"
+        },
+        "bytes": 64718,
+        "sha256": "6d129922fd46baa97e20678da921496f00fed94ab20dd5777a53f934c22257e0"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/2f059a21-d41b-4846-b7ae-7ea38c32fd4c/notification.xml",
+      "notification_path": "notifications/e6d6578ecb004ca9eccf.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/2f059a21-d41b-4846-b7ae-7ea38c32fd4c/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/2f059a21-d41b-4846-b7ae-7ea38c32fd4c/notification.xml",
+        "started_utc": "2026-10-27T00:16:21.725849+00:00",
+        "finished_utc": "2026-10-27T00:16:21.760727+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:15:03 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"c26aca4dd9b2a338713f15d49a785565\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:10:57 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "93e18c43e16bab2ebe934b5e075fc428fe3f6ca721bae1c3085d492c3e4feaaa"
+      },
+      "session_id": "30d919c0-4898-4685-8fab-5e1c067ab213",
+      "serial": 1599,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/2f059a21-d41b-4846-b7ae-7ea38c32fd4c/30d919c0-4898-4685-8fab-5e1c067ab213/1599/snapshot.xml",
+      "snapshot_sha256": "890917fcdc82a9b34830b35f600d1a9692cb4bac7fd1bcf39276c1e808a35219",
+      "snapshot_path": "xml/890917fcdc82a9b34830b35f600d1a9692cb4bac7fd1bcf39276c1e808a35219.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/2f059a21-d41b-4846-b7ae-7ea38c32fd4c/30d919c0-4898-4685-8fab-5e1c067ab213/1599/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/2f059a21-d41b-4846-b7ae-7ea38c32fd4c/30d919c0-4898-4685-8fab-5e1c067ab213/1599/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:21.761518+00:00",
+        "finished_utc": "2026-10-27T00:16:22.498968+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:23 GMT",
+          "Content-Length": "131641",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"5e7635e4c20c7ca71abb4b78441da1e0\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:10:57 GMT"
+        },
+        "bytes": 131641,
+        "sha256": "890917fcdc82a9b34830b35f600d1a9692cb4bac7fd1bcf39276c1e808a35219"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/42582c67-dd3f-4bc5-ba60-e97e552c6e35/notification.xml",
+      "notification_path": "notifications/cf17a003a4c805b1d493.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/42582c67-dd3f-4bc5-ba60-e97e552c6e35/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/42582c67-dd3f-4bc5-ba60-e97e552c6e35/notification.xml",
+        "started_utc": "2026-10-27T00:16:22.452166+00:00",
+        "finished_utc": "2026-10-27T00:16:22.924519+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:23 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"30df912918e74a0cd15b2f04ac41afc9\"",
+          "Last-Modified": "Mon, 26 Oct 2026 00:50:23 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "1b8d84805d6a39d7b1bb6d1e01bf9a5243baf01e2dcf1757f30e2986019d7173"
+      },
+      "session_id": "74a44187-d8e1-40af-861d-78d32361edb9",
+      "serial": 1503,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/42582c67-dd3f-4bc5-ba60-e97e552c6e35/74a44187-d8e1-40af-861d-78d32361edb9/1503/snapshot.xml",
+      "snapshot_sha256": "90e7e4167e321a981175683de54d6cf13f0b7e56280ff8655d368a48d59109f6",
+      "snapshot_path": "xml/90e7e4167e321a981175683de54d6cf13f0b7e56280ff8655d368a48d59109f6.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/42582c67-dd3f-4bc5-ba60-e97e552c6e35/74a44187-d8e1-40af-861d-78d32361edb9/1503/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/42582c67-dd3f-4bc5-ba60-e97e552c6e35/74a44187-d8e1-40af-861d-78d32361edb9/1503/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:22.925259+00:00",
+        "finished_utc": "2026-10-27T00:16:23.411421+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:24 GMT",
+          "Content-Length": "82953",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"8a9bb6bc8c3e0f2349081b8a0ad4630e\"",
+          "Last-Modified": "Mon, 26 Oct 2026 00:50:23 GMT"
+        },
+        "bytes": 82953,
+        "sha256": "90e7e4167e321a981175683de54d6cf13f0b7e56280ff8655d368a48d59109f6"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/517f3ed7-58b5-4796-be37-14d62e48f056/notification.xml",
+      "notification_path": "notifications/c918838974a0fe56871b.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/517f3ed7-58b5-4796-be37-14d62e48f056/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/517f3ed7-58b5-4796-be37-14d62e48f056/notification.xml",
+        "started_utc": "2026-10-27T00:16:22.499454+00:00",
+        "finished_utc": "2026-10-27T00:16:22.536997+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:12:26 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"2a198d324f8d4765f3e98f1e98db8536\"",
+          "Last-Modified": "Mon, 26 Oct 2026 04:21:01 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "ca27dfe7610114aa0bc2f748ca6379f3c604bdfd38fc26b6e923ddb7d160c35b"
+      },
+      "session_id": "15049d5c-515b-4018-8402-cc98e4b507da",
+      "serial": 2386,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/517f3ed7-58b5-4796-be37-14d62e48f056/15049d5c-515b-4018-8402-cc98e4b507da/2386/snapshot.xml",
+      "snapshot_sha256": "eb70dd62b9d36b524a9f3bc569b26aaa0aa475296efe3960e877218c9acf2051",
+      "snapshot_path": "xml/eb70dd62b9d36b524a9f3bc569b26aaa0aa475296efe3960e877218c9acf2051.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/517f3ed7-58b5-4796-be37-14d62e48f056/15049d5c-515b-4018-8402-cc98e4b507da/2386/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/517f3ed7-58b5-4796-be37-14d62e48f056/15049d5c-515b-4018-8402-cc98e4b507da/2386/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:22.537623+00:00",
+        "finished_utc": "2026-10-27T00:16:23.060728+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:23 GMT",
+          "Content-Length": "1354704",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"17fc62eb5a6f302de782de50cfbaf336\"",
+          "Last-Modified": "Mon, 26 Oct 2026 04:21:01 GMT"
+        },
+        "bytes": 1354704,
+        "sha256": "eb70dd62b9d36b524a9f3bc569b26aaa0aa475296efe3960e877218c9acf2051"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/54602fb0-a9d4-4f9f-b0ca-be2a139ea92b/notification.xml",
+      "notification_path": "notifications/a9b0b23b3e6c4dd0d66f.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/54602fb0-a9d4-4f9f-b0ca-be2a139ea92b/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/54602fb0-a9d4-4f9f-b0ca-be2a139ea92b/notification.xml",
+        "started_utc": "2026-10-27T00:16:23.061237+00:00",
+        "finished_utc": "2026-10-27T00:16:23.096914+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:22 GMT",
+          "Content-Length": "24375",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"23ea08e270b2de475ff0d1f8d5e10fdc\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:01:48 GMT"
+        },
+        "bytes": 24375,
+        "sha256": "ac08c4b818adcb67674c1ae3486d8e0c38ac4d91de26225c91e2836e8093e150"
+      },
+      "session_id": "098c0ce1-b270-4006-a087-bd4f56f842f3",
+      "serial": 127926,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/54602fb0-a9d4-4f9f-b0ca-be2a139ea92b/098c0ce1-b270-4006-a087-bd4f56f842f3/127926/snapshot.xml",
+      "snapshot_sha256": "7786d61584270797f21b95d1d9873200e86bb8b2e3cdd6a0ed9a020132d9e81e",
+      "snapshot_path": "xml/7786d61584270797f21b95d1d9873200e86bb8b2e3cdd6a0ed9a020132d9e81e.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/54602fb0-a9d4-4f9f-b0ca-be2a139ea92b/098c0ce1-b270-4006-a087-bd4f56f842f3/127926/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/54602fb0-a9d4-4f9f-b0ca-be2a139ea92b/098c0ce1-b270-4006-a087-bd4f56f842f3/127926/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:23.097561+00:00",
+        "finished_utc": "2026-10-27T00:16:24.345945+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:24 GMT",
+          "Content-Length": "1264650",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"71d39d87f2387b3097a439bfe61d8e42\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:01:48 GMT"
+        },
+        "bytes": 1264650,
+        "sha256": "7786d61584270797f21b95d1d9873200e86bb8b2e3cdd6a0ed9a020132d9e81e"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/602a26e5-4a9e-4e5e-89f0-ef891490d9c9/notification.xml",
+      "notification_path": "notifications/b931c1f5f4b7f6b4cfa8.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/602a26e5-4a9e-4e5e-89f0-ef891490d9c9/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/602a26e5-4a9e-4e5e-89f0-ef891490d9c9/notification.xml",
+        "started_utc": "2026-10-27T00:16:23.411917+00:00",
+        "finished_utc": "2026-10-27T00:16:23.886235+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:24 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"c3d97b1706bca62fa2ccc6801363cce2\"",
+          "Last-Modified": "Mon, 26 Oct 2026 00:50:25 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "bf3742fbacc43cd168836dca6022c66360a3587bdacd92f603de434919a52595"
+      },
+      "session_id": "7be1c1f0-fb1a-4b5b-875a-fb3feb9a8d1b",
+      "serial": 1511,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/602a26e5-4a9e-4e5e-89f0-ef891490d9c9/7be1c1f0-fb1a-4b5b-875a-fb3feb9a8d1b/1511/snapshot.xml",
+      "snapshot_sha256": "281c82e57a93b0fce47788ae031377ac84b68abc1e62197161c4565358043c87",
+      "snapshot_path": "xml/281c82e57a93b0fce47788ae031377ac84b68abc1e62197161c4565358043c87.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/602a26e5-4a9e-4e5e-89f0-ef891490d9c9/7be1c1f0-fb1a-4b5b-875a-fb3feb9a8d1b/1511/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/602a26e5-4a9e-4e5e-89f0-ef891490d9c9/7be1c1f0-fb1a-4b5b-875a-fb3feb9a8d1b/1511/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:23.887056+00:00",
+        "finished_utc": "2026-10-27T00:16:24.372947+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:25 GMT",
+          "Content-Length": "70901",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"31607fab192cf6e00a53a6ff434f2ab0\"",
+          "Last-Modified": "Mon, 26 Oct 2026 00:50:25 GMT"
+        },
+        "bytes": 70901,
+        "sha256": "281c82e57a93b0fce47788ae031377ac84b68abc1e62197161c4565358043c87"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/708aafaf-00b4-485b-854c-0b32ca30f57b/notification.xml",
+      "notification_path": "notifications/170de76476c45bbfaf16.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/708aafaf-00b4-485b-854c-0b32ca30f57b/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/708aafaf-00b4-485b-854c-0b32ca30f57b/notification.xml",
+        "started_utc": "2026-10-27T00:16:24.346440+00:00",
+        "finished_utc": "2026-10-27T00:16:24.384607+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:12:30 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"b2c2e072ea20522a5cb488277ec070a2\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:03:29 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "a35f5e713a92f77d2c59d009ff61b477020da88086fbe65f21882a1bd74f73b8"
+      },
+      "session_id": "7c2d14ed-ded9-4777-9885-dc9d35403305",
+      "serial": 1723,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/708aafaf-00b4-485b-854c-0b32ca30f57b/7c2d14ed-ded9-4777-9885-dc9d35403305/1723/snapshot.xml",
+      "snapshot_sha256": "b35774360cffac81c002121648a369d471b15129b0024405dee00795b6e684a8",
+      "snapshot_path": "xml/b35774360cffac81c002121648a369d471b15129b0024405dee00795b6e684a8.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/708aafaf-00b4-485b-854c-0b32ca30f57b/7c2d14ed-ded9-4777-9885-dc9d35403305/1723/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/708aafaf-00b4-485b-854c-0b32ca30f57b/7c2d14ed-ded9-4777-9885-dc9d35403305/1723/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:24.385327+00:00",
+        "finished_utc": "2026-10-27T00:16:24.853837+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:25 GMT",
+          "Content-Length": "18218",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"978efc9323eb309b0d21a2bec636f95a\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:03:29 GMT"
+        },
+        "bytes": 18218,
+        "sha256": "b35774360cffac81c002121648a369d471b15129b0024405dee00795b6e684a8"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/71e5236f-c6f1-4928-a1b9-8def09c06085/notification.xml",
+      "notification_path": "notifications/7f4f0bba5588a9877a41.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/71e5236f-c6f1-4928-a1b9-8def09c06085/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/71e5236f-c6f1-4928-a1b9-8def09c06085/notification.xml",
+        "started_utc": "2026-10-27T00:16:24.373514+00:00",
+        "finished_utc": "2026-10-27T00:16:24.411401+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:15:04 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"ca0e88b5d8284a297d808a8ff1093197\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:10:41 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "195fa849ee10b85b76f310dfe6e1428a0aeb0c6bb5b6890a3de5b24969fc9d63"
+      },
+      "session_id": "c6122fc7-42c8-40a4-bca2-8cc1c883d8f8",
+      "serial": 1452,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/71e5236f-c6f1-4928-a1b9-8def09c06085/c6122fc7-42c8-40a4-bca2-8cc1c883d8f8/1452/snapshot.xml",
+      "snapshot_sha256": "9a6f9330502cb7c50030ae0acd3def9192bb307835e98e8f02700f59b75e8ac0",
+      "snapshot_path": "xml/9a6f9330502cb7c50030ae0acd3def9192bb307835e98e8f02700f59b75e8ac0.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/71e5236f-c6f1-4928-a1b9-8def09c06085/c6122fc7-42c8-40a4-bca2-8cc1c883d8f8/1452/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/71e5236f-c6f1-4928-a1b9-8def09c06085/c6122fc7-42c8-40a4-bca2-8cc1c883d8f8/1452/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:24.412080+00:00",
+        "finished_utc": "2026-10-27T00:16:24.887333+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:25 GMT",
+          "Content-Length": "6912",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"fad19fa364fee11a12581fabeaf20d4f\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:10:41 GMT"
+        },
+        "bytes": 6912,
+        "sha256": "9a6f9330502cb7c50030ae0acd3def9192bb307835e98e8f02700f59b75e8ac0"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/967a255c-d680-42d3-9ec3-ecb3f9da088c/notification.xml",
+      "notification_path": "notifications/71f18b4b2a68441a32f2.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/967a255c-d680-42d3-9ec3-ecb3f9da088c/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/967a255c-d680-42d3-9ec3-ecb3f9da088c/notification.xml",
+        "started_utc": "2026-10-27T00:16:24.854344+00:00",
+        "finished_utc": "2026-10-27T00:16:24.889802+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:06 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"c1465691f92a4d2aa952224030cc50d6\"",
+          "Last-Modified": "Mon, 26 Oct 2026 05:50:58 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "43ea019566e4aedc95d12b5bba568a22438da97cac7c0d638dee0efa3e9462d0"
+      },
+      "session_id": "50656cf5-c3aa-45bf-8de3-7c9fa8af5322",
+      "serial": 3920,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/967a255c-d680-42d3-9ec3-ecb3f9da088c/50656cf5-c3aa-45bf-8de3-7c9fa8af5322/3920/snapshot.xml",
+      "snapshot_sha256": "c110ef2b4305bcae25dfe73b4d21ac0018e14a6aca2e4981eae15d139dc73e3b",
+      "snapshot_path": "xml/c110ef2b4305bcae25dfe73b4d21ac0018e14a6aca2e4981eae15d139dc73e3b.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/967a255c-d680-42d3-9ec3-ecb3f9da088c/50656cf5-c3aa-45bf-8de3-7c9fa8af5322/3920/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/967a255c-d680-42d3-9ec3-ecb3f9da088c/50656cf5-c3aa-45bf-8de3-7c9fa8af5322/3920/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:24.890508+00:00",
+        "finished_utc": "2026-10-27T00:16:25.397140+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:26 GMT",
+          "Content-Length": "575590",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"d8afb6b2f9e0589cff6901d1a5480883\"",
+          "Last-Modified": "Mon, 26 Oct 2026 05:50:58 GMT"
+        },
+        "bytes": 575590,
+        "sha256": "c110ef2b4305bcae25dfe73b4d21ac0018e14a6aca2e4981eae15d139dc73e3b"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/98c1c974-4608-4b75-8781-dc145101a9bd/notification.xml",
+      "notification_path": "notifications/a4e6ee3b7b3e493f185c.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/98c1c974-4608-4b75-8781-dc145101a9bd/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/98c1c974-4608-4b75-8781-dc145101a9bd/notification.xml",
+        "started_utc": "2026-10-27T00:16:24.887798+00:00",
+        "finished_utc": "2026-10-27T00:16:24.924957+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:12:22 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"6c24d9d2a3b2efbeca669156e76b00cc\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:08:41 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "7fd0361dd1655c7debd27138ae29f5ae16f4c4e883533fb706636b7c1d3016d3"
+      },
+      "session_id": "53034905-0b14-4057-b87b-769f7c63f29b",
+      "serial": 9179,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/98c1c974-4608-4b75-8781-dc145101a9bd/53034905-0b14-4057-b87b-769f7c63f29b/9179/snapshot.xml",
+      "snapshot_sha256": "005af55aea08b26910707786f73890dd9ca3035ada33b6180ebd0ee06329c7c9",
+      "snapshot_path": "xml/005af55aea08b26910707786f73890dd9ca3035ada33b6180ebd0ee06329c7c9.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/98c1c974-4608-4b75-8781-dc145101a9bd/53034905-0b14-4057-b87b-769f7c63f29b/9179/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/98c1c974-4608-4b75-8781-dc145101a9bd/53034905-0b14-4057-b87b-769f7c63f29b/9179/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:24.925597+00:00",
+        "finished_utc": "2026-10-27T00:16:25.952658+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:25 GMT",
+          "Content-Length": "397347",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"7159010a55e02b44ae81686cf4cef4a6\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:08:41 GMT"
+        },
+        "bytes": 397347,
+        "sha256": "005af55aea08b26910707786f73890dd9ca3035ada33b6180ebd0ee06329c7c9"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/a841823c-a10d-477c-bfdf-4086f0b1594c/notification.xml",
+      "notification_path": "notifications/5df25351993bf130e632.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/a841823c-a10d-477c-bfdf-4086f0b1594c/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/a841823c-a10d-477c-bfdf-4086f0b1594c/notification.xml",
+        "started_utc": "2026-10-27T00:16:25.397722+00:00",
+        "finished_utc": "2026-10-27T00:16:25.433483+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:25 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"0628b13517309b100a9d9ad2e9038847\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:02:43 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "b973d6ec2c48593e733e9991c7b67b7169be876a592f1ff28c361c68c12da0a4"
+      },
+      "session_id": "c4c8c42a-ba17-45c5-b04a-58c85419df9c",
+      "serial": 1505,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/a841823c-a10d-477c-bfdf-4086f0b1594c/c4c8c42a-ba17-45c5-b04a-58c85419df9c/1505/snapshot.xml",
+      "snapshot_sha256": "58d10d876112abe90b35661cbe07f5c6149dcf7272b33f69c69289d9b33c2838",
+      "snapshot_path": "xml/58d10d876112abe90b35661cbe07f5c6149dcf7272b33f69c69289d9b33c2838.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/a841823c-a10d-477c-bfdf-4086f0b1594c/c4c8c42a-ba17-45c5-b04a-58c85419df9c/1505/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/a841823c-a10d-477c-bfdf-4086f0b1594c/c4c8c42a-ba17-45c5-b04a-58c85419df9c/1505/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:25.434461+00:00",
+        "finished_utc": "2026-10-27T00:16:26.095225+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:26 GMT",
+          "Content-Length": "37318",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"93451165c6900c398c4afaebc5384362\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:02:42 GMT"
+        },
+        "bytes": 37318,
+        "sha256": "58d10d876112abe90b35661cbe07f5c6149dcf7272b33f69c69289d9b33c2838"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/b3f6b688-cff4-402f-97d5-02f6f1886b7e/notification.xml",
+      "notification_path": "notifications/3dc8e80acb58f8408f7a.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/b3f6b688-cff4-402f-97d5-02f6f1886b7e/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/b3f6b688-cff4-402f-97d5-02f6f1886b7e/notification.xml",
+        "started_utc": "2026-10-27T00:16:25.953220+00:00",
+        "finished_utc": "2026-10-27T00:16:25.991501+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:13:16 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"c86a448a6e571791446a44ab23913dd6\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:10:26 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "46b59c12e77178a2e68b864003ba94b1e7ccd99a42ba7b37bb66b21a3954083d"
+      },
+      "session_id": "c90ce58f-7675-4d72-9c9a-d615359ae3ba",
+      "serial": 1455,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/b3f6b688-cff4-402f-97d5-02f6f1886b7e/c90ce58f-7675-4d72-9c9a-d615359ae3ba/1455/snapshot.xml",
+      "snapshot_sha256": "4074153c46d39fa1f8a12a249012455babd67937218d80d892aadde419ed85b5",
+      "snapshot_path": "xml/4074153c46d39fa1f8a12a249012455babd67937218d80d892aadde419ed85b5.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/b3f6b688-cff4-402f-97d5-02f6f1886b7e/c90ce58f-7675-4d72-9c9a-d615359ae3ba/1455/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/b3f6b688-cff4-402f-97d5-02f6f1886b7e/c90ce58f-7675-4d72-9c9a-d615359ae3ba/1455/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:25.992344+00:00",
+        "finished_utc": "2026-10-27T00:16:26.462482+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:26 GMT",
+          "Content-Length": "13070",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"4a368ebe670ae20f4a0879185b1291d4\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:10:26 GMT"
+        },
+        "bytes": 13070,
+        "sha256": "4074153c46d39fa1f8a12a249012455babd67937218d80d892aadde419ed85b5"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/b8a1dd25-c313-4f25-ac21-bf55514d9c7d/notification.xml",
+      "notification_path": "notifications/7f3ff3800e6a4d358954.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/b8a1dd25-c313-4f25-ac21-bf55514d9c7d/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/b8a1dd25-c313-4f25-ac21-bf55514d9c7d/notification.xml",
+        "started_utc": "2026-10-27T00:16:26.095752+00:00",
+        "finished_utc": "2026-10-27T00:16:26.133983+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:12:46 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"3649771c7833508f973ad0f876088b67\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:03:44 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "41fa3e6ebc01979dfaf4e747aa581ee08f0e865d5c68cdf4c93be95586ca9921"
+      },
+      "session_id": "7f9c5bd1-c000-4f2b-9a98-bb3b625b490c",
+      "serial": 2066,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/b8a1dd25-c313-4f25-ac21-bf55514d9c7d/7f9c5bd1-c000-4f2b-9a98-bb3b625b490c/2066/snapshot.xml",
+      "snapshot_sha256": "4ec49ad31675542861928f840ada7fc684da6ce77d4d2d986758ae5b0ff24248",
+      "snapshot_path": "xml/4ec49ad31675542861928f840ada7fc684da6ce77d4d2d986758ae5b0ff24248.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/b8a1dd25-c313-4f25-ac21-bf55514d9c7d/7f9c5bd1-c000-4f2b-9a98-bb3b625b490c/2066/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/b8a1dd25-c313-4f25-ac21-bf55514d9c7d/7f9c5bd1-c000-4f2b-9a98-bb3b625b490c/2066/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:26.134612+00:00",
+        "finished_utc": "2026-10-27T00:16:27.076533+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:27 GMT",
+          "Content-Length": "283884",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"0373c97b6e50fce144755f2f76298720\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:03:44 GMT"
+        },
+        "bytes": 283884,
+        "sha256": "4ec49ad31675542861928f840ada7fc684da6ce77d4d2d986758ae5b0ff24248"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/bd48a1fa-3471-4ab2-8508-ad36b96813e4/notification.xml",
+      "notification_path": "notifications/e3a499668bf883115e61.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/bd48a1fa-3471-4ab2-8508-ad36b96813e4/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/bd48a1fa-3471-4ab2-8508-ad36b96813e4/notification.xml",
+        "started_utc": "2026-10-27T00:16:26.463007+00:00",
+        "finished_utc": "2026-10-27T00:16:26.501017+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:15:40 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"beec63d4e37f27ce70f989999f55236b\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:03:39 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "b179a33902591c97d1c812f0d3e5c4aeeb47ed3583557d04a57b3e88c79095b9"
+      },
+      "session_id": "be5f8930-8247-40cb-9d48-559e1f1fa93a",
+      "serial": 1638,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/bd48a1fa-3471-4ab2-8508-ad36b96813e4/be5f8930-8247-40cb-9d48-559e1f1fa93a/1638/snapshot.xml",
+      "snapshot_sha256": "62b5fab1a271963808e9c4dcf1e159348f29f92f798b39d2108dbed194204675",
+      "snapshot_path": "xml/62b5fab1a271963808e9c4dcf1e159348f29f92f798b39d2108dbed194204675.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/bd48a1fa-3471-4ab2-8508-ad36b96813e4/be5f8930-8247-40cb-9d48-559e1f1fa93a/1638/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/bd48a1fa-3471-4ab2-8508-ad36b96813e4/be5f8930-8247-40cb-9d48-559e1f1fa93a/1638/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:26.501757+00:00",
+        "finished_utc": "2026-10-27T00:16:27.123477+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:27 GMT",
+          "Content-Length": "65094",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"6093e48fab518b4998f2b6d51317dcdf\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:03:39 GMT"
+        },
+        "bytes": 65094,
+        "sha256": "62b5fab1a271963808e9c4dcf1e159348f29f92f798b39d2108dbed194204675"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/c3cd7c24-12cb-4abc-8fd2-5e2bcbb85ae6/notification.xml",
+      "notification_path": "notifications/2a36a5fe50e4051df215.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/c3cd7c24-12cb-4abc-8fd2-5e2bcbb85ae6/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/c3cd7c24-12cb-4abc-8fd2-5e2bcbb85ae6/notification.xml",
+        "started_utc": "2026-10-27T00:16:27.077500+00:00",
+        "finished_utc": "2026-10-27T00:16:27.113733+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:15:35 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"2cf4689536ec317e97840a2d76d5f820\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:03:55 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "47a85ae407651c8a958125208101dae8ca6d8eb9fda07c97b2cc26dbbdc5b228"
+      },
+      "session_id": "7d81c8e0-e560-4b46-8ebd-89dca0f8ce06",
+      "serial": 1761,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/c3cd7c24-12cb-4abc-8fd2-5e2bcbb85ae6/7d81c8e0-e560-4b46-8ebd-89dca0f8ce06/1761/snapshot.xml",
+      "snapshot_sha256": "18de46bcd8a8ab8eece10be9a73c1c7a8b6b9fec9cd32bb396979b9a825da01f",
+      "snapshot_path": "xml/18de46bcd8a8ab8eece10be9a73c1c7a8b6b9fec9cd32bb396979b9a825da01f.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/c3cd7c24-12cb-4abc-8fd2-5e2bcbb85ae6/7d81c8e0-e560-4b46-8ebd-89dca0f8ce06/1761/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/c3cd7c24-12cb-4abc-8fd2-5e2bcbb85ae6/7d81c8e0-e560-4b46-8ebd-89dca0f8ce06/1761/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:27.114451+00:00",
+        "finished_utc": "2026-10-27T00:16:27.609706+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:28 GMT",
+          "Content-Length": "112086",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"e9d3418bce2737502a517e77a96b1d3d\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:03:55 GMT"
+        },
+        "bytes": 112086,
+        "sha256": "18de46bcd8a8ab8eece10be9a73c1c7a8b6b9fec9cd32bb396979b9a825da01f"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/c474d778-43cb-4c30-ad6a-39968cbc94bc/notification.xml",
+      "notification_path": "notifications/cd4bc6191748a96ff7b2.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/c474d778-43cb-4c30-ad6a-39968cbc94bc/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/c474d778-43cb-4c30-ad6a-39968cbc94bc/notification.xml",
+        "started_utc": "2026-10-27T00:16:27.123956+00:00",
+        "finished_utc": "2026-10-27T00:16:27.586411+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:28 GMT",
+          "Content-Length": "23769",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"a3af33ea08e03bde0972660519091fff\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:11:13 GMT"
+        },
+        "bytes": 23769,
+        "sha256": "7e289dcaad148d104682418166dee793337b8bdeece90f9d7b9d0c77af714194"
+      },
+      "session_id": "7d3762dc-7d10-483a-84b2-e85456b2cd55",
+      "serial": 475,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/c474d778-43cb-4c30-ad6a-39968cbc94bc/7d3762dc-7d10-483a-84b2-e85456b2cd55/475/snapshot.xml",
+      "snapshot_sha256": "dd4fe1edf7de941c4e853d7b98a72e00f85de7b09ad0161c8a404d80989072b1",
+      "snapshot_path": "xml/dd4fe1edf7de941c4e853d7b98a72e00f85de7b09ad0161c8a404d80989072b1.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/c474d778-43cb-4c30-ad6a-39968cbc94bc/7d3762dc-7d10-483a-84b2-e85456b2cd55/475/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/c474d778-43cb-4c30-ad6a-39968cbc94bc/7d3762dc-7d10-483a-84b2-e85456b2cd55/475/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:27.587198+00:00",
+        "finished_utc": "2026-10-27T00:16:28.060910+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:28 GMT",
+          "Content-Length": "9680",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"8a05db878eb736096827e15404a265f1\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:11:12 GMT"
+        },
+        "bytes": 9680,
+        "sha256": "dd4fe1edf7de941c4e853d7b98a72e00f85de7b09ad0161c8a404d80989072b1"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/d1dfea23-5e38-441e-9bf7-e1ceb6e86925/notification.xml",
+      "notification_path": "notifications/a3562cfce84b8d0e08f3.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/d1dfea23-5e38-441e-9bf7-e1ceb6e86925/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/d1dfea23-5e38-441e-9bf7-e1ceb6e86925/notification.xml",
+        "started_utc": "2026-10-27T00:16:27.610156+00:00",
+        "finished_utc": "2026-10-27T00:16:27.644225+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:15:33 GMT",
+          "Content-Length": "11719",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"a67a9ad116881b35da0ef779bb4fc8de\"",
+          "Last-Modified": "Mon, 26 Oct 2026 18:23:17 GMT"
+        },
+        "bytes": 11719,
+        "sha256": "8994baeba5095cdae6150c1beff2ca20c5521c0e6d21cf0bc31a74c56b9b7bce"
+      },
+      "session_id": "2b2eed7a-86a4-47ab-920e-5c8365a48a08",
+      "serial": 50,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/d1dfea23-5e38-441e-9bf7-e1ceb6e86925/2b2eed7a-86a4-47ab-920e-5c8365a48a08/50/snapshot.xml",
+      "snapshot_sha256": "8bd2666a183f786c5e88ff3509b4aeb67094841e52923d98c37ddacb60db110b",
+      "snapshot_path": "xml/8bd2666a183f786c5e88ff3509b4aeb67094841e52923d98c37ddacb60db110b.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/d1dfea23-5e38-441e-9bf7-e1ceb6e86925/2b2eed7a-86a4-47ab-920e-5c8365a48a08/50/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/d1dfea23-5e38-441e-9bf7-e1ceb6e86925/2b2eed7a-86a4-47ab-920e-5c8365a48a08/50/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:27.644708+00:00",
+        "finished_utc": "2026-10-27T00:16:28.127217+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:29 GMT",
+          "Content-Length": "51821",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"5c0c6c3800d6651d5cbbc95a66861225\"",
+          "Last-Modified": "Mon, 26 Oct 2026 18:23:17 GMT"
+        },
+        "bytes": 51821,
+        "sha256": "8bd2666a183f786c5e88ff3509b4aeb67094841e52923d98c37ddacb60db110b"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/db9a372a-09bc-4a32-bfe4-8c48e5dbd219/notification.xml",
+      "notification_path": "notifications/d0488bb2f26d78d9afcb.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/db9a372a-09bc-4a32-bfe4-8c48e5dbd219/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/db9a372a-09bc-4a32-bfe4-8c48e5dbd219/notification.xml",
+        "started_utc": "2026-10-27T00:16:28.061346+00:00",
+        "finished_utc": "2026-10-27T00:16:28.099984+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:15:37 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"104e1a2164c365afb327e2e22f854e02\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:03:34 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "92eb7813611129258c86274f617ec0d34cdb027989ec02087b709a8e52affbae"
+      },
+      "session_id": "af012d70-97a6-4671-8800-0259f8ff833a",
+      "serial": 1608,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/db9a372a-09bc-4a32-bfe4-8c48e5dbd219/af012d70-97a6-4671-8800-0259f8ff833a/1608/snapshot.xml",
+      "snapshot_sha256": "47883b79a8fbec3a6eb2a93439b5cb115d2bb022f4b2e836db6bf5a9c8627838",
+      "snapshot_path": "xml/47883b79a8fbec3a6eb2a93439b5cb115d2bb022f4b2e836db6bf5a9c8627838.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/db9a372a-09bc-4a32-bfe4-8c48e5dbd219/af012d70-97a6-4671-8800-0259f8ff833a/1608/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/db9a372a-09bc-4a32-bfe4-8c48e5dbd219/af012d70-97a6-4671-8800-0259f8ff833a/1608/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:28.100630+00:00",
+        "finished_utc": "2026-10-27T00:16:28.591974+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:29 GMT",
+          "Content-Length": "53338",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"e428552213b1e85f9320b249aea85738\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:03:34 GMT"
+        },
+        "bytes": 53338,
+        "sha256": "47883b79a8fbec3a6eb2a93439b5cb115d2bb022f4b2e836db6bf5a9c8627838"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/dba8f01c-9669-44a3-ac6e-db2edb099b84/notification.xml",
+      "notification_path": "notifications/c01c5c657517a276742e.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/dba8f01c-9669-44a3-ac6e-db2edb099b84/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/dba8f01c-9669-44a3-ac6e-db2edb099b84/notification.xml",
+        "started_utc": "2026-10-27T00:16:28.127630+00:00",
+        "finished_utc": "2026-10-27T00:16:28.166246+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:15:32 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"8842322c8bd754b4d50dccb05b02edab\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:02:29 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "76f6c42ed372e38fcdc8ced9310fe05a833f6a2a308ed41ec1e4c1b956c0d30d"
+      },
+      "session_id": "27e3c914-3741-40c5-bec7-265e2eb80946",
+      "serial": 5273,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/dba8f01c-9669-44a3-ac6e-db2edb099b84/27e3c914-3741-40c5-bec7-265e2eb80946/5273/snapshot.xml",
+      "snapshot_sha256": "45d3357e31a8c981401cc90fb53fee357a38463ab2c5e87105b76d138bab3338",
+      "snapshot_path": "xml/45d3357e31a8c981401cc90fb53fee357a38463ab2c5e87105b76d138bab3338.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/dba8f01c-9669-44a3-ac6e-db2edb099b84/27e3c914-3741-40c5-bec7-265e2eb80946/5273/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/dba8f01c-9669-44a3-ac6e-db2edb099b84/27e3c914-3741-40c5-bec7-265e2eb80946/5273/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:28.166898+00:00",
+        "finished_utc": "2026-10-27T00:16:29.755452+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:29 GMT",
+          "Content-Length": "3393909",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"ed92b653b70e39b53233c9d21e2f42af\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:02:29 GMT"
+        },
+        "bytes": 3393909,
+        "sha256": "45d3357e31a8c981401cc90fb53fee357a38463ab2c5e87105b76d138bab3338"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/dfd7f6d3-e6e9-4987-9ae7-d052c5353898/notification.xml",
+      "notification_path": "notifications/c56da18f51876199a4da.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/dfd7f6d3-e6e9-4987-9ae7-d052c5353898/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/dfd7f6d3-e6e9-4987-9ae7-d052c5353898/notification.xml",
+        "started_utc": "2026-10-27T00:16:28.592505+00:00",
+        "finished_utc": "2026-10-27T00:16:28.631721+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:15:48 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"927a0dd61ab757fd3bce75a83fd52757\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:09:15 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "c04f129bc6323cbefb66bf801479fc2fac774d91c7712ab63911ca03119d4312"
+      },
+      "session_id": "fd0039bd-1d18-4bd9-bd0c-5e5fc3d1976a",
+      "serial": 1439,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/dfd7f6d3-e6e9-4987-9ae7-d052c5353898/fd0039bd-1d18-4bd9-bd0c-5e5fc3d1976a/1439/snapshot.xml",
+      "snapshot_sha256": "bccd4682f9b678d43f47c3c961012e0925ab2e4b1fe6a55c450e29d50d5868f7",
+      "snapshot_path": "xml/bccd4682f9b678d43f47c3c961012e0925ab2e4b1fe6a55c450e29d50d5868f7.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/dfd7f6d3-e6e9-4987-9ae7-d052c5353898/fd0039bd-1d18-4bd9-bd0c-5e5fc3d1976a/1439/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/dfd7f6d3-e6e9-4987-9ae7-d052c5353898/fd0039bd-1d18-4bd9-bd0c-5e5fc3d1976a/1439/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:28.632516+00:00",
+        "finished_utc": "2026-10-27T00:16:29.218296+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:28 GMT",
+          "Content-Length": "24910",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"5b33b24ce8d96f0da4a37209bcff9dfe\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:09:15 GMT"
+        },
+        "bytes": 24910,
+        "sha256": "bccd4682f9b678d43f47c3c961012e0925ab2e4b1fe6a55c450e29d50d5868f7"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/e72d8db0-4728-4fc1-bdd8-471129866362/notification.xml",
+      "notification_path": "notifications/552a557f0d133064f6e0.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/e72d8db0-4728-4fc1-bdd8-471129866362/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/e72d8db0-4728-4fc1-bdd8-471129866362/notification.xml",
+        "started_utc": "2026-10-27T00:16:29.218878+00:00",
+        "finished_utc": "2026-10-27T00:16:29.258176+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:19 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"9b18b3e60e6b2c7538a74534c1d6bd37\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:02:24 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "56de5233fe9b7f84973f31bb700540c5563a92d5b861fc6129a773a078b7ddbb"
+      },
+      "session_id": "dc9f329e-549c-4f77-a043-ae2e219c1b98",
+      "serial": 1759,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/e72d8db0-4728-4fc1-bdd8-471129866362/dc9f329e-549c-4f77-a043-ae2e219c1b98/1759/snapshot.xml",
+      "snapshot_sha256": "9b2f81de09ebe559ed742515a74bf97fa13c0b3335c7366085e6e43060a8ee39",
+      "snapshot_path": "xml/9b2f81de09ebe559ed742515a74bf97fa13c0b3335c7366085e6e43060a8ee39.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/e72d8db0-4728-4fc1-bdd8-471129866362/dc9f329e-549c-4f77-a043-ae2e219c1b98/1759/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/e72d8db0-4728-4fc1-bdd8-471129866362/dc9f329e-549c-4f77-a043-ae2e219c1b98/1759/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:29.258849+00:00",
+        "finished_utc": "2026-10-27T00:16:30.110631+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:30 GMT",
+          "Content-Length": "523831",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"b88902b4315e46d63c7a3c11349f8cc6\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:02:24 GMT"
+        },
+        "bytes": 523831,
+        "sha256": "9b2f81de09ebe559ed742515a74bf97fa13c0b3335c7366085e6e43060a8ee39"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/e7518af5-a343-428d-bf78-f982b6e60505/notification.xml",
+      "notification_path": "notifications/cf5b07739516c8c6aa1e.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/e7518af5-a343-428d-bf78-f982b6e60505/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/e7518af5-a343-428d-bf78-f982b6e60505/notification.xml",
+        "started_utc": "2026-10-27T00:16:29.756104+00:00",
+        "finished_utc": "2026-10-27T00:16:29.791674+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:15:46 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"dfb758ec804860ae1fc07193488defc3\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:10:49 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "4fb4fdb718a5db3ccc29568571a97d27707d56bdc4ee8c4530b7ac6bcce424b5"
+      },
+      "session_id": "4bd13b08-31cf-4342-af8f-0bc15fcee76b",
+      "serial": 4949,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/e7518af5-a343-428d-bf78-f982b6e60505/4bd13b08-31cf-4342-af8f-0bc15fcee76b/4949/snapshot.xml",
+      "snapshot_sha256": "3bf6db6080e9e72655e74640e51dada186119a5585eba634772f25d6fba32c04",
+      "snapshot_path": "xml/3bf6db6080e9e72655e74640e51dada186119a5585eba634772f25d6fba32c04.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/e7518af5-a343-428d-bf78-f982b6e60505/4bd13b08-31cf-4342-af8f-0bc15fcee76b/4949/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/e7518af5-a343-428d-bf78-f982b6e60505/4bd13b08-31cf-4342-af8f-0bc15fcee76b/4949/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:29.793669+00:00",
+        "finished_utc": "2026-10-27T00:16:32.020249+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:31 GMT",
+          "Content-Length": "20231371",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"2f88fe044430e4e6aeeda3f5a0f2f2ae\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:10:48 GMT"
+        },
+        "bytes": 20231371,
+        "sha256": "3bf6db6080e9e72655e74640e51dada186119a5585eba634772f25d6fba32c04"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/f703696e-e47b-4c20-bd93-6f80904e42d2/notification.xml",
+      "notification_path": "notifications/61ccca8e4b2a784776fc.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/f703696e-e47b-4c20-bd93-6f80904e42d2/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/f703696e-e47b-4c20-bd93-6f80904e42d2/notification.xml",
+        "started_utc": "2026-10-27T00:16:30.111150+00:00",
+        "finished_utc": "2026-10-27T00:16:30.566856+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:31 GMT",
+          "Content-Length": "24173",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"e5d23ac349d16d131c0bad69debf4e45\"",
+          "Last-Modified": "Mon, 26 Oct 2026 03:40:43 GMT"
+        },
+        "bytes": 24173,
+        "sha256": "0221e9c8604af22389cf806d5c5f219fd02148916becdcfcec375d20fb71fd1a"
+      },
+      "session_id": "2f7c3e28-e453-499f-9113-51a844b87050",
+      "serial": 26319,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/f703696e-e47b-4c20-bd93-6f80904e42d2/2f7c3e28-e453-499f-9113-51a844b87050/26319/snapshot.xml",
+      "snapshot_sha256": "3f08e9eacda4e022cd9a787782ad92f732650d7aa9de77c758187bad0bad3c24",
+      "snapshot_path": "xml/3f08e9eacda4e022cd9a787782ad92f732650d7aa9de77c758187bad0bad3c24.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/f703696e-e47b-4c20-bd93-6f80904e42d2/2f7c3e28-e453-499f-9113-51a844b87050/26319/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/f703696e-e47b-4c20-bd93-6f80904e42d2/2f7c3e28-e453-499f-9113-51a844b87050/26319/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:30.567588+00:00",
+        "finished_utc": "2026-10-27T00:16:31.186236+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:31 GMT",
+          "Content-Length": "12138106",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"6b0be706cf65051bb6634d8b72fc42a9\"",
+          "Last-Modified": "Mon, 26 Oct 2026 03:40:42 GMT"
+        },
+        "bytes": 12138106,
+        "sha256": "3f08e9eacda4e022cd9a787782ad92f732650d7aa9de77c758187bad0bad3c24"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/fd36ad64-200f-4064-84a8-3c7cc91cdece/notification.xml",
+      "notification_path": "notifications/6530cb4d649782626d82.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/fd36ad64-200f-4064-84a8-3c7cc91cdece/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/fd36ad64-200f-4064-84a8-3c7cc91cdece/notification.xml",
+        "started_utc": "2026-10-27T00:16:31.186758+00:00",
+        "finished_utc": "2026-10-27T00:16:31.668290+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:32 GMT",
+          "Content-Length": "23731",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"56043d96446f74ae0cb867c27bed6472\"",
+          "Last-Modified": "Mon, 26 Oct 2026 00:22:43 GMT"
+        },
+        "bytes": 23731,
+        "sha256": "5cbb63383d75847df9c67bdc029a9c50287843a032635bb0f114a6c84a9e5019"
+      },
+      "session_id": "74b301dd-6631-430c-90da-d0e74c4bb78c",
+      "serial": 180,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/fd36ad64-200f-4064-84a8-3c7cc91cdece/74b301dd-6631-430c-90da-d0e74c4bb78c/180/snapshot.xml",
+      "snapshot_sha256": "54476a4ef98675cbd5f3ef4963bcc3fb61ed66a38fe5ec528be2eed18123838a",
+      "snapshot_path": "xml/54476a4ef98675cbd5f3ef4963bcc3fb61ed66a38fe5ec528be2eed18123838a.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/fd36ad64-200f-4064-84a8-3c7cc91cdece/74b301dd-6631-430c-90da-d0e74c4bb78c/180/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/fd36ad64-200f-4064-84a8-3c7cc91cdece/74b301dd-6631-430c-90da-d0e74c4bb78c/180/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:31.669013+00:00",
+        "finished_utc": "2026-10-27T00:16:32.142497+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:33 GMT",
+          "Content-Length": "12897",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"db8fa39b14a52c6c342e31036743ddbe\"",
+          "Last-Modified": "Mon, 26 Oct 2026 00:22:43 GMT"
+        },
+        "bytes": 12897,
+        "sha256": "54476a4ef98675cbd5f3ef4963bcc3fb61ed66a38fe5ec528be2eed18123838a"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/ff9fa84e-9783-4a0b-a58d-6dc8e2433d33/notification.xml",
+      "notification_path": "notifications/3d730fc5a890d4d29216.xml",
+      "notification_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/ff9fa84e-9783-4a0b-a58d-6dc8e2433d33/notification.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/ff9fa84e-9783-4a0b-a58d-6dc8e2433d33/notification.xml",
+        "started_utc": "2026-10-27T00:16:32.020765+00:00",
+        "finished_utc": "2026-10-27T00:16:32.059104+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:11:48 GMT",
+          "Content-Length": "23971",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"cc1cc643dbe5a1d748d21e8da3c10eb3\"",
+          "Last-Modified": "Mon, 26 Oct 2026 02:49:10 GMT"
+        },
+        "bytes": 23971,
+        "sha256": "21b4d237abed18af5364752ac5c2b1d487d3957bb1126f5c76bee8f791c19093"
+      },
+      "session_id": "4da0bc15-6736-49ab-a0ba-48042a621a58",
+      "serial": 1330,
+      "snapshot_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/ff9fa84e-9783-4a0b-a58d-6dc8e2433d33/4da0bc15-6736-49ab-a0ba-48042a621a58/1330/snapshot.xml",
+      "snapshot_sha256": "43f22a98e584b914ce8f716f94ca6273c9316fccf29eaa72617a38fdcff665f9",
+      "snapshot_path": "xml/43f22a98e584b914ce8f716f94ca6273c9316fccf29eaa72617a38fdcff665f9.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/ff9fa84e-9783-4a0b-a58d-6dc8e2433d33/4da0bc15-6736-49ab-a0ba-48042a621a58/1330/snapshot.xml",
+        "final_uri": "https://rpki-rrdp.us-east-2.amazonaws.com/rrdp/ff9fa84e-9783-4a0b-a58d-6dc8e2433d33/4da0bc15-6736-49ab-a0ba-48042a621a58/1330/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:32.059922+00:00",
+        "finished_utc": "2026-10-27T00:16:32.524067+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:33 GMT",
+          "Content-Length": "3903",
+          "Content-Type": "text/plain",
+          "Content-Encoding": null,
+          "ETag": "\"6889a5d95640cda8c31fb32e7ff05105\"",
+          "Last-Modified": "Mon, 26 Oct 2026 02:49:10 GMT"
+        },
+        "bytes": 3903,
+        "sha256": "43f22a98e584b914ce8f716f94ca6273c9316fccf29eaa72617a38fdcff665f9"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rrdp-rps.arin.net/notification.xml",
+      "notification_path": "notifications/b9455114e9fe21e4eda2.xml",
+      "notification_response": {
+        "requested_uri": "https://rrdp-rps.arin.net/notification.xml",
+        "final_uri": "https://rrdp-rps.arin.net/notification.xml",
+        "started_utc": "2026-10-27T00:19:43.194091+00:00",
+        "finished_utc": "2026-10-27T00:19:43.603256+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:19:43 GMT",
+          "Content-Length": "6832",
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": null,
+          "Last-Modified": "Tue, 27 Oct 2026 00:12:12 GMT"
+        },
+        "bytes": 6832,
+        "sha256": "2275d077f69bedb3b27e761aeee7d1208a39da0f17840afc36ae38ff93df4f72"
+      },
+      "session_id": "222bc4dd-08cd-46c3-b744-f99835520fa4",
+      "serial": 143791,
+      "snapshot_uri": "https://rrdp-rps.arin.net/222bc4dd-08cd-46c3-b744-f99835520fa4/143791/snapshot-d3f49fe5c5f41d8091f70eae4f946f869a65634ede0088946316dc5c504014cb.xml",
+      "snapshot_sha256": "d12d90171216867f19dbdb9590fbd69e59e026887649c3ab829d2d7a849b1bd3",
+      "snapshot_path": "xml/d12d90171216867f19dbdb9590fbd69e59e026887649c3ab829d2d7a849b1bd3.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rrdp-rps.arin.net/222bc4dd-08cd-46c3-b744-f99835520fa4/143791/snapshot-d3f49fe5c5f41d8091f70eae4f946f869a65634ede0088946316dc5c504014cb.xml",
+        "final_uri": "https://rrdp-rps.arin.net/222bc4dd-08cd-46c3-b744-f99835520fa4/143791/snapshot-d3f49fe5c5f41d8091f70eae4f946f869a65634ede0088946316dc5c504014cb.xml",
+        "started_utc": "2026-10-27T00:19:43.604179+00:00",
+        "finished_utc": "2026-10-27T00:19:49.093995+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:19:43 GMT",
+          "Content-Length": "8131875",
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": null,
+          "Last-Modified": "Tue, 27 Oct 2026 00:12:12 GMT"
+        },
+        "bytes": 8131875,
+        "sha256": "d12d90171216867f19dbdb9590fbd69e59e026887649c3ab829d2d7a849b1bd3"
+      },
+      "status": "verified",
+      "prior_attempts": [
+        {
+          "notification_uri": "https://rrdp-rps.arin.net/notification.xml",
+          "notification_path": "notifications/b9455114e9fe21e4eda2.xml",
+          "status": "unavailable",
+          "error": "<urlopen error [Errno 104] Connection reset by peer>",
+          "collection_vantage": "primary collector"
+        }
+      ],
+      "collection_vantage": "second network vantage after primary connection reset"
+    },
+    {
+      "notification_uri": "https://rrdp-rps.cnnic.cn/rrdp/notification.xml",
+      "notification_path": "notifications/aaf85a60f8f306659a79.xml",
+      "notification_response": {
+        "requested_uri": "https://rrdp-rps.cnnic.cn/rrdp/notification.xml",
+        "final_uri": "https://rrdp-rps.cnnic.cn/rrdp/notification.xml",
+        "started_utc": "2026-10-27T00:16:32.524567+00:00",
+        "finished_utc": "2026-10-27T00:16:32.908943+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:32 GMT",
+          "Content-Length": "3655",
+          "Content-Type": "application/xml",
+          "Content-Encoding": null,
+          "ETag": "\"6adfebb3-e47\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:09:23 GMT"
+        },
+        "bytes": 3655,
+        "sha256": "456e984f111b7b3fae300f5529a392b30f77baa6f244e10ca29a4ad20393099b"
+      },
+      "session_id": "255b3209-f9d2-4b6d-803b-f7dc30865374",
+      "serial": 120301,
+      "snapshot_uri": "https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120301/ce43c0b30fc2e285/snapshot.xml",
+      "snapshot_sha256": "78f7f8ab0efdf5f84595710a127020cb9f0bf59bd83c4c1a31275f7e49f5ebbe",
+      "snapshot_path": "xml/78f7f8ab0efdf5f84595710a127020cb9f0bf59bd83c4c1a31275f7e49f5ebbe.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120301/ce43c0b30fc2e285/snapshot.xml",
+        "final_uri": "https://rrdp-rps.cnnic.cn/rrdp/255b3209-f9d2-4b6d-803b-f7dc30865374/120301/ce43c0b30fc2e285/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:32.909465+00:00",
+        "finished_utc": "2026-10-27T00:17:22.465352+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:33 GMT",
+          "Content-Length": "25070182",
+          "Content-Type": "application/xml",
+          "Content-Encoding": null,
+          "ETag": "\"6adfebb1-17e8a66\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:09:21 GMT"
+        },
+        "bytes": 25070182,
+        "sha256": "78f7f8ab0efdf5f84595710a127020cb9f0bf59bd83c4c1a31275f7e49f5ebbe"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rrdp.afrinic.net/notification.xml",
+      "notification_path": "notifications/2a58fcecac1beaaecdb0.xml",
+      "notification_response": {
+        "requested_uri": "https://rrdp.afrinic.net/notification.xml",
+        "final_uri": "https://rrdp.afrinic.net/notification.xml",
+        "started_utc": "2026-10-27T00:16:33.453501+00:00",
+        "finished_utc": "2026-10-27T00:16:33.557937+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:33 GMT",
+          "Content-Length": null,
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": "W/\"6adfed09-1861\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:15:05 GMT"
+        },
+        "bytes": 6241,
+        "sha256": "6021e28732e3ad520d8e304031d413819fd2a4974d14304036671270c5fc14a3"
+      },
+      "session_id": "8fe3109e-2561-4627-8850-83ab94b9bb91",
+      "serial": 101902,
+      "snapshot_uri": "https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101902/snapshot.xml",
+      "snapshot_sha256": "beecc403aae2f6d1accc7dd30224e529d2c30c86e0eadfbfd7c8458f5682a2a4",
+      "snapshot_path": "xml/beecc403aae2f6d1accc7dd30224e529d2c30c86e0eadfbfd7c8458f5682a2a4.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101902/snapshot.xml",
+        "final_uri": "https://rrdp.afrinic.net/8fe3109e-2561-4627-8850-83ab94b9bb91/101902/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:33.558347+00:00",
+        "finished_utc": "2026-10-27T00:16:36.469734+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:34 GMT",
+          "Content-Length": null,
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": "W/\"6adfed09-2b1939d\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:15:05 GMT"
+        },
+        "bytes": 45192093,
+        "sha256": "beecc403aae2f6d1accc7dd30224e529d2c30c86e0eadfbfd7c8458f5682a2a4"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rrdp.apnic.net/notification.xml",
+      "notification_path": "notifications/f7ef354526a351adc359.xml",
+      "notification_response": {
+        "requested_uri": "https://rrdp.apnic.net/notification.xml",
+        "final_uri": "https://rrdp.apnic.net/notification.xml",
+        "started_utc": "2026-10-27T00:16:36.470276+00:00",
+        "finished_utc": "2026-10-27T00:16:36.576157+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:36 GMT",
+          "Content-Length": null,
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": "W/\"1e3ec-65ec759f5a6da-gzip\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:16:01 GMT"
+        },
+        "bytes": 123884,
+        "sha256": "89bcd90e904ec4f05dce8b9afffc696a1869bde3df8215f4e53536a41fe097a9"
+      },
+      "session_id": "8dad0cc8-0bc8-4021-88ed-e75e295df946",
+      "serial": 107347,
+      "snapshot_uri": "https://rrdp.apnic.net/8dad0cc8-0bc8-4021-88ed-e75e295df946/107347/snapshot-4202468ce23fc7d7714e9898fb643055ec8c70997197a0175e905246ad964c0f.xml",
+      "snapshot_sha256": "412acd311a920fffeefe3d6dd33aae795a9b411ce117f902c54aa722bd2ef84a",
+      "snapshot_path": "xml/412acd311a920fffeefe3d6dd33aae795a9b411ce117f902c54aa722bd2ef84a.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rrdp.apnic.net/8dad0cc8-0bc8-4021-88ed-e75e295df946/107347/snapshot-4202468ce23fc7d7714e9898fb643055ec8c70997197a0175e905246ad964c0f.xml",
+        "final_uri": "https://rrdp.apnic.net/8dad0cc8-0bc8-4021-88ed-e75e295df946/107347/snapshot-4202468ce23fc7d7714e9898fb643055ec8c70997197a0175e905246ad964c0f.xml",
+        "started_utc": "2026-10-27T00:16:36.581565+00:00",
+        "finished_utc": "2026-10-27T00:16:40.369564+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:37 GMT",
+          "Content-Length": null,
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": "W/\"701fbf4-65ec75531b855-gzip\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:14:41 GMT"
+        },
+        "bytes": 117570548,
+        "sha256": "412acd311a920fffeefe3d6dd33aae795a9b411ce117f902c54aa722bd2ef84a"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rrdp.arin.net/notification.xml",
+      "notification_path": "notifications/8bd1405242614aed9f13.xml",
+      "notification_response": {
+        "requested_uri": "https://rrdp.arin.net/notification.xml",
+        "final_uri": "https://rrdp.arin.net/notification.xml",
+        "started_utc": "2026-10-27T00:16:40.370065+00:00",
+        "finished_utc": "2026-10-27T00:16:40.883713+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:40 GMT",
+          "Content-Length": "11116",
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": null,
+          "Last-Modified": "Tue, 27 Oct 2026 00:02:41 GMT"
+        },
+        "bytes": 11116,
+        "sha256": "cf184cd95a1987437281ba8e99cef4f3c48b395aa16a96ebd32f286475045e56"
+      },
+      "session_id": "4a394319-7460-4141-a416-1addb69284ff",
+      "serial": 202758,
+      "snapshot_uri": "https://rrdp.arin.net/4a394319-7460-4141-a416-1addb69284ff/202758/snapshot-2699f5efa0d4e4c1965fb5fa663322f6a867ce68d4556e1f3cc8ed52952dc6fd.xml",
+      "snapshot_sha256": "392c048935b53c78b9942b1f51bea381c3364a306d7d82065476c2f23da4993c",
+      "snapshot_path": "xml/392c048935b53c78b9942b1f51bea381c3364a306d7d82065476c2f23da4993c.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rrdp.arin.net/4a394319-7460-4141-a416-1addb69284ff/202758/snapshot-2699f5efa0d4e4c1965fb5fa663322f6a867ce68d4556e1f3cc8ed52952dc6fd.xml",
+        "final_uri": "https://rrdp.arin.net/4a394319-7460-4141-a416-1addb69284ff/202758/snapshot-2699f5efa0d4e4c1965fb5fa663322f6a867ce68d4556e1f3cc8ed52952dc6fd.xml",
+        "started_utc": "2026-10-27T00:16:40.884226+00:00",
+        "finished_utc": "2026-10-27T00:18:24.806044+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:41 GMT",
+          "Content-Length": "761830508",
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": null,
+          "Last-Modified": "Tue, 27 Oct 2026 00:02:41 GMT"
+        },
+        "bytes": 761830508,
+        "sha256": "392c048935b53c78b9942b1f51bea381c3364a306d7d82065476c2f23da4993c"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rrdp.lacnic.net/rrdp/notification.xml",
+      "notification_path": "notifications/4b9f4f9a8ffdeb194969.xml",
+      "notification_response": {
+        "requested_uri": "https://rrdp.lacnic.net/rrdp/notification.xml",
+        "final_uri": "https://rrdp.lacnic.net/rrdp/notification.xml",
+        "started_utc": "2026-10-27T00:16:42.819436+00:00",
+        "finished_utc": "2026-10-27T00:16:43.527064+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:43 GMT",
+          "Content-Length": "9156",
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": "\"6adfed50-23c4\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:16:16 GMT"
+        },
+        "bytes": 9156,
+        "sha256": "26b30c5b2e45bcc81a2ea26aa27aa624e7f679ed467ff5f9e717999a4f669a32"
+      },
+      "session_id": "66b09eea-03c7-435f-bb29-5bee810bd657",
+      "serial": 500889,
+      "snapshot_uri": "https://rrdp.lacnic.net/rrdp/66b09eea-03c7-435f-bb29-5bee810bd657/500889/d5167c8b7a7c375e/snapshot.xml",
+      "snapshot_sha256": "187d5a575a4cc7ad780c71b3327b133c376daaadb020f8b6bb30642da8a25ce1",
+      "snapshot_path": "xml/187d5a575a4cc7ad780c71b3327b133c376daaadb020f8b6bb30642da8a25ce1.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rrdp.lacnic.net/rrdp/66b09eea-03c7-435f-bb29-5bee810bd657/500889/d5167c8b7a7c375e/snapshot.xml",
+        "final_uri": "https://rrdp.lacnic.net/rrdp/66b09eea-03c7-435f-bb29-5bee810bd657/500889/d5167c8b7a7c375e/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:43.527528+00:00",
+        "finished_utc": "2026-10-27T00:16:52.571595+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:43 GMT",
+          "Content-Length": "75834586",
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": "\"6adfed1f-48524da\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:15:27 GMT"
+        },
+        "bytes": 75834586,
+        "sha256": "187d5a575a4cc7ad780c71b3327b133c376daaadb020f8b6bb30642da8a25ce1"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rrdp.paas.rpki.ripe.net/notification.xml",
+      "notification_path": "notifications/7fca1fb9413f98018210.xml",
+      "notification_response": {
+        "requested_uri": "https://rrdp.paas.rpki.ripe.net/notification.xml",
+        "final_uri": "https://rrdp.paas.rpki.ripe.net/notification.xml",
+        "started_utc": "2026-10-27T00:16:52.572139+00:00",
+        "finished_utc": "2026-10-27T00:16:53.455399+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:53 GMT",
+          "Content-Length": "6168",
+          "Content-Type": "application/xml",
+          "Content-Encoding": null,
+          "ETag": "\"6adfed5a-1818\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:16:26 GMT"
+        },
+        "bytes": 6168,
+        "sha256": "b56e514ddd46b87812657b47cf8a8caaf41a2601e3bee628d5b71091246226e8"
+      },
+      "session_id": "1c33ba5d-4e16-448d-9a22-b12599ef1cba",
+      "serial": 410455,
+      "snapshot_uri": "https://rrdp.paas.rpki.ripe.net/1c33ba5d-4e16-448d-9a22-b12599ef1cba/410455/5d1d7670842dd277/snapshot.xml",
+      "snapshot_sha256": "2236aaecfafc547cb232687ad631d3878ccb16f519a1d3c011d57e68ca4311c5",
+      "snapshot_path": "xml/2236aaecfafc547cb232687ad631d3878ccb16f519a1d3c011d57e68ca4311c5.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rrdp.paas.rpki.ripe.net/1c33ba5d-4e16-448d-9a22-b12599ef1cba/410455/5d1d7670842dd277/snapshot.xml",
+        "final_uri": "https://rrdp.paas.rpki.ripe.net/1c33ba5d-4e16-448d-9a22-b12599ef1cba/410455/5d1d7670842dd277/snapshot.xml",
+        "started_utc": "2026-10-27T00:16:53.455865+00:00",
+        "finished_utc": "2026-10-27T00:17:58.660515+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:16:54 GMT",
+          "Content-Length": "34310257",
+          "Content-Type": "application/xml",
+          "Content-Encoding": null,
+          "ETag": "\"6adfed59-20b8871\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:16:25 GMT"
+        },
+        "bytes": 34310257,
+        "sha256": "2236aaecfafc547cb232687ad631d3878ccb16f519a1d3c011d57e68ca4311c5"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rrdp.ripe.net/notification.xml",
+      "notification_path": "notifications/21d6592469dbe79feb29.xml",
+      "notification_response": {
+        "requested_uri": "https://rrdp.ripe.net/notification.xml",
+        "final_uri": "https://rrdp.ripe.net/notification.xml",
+        "started_utc": "2026-10-27T00:17:22.466089+00:00",
+        "finished_utc": "2026-10-27T00:17:23.677740+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:17:23 GMT",
+          "Content-Length": "64342",
+          "Content-Type": "application/xml",
+          "Content-Encoding": null,
+          "ETag": "\"6adfed11-fb56\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:15:13 GMT"
+        },
+        "bytes": 64342,
+        "sha256": "97376cb1169648ca314935f86b365f3326937f797433b4e068223cd467053e85"
+      },
+      "session_id": "172322cf-c642-4e6f-806c-bd2375d8001a",
+      "serial": 239077,
+      "snapshot_uri": "https://rrdp.ripe.net/172322cf-c642-4e6f-806c-bd2375d8001a/239077/snapshot-13f47abdb7224ec738b6c519623d80e48bbf657952f7acabb32b3e52ed85d298.xml",
+      "snapshot_sha256": "897fedf9842b01d50d49ab2bb5836020f9f7f3d30c91852e3dbdde6d3bb8e383",
+      "snapshot_path": "xml/897fedf9842b01d50d49ab2bb5836020f9f7f3d30c91852e3dbdde6d3bb8e383.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rrdp.ripe.net/172322cf-c642-4e6f-806c-bd2375d8001a/239077/snapshot-13f47abdb7224ec738b6c519623d80e48bbf657952f7acabb32b3e52ed85d298.xml",
+        "final_uri": "https://rrdp.ripe.net/172322cf-c642-4e6f-806c-bd2375d8001a/239077/snapshot-13f47abdb7224ec738b6c519623d80e48bbf657952f7acabb32b3e52ed85d298.xml",
+        "started_utc": "2026-10-27T00:17:23.679616+00:00",
+        "finished_utc": "2026-10-27T00:18:17.022074+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:17:24 GMT",
+          "Content-Length": "280994579",
+          "Content-Type": "application/xml",
+          "Content-Encoding": null,
+          "ETag": "\"6adfed11-10bfa313\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:15:13 GMT"
+        },
+        "bytes": 280994579,
+        "sha256": "897fedf9842b01d50d49ab2bb5836020f9f7f3d30c91852e3dbdde6d3bb8e383"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    },
+    {
+      "notification_uri": "https://rrdp.twnic.tw/rrdp/notification.xml",
+      "notification_path": "notifications/66379facf9122b9638d4.xml",
+      "notification_response": {
+        "requested_uri": "https://rrdp.twnic.tw/rrdp/notification.xml",
+        "final_uri": "https://rrdp.twnic.tw/rrdp/notification.xml",
+        "started_utc": "2026-10-27T00:17:58.661130+00:00",
+        "finished_utc": "2026-10-27T00:17:58.797119+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:17:58 GMT",
+          "Content-Length": "16417",
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": "\"6adfec53-4021\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:12:03 GMT"
+        },
+        "bytes": 16417,
+        "sha256": "66cb68f93c7f0d97460e9f93bfc6558d9a7f24e382bfde8ed08f6267223d22dc"
+      },
+      "session_id": "335d178e-beb8-467d-8728-ba45540b34c9",
+      "serial": 68010,
+      "snapshot_uri": "https://rrdp.twnic.tw/rrdp/335d178e-beb8-467d-8728-ba45540b34c9/68010/6f045f53ff00075a/snapshot.xml",
+      "snapshot_sha256": "77a6f0eb2c58cb7b5df28a93b38f03057ec6f22d519cfc0cebbb801f9e60db95",
+      "snapshot_path": "xml/77a6f0eb2c58cb7b5df28a93b38f03057ec6f22d519cfc0cebbb801f9e60db95.xml",
+      "snapshot_response": {
+        "requested_uri": "https://rrdp.twnic.tw/rrdp/335d178e-beb8-467d-8728-ba45540b34c9/68010/6f045f53ff00075a/snapshot.xml",
+        "final_uri": "https://rrdp.twnic.tw/rrdp/335d178e-beb8-467d-8728-ba45540b34c9/68010/6f045f53ff00075a/snapshot.xml",
+        "started_utc": "2026-10-27T00:17:58.798299+00:00",
+        "finished_utc": "2026-10-27T00:17:58.968735+00:00",
+        "http_status": 200,
+        "response_headers": {
+          "Date": "Tue, 27 Oct 2026 00:17:58 GMT",
+          "Content-Length": "7348858",
+          "Content-Type": "text/xml",
+          "Content-Encoding": null,
+          "ETag": "\"6adfec53-70227a\"",
+          "Last-Modified": "Tue, 27 Oct 2026 00:12:03 GMT"
+        },
+        "bytes": 7348858,
+        "sha256": "77a6f0eb2c58cb7b5df28a93b38f03057ec6f22d519cfc0cebbb801f9e60db95"
+      },
+      "status": "verified",
+      "collection_vantage": "primary collector"
+    }
+  ],
+  "snapshot_xml_bytes": 1565796047
+}

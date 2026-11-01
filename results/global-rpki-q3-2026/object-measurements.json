@@ -1,0 +1,329 @@
+{
+  "generation_date_utc": "2026-10-26",
+  "backend": "OpenSSL 3.6.2 and existing Composite provider on ssh pqc",
+  "generator": "tools/generate_rpki_objects.py at 3cddcf7",
+  "private_keys_persisted": false,
+  "verification": "Existing generator calls OpenSSL cms -verify, with the laboratory CA and complete embedded EE certificates. Cryptographic CMS verification is not independent full RPKI validation.",
+  "results": [
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "CA certificate",
+      "bytes": 1064,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/rsa/ca.cer",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "63a4dc238a07b65512eb105342c86910a86af874aa671be64550c5cf0fa7be7e"
+    },
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "ROA EE certificate",
+      "bytes": 1082,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/rsa/route.ee.cer",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "c2384b20a09aa58d282e61771e2bad6c2d3691755088c9f8c99bf26fa1c79059"
+    },
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "Manifest EE certificate",
+      "bytes": 1100,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/rsa/manifest.ee.cer",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "b633a5561f17c67a5855109720ceafa25a5a806d96d565de2a2257f250ceb013"
+    },
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "CRL",
+      "bytes": 415,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/rsa/ca.crl",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "6e765a0a39d3caf55b5a04d0c722bfeaff6819373649e638262960f25014f662"
+    },
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "ROA eContent",
+      "bytes": 45,
+      "classification": "rpki-econtent-der",
+      "public_path": "results/global-rpki-q3-2026/measurements/rsa/route.roa.econtent",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "b86c9611a4d9d108e8864989aafc9ca29e1f4c0ac8302c55a72ef5cbed73655a"
+    },
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "Manifest eContent",
+      "bytes": 146,
+      "classification": "rpki-econtent-der",
+      "public_path": "results/global-rpki-q3-2026/measurements/rsa/manifest.mft.econtent",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "8a3b20d68ae50450f7ba50d73b60436a8f2992bf9343e227f05133af1f82405f"
+    },
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "ROA CMS",
+      "bytes": 1621,
+      "classification": "rfc6488-cms-generated",
+      "public_path": "results/global-rpki-q3-2026/measurements/rsa/route.roa",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "a6495bb0e93028abfa0011d4e207e04ecaa39cfce81b91afeebd896f6b6e6f06"
+    },
+    {
+      "algorithm": "RSA-2048/SHA-256",
+      "artifact": "Manifest CMS",
+      "bytes": 1743,
+      "classification": "rfc6488-cms-generated",
+      "public_path": "results/global-rpki-q3-2026/measurements/rsa/manifest.mft",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "495c6d3d53b4746f579eb625fbe7e7a3bde0104fad2cdfd0f4cc80db83e9221e"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "CA certificate",
+      "bytes": 4264,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-44/ca.cer",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "e507ecda22be4653aef7095edc8016117f486204357b4c54468a47ff9eb5819a"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "ROA EE certificate",
+      "bytes": 4282,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-44/route.ee.cer",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "0b5e86e852b97f0ec78b7cd58674d992c05d5eb6d1e0689381e67b4259a40f72"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "Manifest EE certificate",
+      "bytes": 4300,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-44/manifest.ee.cer",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "70c5eb51893e1b5ff6f2c7d92a8f34593cfe2f941aba6cd8e66d71a4ccb0c034"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "CRL",
+      "bytes": 2575,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-44/ca.crl",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "95d7e61aa90a73b25ad2b9eea9a4cd41f3190da2ed02a717ea3463267c38bbbe"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "ROA eContent",
+      "bytes": 45,
+      "classification": "rpki-econtent-der",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-44/route.roa.econtent",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "b86c9611a4d9d108e8864989aafc9ca29e1f4c0ac8302c55a72ef5cbed73655a"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "Manifest eContent",
+      "bytes": 146,
+      "classification": "rpki-econtent-der",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-44/manifest.mft.econtent",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "8e6c8bf2b8363c8dfc1760bd7f72e6216c562233bcbd296bd3d5d2120387cbdf"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "ROA CMS",
+      "bytes": 7016,
+      "classification": "rfc6488-cms-generated",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-44/route.roa",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "57aecaf06b3a7881d1a39ab4df0d22128dc5b7f397b38f03839b13339eb128ee"
+    },
+    {
+      "algorithm": "ML-DSA-44",
+      "artifact": "Manifest CMS",
+      "bytes": 7138,
+      "classification": "rfc6488-cms-generated",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-44/manifest.mft",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "d70dc1b3bf9db09897e4a1371d430d8b695a1670241f4e4db1cdb540adba0f34"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "CA certificate",
+      "bytes": 5793,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-65/ca.cer",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "d1a9dd966d2f749bb457fbbc88542a6bbdefe6d351e0a21b2fff24b7e14ad203"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "ROA EE certificate",
+      "bytes": 5811,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-65/route.ee.cer",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "272da58125b8db7c49a583c80cf9cd70c92faece42bfd0237d3c88e15acd56d2"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "Manifest EE certificate",
+      "bytes": 5829,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-65/manifest.ee.cer",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "44cbe4b9e700420c0b4bfb2c53513f558fc7ed2c3863403727f14ff809a22ecc"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "CRL",
+      "bytes": 3464,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-65/ca.crl",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "6b5d1b0a2e5166cb679c9cdca5be40e10175b4979bed8e5e5aa5e090aa31d0e6"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "ROA eContent",
+      "bytes": 45,
+      "classification": "rpki-econtent-der",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-65/route.roa.econtent",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "b86c9611a4d9d108e8864989aafc9ca29e1f4c0ac8302c55a72ef5cbed73655a"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "Manifest eContent",
+      "bytes": 146,
+      "classification": "rpki-econtent-der",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-65/manifest.mft.econtent",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "742fc147b880b8003cda8253148be373cd39b65ea7ec77170466585b5b71f85f"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "ROA CMS",
+      "bytes": 9434,
+      "classification": "rfc6488-cms-generated",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-65/route.roa",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "e021acec141be6b0813b4094a69396970546cd84f1c7083fa4a674384ceabb88"
+    },
+    {
+      "algorithm": "ML-DSA-65",
+      "artifact": "Manifest CMS",
+      "bytes": 9556,
+      "classification": "rfc6488-cms-generated",
+      "public_path": "results/global-rpki-q3-2026/measurements/ml-dsa-65/manifest.mft",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "dc00a21df2ace1523244dd182a8e86e8dc8ef84089d6f3052582b1d7ccce1fb8"
+    },
+    {
+      "algorithm": "ML-DSA-65 + ECDSA P-256",
+      "artifact": "CA certificate",
+      "bytes": 5927,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/composite-mldsa65-p256/ca.cer",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "244d3ee41b09a6ad82cda04d83cae2b1c058930f51992fe347366325cc9fab8d"
+    },
+    {
+      "algorithm": "ML-DSA-65 + ECDSA P-256",
+      "artifact": "ROA EE certificate",
+      "bytes": 5945,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/composite-mldsa65-p256/route.ee.cer",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "5b899e6c7a34ff3a51152ecb55b04143083f8426d89ffd6989fbda9e5600ede6"
+    },
+    {
+      "algorithm": "ML-DSA-65 + ECDSA P-256",
+      "artifact": "Manifest EE certificate",
+      "bytes": 5961,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/composite-mldsa65-p256/manifest.ee.cer",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "900fa74063bee6f83191cb45be1a08f576f8cd620c505a5413ad94d7ef46a887"
+    },
+    {
+      "algorithm": "ML-DSA-65 + ECDSA P-256",
+      "artifact": "CRL",
+      "bytes": 3533,
+      "classification": "public-der-fixture",
+      "public_path": "results/global-rpki-q3-2026/measurements/composite-mldsa65-p256/ca.crl",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "d90f4734b326f69137fa43182dbed08fb34502709354dd037248b8008c520475"
+    },
+    {
+      "algorithm": "ML-DSA-65 + ECDSA P-256",
+      "artifact": "ROA eContent",
+      "bytes": 45,
+      "classification": "rpki-econtent-der",
+      "public_path": "results/global-rpki-q3-2026/measurements/composite-mldsa65-p256/route.roa.econtent",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "b86c9611a4d9d108e8864989aafc9ca29e1f4c0ac8302c55a72ef5cbed73655a"
+    },
+    {
+      "algorithm": "ML-DSA-65 + ECDSA P-256",
+      "artifact": "Manifest eContent",
+      "bytes": 146,
+      "classification": "rpki-econtent-der",
+      "public_path": "results/global-rpki-q3-2026/measurements/composite-mldsa65-p256/manifest.mft.econtent",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "f58e36ed5d2992396c4f216480c8bd008f9f9916797b6e205a7311dbd37cfa5d"
+    },
+    {
+      "algorithm": "ML-DSA-65 + ECDSA P-256",
+      "artifact": "ROA CMS",
+      "bytes": 9637,
+      "classification": "rfc6488-cms-generated",
+      "public_path": "results/global-rpki-q3-2026/measurements/composite-mldsa65-p256/route.roa",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "1cf85dd2addfe1b3d5164d0a75d8d0a2f3bb5a6e6552d60e68872508e0541d93"
+    },
+    {
+      "algorithm": "ML-DSA-65 + ECDSA P-256",
+      "artifact": "Manifest CMS",
+      "bytes": 9758,
+      "classification": "rfc6488-cms-generated",
+      "public_path": "results/global-rpki-q3-2026/measurements/composite-mldsa65-p256/manifest.mft",
+      "reason": "",
+      "status": "confirmed",
+      "sha256": "b38955e4bf718aa62634d9c0140eb22c09b5c3d181d3f16a5517a79ffbfc2367"
+    }
+  ]
+}

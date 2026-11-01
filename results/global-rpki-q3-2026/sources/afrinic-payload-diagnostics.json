@@ -1,0 +1,12 @@
+{
+  "publish_count": 17023,
+  "errors": [
+    {
+      "uri": "rsync://rpki.afrinic.net/repository/AfriNIC-simple.tal",
+      "der_bytes": 496,
+      "sha256": "2838ef30ea27ce5705abf5f5adb131d8c35b1f50858338a2f3c84bb207c2fa35",
+      "error": "trailing DER data",
+      "prefix_hex": "7273796e633a2f2f72706b692e616672"
+    }
+  ]
+}
