@@ -546,7 +546,7 @@
  
  The table reports the median and sample standard deviation across ten repetitions of 1,000 operations on a fixed 32-byte message.
  Values are wall-clock seconds per 1,000 operations.
-@@ -558,217 +560,150 @@
+@@ -558,217 +560,155 @@
  The measurements show that RSA-2048 is substantially faster at verification than the other evaluated algorithms in this environment.
  ML-DSA verification cost increases with the parameter set, with ML-DSA-65 requiring about 7.5 times the RSA verification time and ML-DSA-87 about 11.8 times.
  Signing shows a different pattern: ML-DSA-44 is faster than RSA-2048, while ML-DSA-65 and ML-DSA-87 are somewhat slower.
@@ -753,6 +753,8 @@
 +The evaluated Composite projection uses a conservative maximum 3,381-byte encoded signature because its ECDSA component is variable length.
 +Projected key, signature, and digest values are placeholders for size calculation; these are not valid re-signed PQ repositories.
 +
++The table compares the total DER footprint of the observed repository under three scenarios: full replacement with the Next Suite, idealized parallel publication of both suites, and migration of the largest eligible CA subtree while the rest remains on RSA.
++
 +| Suite | Full replacement GiB | Idealized parallel GiB | Mixed subtree GiB |
 +|---|---|---|---|
 +| RSA-2048 | 1.017 | 2.035 | 1.017 |
@@ -760,7 +762,7 @@
 +| ML-DSA-65 | 4.728 | 5.745 | 2.878 |
 +| ML-DSA-65 + P-256 Composite | 4.825 | 5.842 | 2.927 |
 +
-+Idealized parallel publication adds a complete Next Suite counterpart to the observed baseline; the RSA parallel row is a duplicate-baseline control.
++The RSA parallel row is a duplicate-baseline control.
 +This is a hypothetical steady-state footprint, not an RFC 6916 phase schedule or operational deployment procedure.
 +The Mixed Tree scenario selects the largest observed non-self-issued CA subtree with a known parent, using SKI/AKI links: 9,873 CA keys and 265,585 affected objects.
 +The boundary certificate keeps its RSA parent signature while its subject key changes; descendant signatures change only where their issuer is in the selected subtree.
@@ -820,7 +822,10 @@
 +The 39 snapshot documents contain 569,070 publish elements and total 1,565,796,047 XML bytes.
 +A 496-byte text TAL published in the AFRINIC snapshot is included in transfer bytes, excluded from DER totals, and held at its observed size; future TAL contents are outside this model.
 +
-+| Suite | Sep 30 delta sequence GiB | Oct 27 snapshots once GiB |
++The table compares RRDP XML response-body sizes across signature suites: the sum of 6,953 captured delta documents and the sum of one snapshot from each of 39 endpoints.
++The dates identify the datasets; neither column represents daily per-client traffic.
++
++| Suite | Sep 30 captured deltas (GiB) | Oct 27 captured snapshots (GiB) |
 +|---|---|---|
 +| RSA-2048 | 1.834 | 1.458 |
 +| ML-DSA-44 | 2.736 | 4.888 |
@@ -884,7 +889,7 @@
  
  # Acknowledgements
  
-@@ -807,7 +742,7 @@
+@@ -807,7 +747,7 @@
  
  [RFC9981] Harrison, T., Michaelson, G., and J. Snijders, "Resource Public Key Infrastructure (RPKI) Manifest Number Handling", RFC 9981, DOI 10.17487/RFC9981, May 2026.
  
@@ -893,7 +898,7 @@
  
  [I-D.ietf-lamps-pq-composite-sigs] Ounsworth, M., et al., "Composite Module-Lattice-Based Digital Signature Algorithm (ML-DSA) for use in X.509 Public Key Infrastructure", draft-ietf-lamps-pq-composite-sigs-19, Work in Progress, 21 April 2026.
  
-@@ -831,9 +766,7 @@
+@@ -831,9 +771,7 @@
  
  [FIPS186-5] National Institute of Standards and Technology, "Digital Signature Standard (DSS)", FIPS 186-5, DOI 10.6028/NIST.FIPS.186-5, February 2023.
  
@@ -904,7 +909,7 @@
  
  [I-D.ietf-sidrops-rpki-ccr] Snijders, J., Bakker, B., Bruijnzeels, T., and T. Buehler, "A Profile for Resource Public Key Infrastructure (RPKI) Canonical Cache Representation (CCR)", draft-ietf-sidrops-rpki-ccr-11, Work in Progress, 1 July 2026.
  
-@@ -847,4 +780,34 @@
+@@ -847,4 +785,34 @@
  
  [pqRPKI] Li, W., Li, Y., and T. Chung, "pqRPKI: A Practical RPKI Architecture for the Post-Quantum Era", arXiv:2603.06968, March 2026, https://arxiv.org/abs/2603.06968.
  

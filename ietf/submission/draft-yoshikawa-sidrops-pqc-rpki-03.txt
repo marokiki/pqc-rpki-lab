@@ -126,7 +126,7 @@ Internet-Draft                PQC for RPKI                 November 2026
      A.4.  Measured Complete Object Sizes  . . . . . . . . . . . . .  32
      A.5.  Source-Calibrated Repository Projection . . . . . . . . .  32
      A.6.  Repository Transport Measurements . . . . . . . . . . . .  34
-     A.7.  Open Measurement Tasks  . . . . . . . . . . . . . . . . .  35
+     A.7.  Open Measurement Tasks  . . . . . . . . . . . . . . . . .  36
    Appendix B.  Changes from -02 . . . . . . . . . . . . . . . . . .  36
    Acknowledgements  . . . . . . . . . . . . . . . . . . . . . . . .  37
    Authors' Addresses  . . . . . . . . . . . . . . . . . . . . . . .  37
@@ -1833,10 +1833,10 @@ Internet-Draft                PQC for RPKI                 November 2026
    digest values are placeholders for size calculation; these are not
    valid re-signed PQ repositories.
 
-
-
-
-
+   The table compares the total DER footprint of the observed repository
+   under three scenarios: full replacement with the Next Suite,
+   idealized parallel publication of both suites, and migration of the
+   largest eligible CA subtree while the rest remains on RSA.
 
 
 
@@ -1866,18 +1866,17 @@ Internet-Draft                PQC for RPKI                 November 2026
 
                                  Table 6
 
-   Idealized parallel publication adds a complete Next Suite counterpart
-   to the observed baseline; the RSA parallel row is a duplicate-
-   baseline control.  This is a hypothetical steady-state footprint, not
-   an RFC 6916 phase schedule or operational deployment procedure.  The
-   Mixed Tree scenario selects the largest observed non-self-issued CA
-   subtree with a known parent, using SKI/AKI links: 9,873 CA keys and
-   265,585 affected objects.  The boundary certificate keeps its RSA
-   parent signature while its subject key changes; descendant signatures
-   change only where their issuer is in the selected subtree.  These
-   links describe a structural hierarchy; they do not establish
-   resource/path validity or migration readiness.  The selected boundary
-   and exact byte totals are recorded in [pqc-rpki-lab].
+   The RSA parallel row is a duplicate-baseline control.  This is a
+   hypothetical steady-state footprint, not an RFC 6916 phase schedule
+   or operational deployment procedure.  The Mixed Tree scenario selects
+   the largest observed non-self-issued CA subtree with a known parent,
+   using SKI/AKI links: 9,873 CA keys and 265,585 affected objects.  The
+   boundary certificate keeps its RSA parent signature while its subject
+   key changes; descendant signatures change only where their issuer is
+   in the selected subtree.  These links describe a structural
+   hierarchy; they do not establish resource/path validity or migration
+   readiness.  The selected boundary and exact byte totals are recorded
+   in [pqc-rpki-lab].
 
 A.6.  Repository Transport Measurements
 
@@ -1898,6 +1897,7 @@ A.6.  Repository Transport Measurements
    00:16 and 00:19 UTC from all 39 distinct notification URLs at the
    selected September hosts.  This October cohort is separate from the
    September data and does not represent a simultaneous global state.
+   All bodies were uncompressed and matched their notifications' SHA-
 
 
 
@@ -1906,26 +1906,30 @@ Yoshikawa & Velvindron     Expires 5 May 2027                  [Page 34]
 Internet-Draft                PQC for RPKI                 November 2026
 
 
-   All bodies were uncompressed and matched their notifications' SHA-
    256, session, and serial.  The 39 snapshot documents contain 569,070
    publish elements and total 1,565,796,047 XML bytes.  A 496-byte text
    TAL published in the AFRINIC snapshot is included in transfer bytes,
    excluded from DER totals, and held at its observed size; future TAL
    contents are outside this model.
 
-    +=================+===========================+==================+
-    | Suite           | Sep 30 delta sequence GiB | Oct 27 snapshots |
-    |                 |                           | once GiB         |
-    +=================+===========================+==================+
-    | RSA-2048        | 1.834                     | 1.458            |
-    +-----------------+---------------------------+------------------+
-    | ML-DSA-44       | 2.736                     | 4.888            |
-    +-----------------+---------------------------+------------------+
-    | ML-DSA-65       | 3.131                     | 6.426            |
-    +-----------------+---------------------------+------------------+
-    | ML-DSA-65 +     | 3.164                     | 6.556            |
-    | P-256 Composite |                           |                  |
-    +-----------------+---------------------------+------------------+
+   The table compares RRDP XML response-body sizes across signature
+   suites: the sum of 6,953 captured delta documents and the sum of one
+   snapshot from each of 39 endpoints.  The dates identify the datasets;
+   neither column represents daily per-client traffic.
+
+   +=================+==============================+=================+
+   | Suite           | Sep 30 captured deltas (GiB) | Oct 27 captured |
+   |                 |                              | snapshots (GiB) |
+   +=================+==============================+=================+
+   | RSA-2048        | 1.834                        | 1.458           |
+   +-----------------+------------------------------+-----------------+
+   | ML-DSA-44       | 2.736                        | 4.888           |
+   +-----------------+------------------------------+-----------------+
+   | ML-DSA-65       | 3.131                        | 6.426           |
+   +-----------------+------------------------------+-----------------+
+   | ML-DSA-65 +     | 3.164                        | 6.556           |
+   | P-256 Composite |                              |                 |
+   +-----------------+------------------------------+-----------------+
 
                                  Table 7
 
@@ -1948,10 +1952,6 @@ Internet-Draft                PQC for RPKI                 November 2026
    comparisons remain separate work.  Collection and validation details,
    exact totals, and retention limits are recorded in [pqc-rpki-lab].
 
-A.7.  Open Measurement Tasks
-
-   Remaining measurement tasks include:
-
 
 
 
@@ -1961,6 +1961,10 @@ Yoshikawa & Velvindron     Expires 5 May 2027                  [Page 35]
 
 Internet-Draft                PQC for RPKI                 November 2026
 
+
+A.7.  Open Measurement Tasks
+
+   Remaining measurement tasks include:
 
    *  CA key rollover, publication cycle, and full validation across the
       evaluated configurations over a multi-CA corpus modeled on the
@@ -2007,16 +2011,16 @@ Appendix B.  Changes from -02
       including data coverage, assumptions, limitations, and
       reproducibility.
 
-   *  Simplified the presentation of earlier experiments while retaining
-      relevant RP validation results and updating the supporting
-      experimental evidence.
-
 
 
 Yoshikawa & Velvindron     Expires 5 May 2027                  [Page 36]
 
 Internet-Draft                PQC for RPKI                 November 2026
 
+
+   *  Simplified the presentation of earlier experiments while retaining
+      relevant RP validation results and updating the supporting
+      experimental evidence.
 
 Acknowledgements
 
@@ -2037,10 +2041,6 @@ Authors' Addresses
    cyberstorm.mu
    Mauritius
    Email: logan@cyberstorm.mu
-
-
-
-
 
 
 

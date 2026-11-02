@@ -631,6 +631,8 @@ BGPsec subject public keys remain unchanged.
 The evaluated Composite projection uses a conservative maximum 3,381-byte encoded signature because its ECDSA component is variable length.
 Projected key, signature, and digest values are placeholders for size calculation; these are not valid re-signed PQ repositories.
 
+The table compares the total DER footprint of the observed repository under three scenarios: full replacement with the Next Suite, idealized parallel publication of both suites, and migration of the largest eligible CA subtree while the rest remains on RSA.
+
 | Suite | Full replacement GiB | Idealized parallel GiB | Mixed subtree GiB |
 |---|---|---|---|
 | RSA-2048 | 1.017 | 2.035 | 1.017 |
@@ -638,7 +640,7 @@ Projected key, signature, and digest values are placeholders for size calculatio
 | ML-DSA-65 | 4.728 | 5.745 | 2.878 |
 | ML-DSA-65 + P-256 Composite | 4.825 | 5.842 | 2.927 |
 
-Idealized parallel publication adds a complete Next Suite counterpart to the observed baseline; the RSA parallel row is a duplicate-baseline control.
+The RSA parallel row is a duplicate-baseline control.
 This is a hypothetical steady-state footprint, not an RFC 6916 phase schedule or operational deployment procedure.
 The Mixed Tree scenario selects the largest observed non-self-issued CA subtree with a known parent, using SKI/AKI links: 9,873 CA keys and 265,585 affected objects.
 The boundary certificate keeps its RSA parent signature while its subject key changes; descendant signatures change only where their issuer is in the selected subtree.
@@ -661,7 +663,10 @@ All bodies were uncompressed and matched their notifications' SHA-256, session, 
 The 39 snapshot documents contain 569,070 publish elements and total 1,565,796,047 XML bytes.
 A 496-byte text TAL published in the AFRINIC snapshot is included in transfer bytes, excluded from DER totals, and held at its observed size; future TAL contents are outside this model.
 
-| Suite | Sep 30 delta sequence GiB | Oct 27 snapshots once GiB |
+The table compares RRDP XML response-body sizes across signature suites: the sum of 6,953 captured delta documents and the sum of one snapshot from each of 39 endpoints.
+The dates identify the datasets; neither column represents daily per-client traffic.
+
+| Suite | Sep 30 captured deltas (GiB) | Oct 27 captured snapshots (GiB) |
 |---|---|---|
 | RSA-2048 | 1.834 | 1.458 |
 | ML-DSA-44 | 2.736 | 4.888 |

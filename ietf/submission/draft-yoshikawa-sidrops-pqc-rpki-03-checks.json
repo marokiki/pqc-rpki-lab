@@ -18,7 +18,7 @@
     "result": "pass",
     "file": {
       "path": "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.txt",
-      "size": 92766
+      "size": 93210
     },
     "nitsBySeverity": {
       "error": 0,
@@ -41,26 +41,27 @@
   "datatracker_revision_before_release": "02",
   "inputs_and_outputs": {
     "ietf/draft-yoshikawa-sidrops-pqc-rpki.md": {
-      "bytes": 68650,
-      "sha256": "12252a128cad8d755e226288be9723f97071460286d3ca7f6100e66f46b92879"
+      "bytes": 69078,
+      "sha256": "5fe8888ca45a4538a5fc0541b1731fe3d2e03dd19d4ec5a7d856184c7e3aa6a4"
     },
     "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.xml": {
-      "bytes": 101150,
-      "sha256": "0c442654d33e07669176c56dbae36b78c099a960d6b153393dd8fad83a3fae69"
+      "bytes": 101606,
+      "sha256": "8eb653fcbd280b01a30d566c1685e0d548120acbf9bd7b527fde6a1604563399"
     },
     "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.txt": {
-      "bytes": 92766,
-      "sha256": "12a1fc72c43370148968df71e57c6d4e7d790085c4d4e185bae03f5e63258a4c"
+      "bytes": 93210,
+      "sha256": "3187cfde2acd21fdc39e21ca0afe80e5e6db77c870d16cb0a92045c70c8bedaa"
     },
     "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.html": {
-      "bytes": 179601,
-      "sha256": "3f5cd4b81bcb2b706e171ed41b4c0e783eecae8d1674d2c09951a43675a3a034"
+      "bytes": 180177,
+      "sha256": "a1c8a98cfcc2829d68e6c2cdb4c12cf763feba464b01a1a0b9859c47d968bcdb"
     },
     "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.pdf": {
-      "bytes": 144167,
-      "sha256": "29092c23d9502fde3c63f5d151acc4dddda0c2cd135ca3948142f3fe8f4ba02d"
+      "bytes": 144615,
+      "sha256": "f76af44d2396ab408847551c89f4851b249b129c13176d51f50a4c49bc43a201"
     }
   },
   "pdf_pages": 30,
-  "pdf_layout_review": "passed: all 30 page thumbnails and detailed table pages inspected"
+  "pdf_layout_review": "passed: updated table introductions and column headers inspected on pages 27-28",
+  "validation_date": "2026-11-03"
 }

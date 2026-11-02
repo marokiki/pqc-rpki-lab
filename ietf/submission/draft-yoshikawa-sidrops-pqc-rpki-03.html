@@ -2373,6 +2373,7 @@ li > p:last-of-type:only-child {
           </tbody>
         </table>
 <p id="appendix-A.5-4">The laboratory fixtures passed certificate-chain, CRL-signature, and CMS checks, but independent cryptographic interoperability remains unverified. The projection re-encodes each observed object with the candidate key, signature, AlgorithmIdentifier, and CMS digest-attribute lengths, accounting for DER length boundaries. It preserves payloads, names, resource extensions, revoked entries, and manifest fileLists and hash lengths. Observed manifests contain 1 to 48,932 entries and CRLs up to 65,312 revoked entries. BGPsec subject public keys remain unchanged. The evaluated Composite projection uses a conservative maximum 3,381-byte encoded signature because its ECDSA component is variable length. Projected key, signature, and digest values are placeholders for size calculation; these are not valid re-signed PQ repositories.<a href="#appendix-A.5-4" class="pilcrow">¶</a></p>
+<p id="appendix-A.5-5">The table compares the total DER footprint of the observed repository under three scenarios: full replacement with the Next Suite, idealized parallel publication of both suites, and migration of the largest eligible CA subtree while the rest remains on RSA.<a href="#appendix-A.5-5" class="pilcrow">¶</a></p>
 <table class="center" id="table-6">
           <caption><a href="#table-6" class="selfRef">Table 6</a></caption>
 <thead>
@@ -2410,7 +2411,7 @@ li > p:last-of-type:only-child {
             </tr>
           </tbody>
         </table>
-<p id="appendix-A.5-6">Idealized parallel publication adds a complete Next Suite counterpart to the observed baseline; the RSA parallel row is a duplicate-baseline control. This is a hypothetical steady-state footprint, not an RFC 6916 phase schedule or operational deployment procedure. The Mixed Tree scenario selects the largest observed non-self-issued CA subtree with a known parent, using SKI/AKI links: 9,873 CA keys and 265,585 affected objects. The boundary certificate keeps its RSA parent signature while its subject key changes; descendant signatures change only where their issuer is in the selected subtree. These links describe a structural hierarchy; they do not establish resource/path validity or migration readiness. The selected boundary and exact byte totals are recorded in <span>[<a href="#pqc-rpki-lab" class="cite xref">pqc-rpki-lab</a>]</span>.<a href="#appendix-A.5-6" class="pilcrow">¶</a></p>
+<p id="appendix-A.5-7">The RSA parallel row is a duplicate-baseline control. This is a hypothetical steady-state footprint, not an RFC 6916 phase schedule or operational deployment procedure. The Mixed Tree scenario selects the largest observed non-self-issued CA subtree with a known parent, using SKI/AKI links: 9,873 CA keys and 265,585 affected objects. The boundary certificate keeps its RSA parent signature while its subject key changes; descendant signatures change only where their issuer is in the selected subtree. These links describe a structural hierarchy; they do not establish resource/path validity or migration readiness. The selected boundary and exact byte totals are recorded in <span>[<a href="#pqc-rpki-lab" class="cite xref">pqc-rpki-lab</a>]</span>.<a href="#appendix-A.5-7" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="repository-transport-measurements">
@@ -2420,13 +2421,14 @@ li > p:last-of-type:only-child {
         </h3>
 <p id="appendix-A.6-1">The assessment uses observed publication activity; it does not assume ROA churn or apply a multiplier to aggregate RRDP traffic. The September delta sample comes from the RPKIViews raw RRDP archive <span>[<a href="#RPKIViews-RRDP" class="cite xref">RPKIViews-RRDP</a>]</span>. It contains 6,953 documents across 13 notification hosts, covering complete serial intervals after the first and through the last observations in the 2026-09-30 collector log. The collector log's timezone is unspecified. The sample contains 190,738 publish elements: 93,357 manifests, 93,265 CRLs, 3,499 ROAs, 545 certificates, and 72 ASPA objects. Of these publishes, 189,289 contain a replacement hash; the sample also contains 768 withdrawal elements. Repeated publishes are counted, including periodic republication and replacement.<a href="#appendix-A.6-1" class="pilcrow">¶</a></p>
 <p id="appendix-A.6-2">A separate live snapshot sample was captured on 2026-10-27 between 00:16 and 00:19 UTC from all 39 distinct notification URLs at the selected September hosts. This October cohort is separate from the September data and does not represent a simultaneous global state. All bodies were uncompressed and matched their notifications' SHA-256, session, and serial. The 39 snapshot documents contain 569,070 publish elements and total 1,565,796,047 XML bytes. A 496-byte text TAL published in the AFRINIC snapshot is included in transfer bytes, excluded from DER totals, and held at its observed size; future TAL contents are outside this model.<a href="#appendix-A.6-2" class="pilcrow">¶</a></p>
+<p id="appendix-A.6-3">The table compares RRDP XML response-body sizes across signature suites: the sum of 6,953 captured delta documents and the sum of one snapshot from each of 39 endpoints. The dates identify the datasets; neither column represents daily per-client traffic.<a href="#appendix-A.6-3" class="pilcrow">¶</a></p>
 <table class="center" id="table-7">
           <caption><a href="#table-7" class="selfRef">Table 7</a></caption>
 <thead>
             <tr>
               <th class="text-left" rowspan="1" colspan="1">Suite</th>
-              <th class="text-left" rowspan="1" colspan="1">Sep 30 delta sequence GiB</th>
-              <th class="text-left" rowspan="1" colspan="1">Oct 27 snapshots once GiB</th>
+              <th class="text-left" rowspan="1" colspan="1">Sep 30 captured deltas (GiB)</th>
+              <th class="text-left" rowspan="1" colspan="1">Oct 27 captured snapshots (GiB)</th>
             </tr>
           </thead>
           <tbody>
@@ -2452,8 +2454,8 @@ li > p:last-of-type:only-child {
             </tr>
           </tbody>
         </table>
-<p id="appendix-A.6-4">RSA values are captured XML body sizes; PQ values are estimates from the same observed object contents. For each publish element, the model changes its base64 length by 4*ceil(new_DER_bytes/3) - 4*ceil(old_DER_bytes/3), retaining the original URI, XML framing, whitespace, and withdrawal elements. RSA identity projections reproduce the captured byte totals exactly. Snapshot payloads were parsed, without full schema or RPKI resource/path validation.<a href="#appendix-A.6-4" class="pilcrow">¶</a></p>
-<p id="appendix-A.6-5">The snapshot column counts one copy of each selected body for bootstrap or fallback, not recurring traffic. The columns cover different dates and must not be added or used to infer a snapshot-to-delta traffic ratio. The estimates exclude notifications, compression, HTTP/TLS overhead, retries, polling, client catch-up, and snapshot fallback frequency. Neither cohort covers a full quarter or all publication points; no quarterly or all-client traffic total is inferred. Equivalent trace-backed rsync and Erik comparisons remain separate work. Collection and validation details, exact totals, and retention limits are recorded in <span>[<a href="#pqc-rpki-lab" class="cite xref">pqc-rpki-lab</a>]</span>.<a href="#appendix-A.6-5" class="pilcrow">¶</a></p>
+<p id="appendix-A.6-5">RSA values are captured XML body sizes; PQ values are estimates from the same observed object contents. For each publish element, the model changes its base64 length by 4*ceil(new_DER_bytes/3) - 4*ceil(old_DER_bytes/3), retaining the original URI, XML framing, whitespace, and withdrawal elements. RSA identity projections reproduce the captured byte totals exactly. Snapshot payloads were parsed, without full schema or RPKI resource/path validation.<a href="#appendix-A.6-5" class="pilcrow">¶</a></p>
+<p id="appendix-A.6-6">The snapshot column counts one copy of each selected body for bootstrap or fallback, not recurring traffic. The columns cover different dates and must not be added or used to infer a snapshot-to-delta traffic ratio. The estimates exclude notifications, compression, HTTP/TLS overhead, retries, polling, client catch-up, and snapshot fallback frequency. Neither cohort covers a full quarter or all publication points; no quarterly or all-client traffic total is inferred. Equivalent trace-backed rsync and Erik comparisons remain separate work. Collection and validation details, exact totals, and retention limits are recorded in <span>[<a href="#pqc-rpki-lab" class="cite xref">pqc-rpki-lab</a>]</span>.<a href="#appendix-A.6-6" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="open-measurement-tasks">
