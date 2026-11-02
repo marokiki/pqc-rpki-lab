@@ -453,12 +453,15 @@ def build_xml(meta: dict[str, object], abstract: str, middle: str, back: str) ->
             "category": category,
             "ipr": str(meta.get("ipr", "trust200902")),
             "docName": DOCNAME,
-            "submissionType": str(meta.get("submissiontype", "IETF")),
             "consensus": str(
                 meta.get("consensus", "true" if category == "std" else "false")
             ).lower(),
         },
     )
+    # Preserve an unspecified document stream in the submitted source XML.
+    # Rendering may use xml2rfc defaults, but must not make that declaration.
+    if meta.get("submissiontype"):
+        rfc.set("submissionType", str(meta["submissiontype"]))
     front = ET.SubElement(rfc, "front")
     ET.SubElement(front, "title", {"abbrev": str(meta.get("abbrev", ""))}).text = str(
         meta.get("title", "")

@@ -23,6 +23,19 @@ class Draft03SubmissionTest(unittest.TestCase):
         finally:
             renderer.DOCNAME = old_name
 
+    def test_unspecified_stream_is_not_inferred(self):
+        meta, abstract, middle, back = renderer.split_source(self.source)
+        self.assertNotIn('submissiontype', meta)
+        self.assertNotIn('submissionType', self.xml.attrib)
+        self.assertFalse(any(x.get('stream') for x in self.xml.findall('front/seriesInfo')))
+        self.assertEqual(self.xml.findtext('front/workgroup'), 'SIDROPS')
+        self.assertEqual(self.xml.get('category'), 'info')
+
+    def test_explicit_stream_is_preserved(self):
+        meta, abstract, middle, back = renderer.split_source(self.source)
+        meta['submissiontype'] = 'IETF'
+        self.assertEqual(renderer.build_xml(meta, abstract, middle, back).get('submissionType'), 'IETF')
+
     def test_bibliography_and_citations_are_complete_and_pinned(self):
         references = {r.get('anchor'): r for r in self.xml.findall('.//reference')}
         keys = re.findall(r'^\[([^]]+)\]', self.source.split('# References', 1)[1], re.M)

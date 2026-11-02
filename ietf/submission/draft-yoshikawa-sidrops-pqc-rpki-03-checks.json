@@ -28,7 +28,7 @@
     "nits": []
   },
   "unit_tests": {
-    "passed": 119,
+    "passed": 121,
     "failed": 0
   },
   "global_evaluation": {
@@ -41,12 +41,12 @@
   "datatracker_revision_before_release": "02",
   "inputs_and_outputs": {
     "ietf/draft-yoshikawa-sidrops-pqc-rpki.md": {
-      "bytes": 69078,
-      "sha256": "5fe8888ca45a4538a5fc0541b1731fe3d2e03dd19d4ec5a7d856184c7e3aa6a4"
+      "bytes": 69057,
+      "sha256": "0b35e5be3b50728dd2646c9499be22376dc994c2efbcdb950e16f2c601ecd70b"
     },
     "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.xml": {
-      "bytes": 101606,
-      "sha256": "8eb653fcbd280b01a30d566c1685e0d548120acbf9bd7b527fde6a1604563399"
+      "bytes": 101584,
+      "sha256": "700deb25ea7a8e2a694c11ef2a8a7a42ab06a0c240a3b59810c7d37fc20b2a2a"
     },
     "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.txt": {
       "bytes": 93210,
@@ -58,10 +58,18 @@
     },
     "ietf/submission/draft-yoshikawa-sidrops-pqc-rpki-03.pdf": {
       "bytes": 144615,
-      "sha256": "f76af44d2396ab408847551c89f4851b249b129c13176d51f50a4c49bc43a201"
+      "sha256": "9fcf519d33230b41bddabe2ee692d41064db7ff0350396cb6b034d264c7dbed4"
     }
   },
   "pdf_pages": 30,
-  "pdf_layout_review": "passed: updated table introductions and column headers inspected on pages 27-28",
-  "validation_date": "2026-11-03"
+  "pdf_layout_review": "passed: title page inspected; extracted PDF text is unchanged from the preceding release",
+  "validation_date": "2026-11-03",
+  "source_stream_metadata": {
+    "existing_datatracker_revision": "02",
+    "existing_datatracker_stream": null,
+    "submissionType_present": false,
+    "seriesInfo_stream_present": false,
+    "metadata_comparison": "No explicit source stream change relative to the current Datatracker record; server-side resubmission not performed."
+  },
+  "xml2rfc_rendering_notice": "Source submissionType is omitted. xml2rfc warns that it uses IETF as its rendering default; the default is not written back to the submitted XML."
 }

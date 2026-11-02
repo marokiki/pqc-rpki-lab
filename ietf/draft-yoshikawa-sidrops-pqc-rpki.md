@@ -6,7 +6,6 @@ category: info
 ipr: trust200902
 area: Operations and Management
 wg: SIDROPS
-submissiontype: IETF
 consensus: false
 date: 2026-11-01
 keyword:

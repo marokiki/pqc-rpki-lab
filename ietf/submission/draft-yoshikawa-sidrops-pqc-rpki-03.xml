@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<rfc version="3" category="info" ipr="trust200902" docName="draft-yoshikawa-sidrops-pqc-rpki-03" submissionType="IETF" consensus="false">
+<rfc version="3" category="info" ipr="trust200902" docName="draft-yoshikawa-sidrops-pqc-rpki-03" consensus="false">
   <front>
     <title abbrev="PQC for RPKI">Post-Quantum Signature Experiments and Migration Considerations for the Resource Public Key Infrastructure (RPKI)</title>
     <seriesInfo name="Internet-Draft" value="draft-yoshikawa-sidrops-pqc-rpki-03" />
